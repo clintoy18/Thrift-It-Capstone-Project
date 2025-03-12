@@ -9,7 +9,16 @@ Route::get('/', function () {
 
 Route::get('/dashboard', function () {
     return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+})->middleware(['auth', 'verified','rolemiddleware:user'])->name('dashboard');
+
+Route::get('/admin/dashboard', function () {
+    return view('admin');
+})->middleware(['auth', 'verified','rolemiddleware:admin'])->name('admin');
+
+Route::get('upcycler/dashboard', function () {
+    return view('upcycler');
+})->middleware(['auth', 'verified','rolemiddleware:upcycler'])->name('upcycler');
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
