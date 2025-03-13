@@ -23,13 +23,14 @@ class StoreProductRequest extends FormRequest
     {
         return [
 
-        'name' =>['required','string','max:50'],
-        'description' =>['required','string','max:255'],
-        'price'=>['required'],
-        'image' =>['required','string','max:50'],
-        'qty' =>['required'],
-        'listingtype' => ['required', 'in:for sale,for donation'],
-        'status' => ['required', 'in:available,sold']
+            'category_id' => 'required|exists:categories,id',
+            'name' => 'required|string|max:255',
+            'description' => 'required|string',
+            'price' => 'required|numeric|min:0',
+            'image' => 'nullable|image|max:2048',
+            'qty' => 'required|integer|min:1',
+            'listingtype' => 'required|in:for sale,for donation',
+            'status' => 'required|in:available,sold',
         ];
     }
 }

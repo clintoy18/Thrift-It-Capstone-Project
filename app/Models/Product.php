@@ -11,18 +11,19 @@ use Illuminate\Support\Facades\Storage;
 
 class Product extends Model
 {
+   
     use HasFactory;
 
-    protected $fillable =[
+    protected $fillable = [
         'user_id',
-        'categories_id',
+        'category_id',
         'name',
         'description',
         'price',
         'image',
         'qty',
         'listingtype',
-        'status'
+        'status',
     ];
 
     public function user(){
@@ -38,7 +39,7 @@ class Product extends Model
         if(is_file($value)){
             $this->attributes['image'] = $value->store('products_images','public');
         }else {
-            $this->attribute['image'] = $value;
+            $this->attributes['image'] = $value;
         }
     }
     public function getImageUrlAttribute()

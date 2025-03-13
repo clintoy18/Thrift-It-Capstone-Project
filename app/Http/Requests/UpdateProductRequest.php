@@ -24,11 +24,8 @@ class UpdateProductRequest extends FormRequest
         return [
         'name' =>['required','string','max:50'],
         'description' =>['required','string','max:255'],
-        'price'=>['required'],
-        'image' =>['required','string','max:50'],
-        'qty' =>['required'],
-        'listingtype' => ['required', 'in:for sale,for donation'],
-        'status' => ['required', 'in:available,sold']
+        'price' => 'required|numeric|min:0',
+       
         ];
     }
 }
