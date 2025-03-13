@@ -7,7 +7,6 @@
             <a href="{{ route('products.index') }}" class="ml-auto text-white border p-2 rounded hover:bg-slate-400">Back</a>
         </div>
     </x-slot>
-
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">

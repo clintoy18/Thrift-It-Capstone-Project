@@ -67,7 +67,8 @@ class ProductController extends Controller
      */
     public function edit(Product $product): View
     {
-        return view('products.edit', compact('product'));
+        $categories = Categories::all();
+        return view('products.edit', compact('product','categories'));
     }
 
     /**
@@ -77,12 +78,14 @@ class ProductController extends Controller
      * @param  Product  $product
      * @return RedirectResponse
      */
-    public function update(UpdateProductRequest $request, Product $product): RedirectResponse
+    public function update(UpdateProductRequest $request, Product $product)
     {
-        $product->update($request->validated());
-
-        return redirect()->route('products.index');
+        $data = $request->validated();
+        $product->update($data);
+        
+        return redirect()->route('products.index')->with('success', 'Product updated successfully!');
     }
+    
 
     /**
      * Remove the specified resource from storage.
