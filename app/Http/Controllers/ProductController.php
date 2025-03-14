@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 
 class ProductController extends Controller
@@ -68,7 +69,7 @@ class ProductController extends Controller
     public function edit(Product $product): View
     {
         $categories = Categories::all();
-        return view('products.edit', compact('product','categories'));
+        return view('products.edit', ['product' => $product, 'categories' => $categories]);
     }
 
     /**
@@ -81,6 +82,19 @@ class ProductController extends Controller
     public function update(UpdateProductRequest $request, Product $product)
     {
         $data = $request->validated();
+      
+        if ($request->hasFile('image')) {
+            // Delete the old image if it exists
+            if ($product->image) {
+                Storage::delete('public/' . $product->image);
+            }
+
+        // Store the new image
+        $imagePath = $request->file('image')->store('products', 'public');
+        $data['image'] = $imagePath; // Add the image path to the validated data
+    }
+
+    // U
         $product->update($data);
         
         return redirect()->route('products.index')->with('success', 'Product updated successfully!');
