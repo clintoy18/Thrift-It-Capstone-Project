@@ -1,0 +1,128 @@
+<x-app-layout>
+    <x-slot name="header">
+        <div class="flex items-center justify-between">
+            <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+                {{ $product->name }}
+            </h2>
+        </div>
+    </x-slot>
+
+    <div class="py-12">
+        <div class="max-w-6xl mx-auto bg-white dark:bg-gray-800 shadow rounded-lg p-6">
+            <!-- Two-Column Layout -->
+            <div class="flex flex-col md:flex-row gap-6">
+                
+                <!-- Left Column: Multiple Images -->
+                <div class="md:w-1/3 flex flex-col gap-4">
+                    <!-- Main Image (or multiple stacked images) -->
+                    <img 
+                        src="{{ $product->image ? asset('storage/' . $product->image) : asset('images/default-placeholder.png') }}" 
+                        alt="{{ $product->name }}"
+                        class="w-full h-64 object-cover rounded-lg"
+                    >
+                    <!-- Additional images (static placeholders for now) -->
+                    <img 
+                    src="{{ $product->image ? asset('storage/' . $product->image) : asset('images/default-placeholder.png') }}" 
+                        alt="Additional 1"
+                        class="w-full h-64 object-cover rounded-lg"
+                    >
+                    <img 
+                    src="{{ $product->image ? asset('storage/' . $product->image) : asset('images/default-placeholder.png') }}" 
+                        alt="Additional 2"
+                        class="w-full h-64 object-cover rounded-lg"
+                    >
+                </div>
+
+                <!-- Right Column: User Info, Product Details, Comments -->
+                <div class="md:w-2/3 flex flex-col gap-6">
+
+                    <!-- User & Rating Section -->
+                    <div class="flex items-center gap-4">
+                        <!-- Avatar -->
+                        {{-- <img 
+                            src="{{ $product->user->profile_photo_url ?? asset('images/default-avatar.png') }}" 
+                            alt="{{ $product->user->fname }} {{ $product->user->lname }}"
+                            class="w-12 h-12 rounded-full"
+                        > --}}
+                        <div class="flex flex-col">
+                            <p class="font-semibold text-gray-800 dark:text-gray-200">
+                                {{ $product->user->fname }} {{ $product->user->lname }}
+                            </p>
+                            <!-- Static rating for demonstration -->
+                            <div class="flex items-center text-sm text-yellow-500">
+                                <span class="mr-1">★★★★★</span>
+                                <span class="text-gray-500"> (5)</span>
+                            </div>
+                        </div>
+                        <!-- Visit Profile Button -->
+                        <a 
+                            href="#" 
+                            class="ml-auto px-4 py-2 text-sm border rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition"
+                        >
+                            Visit Profile
+                        </a>
+                    </div>
+
+                    <!-- Product Title & Short Info -->
+                    <div>
+                        <h1 class="text-2xl font-bold mb-1">
+                            {{ $product->name }}
+                        </h1>
+                        <!-- Example: "Size: L . Excellent condition . Carhart" -->
+                        <p class="text-sm text-gray-600">
+                            Size: {{ $product->size }} · 
+                            {{ ucfirst($product->condition) }} condition · 
+                            {{ $product->category->name ?? 'No Category' }}
+                        </p>
+                    </div>
+
+                    <!-- Product Details -->
+                    <div>
+                        <h2 class="font-semibold text-gray-800 dark:text-gray-200 mb-1">Details</h2>
+                        <!-- Example details text -->
+                        <p class="text-gray-600 mb-2">
+                            {{ $product->description }}
+                        </p>
+                        <!-- Example: "Min: 1500", "Steal: 2000", "Lock: 3000" -->
+                        @if($product->listingtype === 'for donation')
+                            <p class="text-lg font-bold text-green-600 mb-2">For Donation</p>
+                        @else
+                            <p class="text-lg font-bold text-gray-900 mb-2">
+                                ₱{{ number_format($product->price, 2) }}
+                            </p>
+                        @endif
+                        <p class="text-sm text-gray-500">Quantity: {{ $product->qty }}</p>
+                        <p class="text-sm text-gray-500">Status: {{ ucfirst($product->status) }}</p>
+                    </div>
+
+                    <!-- Static Comments Section -->
+                    <div class="border p-8">
+                        <h3 class="text-lg font-bold mb-2">Comments</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <p class="text-gray-800"><strong>Aldrian Bshon</strong>: This product is amazing!</p>
+                                <p class="text-gray-600 text-xs">2 hours ago</p>
+                            </div>
+                            <div>
+                                <p class="text-gray-800"><strong>James Stinoy</strong>: Great quality and price.</p>
+                                <p class="text-gray-600 text-xs">1 hour ago</p>
+                            </div>
+                            <div>
+                                <p class="text-gray-800"><strong>Clint Alonzo</strong>: Perfect for my next trip!</p>
+                                <p class="text-gray-600 text-xs">Just now</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Back to Products -->
+                    <a 
+                        href="{{ route('products.index') }}" 
+                        class="mt-4 inline-block text-blue-500 hover:underline"
+                    >
+                        Back to Products
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</x-app-layout>

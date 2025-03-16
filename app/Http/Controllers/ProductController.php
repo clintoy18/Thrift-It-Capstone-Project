@@ -100,6 +100,15 @@ class ProductController extends Controller
         return redirect()->route('products.index')->with('success', 'Product updated successfully!');
     }
     
+    //show product details
+        public function show($id)
+        {
+            $product = Product::with('user')->findOrFail($id);
+            return view('products.show', compact('product'));
+        }
+
+
+    
 
     /**
      * Remove the specified resource from storage.

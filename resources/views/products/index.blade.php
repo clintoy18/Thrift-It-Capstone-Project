@@ -13,33 +13,32 @@
                 @if($products->count() > 0)
                     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                         @foreach ($products as $product)
-                            <div class="bg-white text-black rounded-lg overflow-hidden shadow-lg border border-gray-200">
-                                <!-- Image with border highlight -->
+                            <a href="{{ route('products.show', $product->id) }}" class="block bg-white text-black rounded-lg overflow-hidden shadow-lg border border-gray-200 hover:shadow-xl transition duration-200 ease-in-out">
+                                <!-- Image with border highlight -->  
                                 <div class="relative group">
-                                    <img src="{{ $product->image ? asset('storage/' . $product->image) : asset('default-image.jpg') }}" 
+                                    <img src="{{ $product->image ? asset('storage/' . $product->image) : asset('images/default-placeholder.png') }}" 
                                          alt="{{ $product->name }}" 
                                          class="w-full h-64 object-cover border-2 border-transparent group-hover:border-blue-500 transition">
                                 </div>
 
-                                <!-- Product Details -->
+                                <!-- Product Details -->  
                                 <div class="p-4">
-                                   
-                                    
                                     <div class="flex justify-between items-start">
                                         <h3 class="text-lg font-bold">{{ $product->name }}</h3>
                                         <span class="text-gray-600 font-semibold">{{ $product->size ?? 'L' }}</span>
                                     </div>
-
                                     <p class="text-gray-500 text-sm truncate">{{ $product->category->name ?? 'No Category' }}</p>
-
+                                    
                                     <div class="flex justify-between items-center mt-2">
-                                        <p class="text-black font-bold text-lg">₱{{ number_format($product->price, 0) }}</p>
-                                        <button class="text-gray-500 hover:text-red-500">
-                                            ❤️
+                                        <p class="text-black font-bold text-lg">
+                                            {{ $product->listingtype === 'for donation' ? 'For Donation' : '₱' . number_format($product->price, 0) }}
+                                        </p>
+                                        <button class="favorite-btn text-gray-500 hover:text-red-500" data-id="{{ $product->id }}" onclick="event.preventDefault();">
+                                            🤍
                                         </button>
                                     </div>
                                 </div>
-                            </div>
+                            </a>
                         @endforeach
                     </div>
                 @else
@@ -47,5 +46,14 @@
                 @endif
             </div>
         </div>
-    </div>  
+    </div>
+
+    <script>
+        document.querySelectorAll('.favorite-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                // Toggle the favorite icon (for demonstration purposes only)
+                this.textContent = this.textContent === '🤍' ? '❤️' : '🤍';
+            });
+        });
+    </script>
 </x-app-layout>
