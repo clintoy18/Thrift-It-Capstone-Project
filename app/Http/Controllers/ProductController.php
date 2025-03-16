@@ -22,10 +22,10 @@ class ProductController extends Controller
      */
     public function index(): View
     {
-        $products = Product::all();
-
+        $products = Product::where('user_id', Auth::id())->get();
         return view('products.index', compact('products'));
     }
+    
 
     /**
      * Show the form for creating a new resource.

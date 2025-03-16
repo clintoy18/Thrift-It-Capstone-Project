@@ -25,7 +25,7 @@
                 @elseif($role === 1)
                     <a href="{{ route('upcycler') }}" class="text-gray-700">Upcycling Requests</a>
                 @elseif($role === 0)
-                    <a href="{{ route('products.index') }}" class="text-gray-700">Browse Products</a>
+                    <a href="{{ route('products.index') }}" class="text-gray-700">My Products</a>
                 @endif
                 
                 <a href="{{  route('products.create') }}" class="bg-black text-white px-4 py-1.5 text-sm rounded">
