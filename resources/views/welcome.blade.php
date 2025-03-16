@@ -78,15 +78,7 @@
             
             <div class="w-full border-t border-white my-6 text-center"></div>
             <!-- Navigation Links -->
-            <nav class="flex mx-auto gap-6 text-sm font-medium px-11  text-gray-900">
-                <a href="#" class="hover:underline">Men</a>
-                <a href="#" class="hover:underline">Women</a>
-                <a href="#" class="hover:underline">Kids</a>
-                <a href="#" class="hover:underline">Sports</a>
-                <a href="#" class="hover:underline">Brands</a>
-                <a href="#" class="text-red-600 font-bold hover:underline">Sale</a>
-                <a href="#" class="hover:underline">Upcycle</a>
-            </nav>
+          
         </header>
         
         <div class="flex items-center justify-center w-full transition-opacity opacity-100 duration-750 lg:grow starting:opacity-0">

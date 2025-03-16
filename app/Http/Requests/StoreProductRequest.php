@@ -22,13 +22,13 @@ class StoreProductRequest extends FormRequest
     public function rules(): array
     {
         return [
-
             'category_id' => 'required|exists:categories,id',
             'name' => 'required|string|max:255',
             'description' => 'required|string',
             'price' => 'required|numeric|min:0',
+            'size' => 'required|in:S,M,L,XL,XXL,3XL,4XL,5XL',
             'image' => 'nullable|image|max:2048',
-            'qty' => 'required|integer|min:1',
+            'qty' => 'integer',
             'listingtype' => 'required|in:for sale,for donation',
             'status' => 'required|in:available,sold',
         ];

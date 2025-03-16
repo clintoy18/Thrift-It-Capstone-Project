@@ -28,7 +28,7 @@
                     <a href="{{ route('products.index') }}" class="text-gray-700">Browse Products</a>
                 @endif
                 
-                <a href="{{ url('register') }}" class="bg-black text-white px-4 py-1.5 text-sm rounded">
+                <a href="{{  route('products.create') }}" class="bg-black text-white px-4 py-1.5 text-sm rounded">
                     Sell now
                 </a>
 
