@@ -76,31 +76,37 @@
                         </p>
                     </div>
 
-                    <!-- Product Details -->
-                    <div>
-                        <h2 class="font-semibold text-gray-800 dark:text-gray-200 mb-1">Details</h2>
-                        <!-- Example details text -->
-                        <p class="text-gray-600 mb-2">
-                            {{ $product->description }}
-                        </p>
-                        <!-- Example: "Min: 1500", "Steal: 2000", "Lock: 3000" -->
+                 <!-- Product Details -->
+                    <div class="space-y-2">
+                        <h2 class="font-semibold text-gray-800 dark:text-gray-200">Details</h2>
+                        <p class="text-gray-600">{{ $product->description }}</p>
+                        
                         @if($product->listingtype === 'for donation')
-                            <p class="text-lg font-bold text-green-600 mb-2">For Donation</p>
+                            <p class="text-lg font-bold text-green-600">For Donation</p>
                         @else
-                            <p class="text-lg font-bold text-gray-900 mb-2">
-                                ₱{{ number_format($product->price, 2) }}
-                            </p>
+                            <p class="text-lg font-bold text-gray-900">₱{{ number_format($product->price, 2) }}</p>
                         @endif
+                        
                         <p class="text-sm text-gray-500">Quantity: {{ $product->qty }}</p>
                         <p class="text-sm text-gray-500">Status: {{ ucfirst($product->status) }}</p>
+                        
+                        <!-- Show Update Button if User Owns the Product -->
+                        @if(Auth::id() === $product->user_id)
+                            <a href="{{ route('products.edit', $product->id) }}" 
+                                class="inline-block mt-3 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition">
+                                Update Product
+                            </a>
+                        @endif
                     </div>
+
+
 
                    <!-- Comments Section -->
                 <div class="border p-6 rounded-lg shadow bg-gray-100 dark:bg-gray-800">
                     <h3 class="text-lg font-bold mb-4">Comments</h3>
 
                     <!-- Scrollable Comment List -->
-                    <div class="max-h-64 overflow-y-auto space-y-4 pr-2">
+                    <div class="max-h-60 overflow-y-auto space-y-4 pr-2">
                         @forelse($product->comments as $comment)
                             <div class="bg-white dark:bg-gray-700 p-4 rounded-lg shadow-md">
                                 <div class="flex items-center gap-3">
