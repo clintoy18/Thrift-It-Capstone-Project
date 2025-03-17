@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\User;
 use App\Models\Categories;
+use App\Models\Comment;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
@@ -46,5 +47,10 @@ class Product extends Model
     public function getImageUrlAttribute()
     {
         return $this->image ? Storage::url($this->image) : null;
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
     }
 }

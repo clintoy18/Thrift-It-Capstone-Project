@@ -1,21 +1,20 @@
 <?php
 
 namespace App\Http\Controllers;
-
-use Illuminate\Http\Request;
+use App\Http\Requests\StoreCommentRequest;
 use App\Models\Product;
-use App\Models\Categories;
+use App\Models\Comment;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 
-class UserDashboardController extends Controller
+class CommentController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $products = Product::with(['category', 'user'])->get();
-        return view('dashboard', compact('products'));
+        //
     }
 
     /**
@@ -29,9 +28,17 @@ class UserDashboardController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreCommentRequest $request, $productId)
     {
-        //
+        Comment::create([
+            'user_id'=> Auth::id(),
+            'product_id'=> $productId,
+            'content'=> $request->content,
+            'parent_id' => $request->parent_id,
+
+        ]);
+
+        return redirect()->back()->with('success','Comment added succesfully!');
     }
 
     /**
@@ -61,8 +68,13 @@ class UserDashboardController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Comment $comment)
     {
-        //
+        if ($comment->user_id === Auth::id()) {
+            $comment->delete();
+            return redirect()->back()->with('success', 'Comment deleted.');
+        }
+
+        return redirect()->back()->with('error', 'Unauthorized action.');
     }
 }

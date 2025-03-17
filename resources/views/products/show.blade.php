@@ -95,24 +95,101 @@
                         <p class="text-sm text-gray-500">Status: {{ ucfirst($product->status) }}</p>
                     </div>
 
-                    <!-- Static Comments Section -->
-                    <div class="border p-8">
-                        <h3 class="text-lg font-bold mb-2">Comments</h3>
-                        <div class="space-y-4">
-                            <div>
-                                <p class="text-gray-800"><strong>Aldrian Bshon</strong>: This product is amazing!</p>
-                                <p class="text-gray-600 text-xs">2 hours ago</p>
-                            </div>
-                            <div>
-                                <p class="text-gray-800"><strong>James Stinoy</strong>: Great quality and price.</p>
-                                <p class="text-gray-600 text-xs">1 hour ago</p>
-                            </div>
-                            <div>
-                                <p class="text-gray-800"><strong>Clint Alonzo</strong>: Perfect for my next trip!</p>
-                                <p class="text-gray-600 text-xs">Just now</p>
+                        <!-- Comments Section -->
+                        <div class="border p-6 rounded-lg shadow bg-gray-100 dark:bg-gray-800">
+                            <h3 class="text-lg font-bold mb-4">Comments</h3>
+
+                            <div class="max-h-96 overflow-y-auto space-y-4 pr-2">
+                                @foreach($product->comments->where('parent_id', null) as $comment)
+                                    <div class="bg-white dark:bg-gray-700 p-4 rounded-lg shadow-md">
+                                        <div class="flex items-start gap-3">
+                                            <img 
+                                                src="https://ui-avatars.com/api/?name={{ urlencode($comment->user->fname . ' ' . $comment->user->lname) }}&background=random" 
+                                                class="w-10 h-10 rounded-full border"
+                                            >
+                                            <div class="w-full">
+                                                <div class="flex justify-between items-center">
+                                                    <p class="font-semibold text-gray-800 dark:text-gray-200">
+                                                        {{ $comment->user->fname }} {{ $comment->user->lname }}
+                                                    </p>
+                                                    <div class="flex gap-2">
+                                                        <p class="text-gray-600 text-sm">{{ $comment->created_at->diffForHumans() }}</p>
+                                                        
+                                                        @if(auth()->id() == $comment->user_id)
+                                                            <form action="{{ route('comments.destroy', $comment->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this comment?');">
+                                                                @csrf
+                                                                @method('DELETE')
+                                                                <button type="submit" class="text-red-500 text-sm hover:underline">Delete</button>
+                                                            </form>
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                                <p class="text-gray-800">{{ $comment->content }}</p>
+
+                                                <!-- Reply Button -->
+                                                <button class="text-blue-500 text-sm hover:underline" onclick="toggleReplyForm({{ $comment->id }})">
+                                                    Reply
+                                                </button>
+
+                                                <!-- Reply Form (Appears Directly Below the Comment) -->
+                                                <div id="reply-form-{{ $comment->id }}" class="hidden mt-2 ml-12">
+                                                    <form action="{{ route('comments.store', $product->id) }}" method="POST">
+                                                        @csrf
+                                                        <input type="hidden" name="parent_id" value="{{ $comment->id }}">
+                                                        <textarea name="content" rows="2" class="w-full border rounded-lg p-2"></textarea>
+                                                        <button type="submit" class="mt-2 px-4 py-1 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition">
+                                                            Reply
+                                                        </button>
+                                                    </form>
+                                                </div>
+
+                                                <!-- Replies (Properly Nested) -->
+                                                <div id="replies-{{ $comment->id }}" class="ml-8 mt-3 space-y-2">
+                                                    @foreach($comment->replies as $reply)
+                                                        <div class="bg-gray-200 dark:bg-gray-800 p-3 rounded-lg flex items-start gap-3">
+                                                            <img 
+                                                                src="https://ui-avatars.com/api/?name={{ urlencode($reply->user->fname . ' ' . $reply->user->lname) }}&background=random" 
+                                                                class="w-8 h-8 rounded-full border"
+                                                            >
+                                                            <div class="w-full">
+                                                                <div class="flex justify-between items-center">
+                                                                    <p class="text-sm text-gray-800 dark:text-gray-200">
+                                                                        <strong>{{ $reply->user->fname }} {{ $reply->user->lname }}</strong>
+                                                                    </p>
+                                                                    <div class="flex gap-2">
+                                                                        <p class="text-xs text-gray-600">{{ $reply->created_at->diffForHumans() }}</p>
+
+                                                                        @if(auth()->id() == $reply->user_id)
+                                                                            <form action="{{ route('comments.destroy', $reply->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this reply?');">
+                                                                                @csrf
+                                                                                @method('DELETE')
+                                                                                <button type="submit" class="text-red-500 text-xs hover:underline">Delete</button>
+                                                                            </form>
+                                                                        @endif
+                                                                    </div>
+                                                                </div>
+                                                                <p class="text-gray-800">{{ $reply->content }}</p>
+                                                            </div>
+                                                        </div>
+                                                    @endforeach
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
                             </div>
                         </div>
-                    </div>
+
+                        <script>
+                        function toggleReplyForm(commentId) {
+                            let form = document.getElementById('reply-form-' + commentId);
+                            if (form) {
+                                form.classList.toggle('hidden');
+                            }
+                        }
+                        </script>
+
+
 
                     <!-- Back to Products -->
                     <a 
