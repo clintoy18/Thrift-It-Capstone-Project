@@ -25,9 +25,7 @@ class ProductController extends Controller
         $products = Product::where('user_id', Auth::id())->get();
         return view('products.index', compact('products'));
     }
-    
-
-    /**
+        /**
      * Show the form for creating a new resource.
      *
      * @return View
