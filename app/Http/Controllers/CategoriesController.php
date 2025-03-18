@@ -41,10 +41,18 @@ class CategoriesController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Categories $categories)
+    public function show(Categories $category)
     {
-        //
+        // Fetch the products related to the category
+        $products = $category->products;
+    
+        // Return the view with the category and its products
+        return view('categories.show', [
+            'category' => $category,
+            'products' => $products,
+        ]);
     }
+    
 
     /**
      * Show the form for editing the specified resource.

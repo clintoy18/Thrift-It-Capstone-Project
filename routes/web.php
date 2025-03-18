@@ -31,21 +31,17 @@ Route::get('upcycler/dashboard', function () {
 Route::middleware(['auth', 'verified', 'rolemiddleware:user'])->group(function () {
     Route::resource('products', ProductController::class);
     Route::resource('categories', CategoriesController::class);
+   
 
       // Comments should only be created or deleted by authenticated users
       Route::post('/products/{product}/comments', [CommentController::class, 'store'])->name('comments.store');
       Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
 });
 
-
-
-
-
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-
 });
 
 require __DIR__.'/auth.php';

@@ -13,6 +13,7 @@
             </svg>
         </div>
         
+        
         <!-- User Menu -->
         <div class="hidden md:flex items-center gap-4">
             @auth
@@ -57,4 +58,7 @@
             @endauth
         </div>
     </div>
+  
+
+
 </nav>
