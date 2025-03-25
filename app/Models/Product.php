@@ -8,11 +8,13 @@ use App\Models\Comment;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
-
+use Laravel\Scout\Searchable;
 
 class Product extends Model
 {
-   
+   //typesense searchable trait from laravel scout
+    use Searchable;
+
     use HasFactory;
 
     protected $fillable = [
@@ -53,4 +55,18 @@ class Product extends Model
     {
         return $this->hasMany(Comment::class);
     }
+
+        /**
+     * Get the indexable data array for the model.
+     *
+     * @return array<string, mixed>
+     */
+    public function toSearchableArray()
+    {
+        return array_merge($this->toArray(),[
+            'id' => (string) $this->id,
+            'created_at' => $this->created_at->timestamp,
+        ]);
+    }
+
 }

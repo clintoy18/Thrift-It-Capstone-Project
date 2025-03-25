@@ -52,7 +52,7 @@ class CategoriesController extends Controller
             'products' => $products,
         ]);
     }
-    
+
 
     /**
      * Show the form for editing the specified resource.
