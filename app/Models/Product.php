@@ -61,7 +61,7 @@ class Product extends Model
      *
      * @return array<string, mixed>
      */
-    public function toSearchableArray()
+    public function toSearchableArray() :array
     {
         return array_merge($this->toArray(),[
             'id' => (string) $this->id,
