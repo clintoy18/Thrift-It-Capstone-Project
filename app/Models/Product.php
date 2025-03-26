@@ -14,7 +14,6 @@ class Product extends Model
 {
    //typesense searchable trait from laravel scout
     use Searchable;
-
     use HasFactory;
 
     protected $fillable = [
@@ -30,6 +29,10 @@ class Product extends Model
         'status',
     ];
 
+    protected $casts = [
+        'price' => 'float',
+    ];
+    
     public function user(){
         return $this->belongsTo(User::class);
     }
@@ -61,11 +64,14 @@ class Product extends Model
      *
      * @return array<string, mixed>
      */
-    public function toSearchableArray() :array
+    public function toSearchableArray() : array
     {
         return array_merge($this->toArray(),[
             'id' => (string) $this->id,
             'created_at' => $this->created_at->timestamp,
+            'updated_at' => $this->updated_at->timestamp,
+            
+            
         ]);
     }
 
