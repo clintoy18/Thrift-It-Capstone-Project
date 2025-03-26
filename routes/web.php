@@ -12,16 +12,12 @@ use App\Http\Controllers\SearchController;
 use App\Models\Product;
 
 
-Route::get('/search', function (Request $request) {
-    $query = $request->input('query');
-    return Product::search($query)->get();
-});
+Route::get('/search', [SearchController::class, 'index'])->name('search');
+
 
 Route::get('/', function () {
     return view('welcome');
 });
-
-
 
 Route::get('/dashboard', [UserDashboardController::class, 'index'])
     ->middleware(['auth', 'verified', 'rolemiddleware:user'])

@@ -5,13 +5,18 @@
             THRIFT - IT
         </a>
 
-        <!-- Search Bar -->
-        <div class="flex items-center bg-white px-3 py-1.5 rounded-full w-full max-w-md">
-            <input type="text" placeholder="Search" class="w-full border-none outline-none text-sm bg-transparent">
-            <svg class="w-5 h-5 text-gray-500" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M8 4a4 4 0 1 1 2.83 6.83l3.88 3.88a1 1 0 0 1-1.42 1.42l-3.88-3.88A4 4 0 0 1 8 4zm0 2a2 2 0 1 0 0 4 2 2 0 0 0 0-4z" clip-rule="evenodd"/>
-            </svg>
-        </div>
+        <form action="{{ route('search') }}" method="GET" class="flex items-center bg-white px-4 py-2 rounded-full w-full max-w-md shadow-sm border">
+            <input type="text" name="query" value="{{ request('query') }}" 
+                   placeholder="Search for a product..."
+                   class="w-full border-none outline-none text-sm bg-transparent text-gray-700"
+                   required>
+            <button type="submit" class="ml-2 text-gray-500 hover:text-blue-500">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M8 4a4 4 0 1 1 2.83 6.83l3.88 3.88a1 1 0 0 1-1.42 1.42l-3.88-3.88A4 4 0 0 1 8 4zm0 2a2 2 0 1 0 0 4 2 2 0 0 0 0-4z" clip-rule="evenodd"/>
+                </svg>
+            </button>
+        </form>
+        
 
         <!-- Right Icons (Wishlist, Cart, Sell Now, My Products, Profile) -->
         <div class="flex items-center gap-4">

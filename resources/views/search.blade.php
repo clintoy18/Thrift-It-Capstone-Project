@@ -1,40 +1,67 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Product Search</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-100 p-6">
+<x-app-layout>
+    <x-slot name="header">
+        <div class="flex">
+            <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+                {{ __('Search Results') }}
+            </h2>            
+        </div>
+    </x-slot>
 
-    <div class="max-w-2xl mx-auto bg-white p-6 shadow-md rounded-lg">
-        <h2 class="text-2xl font-bold mb-4">Search Products</h2>
+    <div class="py-12">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-4">
+            <div class="bg-gray-100 dark:bg-gray-800 overflow-hidden sm:rounded-md p-6">
+             
 
-        <form action="{{ route('search') }}" method="GET" class="mb-4">
-            <input type="text" name="query" value="{{ request('query') }}" 
-                   placeholder="Search for a product..."
-                   class="w-full px-4 py-2 border rounded-md">
-            <button type="submit" class="mt-2 w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-700">
-                Search
-            </button>
-        </form>
+                <!-- Search Results -->
+                @if(request('query'))
+                    @if($products->count() > 0)
+                        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                            @foreach ($products as $product)
+                                <a href="{{ route('products.show', $product->id) }}" 
+                                   class="block bg-white text-black rounded-lg overflow-hidden shadow-lg border border-gray-200 hover:shadow-xl transition duration-200 ease-in-out">
+                                    
+                                    <!-- Image -->
+                                    <div class="relative group">
+                                        <img src="{{ $product->image ? asset('storage/' . $product->image) : asset('images/default-placeholder.png') }}" 
+                                             alt="{{ $product->name }}" 
+                                             class="w-full h-64 object-cover border-2 border-transparent group-hover:border-blue-500 transition">
+                                    </div>
 
-        @if(request('query')) 
-            @if($products->count())
-                <h3 class="text-lg font-semibold mb-2">Search Results ({{ $products->count() }})</h3>
-                <ul>
-                    @foreach($products as $product)
-                        <li class="p-4 border-b">
-                            <strong>{{ $product->name }}</strong> - ₱{{ number_format($product->price, 2) }}
-                        </li>
-                    @endforeach
-                </ul>
-            @else
-                <p class="text-gray-500">No products found matching "<strong>{{ request('query') }}</strong>".</p>
-            @endif
-        @endif
+                                    <!-- Product Details -->
+                                    <div class="p-4">
+                                        <div class="flex justify-between items-start">
+                                            <h3 class="text-lg font-bold">{{ $product->name }}</h3>
+                                            <span class="text-gray-600 font-semibold">{{ $product->size ?? 'L' }}</span>
+                                        </div>
+                                        <p class="text-gray-500 text-sm truncate">{{ $product->category->name ?? 'No Category' }}</p>
+                                        
+                                        <div class="flex justify-between items-center mt-2">
+                                            <p class="text-black font-bold text-lg">
+                                                {{ $product->listingtype === 'for donation' ? 'For Donation' : '₱' . number_format($product->price, 0) }}
+                                            </p>
+                                            <button class="favorite-btn text-gray-500 hover:text-red-500" 
+                                                    data-id="{{ $product->id }}" 
+                                                    onclick="event.preventDefault();">
+                                                🤍
+                                            </button>
+                                        </div>
+                                    </div>
+                                </a>
+                            @endforeach
+                        </div>
+                    @else
+                        <p class="text-gray-400 text-center">No products found matching "<strong>{{ request('query') }}</strong>".</p>
+                    @endif
+                @endif
+            </div>
+        </div>
     </div>
 
-</body>
-</html>
+    <script>
+        document.querySelectorAll('.favorite-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                this.textContent = this.textContent === '🤍' ? '❤️' : '🤍';
+            });
+        });
+    </script>
+</x-app-layout>
