@@ -7,6 +7,15 @@ use App\Models\Categories;
 use App\Http\Controllers\UserDashboardController;
 use App\Http\Controllers\CommentController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
+use App\Http\Controllers\SearchController;
+use App\Models\Product;
+
+
+Route::get('/search', function (Request $request) {
+    $query = $request->input('query');
+    return Product::search($query)->get();
+});
 
 Route::get('/', function () {
     return view('welcome');
