@@ -69,9 +69,7 @@ class Product extends Model
         return array_merge($this->toArray(),[
             'id' => (string) $this->id,
             'created_at' => $this->created_at->timestamp,
-            'updated_at' => $this->updated_at->timestamp,
-            
-            
+            'updated_at' => $this->updated_at->timestamp,        
         ]);
     }
 

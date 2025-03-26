@@ -4,7 +4,8 @@
         <a href="{{ url('/dashboard') }}" class="text-2xl font-bold text-red-600">
             THRIFT - IT
         </a>
-
+        
+       <!---Search Bar--->
         <form action="{{ route('search') }}" method="GET" class="flex items-center bg-white px-4 py-2 rounded-full w-full max-w-md shadow-sm border">
             <input type="text" name="query" value="{{ request('query') }}" 
                    placeholder="Search for a product..."
