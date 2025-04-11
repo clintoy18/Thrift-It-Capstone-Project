@@ -37,6 +37,13 @@
                         <x-text-input id="price" name="price" type="number" step="0.01" class="mt-1 block w-full" 
                             :value="old('price', $product->price)" required />
                     </div>
+                    <div>
+                        <label for="status" class="block text-black font-medium mb-2">Status</label>
+                        <select id="status" name="status" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-gray-500" required>
+                            <option value="available">Available</option>
+                            <option value="sold">Sold</option>
+                        </select>
+                    </div>
 
                     <!-- Image Upload -->
                     <div class="mt-4">
