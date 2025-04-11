@@ -14,7 +14,7 @@ class UserDashboardController extends Controller
      */
     public function index()
     {
-        $products = Product::with(['category', 'user'])->get();
+        $products = Product::with(['category', 'user'])->where('status','available')->get();
         return view('dashboard', compact('products'));
     }
 
