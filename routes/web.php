@@ -3,7 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CategoriesController;
-use App\Models\Categories;
+use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\UserDashboardController;
 use App\Http\Controllers\CommentController;
 use Illuminate\Support\Facades\Route;
@@ -32,15 +32,13 @@ Route::get('upcycler/dashboard', function () {
 })->middleware(['auth', 'verified','rolemiddleware:upcycler'])->name('upcycler');
 
 
-//to make sure only a user can access the products routes, 
+//to make sure only a user can access the user routes, 
 Route::middleware(['auth', 'verified', 'rolemiddleware:user'])->group(function () {
     Route::resource('products', ProductController::class);
     Route::resource('categories', CategoriesController::class);
-   
-
-      // Comments should only be created or deleted by authenticated users
-      Route::post('/products/{product}/comments', [CommentController::class, 'store'])->name('comments.store');
-      Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
+    Route::resource('appointments', AppointmentController::class);
+    Route::post('/products/{product}/comments', [CommentController::class, 'store'])->name('comments.store');
+    Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
 });
 
 Route::middleware('auth')->group(function () {
