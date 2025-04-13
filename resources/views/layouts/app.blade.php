@@ -18,6 +18,9 @@
         <div class="min-h-screen bg-[#d9d9d9] dark:bg-gray-900">
             @include('layouts.navigation')
 
+            <!-- Success Message -->
+            <x-alert :message="session('success')" type="success" />
+
             <!-- Page Heading -->
             @isset($header)
                 <header class="bg-white dark:bg-gray-800 shadow">

@@ -5,15 +5,14 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 
-
-class UpdateProductRequest extends FormRequest
+class StoreAppointmentRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return Auth::check();
+        return Auth::check(); 
     }
 
     /**
@@ -24,12 +23,10 @@ class UpdateProductRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'category_id' => 'required|exists:categories,id',
-            'name' => 'required|string|max:255',
-            'price' => 'required|numeric|min:0',
-            'status' => 'required|in:available,sold',
-            'image' => 'nullable|image|max:2048'
-
+            'upcycler_id' => 'required|exists:users,id', // Ensure the upcycler exists
+            'appdetails' => 'nullable|string|max:255',
+            'apptype' => 'required|string|max:20',
+            'appdate' => 'required|date|after:now',
         ];
     }
 }
