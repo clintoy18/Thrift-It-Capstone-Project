@@ -36,6 +36,9 @@
                 <a href="{{ route('products.create') }}" class="bg-black text-white px-4 py-1.5 text-sm rounded">
                     Sell now
                 </a>
+                <a href="{{ route('appointments.index') }}" class="bg-black text-white px-4 py-1.5 text-sm rounded">
+                    Upcycle
+                </a>
 
                 <!-- Profile Dropdown -->
                 <div class="relative" x-data="{ open: false }">
