@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreAppointmentRequest;
 use App\Http\Requests\UpdateAppointmentRequest;
-use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use App\Models\Appointment;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
@@ -16,17 +16,23 @@ class AppointmentController extends Controller
      */
     public function index()
     {
-        $appointments = Appointment::where('user_id', Auth::id())->get();
-        return view('appointments.index', compact('appointments'));
+        $upcyclers = User::where('role', 1)->get(); // fetch all upcyclers
+        return view('appointments.index', compact('upcyclers'));
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Request $request)
     {
-        $upcyclers = User::where('role', 1)->get(); // Fetch all upcyclers
-        return view('appointments.create', compact('upcyclers'));
+        $upcyclerId = $request->query('upcycler_id'); 
+        $upcycler = null;
+
+        if($upcyclerId){
+            $upcycler = User::where('role', 1)->find($upcyclerId); 
+        }
+
+        return view('appointments.create', compact('upcycler'));
     }
 
     /**

@@ -12,18 +12,14 @@
                 <form action="{{ route('appointments.store') }}" method="POST">
                     @csrf
 
-                    <!-- Select Upcycler -->
-                    <div class="mb-4">
-                        <label for="upcycler_id" class="block text-black font-medium mb-2">Select Upcycler</label>
-                        <select id="upcycler_id" name="upcycler_id" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-gray-500" required>
-                            <option value="" disabled selected>Select an upcycler</option>
-                            @foreach ($upcyclers as $upcycler)
-                                <option value="{{ $upcycler->id }}" {{ old('upcycler_id') == $upcycler->id ? 'selected' : '' }}>
-                                    {{ $upcycler->fname }} {{ $upcycler->lname }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
+                    <!-- Display Upcycler Name -->
+                    @if ($upcycler)
+                        <div class="mb-4">
+                            <label class="block text-black font-medium mb-2">Upcycler</label>
+                            <p class="text-gray-800 dark:text-gray-200">{{ $upcycler->fname }} {{ $upcycler->lname }}</p>
+                            <input type="hidden" name="upcycler_id" value="{{ $upcycler->id }}">
+                        </div>
+                    @endif
 
                     <!-- Appointment Type -->
                     <div class="mb-4">
