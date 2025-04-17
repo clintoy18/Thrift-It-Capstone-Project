@@ -28,8 +28,8 @@ class UpdateProductRequest extends FormRequest
             'name' => 'required|string|max:255',
             'price' => 'required|numeric|min:0',
             'status' => 'required|in:available,sold',
-            'image' => 'nullable|image|max:2048'
-
+            'image' => 'nullable|image|max:2048',
+            'approval_status' => 'required|in:approved,pending,rejected'
         ];
     }
 }

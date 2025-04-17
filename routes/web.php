@@ -5,6 +5,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\UserDashboardController;
+use App\Http\Controllers\UpcyclerController;
 use App\Http\Controllers\CommentController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
@@ -13,7 +14,6 @@ use App\Models\Product;
 
 
 Route::get('/search', [SearchController::class, 'index'])->name('search');
-
 
 Route::get('/', function () {
     return view('welcome');
@@ -41,6 +41,9 @@ Route::middleware(['auth', 'verified', 'rolemiddleware:user'])->group(function (
     Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
 });
 
+Route::middleware(['auth', 'verified', 'rolemiddleware:upcycler'])->group(function () {
+    Route::resource('upcycler', UpcyclerController::class);
+});
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

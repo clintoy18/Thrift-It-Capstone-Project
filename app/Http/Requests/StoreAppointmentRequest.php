@@ -23,9 +23,10 @@ class StoreAppointmentRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'upcycler_id' => 'required|exists:users,id', // Ensure the upcycler exists
+            'upcycler_id' => 'required|exists:users,id',
             'appdetails' => 'nullable|string|max:255',
-            'apptype' => 'required|string|max:20',
+            'apptype' => ['required', 'in:Resize,Customize,Patchwork,Fabric Dyeing'],
+            'appstatus' => ['nullable', 'in:pending,approved,declined,completed'],
             'appdate' => 'required|date|after:now',
         ];
     }
