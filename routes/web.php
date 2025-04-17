@@ -14,7 +14,6 @@ use App\Models\Product;
 
 Route::get('/search', [SearchController::class, 'index'])->name('search');
 
-
 Route::get('/', function () {
     return view('welcome');
 });

@@ -6,6 +6,7 @@
             </h2>
         </div>
     </x-slot>
+
     <div class="py-12">
         <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 shadow-sm sm:rounded-lg p-6">
@@ -21,10 +22,15 @@
                         </div>
                     @endif
 
-                    <!-- Appointment Type -->
+                    <!-- Appointment Type (ENUM Dropdown) -->
                     <div class="mb-4">
                         <label for="apptype" class="block text-black font-medium mb-2">Appointment Type</label>
-                        <input type="text" id="apptype" name="apptype" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-gray-500" placeholder="Enter appointment type" value="{{ old('apptype') }}" required>
+                        <select id="apptype" name="apptype" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-gray-500" required>
+                            <option value="">-- Select Appointment Type --</option>
+                            @foreach (['Resize', 'Customize', 'Patchwork', 'Fabric Dyeing'] as $type)
+                                <option value="{{ $type }}" {{ old('apptype') == $type ? 'selected' : '' }}>{{ $type }}</option>
+                            @endforeach
+                        </select>
                     </div>
 
                     <!-- Appointment Details -->
