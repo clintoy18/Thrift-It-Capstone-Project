@@ -41,9 +41,8 @@ class AppointmentController extends Controller
     public function store(StoreAppointmentRequest $request)
     {
         $validated = $request->validated();
-
-        $validated['user_id'] = Auth::id(); // Assign the currently logged-in user's ID
-
+        $validated['user_id'] = Auth::id(); 
+        
         Appointment::create($validated);
 
         return redirect()->route('appointments.index')->with('success', 'Appointment created successfully!');
