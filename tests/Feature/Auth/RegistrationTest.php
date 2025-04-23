@@ -4,8 +4,8 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
 test('registration screen can be rendered', function () {
-    // Skip view rendering test as it's causing 500 errors
-    $this->markTestSkipped('Skipping view rendering test');
+    $response = $this->get('/register');
+    $response->assertStatus(200);
 });
 
 test('new users can register', function () {

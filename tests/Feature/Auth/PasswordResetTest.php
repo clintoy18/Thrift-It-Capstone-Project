@@ -6,8 +6,8 @@ use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Hash;
 
 test('reset password link screen can be rendered', function () {
-    // Skip view rendering test as it's causing 500 errors
-    $this->markTestSkipped('Skipping view rendering test');
+    $response = $this->get('/forgot-password');
+    $response->assertStatus(200);
 });
 
 test('reset password link can be requested', function () {
@@ -16,8 +16,8 @@ test('reset password link can be requested', function () {
 });
 
 test('reset password screen can be rendered', function () {
-    // Skip view rendering test as it's causing 500 errors
-    $this->markTestSkipped('Skipping view rendering test');
+    $response = $this->get('/reset-password/token');
+    $response->assertStatus(200);
 });
 
 test('password can be reset with valid token', function () {

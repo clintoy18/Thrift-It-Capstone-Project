@@ -4,8 +4,9 @@ use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 
 test('confirm password screen can be rendered', function () {
-    // Skip view rendering test as it's causing 500 errors
-    $this->markTestSkipped('Skipping view rendering test');
+    $user = User::factory()->create();
+    $response = $this->actingAs($user)->get('/confirm-password');
+    $response->assertStatus(200);
 });
 
 test('password can be confirmed', function () {

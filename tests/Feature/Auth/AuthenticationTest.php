@@ -4,8 +4,8 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
 test('login screen can be rendered', function () {
-    // Skip view rendering test as it's causing 500 errors
-    $this->markTestSkipped('Skipping view rendering test');
+    $response = $this->get('/login');
+    $response->assertStatus(200);
 });
 
 test('users can authenticate using the login screen', function () {

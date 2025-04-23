@@ -2,10 +2,14 @@
 
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 test('profile page is displayed', function () {
-    // Skip view rendering test as it's causing 500 errors
-    $this->markTestSkipped('Skipping view rendering test');
+    $user = User::factory()->create();
+    
+    $response = $this->actingAs($user)->get('/profile');
+    
+    $response->assertOk();
 });
 
 test('profile information can be updated', function () {
@@ -55,8 +59,8 @@ test('correct password must be provided to delete account', function () {
     ]);
     
     // Verify that wrong password doesn't match
-    $this->assertFalse(\Illuminate\Support\Facades\Hash::check('wrong-password', $user->password));
+    $this->assertFalse(Hash::check('wrong-password', $user->password));
     
     // Verify the correct password matches
-    $this->assertTrue(\Illuminate\Support\Facades\Hash::check('correct-password', $user->password));
+    $this->assertTrue(Hash::check('correct-password', $user->password));
 });
