@@ -66,7 +66,6 @@ class ProductController extends Controller
     public function edit(Product $product): View
     {
         $categories = Categories::all();
-        
         return view('products.edit', ['product' => $product, 'categories' => $categories]);
     }
 
@@ -87,14 +86,13 @@ class ProductController extends Controller
                 Storage::delete('public/' . $product->image);
             }
 
-        // Store the new image
-        $imagePath = $request->file('image')->store('products', 'public');
-        $data['image'] = $imagePath; // Add the image path to the validated data
-    }
+            // Store the new image
+            $imagePath = $request->file('image')->store('products', 'public');
+            $data['image'] = $imagePath; // Add the image path to the validated data
+        }
 
-    // U
+        // Update the product
         $product->update($data);
-        
         return redirect()->route('products.index')->with('success', 'Product updated successfully!');
     }
     
