@@ -47,8 +47,7 @@ class ProductController extends Controller
         {
             $validated = $request->validated();
 
-            $validated['user_id'] = Auth::id(); // Assign the currently logged-in user's ID
-
+            $validated['user_id'] = Auth::id(); 
             if ($request->hasFile('image')) {
                 $validated['image'] = $request->file('image')->store('products_images', 'public');
             }
@@ -67,6 +66,7 @@ class ProductController extends Controller
     public function edit(Product $product): View
     {
         $categories = Categories::all();
+        
         return view('products.edit', ['product' => $product, 'categories' => $categories]);
     }
 
@@ -101,7 +101,8 @@ class ProductController extends Controller
     //show product details
         public function show($id)
         {
-            $product = Product::with('user')->findOrFail($id);
+            
+            $product = Product::with(['user', 'category','comments'])->findOrFail($id);
             return view('products.show', compact('product'));
         }
 

@@ -16,7 +16,9 @@ class UpcyclerController extends Controller
         $appointments = Appointment::where('upcycler_id', Auth::id())
         ->where('appstatus', 'pending')
         ->get();
-    return view('upcycler.index', compact('appointments'));    }
+        
+        return view('upcycler.index', compact('appointments'));    
+    }
     /**
      * Show the form for creating a new resource.
      */

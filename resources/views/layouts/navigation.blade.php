@@ -40,7 +40,6 @@
                         Manage Appointments
                     </a>
                 @endif
-
                 <!-- Profile Dropdown -->
                 <div class="relative" x-data="{ open: false }">
                     <button @click="open = ! open" class="text-gray-700 flex items-center">
@@ -64,7 +63,6 @@
             @endauth
         </div>
     </div>
-    
     <!-- Categories Navigation (Right-aligned) -->
     <div class="bg-[#d9d9d9] py-2 mt-2">
         @if(Auth::check() && Auth::user()->role === 0)
