@@ -1,11 +1,13 @@
 <x-app-layout>
-
-
     <div class="py-6 bg-white dark:bg-gray-900">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="mb-6">
-                <h2 class="text-xl font-bold text-red-600 dark:text-red-400">My products</h2>
-              
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-xl font-bold text-red-600 dark:text-red-400">My Products</h2>
+
+                <!-- Button to list or create product -->
+                <a href="{{ route('products.create') }}" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 focus:outline-none transition">
+                    <span class="font-semibold">List a Product</span>
+                </a>
             </div>
 
             <div class="rounded-xl shadow-sm overflow-hidden">
@@ -68,7 +70,7 @@
                             @endforeach
                         </div>
                     @else
-                    <x-empty-message message="No active products found." link="{{ route('products.create') }}" />
+                        <x-empty-message message="No active products found." link="{{ route('products.create') }}" />
                     @endif
                 </div>
             </div>
