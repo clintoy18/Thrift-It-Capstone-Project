@@ -2,12 +2,30 @@
     <div class="py-6 bg-white dark:bg-gray-900">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center mb-6">
-                <h2 class="text-xl font-bold text-red-600 dark:text-red-400">My Products</h2>
+                <h2 class="text-xl font-bold text-red-600 dark:text-red-400">
+                    {{ Auth::id() === $user->id ? 'My Products' : $user->fname . "'s Products" }}
+                </h2>
 
-                <!-- Button to list or create product -->
-                <a href="{{ route('products.create') }}" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 focus:outline-none transition">
-                    <span class="font-semibold">List a Product</span>
-                </a>
+                @if (Auth::id() === $user->id)
+                    <!-- Show button only if current user is viewing their own profile -->
+                    <a href="{{ route('products.create') }}" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 focus:outline-none transition">
+                        <span class="font-semibold">List a Product</span>
+                    </a>
+                @endif
+            </div>
+            
+               <!-- Profile Information Section -->
+               <div class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
+                <div class="max-w-xl">
+                    <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">Profile Information</h3>
+
+                    <!-- Display User Information -->
+                    <div class="mt-2">
+                        <p><strong>Name:</strong> {{ $user->fname }}  {{ $user->lname }}</p>
+                        <p><strong>Email:</strong> {{ $user->email }}</p>
+                        <p><strong>Bio:</strong> {{ $user->bio ?? 'No bio available' }}</p>
+                    </div>
+                </div>
             </div>
 
             <div class="rounded-xl shadow-sm overflow-hidden">
@@ -25,8 +43,8 @@
 
                                         <div class="relative aspect-square overflow-hidden">
                                             <img src="{{ $product->image ? asset('storage/' . $product->image) : asset('images/default-placeholder.png') }}" 
-                                                 alt="{{ $product->name }}" 
-                                                 class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105">
+                                                alt="{{ $product->name }}" 
+                                                class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105">
 
                                             <div class="absolute inset-0 bg-gray-800 bg-opacity-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                                                 <span class="bg-white text-gray-800 px-2 py-0.5 rounded-full text-[10px] sm:text-xs font-medium">
@@ -53,7 +71,6 @@
                                                 <p class="text-xs sm:text-sm font-bold {{ $product->listingtype === 'for donation' ? 'text-gray-700' : 'text-red-600' }}">
                                                     {{ $product->listingtype === 'for donation' ? 'For Donation' : '₱' . number_format($product->price, 0) }}
                                                 </p>
-
                                                 <button class="favorite-btn text-gray-400 hover:text-red-500 focus:outline-none transition-colors" 
                                                         data-id="{{ $product->id }}" 
                                                         type="button"
@@ -69,27 +86,10 @@
                             @endforeach
                         </div>
                     @else
-                        <x-empty-message message="No active products found." link="{{ route('products.create') }}" />
+                        <x-empty-message message="No active products found." :link="route('products.create')" />
                     @endif
                 </div>
             </div>
         </div>
     </div>
-
-    <script>
-        document.querySelectorAll('.favorite-btn').forEach(button => {
-            button.addEventListener('click', function() {
-                const svg = this.querySelector('svg');
-                if (svg.getAttribute('fill') === 'none') {
-                    svg.setAttribute('fill', 'currentColor');
-                    svg.setAttribute('stroke', 'none');
-                    this.classList.add('text-red-500');
-                } else {
-                    svg.setAttribute('fill', 'none');
-                    svg.setAttribute('stroke', 'currentColor');
-                    this.classList.remove('text-red-500');
-                }
-            });
-        });
-    </script>
 </x-app-layout>
