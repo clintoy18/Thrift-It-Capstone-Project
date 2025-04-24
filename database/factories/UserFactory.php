@@ -28,8 +28,9 @@ class UserFactory extends Factory
             'lname' => $this->faker->lastName,
             'email' => $this->faker->unique()->safeEmail,
             'email_verified_at' => now(),
-            'password' => bcrypt('password'), // Default password
+            'password' => bcrypt('password'),
             'remember_token' => Str::random(10),
+            'role' => $this->faker->numberBetween(0, 2)
         ];
     }
 
@@ -40,6 +41,26 @@ class UserFactory extends Factory
     {
         return $this->state(fn (array $attributes) => [
             'email_verified_at' => null,
+        ]);
+    }
+    
+    /**
+     * Indicate that the user is an admin.
+     */
+    public function admin(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'role' => 2,
+        ]);
+    }
+    
+    /**
+     * Indicate that the user is an upcycler.
+     */
+    public function upcycler(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'role' => 1,
         ]);
     }
 }

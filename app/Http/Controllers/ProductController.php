@@ -47,8 +47,7 @@ class ProductController extends Controller
         {
             $validated = $request->validated();
 
-            $validated['user_id'] = Auth::id(); // Assign the currently logged-in user's ID
-
+            $validated['user_id'] = Auth::id(); 
             if ($request->hasFile('image')) {
                 $validated['image'] = $request->file('image')->store('products_images', 'public');
             }
@@ -87,21 +86,21 @@ class ProductController extends Controller
                 Storage::delete('public/' . $product->image);
             }
 
-        // Store the new image
-        $imagePath = $request->file('image')->store('products', 'public');
-        $data['image'] = $imagePath; // Add the image path to the validated data
-    }
+            // Store the new image
+            $imagePath = $request->file('image')->store('products', 'public');
+            $data['image'] = $imagePath; // Add the image path to the validated data
+        }
 
-    // U
+        // Update the product
         $product->update($data);
-        
         return redirect()->route('products.index')->with('success', 'Product updated successfully!');
     }
     
     //show product details
         public function show($id)
         {
-            $product = Product::with('user')->findOrFail($id);
+            
+            $product = Product::with(['user', 'category','comments'])->findOrFail($id);
             return view('products.show', compact('product'));
         }
 

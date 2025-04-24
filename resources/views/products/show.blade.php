@@ -55,8 +55,7 @@
                             </div>
                         </div>
                         <!-- Visit Profile Button -->
-                        <a 
-                            href="#" 
+                        <a href="{{ route('profile.show', $product->user->id) }}" 
                             class="ml-auto px-4 py-2 text-sm border rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition"
                         >
                             Visit Profile
@@ -119,9 +118,13 @@
 
                                     <!-- User Info -->
                                     <div>
+                                        <a href="{{ route('profile.show', $comment->user->id) }}" class="text-blue-500 hover:underline">
+                                        
+                                        
                                         <p class="font-semibold text-gray-800 dark:text-gray-200">
                                             {{ $comment->user->fname }} {{ $comment->user->lname }}
                                         </p>
+                                        </a>
                                         <p class="text-gray-600 dark:text-gray-300 text-sm">
                                             {{ $comment->created_at->diffForHumans() }}
                                         </p>
@@ -130,7 +133,7 @@
 
                                 <!-- Comment Content -->
                                 <p class="mt-2 text-gray-800 dark:text-gray-200">{{ $comment->content }}</p>
-
+                               
                                 <!-- Delete Button (Only for Comment Owner) -->
                                 @if(Auth::id() === $comment->user_id)
                                     <form action="{{ route('comments.destroy', $comment->id) }}" method="POST" class="mt-2">

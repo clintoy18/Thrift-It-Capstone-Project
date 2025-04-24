@@ -34,6 +34,9 @@
             <main>
                 {{ $slot }}
             </main>
+            
+            <!-- Include the footer component -->
+            <x-footer />
         </div>
     </body>
 </html>

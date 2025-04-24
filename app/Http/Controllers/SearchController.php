@@ -12,7 +12,6 @@ class SearchController extends Controller
     {
         $query = $request->input('query');
         $products = $query ? Product::search($query)->get() : collect(); // Fetch only if there's a search
-
         return view('search', compact('products', 'query'));
     }
 
