@@ -12,6 +12,10 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\SearchController;
 use App\Models\Product;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\Admin\AdminDashboardController;
+use App\Http\Controllers\Admin\AdminReportController;
+use App\Http\Controllers\Admin\AdminUserController;
+use App\Http\Controllers\Admin\AdminProductController;
 
 
 Route::get('/search', [SearchController::class, 'index'])->name('search');
@@ -57,6 +61,14 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
     Route::get('/users/{user}/report', [ReportController::class, 'create'])->name('reports.create');
     Route::post('/users/{user}/report', [ReportController::class, 'store'])->name('reports.store');
+});
+
+// Admin Routes
+Route::middleware(['auth', 'verified', 'rolemiddleware:admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
+    Route::resource('reports', AdminReportController::class);
+    Route::resource('users', AdminUserController::class);
+    Route::resource('products', AdminProductController::class);
 });
 
 require __DIR__.'/auth.php';
