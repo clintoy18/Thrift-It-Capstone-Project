@@ -1,11 +1,5 @@
 <x-app-layout>
-    <x-slot name="header">
-        <div class="flex items-center justify-between">
-            <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-                {{ __('List an Item') }}
-            </h2>
-        </div>
-    </x-slot>
+
 
     <div class="py-12">
         <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
@@ -159,10 +153,21 @@
                                 <label for="price" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Item Price</label>
                                 <div class="mt-1 relative rounded-md shadow-sm">
                                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                        <span class="text-gray-500 sm:text-sm">$</span>
+                                        <span class="text-gray-500 sm:text-sm">₱</span>
                                     </div>
-                                    <input type="number" id="price" name="price" value="{{ old('price') }}" class="block w-full pl-7 pr-12 rounded-md border-gray-300 focus:border-gray-500 focus:ring-gray-500" placeholder="0.00" min="0" step="0.01">
+                                    <input type="number" 
+                                           id="price" 
+                                           name="price" 
+                                           value="{{ old('price') }}" 
+                                           class="block w-full pl-7 pr-12 rounded-md border-gray-300 focus:border-gray-500 focus:ring-gray-500" 
+                                           placeholder="0.00" 
+                                           min="0" 
+                                           step="0.01"
+                                           pattern="^\d+(\.\d{1,2})?$"
+                                           oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
+                                           required>
                                 </div>
+                                <p class="mt-1 text-sm text-gray-500">Enter amount in PHP (e.g., 100.75)</p>
                                 @error('price')
                                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                                 @enderror
