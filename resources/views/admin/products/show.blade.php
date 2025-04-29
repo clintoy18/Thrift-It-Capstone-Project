@@ -26,7 +26,7 @@
                             <div class="space-y-2">
                                 <p><span class="font-medium">Name:</span> {{ $product->user->first_name }} {{ $product->user->last_name }}</p>
                                 <p><span class="font-medium">Email:</span> {{ $product->user->email }}</p>
-                                <p><span class="font-medium">Role:</span> {{ $product->user->role->name }}</p>
+                                <p><span class="font-medium">Role:</span> {{ $product->user->role_name }}</p>
                             </div>
                         </div>
                     </div>

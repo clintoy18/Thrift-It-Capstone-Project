@@ -46,6 +46,7 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'role' => 'integer',
         ];
     }
 
@@ -53,4 +54,41 @@ class User extends Authenticatable
     {
         return $this->hasMany(Product::class);
     }   
+
+    /**
+     * Check if user is an admin
+     */
+    public function isAdmin(): bool
+    {
+        return $this->role === 2;
+    }
+
+    /**
+     * Check if user is an upcycler
+     */
+    public function isUpcycler(): bool
+    {
+        return $this->role === 1;
+    }
+
+    /**
+     * Check if user is a regular user
+     */
+    public function isRegularUser(): bool
+    {
+        return $this->role === 0;
+    }
+
+    /**
+     * Get role name
+     */
+    public function getRoleNameAttribute(): string
+    {
+        return match($this->role) {
+            2 => 'Admin',
+            1 => 'Upcycler',
+            0 => 'User',
+            default => 'Unknown'
+        };
+    }
 }

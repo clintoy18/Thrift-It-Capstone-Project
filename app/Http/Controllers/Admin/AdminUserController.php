@@ -12,23 +12,22 @@ class AdminUserController extends Controller
 {
     public function index(): View
     {
-        $users = User::with('role')
-            ->latest()
-            ->paginate(10);
-
+        $users = User::latest()->paginate(10);
         return view('admin.users.index', compact('users'));
     }
 
     public function show(User $user): View
     {
-        $user->load(['role', 'products', 'reportsReceived']);
+        $user->load(['products', 'reportsReceived']);
         return view('admin.users.show', compact('user'));
     }
 
     public function update(Request $request, User $user): RedirectResponse
     {
         $validated = $request->validate([
-            'role_id' => 'required|exists:roles,id',
+            'fname' => 'required|string|max:30',
+            'lname' => 'required|string|max:30',
+            'role' => 'required|integer|min:0|max:2',
             'is_active' => 'boolean'
         ]);
 

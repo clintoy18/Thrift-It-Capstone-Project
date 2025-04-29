@@ -14,7 +14,8 @@
                         <div class="bg-gray-50 dark:bg-gray-700 p-6 rounded-lg">
                             <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">Basic Information</h3>
                             <div class="space-y-2">
-                                <p><span class="font-medium">Name:</span> {{ $user->first_name }} {{ $user->last_name }}</p>
+                                <p><span class="font-medium">First Name:</span> {{ $user->fname }}</p>
+                                <p><span class="font-medium">Last Name:</span> {{ $user->lname }}</p>
                                 <p><span class="font-medium">Email:</span> {{ $user->email }}</p>
                                 <p><span class="font-medium">Joined:</span> {{ $user->created_at->format('F j, Y') }}</p>
                             </div>
@@ -26,7 +27,7 @@
                                 <p>
                                     <span class="font-medium">Role:</span>
                                     <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-indigo-100 text-indigo-800">
-                                        {{ $user->role->name }}
+                                        {{ $user->role_name }}
                                     </span>
                                 </p>
                                 <p>

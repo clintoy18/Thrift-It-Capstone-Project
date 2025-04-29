@@ -16,7 +16,7 @@
                             <div class="space-y-2">
                                 <p><span class="font-medium">Name:</span> {{ $report->reporter->first_name }} {{ $report->reporter->last_name }}</p>
                                 <p><span class="font-medium">Email:</span> {{ $report->reporter->email }}</p>
-                                <p><span class="font-medium">Role:</span> {{ $report->reporter->role->name }}</p>
+                                <p><span class="font-medium">Role:</span> {{ $report->reporter->role_name }}</p>
                             </div>
                         </div>
 
@@ -26,7 +26,7 @@
                             <div class="space-y-2">
                                 <p><span class="font-medium">Name:</span> {{ $report->reportedUser->first_name }} {{ $report->reportedUser->last_name }}</p>
                                 <p><span class="font-medium">Email:</span> {{ $report->reportedUser->email }}</p>
-                                <p><span class="font-medium">Role:</span> {{ $report->reportedUser->role->name }}</p>
+                                <p><span class="font-medium">Role:</span> {{ $report->reportedUser->role_name }}</p>
                             </div>
                         </div>
                     </div>

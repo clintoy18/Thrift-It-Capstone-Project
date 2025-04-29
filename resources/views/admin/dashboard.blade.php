@@ -11,7 +11,12 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
                 <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6">
-                        <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">Total Users</h3>
+                        <div class="flex justify-between items-center">
+                            <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">Total Users</h3>
+                            <a href="{{ route('admin.users.index') }}" class="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 focus:bg-indigo-700 active:bg-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                                Manage Users
+                            </a>
+                        </div>
                         <p class="text-3xl font-bold text-indigo-600 dark:text-indigo-400">{{ $stats['total_users'] }}</p>
                         <p class="text-sm text-gray-500 dark:text-gray-400">+{{ $stats['new_users_today'] }} today</p>
                     </div>
@@ -19,7 +24,12 @@
 
                 <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6">
-                        <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">Total Products</h3>
+                        <div class="flex justify-between items-center">
+                            <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">Total Products</h3>
+                            <a href="{{ route('admin.products.index') }}" class="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 focus:bg-indigo-700 active:bg-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                                Manage Products
+                            </a>
+                        </div>
                         <p class="text-3xl font-bold text-indigo-600 dark:text-indigo-400">{{ $stats['total_products'] }}</p>
                         <p class="text-sm text-gray-500 dark:text-gray-400">+{{ $stats['new_products_today'] }} today</p>
                     </div>
@@ -27,7 +37,12 @@
 
                 <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6">
-                        <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">Pending Reports</h3>
+                        <div class="flex justify-between items-center">
+                            <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">Pending Reports</h3>
+                            <a href="{{ route('admin.reports.index') }}" class="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 focus:bg-indigo-700 active:bg-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                                Manage Reports
+                            </a>
+                        </div>
                         <p class="text-3xl font-bold text-indigo-600 dark:text-indigo-400">{{ $stats['pending_reports'] }}</p>
                         <p class="text-sm text-gray-500 dark:text-gray-400">{{ $stats['active_listings'] }} active listings</p>
                     </div>
@@ -53,10 +68,10 @@
                                 @foreach($recentReports as $report)
                                     <tr>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
-                                            {{ $report->reporter->first_name }} {{ $report->reporter->last_name }}
+                                            {{ $report->reporter->fname }} {{ $report->reporter->lname }}
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
-                                            {{ $report->reportedUser->first_name }} {{ $report->reportedUser->last_name }}
+                                            {{ $report->reportedUser->fname }} {{ $report->reportedUser->lname }}
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
                                             {{ $report->reason }}
@@ -102,7 +117,7 @@
                                             {{ $product->name }}
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
-                                            {{ $product->user->first_name }} {{ $product->user->last_name }}
+                                            {{ $product->user->fname }} {{ $product->user->lname }}
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
                                             {{ $product->category->name }}
