@@ -59,7 +59,7 @@
                     <!-- Authentication Buttons -->
                     @if (Route::has('login'))
                         @auth
-                            <a href="{{ url('/dashboard') }}" class="text-sm text-gray-700">
+                            <a href="{{ url('admin/dashboard') }}" class="text-sm text-gray-700">
                                 Dashboard
                             </a>
                         @else

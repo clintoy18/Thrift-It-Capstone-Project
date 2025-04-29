@@ -54,12 +54,23 @@
                                 <span class="text-gray-500"> (5)</span>
                             </div>
                         </div>
-                        <!-- Visit Profile Button -->
-                        <a href="{{ route('profile.show', $product->user->id) }}" 
-                            class="ml-auto px-4 py-2 text-sm border rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition"
-                        >
-                            Visit Profile
-                        </a>
+                        <!-- Action Buttons -->
+                        <div class="ml-auto flex gap-2">
+                            <!-- Visit Profile Button -->
+                            <a href="{{ route('profile.show', $product->user->id) }}" 
+                                class="px-4 py-2 text-sm border rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition"
+                            >
+                                Visit Profile
+                            </a>
+                            <!-- Report User Button -->
+                            @if(Auth::id() !== $product->user_id)
+                                <a href="{{ route('reports.create', $product->user->id) }}" 
+                                    class="px-4 py-2 text-sm border border-red-500 text-red-500 rounded hover:bg-red-50 dark:hover:bg-red-900/20 transition"
+                                >
+                                    Report User
+                                </a>
+                            @endif
+                        </div>
                     </div>
 
                     <!-- Product Title & Short Info -->

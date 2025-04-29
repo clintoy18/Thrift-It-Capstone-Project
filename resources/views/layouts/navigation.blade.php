@@ -3,7 +3,7 @@
         <!-- Desktop Navigation -->
         <div class="flex justify-between items-center">
             <!-- Logo -->
-            <a href="{{ url('/dashboard') }}" class="text-xl sm:text-2xl font-bold text-red-600 flex-shrink-0">
+            <a href="{{ url('admin/dashboard') }}" class="text-xl sm:text-2xl font-bold text-red-600 flex-shrink-0">
                 THRIFT - IT
             </a>
             
@@ -129,35 +129,41 @@
     <!-- Categories Navigation (Responsive) -->
     <div class="bg-[#d9d9d9] py-2 mt-2">
         @if(Auth::check() && Auth::user()->role === 0)
-            <!-- Desktop Categories Dropdown -->
-            <div class="max-w-7xl mx-auto px-2" x-data="{ categoriesOpen: false }">
-                <div class="relative">
-                    <!-- Categories Dropdown Button -->
-                    <button @click="categoriesOpen = !categoriesOpen" class="flex items-center justify-between w-full md:w-48 px-4 py-2 bg-white text-gray-700 rounded-lg shadow-sm hover:bg-gray-50 focus:outline-none">
+            <div class="max-w-7xl mx-auto px-2">
+                <!-- Desktop Categories -->
+                <div class="hidden md:flex items-center justify-center space-x-6">
+                    @foreach($categories as $category)
+                        <a href="{{ route('categories.show', $category->id) }}" 
+                           class="text-sm font-medium text-gray-700 hover:text-red-600 transition-colors duration-200">
+                            {{ $category->name }}
+                        </a>
+                    @endforeach
+                </div>
+
+                <!-- Mobile Categories -->
+                <div class="md:hidden" x-data="{ mobileCategoriesOpen: false }">
+                    <button @click="mobileCategoriesOpen = !mobileCategoriesOpen" 
+                            class="w-full flex items-center justify-between px-4 py-2 bg-white text-gray-700 rounded-lg shadow-sm hover:bg-gray-50">
                         <span class="font-medium">Categories</span>
-                        <svg class="w-5 h-5 ml-2" :class="{'transform rotate-180': categoriesOpen}" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <svg class="w-5 h-5" :class="{'transform rotate-180': mobileCategoriesOpen}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                         </svg>
                     </button>
                     
-                    <!-- Dropdown Content -->
-                    <div x-show="categoriesOpen" 
+                    <div x-show="mobileCategoriesOpen" 
                          x-transition:enter="transition ease-out duration-200"
                          x-transition:enter-start="opacity-0 transform scale-95"
                          x-transition:enter-end="opacity-100 transform scale-100"
                          x-transition:leave="transition ease-in duration-150"
                          x-transition:leave-start="opacity-100 transform scale-100"
                          x-transition:leave-end="opacity-0 transform scale-95"
-                         @click.away="categoriesOpen = false"
-                         class="absolute left-0 mt-2 w-full md:w-64 bg-white rounded-md shadow-lg z-20">
-                        <div class="py-1 max-h-80 overflow-y-auto">
-                            @foreach($categories as $category)
-                                <a href="{{ route('categories.show', $category->id) }}" 
-                                class="block px-4 py-2 text-sm text-gray-700 hover:bg-red-50 hover:text-red-600 {{ $category->name == 'Sale' ? 'text-red-600 font-bold' : '' }}">
-                                    {{ $category->name }}
-                                </a>
-                            @endforeach
-                        </div>
+                         class="mt-2 bg-white rounded-lg shadow-lg overflow-hidden">
+                        @foreach($categories as $category)
+                            <a href="{{ route('categories.show', $category->id) }}" 
+                               class="block px-4 py-3 text-sm font-medium text-gray-700 hover:bg-red-50 hover:text-red-600 transition-colors duration-200">
+                                {{ $category->name }}
+                            </a>
+                        @endforeach
                     </div>
                 </div>
             </div>
