@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('products', function (Blueprint $table) {
-            $table->enum('size',['S', 'M', 'L', 'XL', 'XXL', '3XL', '4XL','5XL'])->after('price');
+            $table->string('size', 10)->nullable()->after('price');
         });
     }
 

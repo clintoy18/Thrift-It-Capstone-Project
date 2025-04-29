@@ -27,7 +27,7 @@ class StoreProductRequest extends FormRequest
             'description' => 'required|string',
             'price' => 'required|numeric|min:0',
             'approval_status' => 'in:approved,pending,rejected',
-            'size' => 'required|in:S,M,L,XL,XXL,3XL,4XL,5XL',
+            'size' => 'required|string',
             'image' => 'nullable|image|max:2048',
             'qty' => 'integer',
             'listingtype' => 'required|in:for sale,for donation',
