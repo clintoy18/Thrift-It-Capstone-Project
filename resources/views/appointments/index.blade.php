@@ -11,9 +11,11 @@
                 @foreach ($upcyclers as $upcycler)
                     <div class="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6">
                         <div class="text-center">
-                            <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200">
+                            <a href="{{ route('profile.show', $upcycler->id) }}">
+                            <h3   class="text-lg font-semibold text-gray-800 dark:text-gray-200">
                                 {{ $upcycler->fname }} {{ $upcycler->lname }}
                             </h3>
+                            </a>
                             <p class="text-gray-600 dark:text-gray-400">{{ $upcycler->email }}</p>
                             <p class="text-gray-600 dark:text-gray-400 mt-2">
                                 Specialization: {{ $upcycler->specialization ?? 'N/A' }}
