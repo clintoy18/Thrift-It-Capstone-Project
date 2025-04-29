@@ -10,6 +10,8 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class ReportController extends Controller
 {
@@ -43,7 +45,7 @@ class ReportController extends Controller
      */
     public function create(User $user): View
     {
-        if (Auth::id() === $user->id) {
+        if ($user->id === Auth::id()) {
             abort(403, 'You cannot report yourself.');
         }
 
@@ -89,11 +91,53 @@ class ReportController extends Controller
      */
     public function show(Report $report): View
     {
-        if ($report->reporter_id !== Auth::id()) {
+        if ($report->reporter_id !== Auth::id() && Auth::user()->role !== 2) {
             abort(403);
         }
 
+        $report->load(['reporter', 'reportedUser']);
+
         return view('reports.show', compact('report'));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, Report $report)
+    {
+        if (Auth::user()->role !== 2) {
+            abort(403);
+        }
+
+        $validated = $request->validate([
+            'status' => 'required|in:pending,reviewed,resolved',
+            'admin_notes' => 'nullable|string',
+        ]);
+
+        DB::transaction(function () use ($report, $validated) {
+            $report->update($validated);
+
+            // If report is resolved, disable the reported user's account
+            if ($validated['status'] === 'resolved') {
+                $reportedUser = User::find($report->reported_user_id);
+                if ($reportedUser) {
+                    Log::info('Disabling user account', [
+                        'user_id' => $reportedUser->id,
+                        'report_id' => $report->id
+                    ]);
+                    
+                    $result = $reportedUser->update(['is_active' => false]);
+                    
+                    Log::info('User account disabled result', [
+                        'success' => $result,
+                        'user_id' => $reportedUser->id
+                    ]);
+                }
+            }
+        });
+
+        return redirect()->route('reports.show', $report)
+            ->with('success', 'Report updated successfully.');
     }
 
     /**
@@ -101,7 +145,7 @@ class ReportController extends Controller
      */
     public function destroy(Report $report): RedirectResponse
     {
-        if ($report->reporter_id !== Auth::id()) {
+        if ($report->reporter_id !== Auth::id() && Auth::user()->role !== 2) {
             abort(403);
         }
 

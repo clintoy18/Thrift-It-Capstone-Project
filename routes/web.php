@@ -28,9 +28,10 @@ Route::get('/dashboard', [UserDashboardController::class, 'index'])
     ->middleware(['auth', 'verified', 'rolemiddleware:user'])
     ->name('dashboard');
 
-Route::get('/admin/dashboard', function () {
-    return view('admin');
-})->middleware(['auth', 'verified','rolemiddleware:admin'])->name('admin');
+Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])
+        ->middleware(['auth', 'verified', 'rolemiddleware:admin'])
+        ->name('admin.dashboard');
+    
 
 Route::get('upcycler/dashboard', function () {
     return view('upcycler');
