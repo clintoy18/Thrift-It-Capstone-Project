@@ -3,7 +3,7 @@
         <!-- Desktop Navigation -->
         <div class="flex justify-between items-center">
             <!-- Logo -->
-            <a href="{{ url('/dashboard') }}" class="text-xl sm:text-2xl font-bold text-red-600 flex-shrink-0">
+            <a href="{{ url('admin/dashboard') }}" class="text-xl sm:text-2xl font-bold text-red-600 flex-shrink-0">
                 THRIFT - IT
             </a>
             
