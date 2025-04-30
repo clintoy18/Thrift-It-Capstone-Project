@@ -7,6 +7,7 @@ use App\Models\Report;
 use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use App\Models\User;
 
 class AdminReportController extends Controller
 {
@@ -34,7 +35,7 @@ class AdminReportController extends Controller
 
         $report->update($validated);
 
-        return redirect()->route('admin.reports.show', $report)
+        return redirect()->route('admin.reports.index', $report)
             ->with('success', 'Report status updated successfully.');
     }
 
