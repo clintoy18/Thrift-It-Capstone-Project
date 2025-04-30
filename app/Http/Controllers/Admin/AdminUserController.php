@@ -25,9 +25,6 @@ class AdminUserController extends Controller
     public function update(Request $request, User $user): RedirectResponse
     {
         $validated = $request->validate([
-            'fname' => 'required|string|max:30',
-            'lname' => 'required|string|max:30',
-            'role' => 'required|integer|min:0|max:2',
             'is_active' => 'boolean'
         ]);
 
