@@ -14,13 +14,11 @@ use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\AdminReportController;
 use App\Http\Controllers\Admin\AdminUserController;
 use App\Http\Controllers\Admin\AdminProductController;
-
+use App\Http\Controllers\LandingPageController;
 
 Route::get('/search', [SearchController::class, 'index'])->name('search');
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [LandingPageController::class, 'index'])->name('landing.index');
 
 Route::get('/dashboard', [UserDashboardController::class, 'index'])
     ->middleware(['auth', 'verified', 'rolemiddleware:user'])
