@@ -24,9 +24,9 @@
                         <div class="bg-gray-50 dark:bg-gray-700 p-6 rounded-lg">
                             <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">Seller Information</h3>
                             <div class="space-y-2">
-                                <p><span class="font-medium">Name:</span> {{ $product->user->first_name }} {{ $product->user->last_name }}</p>
+                                <p><span class="font-medium">Name:</span> {{ $product->user->fname }} {{ $product->user->lname }}</p>
                                 <p><span class="font-medium">Email:</span> {{ $product->user->email }}</p>
-                                <p><span class="font-medium">Role:</span> {{ $product->user->role_name }}</p>
+                                {{-- <p><span class="font-medium">Role:</span> {{ $product->user->role_name }}</p> --}}
                             </div>
                         </div>
                     </div>
@@ -57,7 +57,7 @@
                         </div>
                     </div>
 
-                    <!-- Update Form -->
+                    {{-- <!-- Update Form -->
                     <div class="mt-6">
                         <form action="{{ route('admin.products.update', $product) }}" method="POST">
                             @csrf
@@ -84,7 +84,7 @@
                                 </div>
                             </div>
                         </form>
-                    </div>
+                    </div> --}}
                 </div>
             </div>
         </div>
