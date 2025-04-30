@@ -68,6 +68,7 @@ Route::middleware(['auth', 'verified', 'rolemiddleware:admin'])->prefix('admin')
     Route::resource('reports', AdminReportController::class);
     Route::resource('users', AdminUserController::class);
     Route::resource('products', AdminProductController::class);
+
 });
 
 require __DIR__.'/auth.php';

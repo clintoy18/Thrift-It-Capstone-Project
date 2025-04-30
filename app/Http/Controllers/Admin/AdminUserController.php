@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use App\Models\Report;
 
 class AdminUserController extends Controller
 {
@@ -25,9 +26,6 @@ class AdminUserController extends Controller
     public function update(Request $request, User $user): RedirectResponse
     {
         $validated = $request->validate([
-            'fname' => 'required|string|max:30',
-            'lname' => 'required|string|max:30',
-            'role' => 'required|integer|min:0|max:2',
             'is_active' => 'boolean'
         ]);
 
@@ -44,4 +42,6 @@ class AdminUserController extends Controller
         return redirect()->route('admin.users.index')
             ->with('success', 'User deleted successfully.');
     }
+
+  
 } 

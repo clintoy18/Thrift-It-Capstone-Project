@@ -22,6 +22,7 @@ class AdminDashboardController extends Controller
         $stats = [
             'total_users' => User::count(),
             'total_products' => Product::count(),
+            'total_products_sold' => Product::where('status', 'sold')->count(),
             'pending_reports' => Report::where('status', 'pending')->count(),
             'active_listings' => Product::where('status', 'active')->count(),
             'new_users_today' => User::whereDate('created_at', today())->count(),

@@ -21,7 +21,7 @@
                             </div>
                         </div>
 
-                        <div class="bg-gray-50 dark:bg-gray-700 p-6 rounded-lg">
+                        {{-- <div class="bg-gray-50 dark:bg-gray-700 p-6 rounded-lg">
                             <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">Account Status</h3>
                             <div class="space-y-2">
                                 <p>
@@ -38,7 +38,7 @@
                                     </span>
                                 </p>
                             </div>
-                        </div>
+                        </div> --}}
                     </div>
 
                     <!-- User Activity -->
@@ -86,25 +86,16 @@
                             @csrf
                             @method('PUT')
                             <div class="space-y-4">
+                                
                                 <div>
-                                    <label for="role_id" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Role</label>
-                                    <select name="role_id" id="role_id" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300">
-                                        @foreach(\App\Models\Role::all() as $role)
-                                            <option value="{{ $role->id }}" {{ $user->role_id === $role->id ? 'selected' : '' }}>
-                                                {{ $role->name }}
-                                            </option>
-                                        @endforeach
+                                    <label for="is_active" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Account Status</label>
+                                    <select name="is_active" id="is_active" 
+                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300">
+                                        <option value="1" {{ $user->is_active ? 'selected' : '' }}>Active</option>
+                                        <option value="0" {{ !$user->is_active ? 'selected' : '' }}>Inactive</option>
                                     </select>
                                 </div>
-
-                                <div>
-                                    <label for="is_active" class="flex items-center">
-                                        <input type="checkbox" name="is_active" id="is_active" value="1" 
-                                            {{ $user->is_active ? 'checked' : '' }}
-                                            class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600">
-                                        <span class="ml-2 text-sm text-gray-600 dark:text-gray-300">Active Account</span>
-                                    </label>
-                                </div>
+                                
 
                                 <div class="flex justify-end">
                                     <button type="submit" class="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 focus:bg-indigo-700 active:bg-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">

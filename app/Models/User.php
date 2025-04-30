@@ -93,4 +93,8 @@ class User extends Authenticatable
             default => 'Unknown'
         };
     }
+
+    public function reportsReceived(){
+        return $this->hasMany(Report::class, 'reported_user_id');
+    }
 }
