@@ -25,10 +25,10 @@
                                 @foreach($reports as $report)
                                     <tr>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
-                                            {{ $report->reporter->first_name }} {{ $report->reporter->last_name }}
+                                            {{ $report->reporter->fname }} {{ $report->reporter->lname }}
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
-                                            {{ $report->reportedUser->first_name }} {{ $report->reportedUser->last_name }}
+                                            {{ $report->reportedUser->fname }} {{ $report->reportedUser->lname }}
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
                                             {{ $report->reason }}

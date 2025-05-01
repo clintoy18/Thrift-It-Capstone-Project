@@ -41,6 +41,42 @@ class AdminDashboardController extends Controller
             ->take(5)
             ->get();
 
-        return view('admin.dashboard', compact('stats', 'recentReports', 'recentProducts'));
+        // Monthly sales data for visualization
+        $salesMonths = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        $salesData = [];
+
+        foreach (range(1, 12) as $month) {
+            $salesData[] = Product::where('status', 'sold')
+                ->whereMonth('created_at', $month)
+                ->sum('price');
+        }
+
+        // Report categories breakdown
+        $reportCategories = ['Spam', 'Inappropriate Content', 'Scam', 'Harassment', 'Other'];
+        $reportCounts = [
+            Report::where('reason', 'Spam')->count(),
+            Report::where('reason', 'Inappropriate Content')->count(),
+            Report::where('reason', 'Scam')->count(),
+            Report::where('reason', 'Harassment')->count(),
+            Report::where('reason', 'Other')->count(),
+        ];
+
+        // Report status breakdown
+        $statusCounts = [
+            'pending' => Report::where('status', 'pending')->count(),
+            'resolved' => Report::where('status', 'resolved')->count(),
+            'rejected' => Report::where('status', 'rejected')->count(),
+        ];
+
+        return view('admin.dashboard', compact(
+            'stats',
+            'recentReports',
+            'recentProducts',
+            'salesMonths',
+            'salesData',
+            'reportCategories',
+            'reportCounts',
+            'statusCounts'
+        ));
     }
-} 
+}

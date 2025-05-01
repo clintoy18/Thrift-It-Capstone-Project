@@ -24,12 +24,15 @@ class CategoriesFactory extends Factory
             'Sweaters',
             'Shorts',
             'Skirts',
-            'Suits',
-            'Activewear',
-            'Outerwear',
+            'Suits',          
             'Undergarments',
-            'Accessories',
             'Footwear',
+            'Bags',
+            'Hats',
+            'Shoes',
+            'Socks',
+            'Sandals',
+            'Pants',
         ];
     
         return [
