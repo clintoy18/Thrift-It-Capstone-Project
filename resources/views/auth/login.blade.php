@@ -8,6 +8,11 @@
     <form method="POST" action="{{ route('login') }}">
         @csrf
 
+
+        <div class="mb-4 text-center">
+            <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Welcome Back!</h1>
+            <p class="text-gray-600 dark:text-gray-400">Please log in to your account</p>
+        </div>
         <!-- Email Address -->
         <div>
             <x-input-label for="email" :value="__('Email')" />
@@ -25,6 +30,12 @@
 
             <x-input-error :messages="$errors->get('password')" class="mt-2" />
         </div>
+        <div class="mt-4 text-center">
+        <x-primary-button class="w-full mt-4">
+            <i class="fas fa-sign-in-alt"></i>
+            {{ __('Log in') }}
+        </x-primary-button>
+        </div>
 
         <!-- Remember Me -->
         <div class="block mt-4">
@@ -33,17 +44,23 @@
                 <span class="ms-2 text-sm text-gray-600 dark:text-gray-400">{{ __('Remember me') }}</span>
             </label>
         </div>
+        <div class="flex items-center justify-center mt-4">
+            <a></a>
+                <i class="fas fa-user-plus"></i>
+                {{ __('Don\'t have an account?') }}
+            </a>
+            <a href="{{ route('register') }}" class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800">
+                {{ __('Sign Up ') }}
+            </a>
+        </div>
 
         <div class="flex items-center justify-end mt-4">
             @if (Route::has('password.request'))
+
                 <a class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800" href="{{ route('password.request') }}">
-                    {{ __('Forgot your password?') }}
+                    {{ __('Forgot your password?') }} 
                 </a>
             @endif
-
-            <x-primary-button class="ms-3">
-                {{ __('Log in') }}
-            </x-primary-button>
         </div>
     </form>
 </x-guest-layout>
