@@ -42,8 +42,12 @@
                     <!-- Appointment Date -->
                     <div class="mb-4">
                         <label for="appdate" class="block text-black font-medium mb-2">Appointment Date</label>
-                        <input type="datetime-local" id="appdate" name="appdate" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-gray-500" value="{{ old('appdate') }}" required>
-                    </div>
+                        <input type="datetime-local" id="appdate" name="appdate"
+                        class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-gray-500"
+                        value="{{ old('appdate') }}"
+                        min="2025-05-02T08:00"
+                        required>              
+                      </div>
 
                     <!-- Submit Button -->
                     <button type="submit" class="w-full bg-black text-white font-medium py-2 px-4 rounded-lg hover:bg-gray-700 transition">Request Appointment</button>
@@ -52,3 +56,23 @@
         </div>
     </div>
 </x-app-layout>
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        const input = document.getElementById('appdate');
+        const now = new Date();
+        now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+        const localDatetime = now.toISOString().slice(0, 16);
+        input.min = localDatetime;
+
+        input.addEventListener('change', () => {
+            const selected = new Date(input.value);
+            const hours = selected.getHours();
+
+            if (hours < 8 || hours >= 18) {
+                alert("Please select a time between 8:00 AM and 6:00 PM.");
+                input.value = '';
+            }
+        });
+    });
+</script>
+

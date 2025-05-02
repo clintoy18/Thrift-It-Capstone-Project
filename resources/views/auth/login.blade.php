@@ -31,7 +31,7 @@
             <x-input-error :messages="$errors->get('password')" class="mt-2" />
         </div>
         <div class="mt-4 text-center">
-        <x-primary-button class="w-full mt-4">
+        <x-primary-button class="w-full flex items-center justify-center">
             <i class="fas fa-sign-in-alt"></i>
             {{ __('Log in') }}
         </x-primary-button>
@@ -47,13 +47,12 @@
         <div class="flex items-center justify-center mt-4">
             <a></a>
                 <i class="fas fa-user-plus"></i>
-                {{ __('Don\'t have an account?') }}
+                {{ __('Don\'t have an account?') }} &nbsp;
             </a>
             <a href="{{ route('register') }}" class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800">
                 {{ __('Sign Up ') }}
             </a>
         </div>
-
         <div class="flex items-center justify-end mt-4">
             @if (Route::has('password.request'))
 
