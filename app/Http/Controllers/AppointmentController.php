@@ -53,6 +53,7 @@ class AppointmentController extends Controller
      */
     public function show(Appointment $appointment)
     {
+        
         if ($appointment->user_id !== Auth::id()) {
             abort(403, 'Unauthorized action.');
         }
@@ -88,18 +89,28 @@ class AppointmentController extends Controller
 
         return redirect()->route('appointments.index')->with('success', 'Appointment updated successfully!');
     }
+ 
 
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(Appointment $appointment)
     {
+        // Check if the appointment belongs to the authenticated user
         if ($appointment->user_id !== Auth::id()) {
             abort(403, 'Unauthorized action.');
         }
-
+    
+        // Delete the appointment
         $appointment->delete();
-
-        return redirect()->route('appointments.index')->with('success', 'Appointment deleted successfully!');
+    
+        // Redirect with success message
+        return redirect()->route('appointments.myAppointments')->with('success', 'Appointment deleted successfully!');
+    }
+    
+    public function myAppointments()
+    {
+        $appointments = Appointment::with('upcycler')->where('user_id', Auth::id())->get();
+        return view('appointments.myAppointments', compact('appointments'));
     }
 }
