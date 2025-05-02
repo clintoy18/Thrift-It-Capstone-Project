@@ -36,6 +36,7 @@ Route::get('upcycler/dashboard', function () {
 
 //to make sure only a user can access the user routes, 
 Route::middleware(['auth', 'verified', 'rolemiddleware:user'])->group(function () {
+    Route::get('appointments/myAppointments', [AppointmentController::class, 'myAppointments'])->name('appointments.myAppointments');
     Route::resource('products', ProductController::class);
     Route::resource('categories', CategoriesController::class);
     Route::resource('appointments', AppointmentController::class);

@@ -126,7 +126,7 @@
                                             
                                             <div class="flex justify-between items-center mt-1 sm:mt-2 md:mt-3">
                                                 <p class="text-xs sm:text-sm font-bold {{ $product->listingtype === 'for donation' ? 'text-gray-700' : 'text-red-600' }}">
-                                                    {{ $product->listingtype === 'for donation' ? 'For Donation' : '₱' . number_format($product->price, 0) }}
+                                                    {{ $product->listingtype === 'for donation' ? 'For Donation' : '₱' . number_format($product->price, 2) }}
                                                 </p>
                                                 
                                                 <!-- Favorite button outside of the link to prevent event bubbling -->

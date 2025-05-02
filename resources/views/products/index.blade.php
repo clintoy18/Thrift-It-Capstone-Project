@@ -51,7 +51,7 @@
 
                                             <div class="flex justify-between items-center mt-1">
                                                 <p class="text-xs sm:text-sm font-bold {{ $product->listingtype === 'for donation' ? 'text-gray-700' : 'text-red-600' }}">
-                                                    {{ $product->listingtype === 'for donation' ? 'For Donation' : '₱' . number_format($product->price, 0) }}
+                                                    {{ $product->listingtype === 'for donation' ? 'For Donation' : '₱' . number_format($product->price, 2) }}
                                                 </p>
 
                                                 <button class="favorite-btn text-gray-400 hover:text-red-500 focus:outline-none transition-colors" 

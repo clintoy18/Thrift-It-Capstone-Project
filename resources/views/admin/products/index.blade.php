@@ -29,7 +29,7 @@
                                             {{ $product->name }}
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
-                                            {{ $product->user->first_name }} {{ $product->user->last_name }}
+                                            {{ $product->user->fname }} {{ $product->user->lname }}
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
                                             {{ $product->category->name }}
