@@ -47,8 +47,6 @@
                         <p class="text-sm text-gray-500 dark:text-gray-400">+{{ $stats['new_products_today'] }} today</p>
                     </div>
                 </div>
-
-             
             </div>
             
             <div class="bg-white mb-4 dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
@@ -64,17 +62,18 @@
                 </div>
             </div>
              <!-- Monthly Sales Chart -->
-            <section>
-                <h3 class="text-2xl font-semibold text-gray-800 dark:text-gray-100 mb-6 flex items-center gap-2">
-                    <i class="fas fa-chart-line text-blue-500"></i> Monthly Sales
-                </h3>
+            <section class="mb-4">
+
                 <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6">
+                    <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-6 flex items-center gap-2">
+                        <i class="fas fa-chart-line text-blue-500"></i> Monthly Sales
+                    </h3>
                     <canvas id="monthlySalesChart" class="w-full h-64"></canvas>
                 </div>
             </section>
 
             <!-- Recent Reports -->
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg mb-8">
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg mb-4">
                 <div class="p-6">
                     <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">Recent Reports</h3>
                     <div class="overflow-x-auto">

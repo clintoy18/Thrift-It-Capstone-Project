@@ -3,9 +3,10 @@
         <!-- Desktop Navigation -->
         <div class="flex justify-between items-center">
             <!-- Logo -->
-            <a href="{{ url('admin/dashboard') }}" class="text-xl sm:text-2xl font-bold text-red-600 flex-shrink-0">
+            <a href="{{ Auth::check() ? (Auth::user()->role === 2 ? route('admin.dashboard') : (Auth::user()->role === 1 ? route('upcycler') : route('dashboard'))) : url('/') }}" class="text-xl sm:text-2xl font-bold text-red-600 flex-shrink-0">
                 THRIFT - IT
             </a>
+            
             
             <!-- Search Bar (Hidden on small mobile, visible on larger screens) -->
             <div class="hidden md:flex items-center bg-white px-4 py-2 rounded-full w-full max-w-md shadow-sm border mx-4">

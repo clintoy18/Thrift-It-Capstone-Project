@@ -13,10 +13,10 @@ class AdminUserController extends Controller
 {
     public function index(): View
     {
-        $users = User::latest()->paginate(10);
+        $users = User::orderBy('lname', 'asc')->paginate(10);
         return view('admin.users.index', compact('users'));
     }
-
+    
     public function show(User $user): View
     {
         $user->load(['products', 'reportsReceived']);
