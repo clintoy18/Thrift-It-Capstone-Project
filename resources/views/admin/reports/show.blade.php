@@ -14,7 +14,7 @@
                         <div class="bg-gray-50 dark:bg-gray-700 p-6 rounded-lg">
                             <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">Reporter Information</h3>
                             <div class="space-y-2">
-                                <p><span class="font-medium">Name:</span> {{ $report->reporter->first_name }} {{ $report->reporter->last_name }}</p>
+                                <p><span class="font-medium">Name:</span> {{ $report->reporter->fname }} {{ $report->reporter->lname }}</p>
                                 <p><span class="font-medium">Email:</span> {{ $report->reporter->email }}</p>
                                 <p><span class="font-medium">Role:</span> {{ $report->reporter->role_name }}</p>
                             </div>
@@ -24,7 +24,7 @@
                         <div class="bg-gray-50 dark:bg-gray-700 p-6 rounded-lg">
                             <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">Reported User Information</h3>
                             <div class="space-y-2">
-                                <p><span class="font-medium">Name:</span> {{ $report->reportedUser->first_name }} {{ $report->reportedUser->last_name }}</p>
+                                <p><span class="font-medium">Name:</span> {{ $report->reportedUser->fname }} {{ $report->reportedUser->lname }}</p>
                                 <p><span class="font-medium">Email:</span> {{ $report->reportedUser->email }}</p>
                                 <p><span class="font-medium">Role:</span> {{ $report->reportedUser->role_name }}</p>
                             </div>
