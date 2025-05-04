@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Appointment;
 use Illuminate\Support\Facades\Auth;
-
+use Symfony\Component\HttpFoundation\RedirectResponse;
 class UpcyclerController extends Controller
 {
     /**
@@ -55,18 +55,30 @@ class UpcyclerController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Appointment $appointment)
     {
-        //
+        $request->validate([
+            'appstatus' => 'required|in:pending,approved,declined,completed',
+        ]);
+        
+        $appointment->update([
+            'appstatus' => $request->appstatus,
+        ]);
+    
+        return redirect()->route('upcycler.show', $appointment)->with('status', 'Appointment status updated.');
     }
+    
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Appointment $appointment) : RedirectResponse
     {
-        //
+        $appointment->delete();
+        return redirect()->route('upcycler.index');
+
     }
+   
 
 
 }
