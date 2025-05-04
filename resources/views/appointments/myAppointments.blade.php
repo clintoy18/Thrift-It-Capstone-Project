@@ -16,6 +16,8 @@
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Appointment ID</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Upcycler Name</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Details</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Status</th>
+
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Date</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Time</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Actions</th>
@@ -32,6 +34,17 @@
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
                                             {{ $appointment->appdetails }}
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm 
+                                            {{ 
+                                                $appointment->appstatus === 'pending' ? 'text-yellow-600' : 
+                                                ($appointment->appstatus === 'approved' ? 'text-green-600' :
+                                                ($appointment->appstatus === 'declined' ? 'text-red-600' :
+                                                ($appointment->appstatus === 'completed' ? 'text-blue-600' : 
+                                                ($appointment->appstatus === 'cancelled' ? 'text-red-500' : 'text-gray-900')
+                                                )))
+                                            }} dark:text-gray-100">
+                                            {{ $appointment->appstatus }}
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
                                             {{ $appointment->created_at->format('M d, Y') }}

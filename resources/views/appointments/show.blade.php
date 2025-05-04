@@ -21,14 +21,15 @@
                             <a href="{{ route('appointments.edit', $appointment->appointmentid) }}" class="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300">
                                 Edit Appointment
                             </a>
-                        </div>
+                       
                         <form method="POST" action="{{ route('appointments.cancel', $appointment) }}" onsubmit="return confirm('Are you sure you want to cancel this appointment?');" class="inline-block">
                             @csrf
                             @method('PATCH')
-                            <x-secondary-button class="bg-red-500 hover:bg-red-600 text-white">
-                                {{ __('Cancel Appointment') }}
-                            </x-secondary-button>
+                            <button type="submit" class="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300">
+                                Cancel Appointment
+                            </button>
                         </form>
+                    </div>
                         
                         
                     </div>
