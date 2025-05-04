@@ -41,7 +41,7 @@
                      <!-- Contact Number -->
                      <div class="mb-4">
                         <label for="contactnumber" class="block text-black font-medium mb-2">Contact number</label>
-                        <textarea id="contactnumber" name="contactnumber" class="w-full px-4 py-2 border rounded-lg placeholder-gray-500 focus:ring-2 focus:ring-gray-500" placeholder="Enter contact numberte">{{ old('contactnumber') }}</textarea>
+                        <textarea id="contactnumber" name="contactnumber" class="w-full px-4 py-2 border rounded-lg placeholder-gray-500 focus:ring-2 focus:ring-gray-500" placeholder="Enter contact number">{{ old('contactnumber') }}</textarea>
                     </div>
 
                     <!-- Appointment Date -->
