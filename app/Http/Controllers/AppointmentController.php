@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\Appointment;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use Carbon\Carbon;
 
 class AppointmentController extends Controller
 {
@@ -94,6 +95,20 @@ class AppointmentController extends Controller
     {
         if($appointment->appstatus == 'cancelled'){
             return redirect()->route('appointments.myAppointments')->withErrors('This appointment is already cancelled.');
+        }
+       
+        if($appointment->appstatus == 'completed'){
+            return redirect()->route('appointments.myAppointments')->withErrors('You cannot cancel a completed appointment.');
+        }
+        if($appointment->appstatus == 'declined'){
+            return redirect()->route('appointments.myAppointments')->withErrors('You cannot cancel a declined appointment.');
+        }
+
+        $now = Carbon::now();
+        $appointmentTime = Carbon::parse($appointment->appdate); // Replace with the actual column name if different
+        
+        if($appointmentTime->diffInHours($now) < 24){
+            return redirect()->route('appointments.myAppointments')->withErrors('You can only cancel appointments more than 24 hours in advance.');
         }
         $appointment->update(['appstatus' => 'cancelled']);
         return redirect()->route('appointments.myAppointments')->with('success', 'Appointment cancelled successfully!');
