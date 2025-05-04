@@ -15,6 +15,7 @@ use App\Http\Controllers\Admin\AdminReportController;
 use App\Http\Controllers\Admin\AdminUserController;
 use App\Http\Controllers\Admin\AdminProductController;
 use App\Http\Controllers\LandingPageController;
+use App\Http\Controllers\ReviewController;
 
 Route::get('/search', [SearchController::class, 'index'])->name('search');
 
@@ -43,11 +44,22 @@ Route::middleware(['auth', 'verified', 'rolemiddleware:user'])->group(function (
     Route::patch('/appointments/{appointment}/cancel', [AppointmentController::class, 'cancel'])->name('appointments.cancel');
     Route::post('/products/{product}/comments', [CommentController::class, 'store'])->name('comments.store');
     Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
+    Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
+    Route::get('/users/{user}/report', [ReportController::class, 'create'])->name('reports.create');
+    Route::post('/users/{user}/report', [ReportController::class, 'store'])->name('reports.store');
+    Route::get('/reviews',[ReviewController::class,'index'])->name('reviews.index');
+    Route::get('reviews/{review}',[ReviewController::class,'show'])->name('reviews.show');
+    Route::get('/users/{user}/review',[ReviewController::class,'create'])->name('reviews.create');
+    Route::post('/users/{user}/review',[ReviewController::class,'store'])->name('reviews.store');
 });
 
+
+//Upcycler Routes
 Route::middleware(['auth', 'verified', 'rolemiddleware:upcycler'])->group(function () {
     Route::resource('upcycler', UpcyclerController::class);
 });
+
+//Global Routes
 Route::middleware('auth')->group(function () {
     Route::get(('/profile/{user}'), [ProfileController::class, 'show'])->name('profile.show');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -55,12 +67,12 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-// Report Routes
-Route::middleware(['auth'])->group(function () {
-    Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
-    Route::get('/users/{user}/report', [ReportController::class, 'create'])->name('reports.create');
-    Route::post('/users/{user}/report', [ReportController::class, 'store'])->name('reports.store');
-});
+// // Report Routes
+// Route::middleware(['auth'])->group(function () {
+//     Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
+//     Route::get('/users/{user}/report', [ReportController::class, 'create'])->name('reports.create');
+//     Route::post('/users/{user}/report', [ReportController::class, 'store'])->name('reports.store');
+// });
 
 // Admin Routes
 Route::middleware(['auth', 'verified', 'rolemiddleware:admin'])->prefix('admin')->name('admin.')->group(function () {
