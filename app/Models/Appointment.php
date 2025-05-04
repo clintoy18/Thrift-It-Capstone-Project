@@ -19,6 +19,7 @@ class Appointment extends Model
         'user_id',
         'upcycler_id',
         'appdetails',
+        'contactnumber',
         'apptype',
         'appstatus',
         'appdate',

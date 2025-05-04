@@ -1,11 +1,11 @@
 <?php
 
 namespace App\Http\Requests;
-use Illuminate\Support\Facades\Auth;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateAppointmentRequest extends FormRequest
+class StoreReviewRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -13,7 +13,6 @@ class UpdateAppointmentRequest extends FormRequest
     public function authorize(): bool
     {
         return Auth::check();
-
     }
 
     /**
@@ -24,8 +23,8 @@ class UpdateAppointmentRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'appdetails' => 'nullable|string|max:255',
-            'contactnumber' => 'required|numeric|digits_between:10,15',
+            'rating' => 'required|integer|min:1|max:5',
+            'comment' => 'nullable|string|max:1000'
         ];
     }
 }

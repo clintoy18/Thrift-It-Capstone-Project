@@ -16,6 +16,8 @@
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Appointment ID</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Upcycler Name</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Details</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Status</th>
+
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Date</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Time</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Actions</th>
@@ -33,6 +35,17 @@
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
                                             {{ $appointment->appdetails }}
                                         </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm 
+                                            {{ 
+                                                $appointment->appstatus === 'pending' ? 'text-yellow-600' : 
+                                                ($appointment->appstatus === 'approved' ? 'text-green-600' :
+                                                ($appointment->appstatus === 'declined' ? 'text-red-600' :
+                                                ($appointment->appstatus === 'completed' ? 'text-blue-600' : 
+                                                ($appointment->appstatus === 'cancelled' ? 'text-red-500' : 'text-gray-900')
+                                                )))
+                                            }} dark:text-gray-100">
+                                            {{ $appointment->appstatus }}
+                                        </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
                                             {{ $appointment->created_at->format('M d, Y') }}
                                         </td>
@@ -41,15 +54,16 @@
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                             <a href="{{ route('appointments.show', $appointment) }}" class="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300 mr-3">
-                                                View
+                                                View Appointment
                                             </a>
-                                            <form action="{{ route('appointments.destroy', $appointment) }}" method="POST" class="inline">
+                                            <form method="POST" action="{{ route('appointments.cancel', $appointment) }}" onsubmit="return confirm('Are you sure you want to cancel this appointment?');" class="inline-block">
                                                 @csrf
-                                                @method('DELETE')
-                                                <button type="submit" onclick="return confirm('Are you sure you want to delete this appointment?')" class="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300">
-                                                    Delete
+                                                @method('PATCH')
+                                                <button type="submit" class="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300">
+                                                    Cancel Appointment
                                                 </button>
                                             </form>
+                                           
                                         </td>
                                     </tr>
                                 @empty
