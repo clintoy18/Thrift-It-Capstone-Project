@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Requests;
+use Illuminate\Support\Facades\Auth;
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -11,7 +12,8 @@ class UpdateAppointmentRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return Auth::check();
+
     }
 
     /**
@@ -22,11 +24,8 @@ class UpdateAppointmentRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'upcycler_id' => 'required|exists:users,id',
             'appdetails' => 'nullable|string|max:255',
-            'apptype' => ['required', 'in:Resize,Customize,Patchwork,Fabric Dyeing'],
-            'appstatus' => ['nullable', 'in:pending,approved,declined,completed'],
-            'appdate' => 'required|date|after:now',
+            'contactnumber' => 'required|numeric|digits_between:10,15',
         ];
     }
 }

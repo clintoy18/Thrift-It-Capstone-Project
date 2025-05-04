@@ -11,8 +11,9 @@
                 <div class="p-6">
                     <!-- Display the Appointment Details -->
                     <div class="space-y-6">
-                        <h3 class="text-xl font-semibold text-gray-900 dark:text-gray-100">Appointment ID: {{ $appointment->appointmentid }}</h3>
                         <p class="text-sm text-gray-600 dark:text-gray-400"><strong>Appointment Details:</strong> {{ $appointment->appdetails }}</p>
+                        <p class="text-sm text-gray-600 dark:text-gray-400"><strong>Contact Number:</strong> {{ $appointment->contactnumber }}</p>
+                        
                         <p class="text-sm text-gray-600 dark:text-gray-400"><strong>Scheduled with Upcycler:</strong> {{ $appointment->upcycler->fname ?? 'N/A' }}  {{ $appointment->upcycler->lname ?? 'N/A' }}</p>
                         <p class="text-sm text-gray-600 dark:text-gray-400"><strong>Time:</strong> {{ $appointment->created_at->format('M d, Y h:i A') }}</p>
                         <!-- Actions: Edit/Delete Appointment -->
@@ -20,15 +21,16 @@
                             <a href="{{ route('appointments.edit', $appointment->appointmentid) }}" class="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300">
                                 Edit Appointment
                             </a>
-                            <form action="{{ route('appointments.destroy', $appointment->appointmentid) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this appointment?');">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300">
-                                    Delete Appointment
-                                </button>
-                            </form>
-                            
                         </div>
+                        <form method="POST" action="{{ route('appointments.cancel', $appointment) }}" onsubmit="return confirm('Are you sure you want to cancel this appointment?');" class="inline-block">
+                            @csrf
+                            @method('PATCH')
+                            <x-secondary-button class="bg-red-500 hover:bg-red-600 text-white">
+                                {{ __('Cancel Appointment') }}
+                            </x-secondary-button>
+                        </form>
+                        
+                        
                     </div>
 
                     <!-- Display Error if No Upcycler Available -->

@@ -55,18 +55,18 @@ class UpcyclerController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Appointment $appointment)
-    {
-        $request->validate([
-            'appstatus' => 'required|in:pending,approved,declined,completed',
-        ]);
+    // public function update(Request $request, Appointment $appointment)
+    // {
+    //     $request->validate([
+    //         'appstatus' => 'required|in:pending,approved,declined,completed',
+    //     ]);
         
-        $appointment->update([
-            'appstatus' => $request->appstatus,
-        ]);
+    //     $appointment->update([
+    //         'appstatus' => $request->appstatus,
+    //     ]);
     
-        return redirect()->route('upcycler.show', $appointment)->with('status', 'Appointment status updated.');
-    }
+    //     return redirect()->route('upcycler.show', $appointment)->with('status', 'Appointment status updated.');
+    // }
     
 
     /**

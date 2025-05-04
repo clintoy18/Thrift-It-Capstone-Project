@@ -42,9 +42,7 @@ class AppointmentController extends Controller
     {
         $validated = $request->validated();
         $validated['user_id'] = Auth::id(); 
-        
         Appointment::create($validated);
-
         return redirect()->route('appointments.index')->with('success', 'Appointment created successfully!');
     }
 
@@ -53,11 +51,6 @@ class AppointmentController extends Controller
      */
     public function show(Appointment $appointment)
     {
-        
-        if ($appointment->user_id !== Auth::id()) {
-            abort(403, 'Unauthorized action.');
-        }
-
         return view('appointments.show', compact('appointment'));
     }
 
@@ -66,10 +59,6 @@ class AppointmentController extends Controller
      */
     public function edit(Appointment $appointment)
     {
-        if ($appointment->user_id !== Auth::id()) {
-            abort(403, 'Unauthorized action.');
-        }
-
         $upcyclers = User::where('role', 1)->get();
         return view('appointments.edit', compact('appointment', 'upcyclers'));
     }
@@ -79,12 +68,7 @@ class AppointmentController extends Controller
      */
     public function update(UpdateAppointmentRequest $request, Appointment $appointment)
     {
-        if ($appointment->user_id !== Auth::id()) {
-            return redirect()->route('appointments.index')->with('error', 'You are not authorized to edit this appointment.');
-        }
-
         $validated = $request->validated();
-
         $appointment->update($validated);
 
         return redirect()->route('appointments.index')->with('success', 'Appointment updated successfully!');
@@ -96,15 +80,7 @@ class AppointmentController extends Controller
      */
     public function destroy(Appointment $appointment)
     {
-        // Check if the appointment belongs to the authenticated user
-        if ($appointment->user_id !== Auth::id()) {
-            abort(403, 'Unauthorized action.');
-        }
-    
-        // Delete the appointment
         $appointment->delete();
-    
-        // Redirect with success message
         return redirect()->route('appointments.myAppointments')->with('success', 'Appointment deleted successfully!');
     }
     
@@ -112,5 +88,14 @@ class AppointmentController extends Controller
     {
         $appointments = Appointment::with('upcycler')->where('user_id', Auth::id())->get();
         return view('appointments.myAppointments', compact('appointments'));
+    }
+
+    public function cancel(Appointment $appointment)
+    {
+        if($appointment->appstatus == 'cancelled'){
+            return redirect()->route('appointments.myAppointments')->withErrors('This appointment is already cancelled.');
+        }
+        $appointment->update(['appstatus' => 'cancelled']);
+        return redirect()->route('appointments.myAppointments')->with('success', 'Appointment cancelled successfully!');
     }
 }
