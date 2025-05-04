@@ -93,15 +93,8 @@ class AppointmentController extends Controller
 
     public function cancel(Appointment $appointment)
     {
-        if($appointment->appstatus == 'cancelled'){
+        if($appointment->appstatus == 'cancelled' || $appointment->appstatus == 'completed' || $appointment->appstatus == 'declined'){
             return redirect()->route('appointments.myAppointments')->withErrors('This appointment is already cancelled.');
-        }
-       
-        if($appointment->appstatus == 'completed'){
-            return redirect()->route('appointments.myAppointments')->withErrors('You cannot cancel a completed appointment.');
-        }
-        if($appointment->appstatus == 'declined'){
-            return redirect()->route('appointments.myAppointments')->withErrors('You cannot cancel a declined appointment.');
         }
 
         $now = Carbon::now();
