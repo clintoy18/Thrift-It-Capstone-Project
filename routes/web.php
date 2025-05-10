@@ -80,7 +80,10 @@ Route::middleware(['auth', 'verified', 'rolemiddleware:admin'])->prefix('admin')
     Route::resource('reports', AdminReportController::class);
     Route::resource('users', AdminUserController::class);
     Route::resource('products', AdminProductController::class);
-
+    
+    // Sales Report Routes
+    Route::get('/sales/monthly-report/{month}', [App\Http\Controllers\Admin\SalesReportController::class, 'generateMonthlyReport'])->name('sales.monthly-report');
+    Route::get('/sales/yearly-report', [App\Http\Controllers\Admin\SalesReportController::class, 'generateYearlyReport'])->name('sales.yearly-report');
 });
 
 require __DIR__.'/auth.php';

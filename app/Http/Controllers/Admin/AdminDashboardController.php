@@ -7,6 +7,7 @@ use App\Models\Product;
 use App\Models\Report;
 use App\Models\User;
 use Illuminate\View\View;
+use Illuminate\Support\Facades\DB;
 
 class AdminDashboardController extends Controller
 {
@@ -45,11 +46,35 @@ class AdminDashboardController extends Controller
         $salesMonths = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
         $salesData = [];
 
+        // Get detailed monthly sales data
+        $monthlySalesDetails = [];
         foreach (range(1, 12) as $month) {
-            $salesData[] = Product::where('status', 'sold')
+            $monthlyProducts = Product::with(['user', 'category'])
+                ->where('status', 'sold')
                 ->whereMonth('created_at', $month)
-                ->sum('price');
+                ->get();
+
+            $monthlyTotal = $monthlyProducts->sum('price');
+            $salesData[] = $monthlyTotal;
+
+            $monthlySalesDetails[$month] = [
+                'total_sales' => $monthlyTotal,
+                'total_products' => $monthlyProducts->count(),
+                'products' => $monthlyProducts,
+                'month_name' => $salesMonths[$month - 1]
+            ];
         }
+
+        // Get yearly sales summary
+        $yearlySalesSummary = Product::where('status', 'sold')
+            ->select(
+                DB::raw('MONTH(created_at) as month'),
+                DB::raw('COUNT(*) as total_products'),
+                DB::raw('SUM(price) as total_sales')
+            )
+            ->groupBy('month')
+            ->orderBy('month')
+            ->get();
 
         // Report categories breakdown
         $reportCategories = ['Spam', 'Inappropriate Content', 'Scam', 'Harassment', 'Other'];
@@ -76,7 +101,9 @@ class AdminDashboardController extends Controller
             'salesData',
             'reportCategories',
             'reportCounts',
-            'statusCounts'
+            'statusCounts',
+            'monthlySalesDetails',
+            'yearlySalesSummary'
         ));
     }
 }
