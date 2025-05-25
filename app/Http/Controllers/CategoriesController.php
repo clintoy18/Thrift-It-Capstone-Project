@@ -43,8 +43,8 @@ class CategoriesController extends Controller
      */
     public function show(Categories $category)
     {
-        // Fetch the products related to the category
-        $products = $category->products;
+        // Fetch the products related to the category with status available
+        $products = $category->products()->where('status', 'available')->get();
     
         // Return the view with the category and its products
         return view('categories.show', [

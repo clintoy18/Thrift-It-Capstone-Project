@@ -28,9 +28,13 @@ class SearchController extends Controller
         // If a query exists, search for both users and products
         if ($query) {
             // Search for products by name or description
-            $products = Product::where('name', 'like', "%{$query}%")
-                ->orWhere('description', 'like', "%{$query}%")
-                ->paginate(10);  // Paginate the results for products (10 per page)
+            $products = Product::where(function ($q) use ($query) {
+                                $q->where('name', 'like', "%{$query}%")
+                                ->orWhere('description', 'like', "%{$query}%");
+                            })
+                            ->where('status', 'available')
+                            ->paginate(10);
+                        // Paginate the results for products (10 per page)
             
             // Search for users by name or email
             $users = User::where('fname', 'like', "%{$query}%")

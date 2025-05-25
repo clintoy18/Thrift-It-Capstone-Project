@@ -42,24 +42,7 @@
             <!-- Include the footer component -->
             <x-footer />
         </div>
-
-                <!-- Loader -->
-        <div id="loader" style="display: none;">
-            <div class="spinner"></div>
-        </div>
-
     </body>
 </html>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const forms = document.querySelectorAll('form');
-    
-        forms.forEach(form => {
-            form.addEventListener('submit', function () {
-                document.getElementById('loader').style.display = 'flex';
-            });
-        });
-    });
-</script>
     
