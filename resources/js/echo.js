@@ -10,13 +10,14 @@ window.Echo = new Echo({
     forceTLS: true,
 });
 
+// Public channel (optional if you’re only using private)
 window.Echo.channel('chat-channel')
     .listen('.message.sent', (e) => {
         console.log('Received message:', e.message);
 
         const newMessageHTML = `
             <div class="mb-4">
-                <strong>${e.message.user.name}:</strong>
+                <strong>${e.message.user.fname} ${e.message.user.lname}:</strong>
                 <span>${e.message.message}</span><br>
                 <small class="text-gray-500">just now</small>
             </div>
@@ -24,21 +25,25 @@ window.Echo.channel('chat-channel')
         `;
 
         const container = document.getElementById('messages-container');
-        container.insertAdjacentHTML('beforeend', newMessageHTML);
-        container.scrollTop = container.scrollHeight;
+        if (container) {
+            container.insertAdjacentHTML('beforeend', newMessageHTML);
+            container.scrollTop = container.scrollHeight;
+        }
     });
-    
+
+// Private message listener
 const currentUserId = Number(document.querySelector('meta[name="user-id"]').content);
 
 window.Echo.private(`chat.user.${currentUserId}`)
     .listen('.private-message', (e) => {
-        if (e.sender.id === currentUserId) return; // Ignore own message (already added)
+        if (e.sender.id === currentUserId) return; // Skip own message
 
         const container = document.getElementById('private-messages-container');
+        if (!container) return;
 
         const newMessageHTML = `
             <div class="mb-4">
-                <strong>${e.sender.name}:</strong>
+                <strong>${e.sender.fname} ${e.sender.lname}:</strong>
                 <span>${e.message.message}</span><br>
                 <small class="text-gray-500">just now</small>
             </div>

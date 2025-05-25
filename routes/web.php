@@ -16,6 +16,7 @@ use App\Http\Controllers\Admin\AdminUserController;
 use App\Http\Controllers\Admin\AdminProductController;
 use App\Http\Controllers\LandingPageController;
 use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\PrivateChatController;
 
 Route::get('/search', [SearchController::class, 'index'])->name('search');
 
@@ -65,6 +66,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    Route::get('/private-chat/{user}', [PrivateChatController::class, 'show'])->name('private.chat');
+    Route::post('/private-chat/{user}/send', [PrivateChatController::class, 'send'])->name('private.chat.send');
 });
 
 // // Report Routes
