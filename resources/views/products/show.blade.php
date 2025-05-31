@@ -54,23 +54,45 @@
                                 <span class="text-gray-500"> (5)</span>
                             </div>
                         </div>
-                        <!-- Action Buttons -->
-                        <div class="ml-auto flex gap-2">
-                            <!-- Visit Profile Button -->
-                            <a href="{{ route('profile.show', $product->user->id) }}" 
-                                class="px-4 py-2 text-sm border rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition"
-                            >
-                                Visit Profile
-                            </a>
-                            <!-- Report User Button -->
-                            @if(Auth::id() !== $product->user_id)
-                                <a href="{{ route('reports.create', $product->user->id) }}" 
-                                    class="px-4 py-2 text-sm border border-red-500 text-red-500 rounded hover:bg-red-50 dark:hover:bg-red-900/20 transition"
-                                >
-                                    Report User
+                       <!-- Action Buttons -->
+                            <div class="ml-auto flex gap-2 text-sm">
+                                <!-- Message Seller -->
+                                <a href="{{ route('private.chat', $product->user->id) }}"
+                                class="flex items-center gap-1 px-3 py-1.5 border border-gray-300 text-gray-700 rounded hover:bg-gray-100 transition">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                            d="M8 10h.01M12 10h.01M16 10h.01M21 12c0 4.418-4.03 8-9 8-1.325 0-2.58-.26-3.68-.725L3 20l1.32-3.96C3.474 15.003 3 13.55 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+                                    </svg>
+                                    Message
                                 </a>
-                            @endif
-                        </div>
+
+                                <!-- Visit Profile -->
+                                <a href="{{ route('profile.show', $product->user->id) }}"
+                                class="flex items-center gap-1 px-3 py-1.5 border border-gray-300 text-gray-700 rounded hover:bg-gray-100 transition">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                            d="M12 14c-2.5 0-4 1.5-4 3v1h8v-1c0-1.5-1.5-3-4-3z"/>
+                                        <circle cx="12" cy="8" r="3"/>
+                                    </svg>
+                                    Profile
+                                </a>
+
+                                <!-- Report User -->
+                                @if(Auth::id() !== $product->user_id)
+                                    <a href="{{ route('reports.create', $product->user->id) }}"
+                                    class="flex items-center gap-1 px-3 py-1.5 border border-red-300 text-red-600 rounded hover:bg-red-50 transition">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
+                                            viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                                d="M12 9v2m0 4h.01M5.455 4.455a2.836 2.836 0 012-1.455h9.09a2.836 2.836 0 012 1.455l3.182 5.455a2.836 2.836 0 010 2.182L18.545 17.09a2.836 2.836 0 01-2 1.455H7.455a2.836 2.836 0 01-2-1.455L2.273 12.09a2.836 2.836 0 010-2.182L5.455 4.455z"/>
+                                        </svg>
+                                        Report
+                                    </a>
+                                @endif
+                            </div>
+
                     </div>
 
                     <!-- Product Title & Short Info -->
