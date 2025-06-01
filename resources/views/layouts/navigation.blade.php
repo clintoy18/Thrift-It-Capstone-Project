@@ -3,10 +3,15 @@
         <!-- Desktop Navigation -->
         <div class="flex justify-between items-center">
             <!-- Logo -->
-            <a href="{{ Auth::check() ? (Auth::user()->role === 2 ? route('admin.dashboard') : (Auth::user()->role === 1 ? route('upcycler') : route('dashboard'))) : url('/') }}" class="text-xl sm:text-2xl font-bold text-red-600 flex-shrink-0">
-                THRIFT - IT
+            <a href="{{ Auth::check() ? (Auth::user()->role === 2 ? route('admin.dashboard') : (Auth::user()->role === 1 ? route('upcycler') : route('dashboard'))) : url('/') }}" class="flex-shrink-0">
+                <img src="{{ asset('images/nipis 4.png') }}" alt="Thrift-IT Logo" class="h-8 w-[80px] h-[70px]">
             </a>
-            
+            <div class="hidden space-x-8 sm:-my-px sm:ml-10 md:flex">
+                <a href="#" class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium leading-5 text-gray-700 hover:text-gray-900 hover:border-gray-300 focus:outline-none focus:text-gray-900 focus:border-gray-300 transition duration-150 ease-in-out">Home</a>
+                <a href="#" class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium leading-5 text-gray-700 hover:text-gray-900 hover:border-gray-300 focus:outline-none focus:text-gray-900 focus:border-gray-300 transition duration-150 ease-in-out">Sell</a>
+                <a href="#" class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium leading-5 text-gray-700 hover:text-gray-900 hover:border-gray-300 focus:outline-none focus:text-gray-900 focus:border-gray-300 transition duration-150 ease-in-out">Donate</a>
+                <a href="#" class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium leading-5 text-gray-700 hover:text-gray-900 hover:border-gray-300 focus:outline-none focus:text-gray-900 focus:border-gray-300 transition duration-150 ease-in-out">Upcycle</a>
+            </div>
             
             <!-- Search Bar (Hidden on small mobile, visible on larger screens) -->
             <div class="hidden md:flex items-center bg-white px-4 py-2 rounded-full w-full max-w-md shadow-sm border mx-4">
@@ -33,15 +38,8 @@
                         $role = Auth::user()->role;
                     @endphp
 
-                    @if($role === 0) <!-- Regular User -->
-                        <a href="{{ route('products.index') }}" class="text-gray-700 hidden lg:block">My Products</a>
-                        <a href="{{ route('products.create') }}" class="bg-black text-white px-3 py-1.5 text-sm rounded hover:bg-gray-800 transition">
-                            Sell now
-                        </a>
-                        <a href="{{ route('appointments.index') }}" class="bg-black text-white px-3 py-1.5 text-sm rounded hover:bg-gray-800 transition">
-                            Upcycle
-                        </a>
-                    @elseif($role === 1) <!-- Upcycler -->
+        
+                    @if($role === 1) <!-- Upcycler -->
                         <a href="{{ route('upcycler.index') }}" class="bg-black text-white px-3 py-1.5 text-sm rounded hover:bg-gray-800 transition">
                             Manage Appointments
                         </a>
@@ -70,6 +68,7 @@
                 @endauth
             </div>
 
+           
             <!-- Mobile Menu Toggle -->
             <div class="flex md:hidden items-center gap-2">
                 <!-- Mobile Search Toggle -->
@@ -99,18 +98,17 @@
         <!-- Mobile Menu (Conditional Rendering) -->
         <div x-show="mobileMenuOpen" class="md:hidden mt-2 py-2 bg-gray-100 rounded-lg shadow-md">
             <div class="flex flex-col space-y-2 px-4">
-                <a href="#" class="flex items-center text-gray-700 py-2 hover:text-red-600">
-                    <span class="mr-2">🤍</span> Wishlist
-                </a>
-                <a href="#" class="flex items-center text-gray-700 py-2 hover:text-red-600">
-                    <span class="mr-2">🛒</span> Cart
-                </a>
-                
                 @auth
-                    @if($role === 0)
+                    @php
+                        $role = Auth::user()->role;
+                    @endphp
+                    @if($role === 1) 
+                        <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-200">Home</a>
+                        <a href="{{ route('products.create') }}" class="block px-4 py-2 text-gray-700 hover:bg-gray-200">Sell</a>
+                        <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-200">Donate</a>
+                        <a href="{{ route('appointments.index') }}" class="block px-4 py-2 text-gray-700 hover:bg-gray-200">Upcycle</a>
                         <a href="{{ route('products.index') }}" class="flex items-center text-gray-700 py-2 hover:text-red-600">My Products</a>
-                        <a href="{{ route('products.create') }}" class="flex items-center text-gray-700 py-2 hover:text-red-600">Sell Now</a>
-                        <a href="{{ route('appointments.index') }}" class="flex items-center text-gray-700 py-2 hover:text-red-600">Upcycle</a>
+        
                     @elseif($role === 1)
                         <a href="{{ route('upcycler.index') }}" class="flex items-center text-gray-700 py-2 hover:text-red-600">Manage Appointments</a>
                     @endif

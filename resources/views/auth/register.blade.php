@@ -1,6 +1,12 @@
-<x-guest-layout>
+<x-guest-layout containerClass="max-w-[400px]" reverseColumns="true">
+
+    {{-- Removed wrapper for smaller form size --}}
+    <div class="max-w-[300px] mx-auto"> 
     <form method="POST" action="{{ route('register') }}">
         @csrf
+        <div class="mb-4 text-center">
+            <h1 class="text-3xl font-bold text-black dark:text-black">Register</h1>
+        </div>
         <!-- Name -->
         <div>
             <x-input-label for="fname" :value="__('First Name')" />
@@ -20,7 +26,7 @@
             <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autocomplete="username" />
             <x-input-error :messages="$errors->get('email')" class="mt-2" />
         </div>
-            <!-- Role Selection -->
+        <!-- Role Selection -->
         <div class="mt-4">
             <x-input-label for="role" :value="__('Role')" />
             <select id="role" name="role" class="block mt-1 w-full border-gray-300 rounded-md shadow-sm">
@@ -65,4 +71,5 @@
             </a>
         </div>
     </form>
+</div>
 </x-guest-layout>

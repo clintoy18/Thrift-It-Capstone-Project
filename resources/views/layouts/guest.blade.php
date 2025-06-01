@@ -1,3 +1,5 @@
+@props(['containerClass' => 'max-w-md', 'reverseColumns' => false])
+
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
@@ -17,25 +19,48 @@
 <body class="font-sans antialiased">
 
   <!-- Full-height 2-column grid -->
-  <div class="h-screen grid grid-cols-1 md:grid-cols-2">
+  <div class="h-screen grid grid-cols-1 md:grid-cols-2 ">
 
-    <!-- LEFT COLUMN: Logo + Auth Card -->
-    <div class="flex flex-col justify-center items-center px-8 py-12 bg-[#D9D9D9]">
-     
-      <div class="w-full max-w-md bg-white p-6 rounded-lg shadow-md">
-        {{ $slot }}
+    @if($reverseColumns)
+      <!-- RIGHT COLUMN: Full-height Background Image (Rendered first if reverseColumns is true) -->
+      <div class="hidden md:block h-screen ">
+        <img
+          src="{{ asset('/images/image 136.png') }}"
+          alt="Login background"
+          class="w-full h-screen  object-cover object-center"
+        >
       </div>
-    </div>
 
-    <!-- RIGHT COLUMN: Full-height Background Image -->
-    <div class="hidden md:block h-screen">
-      <img
-        src="{{ asset('storage/bgimages/login.png') }}"
-        alt="Login background"
-        class="w-full h-full object-cover object-center"
-      >
-    </div>
+      <!-- LEFT COLUMN: Logo + Auth Card (Rendered second if reverseColumns is true) -->
+      <div class="flex flex-col items-center px-8 py-12 bg-[#D9D9D9] h-screen overflow-y-auto ">
+      <a href="{{ Auth::check() ? (Auth::user()->role === 2 ? route('admin.dashboard') : (Auth::user()->role === 1 ? route('upcycler') : route('dashboard'))) : url('/') }}" class="flex-shrink-0 mb-8">
+                  <img src="{{ asset('images/nipis 4.png') }}" alt="Thrift-IT Logo" class="h-8 w-[120px] h-[100px]">
+         </a>
+        <div {{ $attributes->merge(['class' => 'w-full '.$containerClass.' bg-white p-4 rounded-lg shadow-md']) }}>
+          {{ $slot }}
+        </div>
+      </div>
+    @else
+      <!-- LEFT COLUMN: Logo + Auth Card (Default order) -->
+      <div class="flex flex-col items-center px-8 py-12 bg-[#D9D9D9] h-screen overflow-y-auto ">
+      <a href="{{ Auth::check() ? (Auth::user()->role === 2 ? route('admin.dashboard') : (Auth::user()->role === 1 ? route('upcycler') : route('dashboard'))) : url('/') }}" class="flex-shrink-0 mb-8">
+                  <img src="{{ asset('images/nipis 4.png') }}" alt="Thrift-IT Logo" class="h-8 w-[120px] h-[100px]">
+         </a>
+        <div {{ $attributes->merge(['class' => 'w-full '.$containerClass.' bg-white p-4 rounded-lg shadow-md']) }}>
+          {{ $slot }}
+        </div>
+      </div>
 
+      <!-- RIGHT COLUMN: Full-height Background Image (Default order) -->
+      <div class="hidden md:block h-screen ">
+        <img
+          src="{{ asset('/images/image 136.png') }}"
+          alt="Login background"
+          class="w-full h-screen  object-cover object-center"
+        >
+      </div>
+    @endif
+  
   </div>
 
 </body>

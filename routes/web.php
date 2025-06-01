@@ -71,6 +71,18 @@ Route::middleware('auth')->group(function () {
     Route::post('/private-chat/{user}/send', [PrivateChatController::class, 'send'])->name('private.chat.send');
 });
 
+Route::get('/men', function () {
+    return view('men');
+})->name('men');
+
+Route::get('/women', function () {
+    return view('women');
+})->name('women');
+
+Route::get('/kids', function () {
+    return view('kids');
+})->name('kids');
+
 // // Report Routes
 // Route::middleware(['auth'])->group(function () {
 //     Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');

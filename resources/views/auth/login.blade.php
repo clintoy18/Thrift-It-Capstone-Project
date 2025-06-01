@@ -1,21 +1,20 @@
 
  
-<x-guest-layout>
+<x-guest-layout containerClass="max-w-[400px]">
     
     <!-- Session Status -->
     <x-auth-session-status class="mb-4" :status="session('status')" />
-
+<div class="max-w-[300px] mx-auto">
     <form method="POST" action="{{ route('login') }}">
         @csrf
         <div class="mb-4 text-center">
-            <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Welcome Back!</h1>
-            <p class="text-gray-600 dark:text-gray-400">Please log in to your account</p>
+            <h1 class="text-3xl font-bold text-black dark:text-black">Login</h1>
         </div>
         <!-- Email Address -->
         <div>
             <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
+            <x-text-input id="email" class="block mt-1  w-full" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
+            <x-input-error :messages="$errors->get('email')" class="" />
         </div>
 
         <!-- Password -->
@@ -60,4 +59,5 @@
             @endif
         </div>
     </form>
+</div> 
 </x-guest-layout>

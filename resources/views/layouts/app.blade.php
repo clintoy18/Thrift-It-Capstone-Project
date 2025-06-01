@@ -19,7 +19,7 @@
 
     </head>
     <body class="font-sans antialiased">
-        <div class="min-h-screen bg-[#d9d9d9] dark:bg-gray-900">
+        <div class="min-h-screen bg-[#F4F2ED] dark:bg-gray-900">
             @include('layouts.navigation')
 
             <!-- Success Message -->

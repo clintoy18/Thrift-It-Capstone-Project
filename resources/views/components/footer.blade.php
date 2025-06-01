@@ -1,10 +1,10 @@
 <!-- Footer Component -->
-<footer class="bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 mt-12">
+<footer class="bg-white   ">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
             <!-- Brand Column -->
             <div>
-                <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-4">THRIFT-IT</h2>
+                <h2 class="text-xl font-bold text-gray-900 dark:text-black mb-4">THRIFT-IT</h2>
                 <p class="text-gray-600 dark:text-gray-400 mb-4">
                     "Every item has a story—don't let it end in a landfill. Donate, upcycle, and be part of a greener future. Together, we create impact!" <span class="inline-block">💚♻️</span>
                 </p>
@@ -12,7 +12,7 @@
             
             <!-- Contact Column -->
             <div>
-                <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-4">CONTACT US</h2>
+                <h2 class="text-xl font-bold text-gray-900 dark:text-black mb-4">CONTACT US</h2>
                 <div class="space-y-2">
                     <p class="text-gray-600 dark:text-gray-400">ThriftIt@gmail.com</p>
                     <p class="text-gray-600 dark:text-gray-400">Uc Main Sancianqko St, Avocado Bldg, 5th Floor</p>
@@ -22,7 +22,7 @@
             
             <!-- Social Column -->
             <div>
-                <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-4">FOLLOW US</h2>
+                <h2 class="text-xl font-bold text-gray-900 dark:text-black mb-4">FOLLOW US</h2>
                 <p class="text-gray-600 dark:text-gray-400 mb-4">Yes, we are social!</p>
                 <div class="flex space-x-4">
                     <a href="#" class="bg-black rounded-full p-2 text-white hover:bg-gray-800 transition">
