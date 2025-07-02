@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use App\Models\Appointment;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use App\Http\Requests\UpdateAppointmentRequest;
+use App\Mail\UpcycleBookingApproved;
+use Illuminate\Support\Facades\Mail;
 class UpcyclerController extends Controller
 {
     /**
@@ -14,7 +17,7 @@ class UpcyclerController extends Controller
     public function index()
     {
         $appointments = Appointment::where('upcycler_id', Auth::id())
-        ->where('appstatus', 'pending')
+        ->whereIn('appstatus', ['pending', 'approved'])
         ->get();
         
         return view('upcycler.index', compact('appointments'));    
@@ -52,22 +55,27 @@ class UpcyclerController extends Controller
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    // public function update(Request $request, Appointment $appointment)
-    // {
-    //     $request->validate([
-    //         'appstatus' => 'required|in:pending,approved,declined,completed',
-    //     ]);
-        
-    //     $appointment->update([
-    //         'appstatus' => $request->appstatus,
-    //     ]);
-    
-    //     return redirect()->route('upcycler.show', $appointment)->with('status', 'Appointment status updated.');
-    // }
-    
+    public function update(UpdateAppointmentRequest $request, $appointmentid)
+        {
+            $validated = $request->validated(); // ✅ reuse this
+
+            $appointment = Appointment::findOrFail($appointmentid);
+
+            // Optional: check if current upcycler is allowed to modify
+            if ($appointment->upcycler_id !==  Auth::id()) {
+                abort(403, 'Unauthorized action.');
+            }
+
+            $wasApproved = $appointment->appstatus === 'approved';
+
+            $appointment->update($validated);
+
+            if (!$wasApproved && $appointment->appstatus === 'approved') {
+                Mail::to($appointment->user->email)->send(new UpcycleBookingApproved($appointment));
+            }
+
+            return redirect()->back()->with('status', 'Appointment status updated.');
+        }
 
     /**
      * Remove the specified resource from storage.
