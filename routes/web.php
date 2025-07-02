@@ -30,13 +30,12 @@ Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])
         ->middleware(['auth', 'verified', 'rolemiddleware:admin'])
         ->name('admin.dashboard');
     
-
 Route::get('upcycler/dashboard', function () {
     return view('upcycler');
 })->middleware(['auth', 'verified','rolemiddleware:upcycler'])->name('upcycler');
 
 
-//to make sure only a user can access the user routes, 
+//to make sure only a verified user can access the user routes, 
 Route::middleware(['auth', 'verified', 'rolemiddleware:user'])->group(function () {
     Route::get('appointments/myAppointments', [AppointmentController::class, 'myAppointments'])->name('appointments.myAppointments');
     Route::resource('products', ProductController::class);
@@ -84,6 +83,7 @@ Route::middleware(['auth', 'verified', 'rolemiddleware:admin'])->prefix('admin')
     Route::resource('reports', AdminReportController::class);
     Route::resource('users', AdminUserController::class);
     Route::resource('products', AdminProductController::class);
+
     
     // Sales Report Routes
     Route::get('/sales/monthly-report/{month}', [App\Http\Controllers\Admin\SalesReportController::class, 'generateMonthlyReport'])->name('sales.monthly-report');

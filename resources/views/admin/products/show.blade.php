@@ -7,6 +7,12 @@
 
     <div class="py-10">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+            <div class="flex justify-end max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-4">
+            <a href="{{ route('admin.products.edit', $product) }}"
+                class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-md shadow">
+                    Edit Product
+                </a>
+            </div>
             <!-- Product & Seller Info -->
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 <!-- Product Image -->

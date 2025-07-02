@@ -1,15 +1,17 @@
-<h2>Hi {{ $appointment->user->lname }} {{ $appointment->user->fname }},</h2>
-<p>Your appointment has been <strong>approved</strong> by {{ $appointment->upcycler->lname }}.</p>
+<h2>Hello {{ $appointment->user->fname }} {{ $appointment->user->lname }},</h2>
 
-<p><strong>Appointment Details:</strong></p>
+<p>We’re pleased to inform you that your appointment has been <strong>approved</strong> by <strong>{{ $appointment->upcycler->fname }} {{ $appointment->upcycler->lname }}</strong>, your selected upcycler.</p>
+
+<p><strong>Appointment Summary:</strong></p>
 <ul>
-  <li>Type: {{ $appointment->apptype }}</li>
-  <li>Date: {{ $appointment->appdate }}</li>
-  <li>Contact: {{ $appointment->contactnumber }}</li>
+  <li><strong>Service Type:</strong> {{ $appointment->apptype }}</li>
+  <li><strong>Date & Time:</strong> {{ \Carbon\Carbon::parse($appointment->appdate)->format('F j, Y \a\t g:i A') }}</li>
+  <li><strong>Contact Number:</strong> {{ $appointment->contactnumber }}</li>
 </ul>
 
-<p>Thank you for choosing our upcycling service!</p>
-<p>Best regards, </p>
-<p>The Upcycling Team</p>
-{{-- 
-Must modify this email template to include the appointment details and the upcycler's name. --}}
+<p>If you have any questions or need to make changes to your appointment, please feel free to contact us or reach out directly to your upcycler.</p>
+
+<p>Thank you for trusting our upcycling service. We’re excited to help you transform your items in a more sustainable way!</p>
+
+<p>Warm regards,</p>
+<p><strong>The Upcycling Team</strong></p>
