@@ -71,7 +71,6 @@ class AppointmentController extends Controller
     {
         $validated = $request->validated();
         $appointment->update($validated);
-
         return redirect()->route('appointments.index')->with('success', 'Appointment updated successfully!');
     }
  
