@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use App\Http\Requests\UpdateAppointmentRequest;
 use App\Mail\UpcycleBookingApproved;
+use App\Mail\UpcycleBookingCompleted;
 use Illuminate\Support\Facades\Mail;
 class UpcyclerController extends Controller
 {
@@ -66,13 +67,23 @@ class UpcyclerController extends Controller
                 abort(403, 'Unauthorized action.');
             }
 
-            $wasApproved = $appointment->appstatus === 'approved';
+          $previousStatus = $appointment->getOriginal('appstatus'); // Old value before update
 
-            $appointment->update($validated);
+            $appointment->update($validated); // Now the new value is in $appointment->appstatus
 
-            if (!$wasApproved && $appointment->appstatus === 'approved') {
+            // Log previous and current for debugging
+            logger("Previous status: $previousStatus | New status: {$appointment->appstatus}");
+
+            // 1. Send approval email
+            if ($previousStatus !== 'approved' && $appointment->appstatus === 'approved') {
                 Mail::to($appointment->user->email)->send(new UpcycleBookingApproved($appointment));
             }
+
+            // 2. Send completed email
+            if ($previousStatus !== 'completed' && $appointment->appstatus === 'completed') {
+                Mail::to($appointment->user->email)->send(new UpcycleBookingCompleted($appointment));
+            }
+
 
             return redirect()->back()->with('status', 'Appointment status updated.');
         }

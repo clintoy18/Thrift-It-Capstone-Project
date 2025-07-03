@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ApprovalStatusProductUpdateRequest;
 use App\Models\Product;
 use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
@@ -24,19 +25,23 @@ class AdminProductController extends Controller
         $product->load(['user', 'category', 'comments.user']);
         return view('admin.products.show', compact('product'));
     }
+    
 
-    public function update(Request $request, Product $product): RedirectResponse
+    public function update(ApprovalStatusProductUpdateRequest $request, Product $product): RedirectResponse
     {
-        $validated = $request->validate([
-            'status' => 'required|in:active,pending,rejected',
-            'admin_notes' => 'nullable|string|max:1000'
-        ]);
-
+        $validated = $request->validated();
         $product->update($validated);
 
-        return redirect()->route('admin.products.show', $product)
-            ->with('success', 'Product status updated successfully.');
+        return redirect()->route('admin.products.index')
+            ->with('success', 'Product approval status updated successfully.');
     }
+    
+    public function edit(Product $product): View
+    {
+        $product->load(['user', 'category']);
+        return view('admin.products.edit', compact('product'));
+    }
+
 
     public function destroy(Product $product): RedirectResponse
     {
