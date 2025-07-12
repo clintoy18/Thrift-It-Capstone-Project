@@ -16,3 +16,9 @@ has been successfully <strong>completed</strong>, and your item is now <strong>r
 
 <p>Warm regards,</p>
 <p><strong>The Upcycling Team</strong></p>
+
+<hr>
+
+<p style="font-size: 0.9em; color: #666;">
+This is an automated message. Please do not reply to this email. For assistance, kindly contact us through our official website or support channels.
+</p>

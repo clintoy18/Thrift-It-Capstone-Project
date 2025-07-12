@@ -41,6 +41,13 @@ class AppointmentController extends Controller
      */
     public function store(StoreAppointmentRequest $request)
     {
+
+
+        $user = Auth::user();
+        //check user subscription plan and appointment count
+        if($user->subscription_plan == 'free' && Appointment::where('user_id', $user->id)->count() >= 5) {
+                    return redirect()->back()->with('error', 'You have reached the maximum number of appointments allowed for your subscription plan.');
+                }
         $validated = $request->validated();
         $validated['user_id'] = Auth::id(); 
         Appointment::create($validated);
@@ -97,7 +104,7 @@ class AppointmentController extends Controller
         }
 
         $now = Carbon::now();
-        $appointmentTime = Carbon::parse($appointment->appdate); // Replace with the actual column name if different
+        $appointmentTime = Carbon::parse($appointment->appdate); 
         
         if($appointmentTime->diffInHours($now) < 24){
             return redirect()->route('appointments.myAppointments')->withErrors('You can only cancel appointments more than 24 hours in advance.');

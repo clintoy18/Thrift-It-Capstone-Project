@@ -45,6 +45,13 @@ class ProductController extends Controller
  
         public function store(StoreProductRequest $request): RedirectResponse
         {
+            //check user subs plan and product count
+            $user = Auth::user();
+            if($user->subscription_plan == 'free' && Product::where('user_id', $user->id)->count() >= 5) {
+
+                return redirect()->back()->with('error', 'You have reached the maximum number of products allowed for your subscription plan.');
+            }
+
             $validated = $request->validated();
 
             $validated['user_id'] = Auth::id(); 
