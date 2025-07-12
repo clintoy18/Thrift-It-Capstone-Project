@@ -9,9 +9,17 @@
   <li><strong>Contact Number:</strong> {{ $appointment->contactnumber }}</li>
 </ul>
 
-<p>If you have any questions or need to make changes to your appointment, please feel free to contact us or reach out directly to your upcycler.</p>
+<p>Please make sure to arrive on time for your appointment to ensure a smooth and efficient service.</p>
+
+<p>If you have any questions or need to make changes to your appointment, please feel free to contact us through our official platform or reach out directly to your upcycler.</p>
 
 <p>Thank you for trusting our upcycling service. We’re excited to help you transform your items in a more sustainable way!</p>
 
 <p>Warm regards,</p>
 <p><strong>The Upcycling Team</strong></p>
+
+<hr>
+
+<p style="font-size: 0.9em; color: #666;">
+This is an automated message. Please do not reply to this email. For inquiries, contact us through our website or support channels.
+</p>

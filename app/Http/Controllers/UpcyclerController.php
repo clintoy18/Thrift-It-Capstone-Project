@@ -58,33 +58,29 @@ class UpcyclerController extends Controller
 
     public function update(UpdateAppointmentRequest $request, $appointmentid)
         {
-            $validated = $request->validated(); // ✅ reuse this
+            $validated = $request->validated();
 
             $appointment = Appointment::findOrFail($appointmentid);
 
-            // Optional: check if current upcycler is allowed to modify
+            // check authorization
             if ($appointment->upcycler_id !==  Auth::id()) {
                 abort(403, 'Unauthorized action.');
             }
 
-          $previousStatus = $appointment->getOriginal('appstatus'); // Old value before update
+            //check previous status
+            $previousStatus = $appointment->getOriginal('appstatus'); 
 
-            $appointment->update($validated); // Now the new value is in $appointment->appstatus
+            $appointment->update($validated); 
 
-            // Log previous and current for debugging
-            logger("Previous status: $previousStatus | New status: {$appointment->appstatus}");
-
-            // 1. Send approval email
+            // if appstatus is approved send email to user 
             if ($previousStatus !== 'approved' && $appointment->appstatus === 'approved') {
                 Mail::to($appointment->user->email)->send(new UpcycleBookingApproved($appointment));
             }
 
-            // 2. Send completed email
+           // if appstatus is completed and ready to pick-up send email to user 
             if ($previousStatus !== 'completed' && $appointment->appstatus === 'completed') {
                 Mail::to($appointment->user->email)->send(new UpcycleBookingCompleted($appointment));
-            }
-
-
+            }    
             return redirect()->back()->with('status', 'Appointment status updated.');
         }
 
