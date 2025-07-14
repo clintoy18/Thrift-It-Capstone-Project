@@ -104,7 +104,7 @@ class AppointmentController extends Controller
         }
 
         $now = Carbon::now();
-        $appointmentTime = Carbon::parse($appointment->appdate); 
+        $appointmentTime = Carbon::parse($appointment->appdate); // Replace with the actual column name if different
         
         if($appointmentTime->diffInHours($now) < 24){
             return redirect()->route('appointments.myAppointments')->withErrors('You can only cancel appointments more than 24 hours in advance.');
