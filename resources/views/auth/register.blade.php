@@ -1,5 +1,4 @@
 <x-guest-layout containerClass="max-w-[400px]" reverseColumns="true">
-
     {{-- Removed wrapper for smaller form size --}}
     <div class="max-w-[300px] mx-auto"> 
     <form method="POST" action="{{ route('register') }}">

@@ -39,7 +39,7 @@
         <div class="flex justify-between items-center">
             <!-- Logo (hidden on mobile, visible on desktop) -->
             <a href="{{ Auth::check() ? (Auth::user()->role === 2 ? route('admin.dashboard') : (Auth::user()->role === 1 ? route('upcycler') : route('dashboard'))) : url('/') }}" class="flex-shrink-0 hidden md:block">
-                <img src="{{ asset('images/nipis 4.png') }}" alt="Thrift-IT Logo" class="h-10 w-auto md:h-12">
+                <img src="{{ asset('images/logo.png') }}" alt="Thrift-IT Logo" class="h-10 w-auto md:h-12">
             </a>
             
             <!-- Search Bar (Hidden on small mobile, visible on larger screens) -->
