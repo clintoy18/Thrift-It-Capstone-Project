@@ -1,6 +1,12 @@
-<x-guest-layout>
+<x-guest-layout containerClass="max-w-[400px]" reverseColumns="true">
+
+    {{-- Removed wrapper for smaller form size --}}
+    <div class="max-w-[300px] mx-auto"> 
     <form method="POST" action="{{ route('register') }}">
         @csrf
+        <div class="mb-4 text-center">
+            <h1 class="text-3xl font-bold text-black dark:text-black">Register</h1>
+        </div>
         <!-- Name -->
         <div>
             <x-input-label for="fname" :value="__('First Name')" />
@@ -20,7 +26,7 @@
             <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autocomplete="username" />
             <x-input-error :messages="$errors->get('email')" class="mt-2" />
         </div>
-            <!-- Role Selection -->
+        <!-- Role Selection -->
         <div class="mt-4">
             <x-input-label for="role" :value="__('Role')" />
             <select id="role" name="role" class="block mt-1 w-full border-gray-300 rounded-md shadow-sm">
@@ -60,9 +66,10 @@
           </div>
           
         <div class="flex items-center justify-end mt-4">
-            <a class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800" href="{{ route('login') }}">
+            <a class="underline text-sm text-[#B59F84] hover:text-[#a08e77] transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-[#B59F84] focus:ring-offset-2" href="{{ route('login') }}">
                 {{ __('Already registered?') }}
             </a>
         </div>
     </form>
+</div>
 </x-guest-layout>

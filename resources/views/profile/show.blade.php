@@ -8,7 +8,7 @@
 
                 @if (Auth::id() === $user->id)
                     <!-- Show button only if current user is viewing their own profile -->
-                    <a href="{{ route('products.create') }}" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 focus:outline-none transition">
+                    <a href="{{ route('products.create') }}" class="px-4 py-2 bg-[#B59F84] text-white rounded-lg hover:bg-[#a08e77] hover:scale-105 focus:outline-none transition-all duration-200">
                         <span class="font-semibold">List a Product</span>
                     </a>
                 @endif
