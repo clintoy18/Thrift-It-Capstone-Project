@@ -21,7 +21,7 @@
 
             {{-- Image --}}
             <div class="w-full md:w-1/2 h-full flex items-center justify-center animate-fade-in-right">
-                <img src="{{ asset('images/image 152.png') }}" alt="Hero Image" class="object-contain max-h-full w-auto mx-auto">
+                <img src="{{ asset('storage/bgimages/jumbotron.png') }}" alt="Hero Image" class="object-contain max-h-full w-auto mx-auto">
             </div>
         </div>
     </div>
