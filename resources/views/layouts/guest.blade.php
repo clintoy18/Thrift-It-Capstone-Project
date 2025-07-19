@@ -25,7 +25,7 @@
       <!-- RIGHT COLUMN: Full-height Background Image (Rendered first if reverseColumns is true) -->
       <div class="hidden md:block h-screen ">
         <img
-          src="{{ asset('/images/image 136.png') }}"
+          src="{{ asset('images/loginbg.png') }}"
           alt="Login background"
           class="w-full h-screen  object-cover object-center"
         >
@@ -44,7 +44,7 @@
       <!-- LEFT COLUMN: Logo + Auth Card (Default order) -->
       <div class="flex flex-col justify-center items-center px-8 py-12" style="background-color: #CBBC968F;">
         <a href="{{ Auth::check() ? (Auth::user()->role === 2 ? route('admin.dashboard') : (Auth::user()->role === 1 ? route('upcycler') : route('dashboard'))) : url('/') }}" class="flex-shrink-0 mb-8">
-                  <img src="{{ asset('images/nipis 4.png') }}" alt="Thrift-IT Logo" class="h-8 w-[120px] h-[100px]">
+                  <img src="{{ asset('images/logo.png') }}" alt="Thrift-IT Logo" class="h-8 w-[120px] h-[100px]">
          </a>
         <div {{ $attributes->merge(['class' => 'w-full '.$containerClass.' bg-white p-4 rounded-lg shadow-md']) }}>
           {{ $slot }}
@@ -54,7 +54,7 @@
       <!-- RIGHT COLUMN: Full-height Background Image (Default order) -->
       <div class="hidden md:block h-screen ">
         <img
-          src="{{ asset('/images/image 136.png') }}"
+          src="{{ asset('/images/loginbg.png') }}"
           alt="Login background"
           class="w-full h-screen  object-cover object-center"
         >
