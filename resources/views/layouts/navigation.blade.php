@@ -63,7 +63,7 @@
                 <a href="#" class="text-gray-700 text-lg">🛒</a> <!-- Cart -->
 
                 @auth
-                    @php    
+                    @php
                         $role = Auth::user()->role;
                     @endphp
 
