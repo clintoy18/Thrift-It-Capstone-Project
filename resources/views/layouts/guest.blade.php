@@ -1,42 +1,61 @@
-<!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="csrf-token" content="{{ csrf_token() }}">
+<x-guest-layout containerClass="max-w-[400px]">
+    <x-auth-session-status class="mb-4" :status="session('status')" />
 
-  <title>{{ config('app.name', 'Laravel') }}</title>
+    <div class="flex items-center justify-center h-screen">
+        <div class="max-w-[300px] w-full">
+            <form method="POST" action="{{ route('login') }}">
+                @csrf
+                <div class="mb-4 text-center">
+                    <h1 class="text-3xl font-bold text-black dark:text-black">Login</h1>
+                </div>
 
-  <!-- Fonts -->
-  <link rel="preconnect" href="https://fonts.bunny.net">
-  <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+                <!-- Email -->
+                <div>
+                    <x-input-label for="email" :value="__('Email')" />
+                    <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
+                    <x-input-error :messages="$errors->get('email')" />
+                </div>
 
-  <!-- Scripts -->
-  @vite(['resources/css/app.css', 'resources/js/app.js'])
-</head>
-<body class="font-sans antialiased">
+                <!-- Password -->
+                <div class="mt-4">
+                    <x-input-label for="password" :value="__('Password')" />
+                    <x-text-input id="password" class="block mt-1 w-full" type="password" name="password" required autocomplete="current-password" />
+                    <x-input-error :messages="$errors->get('password')" class="mt-2" />
+                </div>
 
-  <!-- Full-height 2-column grid -->
-  <div class="h-screen grid grid-cols-1 md:grid-cols-2">
+                <!-- Login Button -->
+                <div class="mt-4 text-center">
+                    <x-primary-button class="w-full flex items-center justify-center">
+                        <i class="fas fa-sign-in-alt mr-2"></i>
+                        {{ __('Log in') }}
+                    </x-primary-button>
+                </div>
 
-    <!-- LEFT COLUMN: Logo + Auth Card -->
-    <div class="flex flex-col justify-center items-center px-8 py-12 bg-[#D9D9D9]">
-     
-      <div class="w-full max-w-md bg-white p-6 rounded-lg shadow-md">
-        {{ $slot }}
-      </div>
+                <!-- Remember Me -->
+                <div class="block mt-4">
+                    <label for="remember_me" class="inline-flex items-center cursor-pointer select-none gap-2">
+                        <input id="remember_me" type="checkbox" class="h-5 w-5 rounded border-gray-300 text-[#B59F84] focus:ring-[#B59F84] transition-all duration-150 shadow-sm" name="remember">
+                        <span class="text-base text-gray-700 font-medium">{{ __('Remember me') }}</span>
+                    </label>
+                </div>
+
+                <!-- Sign Up -->
+                <div class="flex items-center justify-center mt-4 gap-2">
+                    <span class="text-gray-700">{{ __('Don\'t have an account?') }}</span>
+                    <a href="{{ route('register') }}" class="underline text-sm text-[#B59F84] hover:text-[#a08e77]">
+                        <i class="fas fa-user-plus mr-1"></i>{{ __('Sign Up') }}
+                    </a>
+                </div>
+
+                <!-- Forgot Password -->
+                <div class="flex items-center justify-end mt-4">
+                    @if (Route::has('password.request'))
+                        <a class="underline text-sm text-[#B59F84] hover:text-[#a08e77]" href="{{ route('password.request') }}">
+                            {{ __('Forgot your password?') }}
+                        </a>
+                    @endif
+                </div>
+            </form>
+        </div>
     </div>
-
-    <!-- RIGHT COLUMN: Full-height Background Image -->
-    <div class="hidden md:block h-screen">
-      <img
-        src="{{ asset('storage/bgimages/login.png') }}"
-        alt="Login background"
-        class="w-full h-full object-cover object-center"
-      >
-    </div>
-
-  </div>
-
-</body>
-</html>
+</x-guest-layout>

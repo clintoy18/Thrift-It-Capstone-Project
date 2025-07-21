@@ -5,7 +5,7 @@
                 <h2 class="text-xl font-bold text-red-600 dark:text-red-400">My Products</h2>
 
                 <!-- Button to list or create product -->
-                <a href="{{ route('products.create') }}" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 focus:outline-none transition">
+                <a href="{{ route('products.create') }}" class="px-4 py-2 bg-[#B59F84] text-white rounded-lg hover:bg-[#a08e77] hover:scale-105 focus:outline-none transition-all duration-200">
                     <span class="font-semibold">List a Product</span>
                 </a>
             </div>
