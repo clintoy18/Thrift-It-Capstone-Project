@@ -5,13 +5,19 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreAppointmentRequest;
 use App\Http\Requests\UpdateAppointmentRequest;
 use Illuminate\Http\Request;
-use App\Models\Appointment;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
-use Carbon\Carbon;
+use App\Services\AppointmentService;
 
 class AppointmentController extends Controller
 {
+    protected $appointmentService;
+
+    public function __construct(AppointmentService $appointmentService)
+    {
+        $this->appointmentService = $appointmentService;
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -43,23 +49,25 @@ class AppointmentController extends Controller
     {
         $validated = $request->validated();
         $validated['user_id'] = Auth::id(); 
-        Appointment::create($validated);
+        $this->appointmentService->createAppointment($validated);
         return redirect()->route('appointments.index')->with('success', 'Appointment created successfully!');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Appointment $appointment)
+    public function show($appointmentid)
     {
+        $appointment = $this->appointmentService->getAppointmentById($appointmentid);
         return view('appointments.show', compact('appointment'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Appointment $appointment)
+    public function edit($appointmentid)
     {
+        $appointment = $this->appointmentService->getAppointmentById($appointmentid);
         $upcyclers = User::where('role', 1)->get();
         return view('appointments.edit', compact('appointment', 'upcyclers'));
     }
@@ -67,42 +75,37 @@ class AppointmentController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateAppointmentRequest $request, Appointment $appointment)
+    public function update(UpdateAppointmentRequest $request, $appointmentid)
     {
+        $appointment = $this->appointmentService->getAppointmentById($appointmentid);
         $validated = $request->validated();
-        $appointment->update($validated);
+        $this->appointmentService->updateAppointment($appointment, $validated);
         return redirect()->route('appointments.index')->with('success', 'Appointment updated successfully!');
     }
- 
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Appointment $appointment)
+    public function destroy($appointmentid)
     {
-        $appointment->delete();
+        $appointment = $this->appointmentService->getAppointmentById($appointmentid);
+        $this->appointmentService->deleteAppointment($appointment);
         return redirect()->route('appointments.myAppointments')->with('success', 'Appointment deleted successfully!');
     }
     
     public function myAppointments()
     {
-        $appointments = Appointment::with('upcycler')->where('user_id', Auth::id())->get();
+        $appointments = $this->appointmentService->getAppointmentsByUser(Auth::id());
         return view('appointments.myAppointments', compact('appointments'));
     }
 
-    public function cancel(Appointment $appointment)
+    public function cancel($appointmentid)
     {
-        if($appointment->appstatus == 'cancelled' || $appointment->appstatus == 'completed' || $appointment->appstatus == 'declined'){
-            return redirect()->route('appointments.myAppointments')->withErrors('This appointment cannot be cancelled.');
+        $appointment = $this->appointmentService->getAppointmentById($appointmentid);
+        $result = $this->appointmentService->cancelAppointment($appointment);
+        if(isset($result['error'])){
+            return redirect()->route('appointments.myAppointments')->withErrors($result['error']);
         }
-
-        $now = Carbon::now();
-        $appointmentTime = Carbon::parse($appointment->appdate); // Replace with the actual column name if different
-        
-        if($appointmentTime->diffInHours($now) < 24){
-            return redirect()->route('appointments.myAppointments')->withErrors('You can only cancel appointments more than 24 hours in advance.');
-        }
-        $appointment->update(['appstatus' => 'cancelled']);
-        return redirect()->route('appointments.myAppointments')->with('success', 'Appointment cancelled successfully!');
+        return redirect()->route('appointments.myAppointments')->with('success', $result['success']);
     }
 }

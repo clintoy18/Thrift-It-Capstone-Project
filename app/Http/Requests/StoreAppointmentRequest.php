@@ -29,7 +29,6 @@ class StoreAppointmentRequest extends FormRequest
             'apptype' => ['required', 'in:Resize,Customize,Patchwork,Fabric Dyeing'],
             'appstatus' => ['nullable', 'in:pending,approved,declined,completed,cancelled'],
             'appdate' => 'required|date|after:now',
-            ''
         ];
     }
 }
