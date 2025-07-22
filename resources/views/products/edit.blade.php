@@ -37,24 +37,13 @@
                         <x-text-input id="price" name="price" type="number" step="0.01" class="mt-1 block w-full" 
                             :value="old('price', $product->price)" required />
                     </div>
-                  <!-- Status -->
-                        <div class="mt-4">
-                            <x-input-label for="status" :value="__('Status')" />
-                            <select id="status" name="status" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-gray-500" required>
-                                <option value="available"
-                                    @if($product->status === 'sold') disabled @endif
-                                    {{ old('status', $product->status) === 'available' ? 'selected' : '' }}>
-                                    Available
-                                </option>
-                                <option value="sold" {{ old('status', $product->status) === 'sold' ? 'selected' : '' }}>
-                                    Sold
-                                </option>
-                            </select>
-                            @if($product->status === 'sold')
-                                <p class="text-sm text-red-600 mt-1">Product is sold and cannot be marked as available again.</p>
-                            @endif
-                        </div>
-
+                    <div>
+                        <label for="status" class="block text-black font-medium mb-2">Status</label>
+                        <select id="status" name="status" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-gray-500" required>
+                            <option value="available">Available</option>
+                            <option value="sold">Sold</option>
+                        </select>
+                    </div>
 
                     <!-- Image Upload -->
                     <div class="mt-4">
