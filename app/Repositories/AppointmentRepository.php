@@ -36,4 +36,18 @@ class AppointmentRepository
     {
         return Appointment::with('upcycler')->where('user_id', $userId)->get();
     }
+
+    public function getByUpcycler($upcyclerId, $statuses = ['pending', 'approved'])
+    {
+        return Appointment::where('upcycler_id', $upcyclerId)
+            ->whereIn('appstatus', $statuses)
+            ->get();
+    }
+
+    public function updateById($appointmentId, array $data)
+    {
+        $appointment = Appointment::findOrFail($appointmentId);
+        $appointment->update($data);
+        return $appointment;
+    }
 }
