@@ -7,20 +7,19 @@ use App\Models\Appointment;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use App\Http\Requests\UpdateAppointmentRequest;
-use App\Mail\UpcycleBookingApproved;
-use App\Mail\UpcycleBookingCompleted;
-use Illuminate\Support\Facades\Mail;
+use App\Services\UpcyclerService;
 class UpcyclerController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    protected $upcyclerService;
+  
+    public function __construct(UpcyclerService $upcyclerService)
+    {
+        $this->upcyclerService = $upcyclerService;
+        
+    }
     public function index()
     {
-        $appointments = Appointment::where('upcycler_id', Auth::id())
-        ->whereIn('appstatus', ['pending', 'approved'])
-        ->get();
-        
+        $appointments = $this->upcyclerService->getAppointmentsForUpcycler(Auth::id());
         return view('upcycler.index', compact('appointments'));    
     }
     /**
@@ -44,7 +43,7 @@ class UpcyclerController extends Controller
      */
     public function show(string $id)
     {
-        $appointment = Appointment::find($id);
+        $appointment = $this->upcyclerService->getAppointmentById($id);
         return view('upcycler.show', compact('appointment'));
     }
   
@@ -59,31 +58,7 @@ class UpcyclerController extends Controller
     public function update(UpdateAppointmentRequest $request, $appointmentid)
         {
             $validated = $request->validated(); // ✅ reuse this
-
-            $appointment = Appointment::findOrFail($appointmentid);
-
-            // Optional: check if current upcycler is allowed to modify
-            if ($appointment->upcycler_id !==  Auth::id()) {
-                abort(403, 'Unauthorized action.');
-            }
-
-          $previousStatus = $appointment->getOriginal('appstatus'); // Old value before update
-
-            $appointment->update($validated); // Now the new value is in $appointment->appstatus
-
-            // Log previous and current for debugging
-            logger("Previous status: $previousStatus | New status: {$appointment->appstatus}");
-
-            // 1. Send approval email
-            if ($previousStatus !== 'approved' && $appointment->appstatus === 'approved') {
-                Mail::to($appointment->user->email)->send(new UpcycleBookingApproved($appointment));
-            }
-
-            // 2. Send completed email
-            if ($previousStatus !== 'completed' && $appointment->appstatus === 'completed') {
-                Mail::to($appointment->user->email)->send(new UpcycleBookingCompleted($appointment));
-            }
-
+            $this->upcyclerService->updateAppointmentStatus($appointmentid,$validated,Auth::id());
 
             return redirect()->back()->with('status', 'Appointment status updated.');
         }
@@ -91,9 +66,9 @@ class UpcyclerController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Appointment $appointment) : RedirectResponse
+    public function destroy($appointmentid) : RedirectResponse
     {
-        $appointment->delete();
+        $this->upcyclerService->deleteAppointment($appointmentid,Auth::id());
         return redirect()->route('upcycler.index');
 
     }
