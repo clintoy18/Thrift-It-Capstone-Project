@@ -140,7 +140,7 @@
                     <!-- Scrollable Comment List -->
                     <div class="max-h-60 overflow-y-auto space-y-4 pr-2">
                         @forelse($product->comments as $comment)
-                            <div class="bg-white dark:bg-gray-700 p-4 rounded-lg shadow-md">
+                            <div class="bg-white dark:bg-gray-700 p-4 rounded-lg shadow-md hover:bg-gray-50 dark:hover:bg-gray-600 transition">
                                 <div class="flex items-center gap-3">
                                     <!-- User Profile Picture -->
                                     <img 
@@ -152,30 +152,45 @@
                                     <!-- User Info -->
                                     <div>
                                         <a href="{{ route('profile.show', $comment->user->id) }}" class="text-blue-500 hover:underline">
-                                        
-                                        
-                                        <p class="font-semibold text-gray-800 dark:text-gray-200">
-                                            {{ $comment->user->fname }} {{ $comment->user->lname }}
-                                        </p>
+                                            <p class="font-semibold text-gray-800 dark:text-gray-200">
+                                                {{ $comment->user->fname }} {{ $comment->user->lname }}
+                                            </p>
                                         </a>
-                                        <p class="text-gray-600 dark:text-gray-300 text-sm">
+                                        <p class="text-gray-500 dark:text-gray-400 text-xs">
                                             {{ $comment->created_at->diffForHumans() }}
                                         </p>
                                     </div>
+                                    <div class="ml-auto flex gap-2">
+                                        @if(Auth::id() === $comment->user_id)
+                                            <a href="{{ route('comments.edit', $comment->id) }}" 
+                                               class="px-2 py-1 bg-blue-100 text-blue-700 rounded hover:bg-blue-200 text-xs flex items-center gap-1">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536M9 13l6-6m2 2l-6 6m-2 2h6" />
+                                                </svg>
+                                                Edit
+                                            </a>
+                                            <form action="{{ route('comments.destroy', $comment->id) }}" method="POST" 
+                                                  class="inline" 
+                                                  onsubmit="return confirm('Are you sure you want to delete this comment?');">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" 
+                                                        class="px-2 py-1 bg-red-100 text-red-700 rounded hover:bg-red-200 text-xs flex items-center gap-1">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                                    </svg>
+                                                    Delete
+                                                </button>
+                                            </form>
+                                        @endif
+                                    </div>
                                 </div>
-
                                 <!-- Comment Content -->
                                 <p class="mt-2 text-gray-800 dark:text-gray-200">{{ $comment->content }}</p>
-                               
-                                <!-- Delete Button (Only for Comment Owner) -->
-                                @if(Auth::id() === $comment->user_id)
-                                    <form action="{{ route('comments.destroy', $comment->id) }}" method="POST" class="mt-2">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="text-red-500 text-sm hover:underline">Delete</button>
-                                    </form>
-                                @endif
                             </div>
+                            @if(!$loop->last)
+                                <hr class="my-2 border-gray-200 dark:border-gray-600">
+                            @endif
                         @empty
                             <p class="text-gray-600 dark:text-gray-400 text-sm">No comments yet. Be the first to comment!</p>
                         @endforelse
@@ -183,12 +198,25 @@
 
                     <!-- Comment Form -->
                     @auth
-                        <form action="{{ route('comments.store', $product->id) }}" method="POST" class="mt-4">
+                        <form action="{{ route('comments.store', $product->id) }}" method="POST" class="mt-4 flex items-start gap-3">
                             @csrf
-                            <textarea name="content" rows="3" class="w-full border rounded-lg p-2 focus:ring focus:ring-blue-300" required></textarea>
-                            <button type="submit" class="mt-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 ">
-                                Post Comment
-                            </button>
+                            <img 
+                                src="https://ui-avatars.com/api/?name={{ urlencode(auth()->user()->fname . ' ' . auth()->user()->lname) }}&background=random" 
+                                alt="{{ auth()->user()->fname }} {{ auth()->user()->lname }}"
+                                class="w-10 h-10 rounded-full border"
+                            >
+                            <div class="flex-1">
+                                <textarea name="content" rows="3" maxlength="1000"
+                                          class="w-full border rounded-lg p-2 focus:ring focus:ring-blue-300" 
+                                          required
+                                          oninput="document.getElementById('char-count').innerText = this.value.length + '/1000';"></textarea>
+                                <div class="flex justify-between items-center mt-2">
+                                    <span id="char-count" class="text-xs text-gray-500">0/1000</span>
+                                    <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 ">
+                                        Post Comment
+                                    </button>
+                                </div>
+                            </div>
                         </form>
                     @else
                         <p class="mt-3 text-gray-600">

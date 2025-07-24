@@ -41,9 +41,10 @@ Route::middleware(['auth', 'verified', 'rolemiddleware:user'])->group(function (
     Route::resource('products', ProductController::class);
     Route::resource('categories', CategoriesController::class);
     Route::resource('appointments', AppointmentController::class);
+    Route::resource('comments', CommentController::class)->only(['edit', 'update', 'destroy']);
+
     Route::patch('/appointments/{appointment}/cancel', [AppointmentController::class, 'cancel'])->name('appointments.cancel');
     Route::post('/products/{product}/comments', [CommentController::class, 'store'])->name('comments.store');
-    Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
     Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
     Route::get('/users/{user}/report', [ReportController::class, 'create'])->name('reports.create');
     Route::post('/users/{user}/report', [ReportController::class, 'store'])->name('reports.store');
