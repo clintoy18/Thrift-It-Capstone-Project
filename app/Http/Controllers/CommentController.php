@@ -6,9 +6,17 @@ use App\Models\Product;
 use App\Models\Comment;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use App\Services\CommentService;
 
 class CommentController extends Controller
 {
+    protected $commentService;
+
+    public function __construct(CommentService $commentService)
+    {
+        $this->commentService = $commentService;
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -30,15 +38,14 @@ class CommentController extends Controller
      */
     public function store(StoreCommentRequest $request, $productId)
     {
-        Comment::create([
+        $this->commentService->createComment([
             'user_id'=> Auth::id(),
             'product_id'=> $productId,
             'content'=> $request->content,
             'parent_id' => $request->parent_id,
-
         ]);
 
-        return redirect()->back()->with('success','Comment added succesfully!');
+        return redirect()->back()->with('success','Comment added successfully!');
     }
 
     /**
@@ -52,9 +59,14 @@ class CommentController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit($id)
     {
+        $comment = $this->commentService->getCommentById($id);
         
+        if($comment->user_id !== Auth::id()){
+            return redirect()->back()->with('error', 'Unauthorize action.');
+        }
+        return view('comments.edit', compact('comment'));
     }
 
     /**
@@ -62,7 +74,18 @@ class CommentController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $comment = $this->commentService->getCommentById($id);
+        
+        if($comment->user_id !== Auth::id()){
+            return redirect()->back()->with('error', 'Unauthorize action.');
+        }
+        $this->commentService->updateComment($id,[
+            'content' => $request->input('content'),
+        ]);
+
+      return redirect()->route('products.show',$id)->with('success','Comment updated successfully!');
+
+
     }
 
     /**
@@ -71,10 +94,9 @@ class CommentController extends Controller
     public function destroy(Comment $comment)
     {
         if ($comment->user_id === Auth::id()) {
-            $comment->delete();
+            $this->commentService->deleteComment($comment->id);
             return redirect()->back()->with('success', 'Comment deleted.');
         }
-
         return redirect()->back()->with('error', 'Unauthorized action.');
     }
 }
