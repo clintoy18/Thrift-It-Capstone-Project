@@ -8,17 +8,24 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Review;
 use Illuminate\View\View;
-
+use App\Services\ReviewService;
 
 class ReviewController extends Controller
 {
+    protected $reviewService;
+
+    public function __construct(ReviewService $reviewService)
+    {
+        $this->reviewService = $reviewService;
+    }
     
     public function index(){
 
-        $submittedReviews = Review::where('reviewer_id',Auth::id())->get();
+        $submittedReviews = $this->reviewService->getSubmittedReviews(Auth::id());
 
         return view('reviews.index',compact('submittedReviews'));
     }
+
 
 
     public function create(User $user): View
@@ -36,12 +43,10 @@ class ReviewController extends Controller
         return redirect()->back()->withError('You cannot review yourself');
        }
 
+       // Use ReviewService to check for existing review
+       $existingReview = $this->reviewService->findExistingReview(Auth::id(), $user->id);
 
-       $exisitingReview = Review::where('reviewer_id', Auth::id())
-            ->where('reviewed_user_id', $user->id)
-            ->first();
-
-       if($exisitingReview){
+       if($existingReview){
         return redirect()->back()->withError('You have already reviewed this user');
        }
 
@@ -49,7 +54,7 @@ class ReviewController extends Controller
        $validated['reviewer_id'] = Auth::id();
        $validated['reviewed_user_id'] = $user->id;
 
-       Review::create($validated);
+       $this->reviewService->createReview($validated);
 
        return redirect()->route('dashboard')->with('success','Review submitted succesfully!');
     }

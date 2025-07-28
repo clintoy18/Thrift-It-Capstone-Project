@@ -62,10 +62,7 @@ class CommentController extends Controller
     public function edit($id)
     {
         $comment = $this->commentService->getCommentById($id);
-        
-        if($comment->user_id !== Auth::id()){
-            return redirect()->back()->with('error', 'Unauthorize action.');
-        }
+    
         return view('comments.edit', compact('comment'));
     }
 
