@@ -6,22 +6,17 @@
             <div class="w-full md:w-1/2 mb-8 md:mb-0 text-center md:text-left flex flex-col items-center md:items-start">
                 <h1 class="text-4xl sm:text-5xl font-bold leading-tight text-[#634600]">Refresh Your Wardrobe Sustainably With Thrift-IT's Unique Finds</h1>
                 <p class="mt-4 text-lg leading-relaxed text-gray-700">Fashion meets purpose — shop, sell, and donate thrifted clothing to embrace a greener future.</p>
-                <div class="mt-8 flex flex-row gap-3 items-center justify-center md:justify-start md:items-start">
-                    <a href="#" class="inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md text-sm font-semibold text-white bg-[#B59F84] shadow-md transform transition-all duration-200 hover:bg-[#a08e77] hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#B59F84]">
-                        Explore Collection
-                        <svg xmlns="http://www.w3.org/2000/svg" class="ml-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                        </svg>
-                    </a>
-                    <a href="{{ route('products.create') }}" class="inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md text-sm font-semibold text-white bg-gradient-to-r from-[#CBBC96] to-[#B59F84] shadow-md transform transition-all duration-200 hover:from-[#b3a87e] hover:to-[#a08e77] hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#B59F84]">
-                        Start Selling
-                    </a>
+                <div class="mt-8 text-center w-full md:flex md:justify-start md:ml-[550px]">
+                    
+                    <a href="{{ route('products.create') }}" class="inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-3xl w-40 h-12 text-sm font-semibold text-white bg-gradient-to-r from-[#CBBC96] to-[#B59F84] shadow-md transform transition-all duration-200 hover:from-[#b3a87e] hover:to-[#a08e77] hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#B59F84]">
+                            Get Started
+                        </a>
                 </div>
             </div>
-
+            
             {{-- Image --}}
             <div class="w-full md:w-1/2 h-full flex items-center justify-center animate-fade-in-right">
-                <img src="{{ asset('images/image 152.png') }}" alt="Hero Image" class="object-contain max-h-full w-auto mx-auto">
+                <img src="{{ asset('storage/bgimages/jumbotron.png') }}" alt="Hero Image" class="object-contain max-h-full w-auto mx-auto">
             </div>
         </div>
     </div>

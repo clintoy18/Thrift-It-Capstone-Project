@@ -1,4 +1,4 @@
-<nav class="w-full bg-[#d9d9d9] px-4 sm:px-6 md:px-8 py-4 border-b border-gray-300 h-20">
+<nav class="w-full bg-[#F4F2ED] px-5 sm:px-6 md:px-8 py-5  h-20 sticky top-0 z-50">
     <div class="max-w-7xl mx-auto h-full flex flex-col justify-center" x-data="{ mobileMenuOpen: false, mobileSearchOpen: false }">
         <!-- Mobile Nav Row: Logo/Search, Menu Toggle -->
         <div class="flex items-center justify-between md:hidden w-full py-2 px-2">
@@ -41,6 +41,33 @@
             <a href="{{ Auth::check() ? (Auth::user()->role === 2 ? route('admin.dashboard') : (Auth::user()->role === 1 ? route('upcycler') : route('dashboard'))) : url('/') }}" class="flex-shrink-0 hidden md:block">
                 <img src="{{ asset('images/logo.png') }}" alt="Thrift-IT Logo" class="h-10 w-auto md:h-12">
             </a>
+
+            @auth
+                @php
+                    $role = Auth::user()->role;
+                @endphp
+                <div class="hidden md:flex items-center gap-2 lg:gap-5 ml-4">
+                    @if($role === 0) <!-- Regular User -->
+                 
+                        <a href="" class=" text-black px-4 py-2 text-sm rounded hover:bg-gray-800 transition">
+                            Home
+                        </a>
+                        <a href="{{ route('products.create') }}" class=" text-black px-4 py-2 text-sm rounded hover:bg-gray-800 transition">
+                            Sell now
+                        </a>
+                        <a href="" class=" text-black px-4 py-2 text-sm rounded hover:bg-gray-800 transition">
+                            Donate
+                        </a>
+                        <a href="{{ route('appointments.index') }}" class=" text-black px-4 py-2 text-sm rounded hover:bg-gray-800 transition">
+                            Upcycle
+                        </a>
+                    @elseif($role === 1) <!-- Upcycler -->
+                        <a href="{{ route('upcycler.index') }}" class="bg-black text-white px-4 py-2 text-sm rounded hover:bg-gray-800 transition">
+                            Manage Appointments
+                        </a>
+                    @endif
+                </div>
+            @endauth
             
             <!-- Search Bar (Hidden on small mobile, visible on larger screens) -->
             <div class="hidden md:flex items-center bg-white px-6 py-2 rounded-full w-full max-w-lg shadow-md border border-gray-200 mx-6 hover:shadow-lg transition-shadow duration-200">
@@ -61,26 +88,8 @@
             <div class="hidden md:flex items-center gap-2 lg:gap-4">
                 <a href="#" class="text-gray-700 text-lg">🤍</a> <!-- Wishlist -->
                 <a href="#" class="text-gray-700 text-lg">🛒</a> <!-- Cart -->
-
+                <!-- Profile Dropdown -->
                 @auth
-                    @php
-                        $role = Auth::user()->role;
-                    @endphp
-
-                    @if($role === 0) <!-- Regular User -->
-                        <a href="{{ route('products.index') }}" class="text-gray-700 hidden lg:block">My Products</a>
-                        <a href="{{ route('products.create') }}" class="bg-black text-white px-4 py-2 text-sm rounded hover:bg-gray-800 transition">
-                            Sell now
-                        </a>
-                        <a href="{{ route('appointments.index') }}" class="bg-black text-white px-4 py-2 text-sm rounded hover:bg-gray-800 transition">
-                            Upcycle
-                        </a>
-                    @elseif($role === 1) <!-- Upcycler -->
-                        <a href="{{ route('upcycler.index') }}" class="bg-black text-white px-4 py-2 text-sm rounded hover:bg-gray-800 transition">
-                            Manage Appointments
-                        </a>
-                    @endif
-                    <!-- Profile Dropdown -->
                     <div class="relative" x-data="{ open: false }">
                         <button @click="open = ! open" class="text-gray-700 flex items-center">
                             <span>{{ Auth::user()->lname }}</span>
@@ -99,8 +108,13 @@
                         </div>
                     </div>
                 @else
-                    <a href="{{ route('register') }}" class="border border-gray-400 px-4 py-2 text-sm rounded hover:bg-gray-100 transition">Sign up</a>
-                    <a href="{{ route('login') }}" class="text-gray-700 hover:text-gray-900">Login</a>
+                <a href="{{ route('register') }}" class="inline-flex items-center justify-center w-20 h-10 text-sm rounded-3xl bg-[#B59F84] text-white border border-[#B59F84] hover:bg-[#a08e77] hover:border-[#a08e77] transition">
+    Sign up
+</a>
+<a href="{{ route('login') }}" class="inline-flex items-center justify-center w-20 h-10 text-sm rounded-3xl bg-[#B59F84] text-white border border-[#B59F84] hover:bg-[#a08e77] hover:border-[#a08e77] transition">
+    Login
+</a>
+
                 @endauth
             </div>
         </div>
@@ -134,17 +148,17 @@
                         <button type="submit" class="w-full text-left flex items-center text-gray-700 py-3 rounded-lg hover:bg-[#F4F2ED] hover:text-[#B59F84] transition-colors duration-200">Log Out</button>
                     </form>
                 @else
-                    <a href="{{ route('register') }}" class="flex items-center text-gray-700 py-3 rounded-lg hover:bg-[#F4F2ED] hover:text-[#B59F84] transition-colors duration-200">Sign up</a>
-                    <a href="{{ route('login') }}" class="flex items-center text-gray-700 py-3 rounded-lg hover:bg-[#F4F2ED] hover:text-[#B59F84] transition-colors duration-200">Login</a>
+                    <a href="{{ route('register') }}" class="flex items-center py-3 rounded-lg bg-[#B59F84] text-white border border-[#B59F84] hover:bg-[#a08e77] hover:border-[#a08e77] transition-colors duration-200">Sign up</a>
+                    <a href="{{ route('login') }}" class="flex items-center py-3 rounded-lg bg-[#B59F84] text-white border border-[#B59F84] hover:bg-[#a08e77] hover:border-[#a08e77] transition-colors duration-200">Login</a>
                 @endauth
             </div>
         </div>
     </div>
 
     <!-- Categories Navigation (Responsive) -->
-    <div class="bg-[#d9d9d9] py-2 mt-2">
+    <div class="bg-[#F4F2ED] py-2 w-full">
         @if(Auth::check() && Auth::user()->role === 0)
-            <div class="max-w-7xl mx-auto px-2">
+            <div class="w-full px-0">
                 <!-- Desktop Categories -->
                 <div class="hidden md:flex items-center justify-center space-x-6">
                     @foreach($categories as $category)
@@ -153,33 +167,6 @@
                             {{ $category->name }}
                         </a>
                     @endforeach
-                </div>
-
-                <!-- Mobile Categories -->
-                <div class="md:hidden" x-data="{ mobileCategoriesOpen: false }">
-                    <button @click="mobileCategoriesOpen = !mobileCategoriesOpen" 
-                            class="w-full flex items-center justify-between px-4 py-2 bg-white text-gray-700 rounded-lg shadow-sm hover:bg-gray-50">
-                        <span class="font-medium">Categories</span>
-                        <svg class="w-5 h-5" :class="{'transform rotate-180': mobileCategoriesOpen}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                        </svg>
-                    </button>
-                    
-                    <div x-show="mobileCategoriesOpen" 
-                         x-transition:enter="transition ease-out duration-200"
-                         x-transition:enter-start="opacity-0 transform scale-95"
-                         x-transition:enter-end="opacity-100 transform scale-100"
-                         x-transition:leave="transition ease-in duration-150"
-                         x-transition:leave-start="opacity-100 transform scale-100"
-                         x-transition:leave-end="opacity-0 transform scale-95"
-                         class="mt-2 bg-white rounded-lg shadow-lg overflow-hidden">
-                        @foreach($categories as $category)
-                            <a href="{{ route('categories.show', $category->id) }}" 
-                               class="block px-4 py-3 text-sm font-medium text-gray-700 hover:bg-red-50 hover:text-red-600 transition-colors duration-200">
-                                {{ $category->name }}
-                            </a>
-                        @endforeach
-                    </div>
                 </div>
             </div>
         @endif
