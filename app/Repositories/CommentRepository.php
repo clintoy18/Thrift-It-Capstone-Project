@@ -28,9 +28,9 @@ class CommentRepository
         return $comment;
     }
 
-    public function delete(Comment $Comment)
+    public function delete(Comment $comment)
     {
-        return $Comment->delete();
+        return $comment->delete();
     }
 
     public function getByUser($userId)

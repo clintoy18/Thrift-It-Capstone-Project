@@ -2,49 +2,48 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\PrivateMessageSent;
-use App\Models\Message;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Services\MessageService;
 
 class PrivateChatController extends Controller
 {
-    public function show(User $user)
+    protected $messageService;
+
+    public function __construct(MessageService $messageService)
     {
-        $authId = Auth::id();
-
-        $privateMessages = Message::with('user')
-            ->where(function ($query) use ($user, $authId) {
-                $query->where('user_id', $authId)->where('receiver_id', $user->id);
-            })
-            ->orWhere(function ($query) use ($user, $authId) {
-                $query->where('user_id', $user->id)->where('receiver_id', $authId);
-            })
-            ->orderBy('created_at')
-            ->get();
-
-        return view('private-chat', [
-            'recipient' => $user,
-            'privateMessages' => $privateMessages
-        ]);
+        $this->messageService = $messageService;
     }
 
+    public function show(User $user)
+    {
+        $chatData = $this->messageService->getChatData(Auth::id(), $user->id);
+
+        if (isset($chatData['error'])) {
+            abort(403, $chatData['error']);
+        }
+
+        return view('private-chat', [
+            'recipient' => $chatData['receiver'],
+            'privateMessages' => $chatData['messages']
+        ]);
+    }
 
     public function send(Request $request, User $user)
     {
         $request->validate(['message' => 'required|string|max:1000']);
 
-        $message = Message::create([
-            'user_id' => Auth::id(),
-            'receiver_id' => $user->id,
-            'message' => $request->message,
-        ]);
+        $result = $this->messageService->sendPrivateMessage(
+            Auth::id(), 
+            $user->id, 
+            $request->message
+        );
 
-        $message->load('user');
+        if (isset($result['error'])) {
+            return response()->json(['error' => $result['error']], 400);
+        }
 
-        broadcast(new PrivateMessageSent($message, $user))->toOthers();
-
-     return response()->json(['message' => $message]);
+        return response()->json(['message' => $result['message']]);
     }
 }

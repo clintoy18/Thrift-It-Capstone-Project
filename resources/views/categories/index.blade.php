@@ -5,7 +5,7 @@
                 {{ __('Category') }}
             </h2>
             <a href="{{ route('categories.create') }}" 
-               class="ml-auto text-white border p-2 rounded hover:bg-slate-400">
+               class="ml-auto text-black border p-2 rounded hover:bg-slate-400">
                 Add Category
             </a>
         </div>
