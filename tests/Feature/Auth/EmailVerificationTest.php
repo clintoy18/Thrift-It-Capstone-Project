@@ -11,15 +11,49 @@ test('email verification screen can be rendered', function () {
     ]);
 
     $response = $this->actingAs($user)->get('/verify-email');
+
     $response->assertStatus(200);
 });
 
 test('email can be verified', function () {
-    // Skip this test as it depends on HTTP request and routes
-    $this->markTestSkipped('Skipping email verification test');
+    Event::fake();
+
+    $user = User::factory()->create([
+        'email_verified_at' => null,
+    ]);
+
+    // Create a temporary signed URL for verification
+    $verificationUrl = URL::temporarySignedRoute(
+        'verification.verify',
+        now()->addMinutes(60),
+        ['id' => $user->id, 'hash' => sha1($user->email)]
+    );
+
+    // Act as the user and visit the verification link
+    $response = $this->actingAs($user)->get($verificationUrl);
+
+    Event::assertDispatched(Verified::class);
+
+    expect($user->fresh()->hasVerifiedEmail())->toBeTrue();
+
+    $response->assertRedirect(route('dashboard', absolute: false) . '?verified=1');
 });
 
 test('email is not verified with invalid hash', function () {
-    // Skip this test as it requires specific authorization handling
-    $this->markTestSkipped('Skipping invalid hash test due to authorization issues');
+    $user = User::factory()->create([
+        'email_verified_at' => null,
+    ]);
+
+    // Create a URL with an invalid hash
+    $invalidUrl = URL::temporarySignedRoute(
+        'verification.verify',
+        now()->addMinutes(60),
+        ['id' => $user->id, 'hash' => sha1('wrong-email')]
+    );
+
+    // Visiting this should fail authorization
+    $this->actingAs($user)->get($invalidUrl)
+        ->assertStatus(403);
+
+    expect($user->fresh()->hasVerifiedEmail())->toBeFalse();
 });

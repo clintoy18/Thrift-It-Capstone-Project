@@ -9,10 +9,22 @@ test('reset password link screen can be rendered', function () {
     $response = $this->get('/forgot-password');
     $response->assertStatus(200);
 });
-
 test('reset password link can be requested', function () {
-    // Skip this test since it depends on notification handling
-    $this->markTestSkipped('Skipping notification test');
+    Notification::fake(); // Prevent real emails from being sent
+
+    $user = User::factory()->create();
+
+    // Request password reset link
+    $response = $this->post('/forgot-password', [
+        'email' => $user->email,
+    ]);
+
+    // Assert redirect to confirmation page
+    $response->assertStatus(302);
+    $response->assertSessionHasNoErrors();
+
+    // Assert that ResetPassword notification was sent to this user
+    Notification::assertSentTo($user, ResetPassword::class);
 });
 
 test('reset password screen can be rendered', function () {

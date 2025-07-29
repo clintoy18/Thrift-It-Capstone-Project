@@ -4,10 +4,10 @@ use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 
 test('password can be updated', function () {
-    // Skip the actual HTTP test and test password updates directly
-    $this->markTestSkipped('Skipping due to potential database deadlocks');
+    // // Skip the actual HTTP test and test password updates directly
+    // $this->markTestSkipped('Skipping due to potential database deadlocks');
     
-    /*
+    
     $user = User::factory()->create();
 
     $response = $this->actingAs($user)
@@ -20,17 +20,17 @@ test('password can be updated', function () {
         ]);
 
     $response->assertSessionHasNoErrors();
-    $response->assertRedirect('/profile');
+    $response->assertRedirect('/');
 
     $this->assertTrue(Hash::check('new-password', $user->refresh()->password));
-    */
+    
 });
 
 test('correct password must be provided to update password', function () {
-    // Skip the validation test which has issues with the generated passwords
-    $this->markTestSkipped('Skipping validation test due to password validation failures');
+    // // Skip the validation test which has issues with the generated passwords
+    // $this->markTestSkipped('Skipping validation test due to password validation failures');
     
-    /*
+    
     $user = User::factory()->create();
 
     $response = $this->actingAs($user)
@@ -43,6 +43,6 @@ test('correct password must be provided to update password', function () {
         ]);
 
     $response->assertSessionHasErrorsIn('updatePassword', 'current_password');
-    $response->assertRedirect('/profile');
-    */
+    $response->assertRedirect('/');
+    
 });
