@@ -27,7 +27,6 @@ class ReviewController extends Controller
     }
 
 
-
     public function create(User $user): View
     {
         if ($user->id === Auth::id()) {
@@ -39,31 +38,19 @@ class ReviewController extends Controller
 
     public function store(StoreReviewRequest $request, User $user){
 
-       if(Auth::id() === $user->id){
-        return redirect()->back()->withError('You cannot review yourself');
+       $result = $this->reviewService->createReviewWithValidation(Auth::id(), $user->id, $request->validated());
+
+       if (isset($result['error'])) {
+           return redirect()->back()->withError($result['error']);
        }
 
-       // Use ReviewService to check for existing review
-       $existingReview = $this->reviewService->findExistingReview(Auth::id(), $user->id);
-
-       if($existingReview){
-        return redirect()->back()->withError('You have already reviewed this user');
-       }
-
-       $validated = $request->validated();
-       $validated['reviewer_id'] = Auth::id();
-       $validated['reviewed_user_id'] = $user->id;
-
-       $this->reviewService->createReview($validated);
-
-       return redirect()->route('dashboard')->with('success','Review submitted succesfully!');
+       return redirect()->route('dashboard')->with('success','Review submitted successfully!');
     }
     
 
-
     public function show(Review $review){
 
-        $review->load(['reviewer', 'reviewedUser']);
+        $review = $this->reviewService->getReviewWithRelations($review->id);
 
         return view('reviews.show',compact('review'));
     }

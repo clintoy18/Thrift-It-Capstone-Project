@@ -9,33 +9,27 @@ use App\Http\Requests\IndexReportsRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
+use App\Services\ReportService;
 
 class ReportController extends Controller
 {
+    protected $reportService;
+
+    public function __construct(ReportService $reportService)
+    {
+        $this->reportService = $reportService;
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index(IndexReportsRequest $request): View
     {
-        $query = Report::with(['reporter', 'reportedUser'])
-            ->where('reporter_id', Auth::id());
+        $search = $request->filled('search') ? $request->validated('search') : null;
+        $status = $request->filled('status') ? $request->validated('status') : null;
 
-        if ($request->filled('search')) {
-            $search = $request->validated('search');
-            $query->whereHas('reportedUser', function ($q) use ($search) {
-                $q->where('fname', 'like', "%{$search}%")
-                  ->orWhere('lname', 'like', "%{$search}%");
-            });
-        }
-
-        if ($request->filled('status')) {
-            $query->where('status', $request->validated('status'));
-        }
-
-        $reports = $query->latest()->paginate(10);
+        $reports = $this->reportService->getReportsByReporter(Auth::id(), $search, $status);
 
         return view('reports.index', compact('reports'));
     }
@@ -45,8 +39,10 @@ class ReportController extends Controller
      */
     public function create(User $user): View
     {
-        if ($user->id === Auth::id()) {
-            abort(403, 'You cannot report yourself.');
+        $validation = $this->reportService->canUserReport(Auth::id(), $user->id);
+        
+        if (isset($validation['error'])) {
+            abort(403, $validation['error']);
         }
 
         return view('reports.create', compact('user'));
@@ -57,29 +53,11 @@ class ReportController extends Controller
      */
     public function store(StoreReportsRequest $request, User $user): RedirectResponse
     {
-        if (Auth::id() === $user->id) {
-            return redirect()
-                ->back()
-                ->with('error', 'You cannot report yourself.');
+        $result = $this->reportService->createReportWithValidation(Auth::id(), $user->id, $request->validated());
+
+        if (isset($result['error'])) {
+            return redirect()->back()->with('error', $result['error']);
         }
-
-        $existingReport = Report::where('reporter_id', Auth::id())
-            ->where('reported_user_id', $user->id)
-            ->where('status', 'pending')
-            ->first();
-
-        if ($existingReport) {
-            return redirect()
-                ->back()
-                ->with('error', 'You have already submitted a pending report for this user.');
-        }
-
-        $validated = $request->validated();
-        $validated['reporter_id'] = Auth::id();
-        $validated['reported_user_id'] = $user->id;
-        $validated['status'] = 'pending';
-
-        Report::create($validated);
 
         return redirect()
             ->route('reports.index')
@@ -91,11 +69,14 @@ class ReportController extends Controller
      */
     public function show(Report $report): View
     {
-        if ($report->reporter_id !== Auth::id() && Auth::user()->role !== 2) {
-            abort(403);
+        $isAdmin = Auth::user()->role === 2;
+        $accessCheck = $this->reportService->canUserAccessReport($report->id, Auth::id(), $isAdmin);
+
+        if (isset($accessCheck['error'])) {
+            abort(403, $accessCheck['error']);
         }
 
-        $report->load(['reporter', 'reportedUser']);
+        $report = $this->reportService->getReportWithRelations($report->id);
 
         return view('reports.show', compact('report'));
     }
@@ -105,36 +86,18 @@ class ReportController extends Controller
      */
     public function update(Request $request, Report $report)
     {
-        if (Auth::user()->role !== 2) {
-            abort(403);
-        }
-
+        $isAdmin = Auth::user()->role === 2;
+        
         $validated = $request->validate([
             'status' => 'required|in:pending,reviewed,resolved',
             'admin_notes' => 'nullable|string',
         ]);
 
-        DB::transaction(function () use ($report, $validated) {
-            $report->update($validated);
+        $result = $this->reportService->updateReportWithUserManagement($report->id, $validated, $isAdmin);
 
-            // If report is resolved, disable the reported user's account
-            if ($validated['status'] === 'resolved') {
-                $reportedUser = User::find($report->reported_user_id);
-                if ($reportedUser) {
-                    Log::info('Disabling user account', [
-                        'user_id' => $reportedUser->id,
-                        'report_id' => $report->id
-                    ]);
-                    
-                    $result = $reportedUser->update(['is_active' => false]);
-                    
-                    Log::info('User account disabled result', [
-                        'success' => $result,
-                        'user_id' => $reportedUser->id
-                    ]);
-                }
-            }
-        });
+        if (isset($result['error'])) {
+            abort(403, $result['error']);
+        }
 
         return redirect()->route('reports.show', $report)
             ->with('success', 'Report updated successfully.');
@@ -145,11 +108,14 @@ class ReportController extends Controller
      */
     public function destroy(Report $report): RedirectResponse
     {
-        if ($report->reporter_id !== Auth::id() && Auth::user()->role !== 2) {
-            abort(403);
+        $isAdmin = Auth::user()->role === 2;
+        $accessCheck = $this->reportService->canUserAccessReport($report->id, Auth::id(), $isAdmin);
+
+        if (isset($accessCheck['error'])) {
+            abort(403, $accessCheck['error']);
         }
 
-        $report->delete();
+        $this->reportService->deleteReport($report->id);
 
         return redirect()
             ->route('reports.index')

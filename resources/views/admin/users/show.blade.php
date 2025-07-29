@@ -46,7 +46,7 @@
                     <div class="space-y-3">
                         @forelse($user->reportsReceived as $report)
                             <div class="flex justify-between items-center text-gray-700 dark:text-gray-300">
-                                <span>Report from {{ $report->reporter->first_name }}</span>
+                                <span>Report from {{ $report->reporter->fname }}</span>
                                 <span class="px-2 py-0.5 inline-flex text-xs font-semibold rounded-full 
                                     {{ $report->status === 'pending' ? 'bg-yellow-100 text-yellow-800' : 
                                        ($report->status === 'resolved' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800') }}">
