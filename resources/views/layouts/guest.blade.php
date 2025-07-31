@@ -34,7 +34,7 @@
       <!-- LEFT COLUMN: Logo + Auth Card (Rendered second if reverseColumns is true) -->
       <div class="flex flex-col justify-center items-center px-8 py-12" style="background-color: #CBBC968F;">
         <a href="{{ Auth::check() ? (Auth::user()->role === 2 ? route('admin.dashboard') : (Auth::user()->role === 1 ? route('upcycler') : route('dashboard'))) : url('/') }}" class="flex-shrink-0 mb-8">
-                  <img src="{{ asset('images/nipis 4.png') }}" alt="Thrift-IT Logo" class="h-8 w-[120px] h-[100px]">
+                  <img src="{{ asset('images/logo.png') }}" alt="Thrift-IT Logo" class="h-8 w-[120px] h-[100px]">
          </a>
         <div class="w-full max-w-md bg-white p-6 rounded-lg shadow-md">
           {{ $slot }}

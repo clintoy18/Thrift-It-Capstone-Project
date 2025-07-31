@@ -122,7 +122,7 @@
                 </div>
                 {{-- Image --}}
                 <div class="md:w-1/2">
-                    <img src="{{ asset('images/upcycling-image.jpg') }}" alt="Upcycling" class="rounded-lg shadow-md w-full h-80 object-cover">
+                    <img src="{{ asset('images/upcycle.png') }}" alt="Upcycling" class="rounded-lg shadow-md w-full h-80 object-cover">
                 </div>
             </div>
 
@@ -130,7 +130,7 @@
             <div class="flex flex-col md:flex-row bg-white p-8  shadow-md items-center scroll-animate">
                 {{-- Image --}}
                 <div class="md:w-1/2 mb-6 md:mb-0">
-                    <img src="{{ asset('images/donate-image.jpg') }}" alt="Donate" class="rounded-lg shadow-md w-full h-80 object-cover">
+                    <img src="{{ asset('images/donate.png') }}" alt="Donate" class="rounded-lg shadow-md w-full h-80 object-cover">
                 </div>
                 {{-- Text Content --}}
                 <div class="md:w-1/2 md:pl-8">
