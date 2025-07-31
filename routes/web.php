@@ -17,6 +17,7 @@ use App\Http\Controllers\Admin\AdminProductController;
 use App\Http\Controllers\LandingPageController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\PrivateChatController;
+use App\Http\Controllers\DonationController;
 
 Route::get('/search', [SearchController::class, 'index'])->name('search');
 
@@ -42,7 +43,7 @@ Route::middleware(['auth', 'verified', 'rolemiddleware:user'])->group(function (
     Route::resource('categories', CategoriesController::class);
     Route::resource('appointments', AppointmentController::class);
     Route::resource('comments', CommentController::class)->only(['edit', 'update', 'destroy']);
-
+    Route::resource('donations',DonationController::class);
     Route::patch('/appointments/{appointment}/cancel', [AppointmentController::class, 'cancel'])->name('appointments.cancel');
     Route::post('/products/{product}/comments', [CommentController::class, 'store'])->name('comments.store');
     Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
