@@ -18,6 +18,7 @@ use App\Http\Controllers\LandingPageController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\PrivateChatController;
 use App\Http\Controllers\DonationController;
+use App\Http\Controllers\LeaderboardController;
 
 Route::get('/search', [SearchController::class, 'index'])->name('search');
 
@@ -45,7 +46,7 @@ Route::middleware(['auth', 'verified', 'rolemiddleware:user'])->group(function (
     Route::resource('appointments', AppointmentController::class);
     Route::resource('comments', CommentController::class);
     Route::resource('donations',DonationController::class);
-
+  
     Route::patch('/appointments/{appointment}/cancel', [AppointmentController::class, 'cancel'])->name('appointments.cancel');
     // Route::post('/products/{product}/comments', [CommentController::class, 'store'])->name('comments.store');
     // Route::post('/donations/{donation}/comments', [CommentController::class, 'storeDonation'])->name('donations.comments.store');
@@ -57,6 +58,9 @@ Route::middleware(['auth', 'verified', 'rolemiddleware:user'])->group(function (
     Route::get('reviews/{review}',[ReviewController::class,'show'])->name('reviews.show');
     Route::get('/users/{user}/review',[ReviewController::class,'create'])->name('reviews.create');
     Route::post('/users/{user}/review',[ReviewController::class,'store'])->name('reviews.store');
+    Route::get('/leaderboard', [LeaderboardController::class, 'index'])
+    ->name('leaderboard.index');
+
 });
 
 //Upcycler Routes
