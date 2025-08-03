@@ -59,6 +59,11 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(Product::class);
     }   
 
+    public function donations()
+    {
+        return $this->hasMany(Donation::class);
+    }
+
     /**
      * Check if user is an admin
      */
