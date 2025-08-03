@@ -49,9 +49,12 @@ class DonationController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show($id)
     {
-        //
+        $donation = $this->donationService->getDonationWithRelations($id);
+        // return dd($donation);
+        return view('donations.show',compact('donation'));
+
     }
 
     /**

@@ -23,11 +23,22 @@ class StoreCommentRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'content' => 'required|string|max:500',
-            'parent_id' => 'nullable|exists:comments,id',
-
+            'content'     => 'required|string|max:1000',
+            'parent_id'   => 'nullable|exists:comments,id',
+            'product_id'  => 'nullable|exists:products,id',
+            'donation_id' => 'nullable|exists:donations,id',
         ];
     }
+
+    public function withValidator($validator)
+    {
+        $validator->after(function ($validator) {
+            if (!$this->product_id && !$this->donation_id) {
+                $validator->errors()->add('product_or_donation', 'A comment must be linked to a product or a donation.');
+            }
+        });
+    }
+
 
     //ERROR MESSAGE
     public function messages()

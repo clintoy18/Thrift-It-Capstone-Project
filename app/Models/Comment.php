@@ -13,6 +13,8 @@ class Comment extends Model
 
         'user_id',
         'product_id',
+        'donation_id',
+        'parent_id',
         'content'
     ];
 
@@ -24,6 +26,11 @@ class Comment extends Model
     public function product()
     {
         return $this->belongsTo(Product::class);
+    }
+    
+    public function donation()
+    {
+        return $this->belongsTo(Donation::class);
     }
 
     public function replies()
