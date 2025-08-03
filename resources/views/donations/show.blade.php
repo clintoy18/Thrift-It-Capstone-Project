@@ -2,7 +2,7 @@
     <x-slot name="header">
         <div class="flex items-center justify-between">
             <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-                {{ $product->name }}
+                {{ $donation->name }}
             </h2>
         </div>
     </x-slot>
@@ -16,37 +16,37 @@
                 <div class="md:w-1/3 flex flex-col gap-4">
                     <!-- Main Image (or multiple stacked images) -->
                     <img 
-                        src="{{ $product->image ? asset('storage/' . $product->image) : asset('images/default-placeholder.png') }}" 
-                        alt="{{ $product->name }}"
+                        src="{{ $donation->image ? asset('storage/' . $donation->image) : asset('images/default-placeholder.png') }}" 
+                        alt="{{ $donation->name }}"
                         class="w-full h-64 object-cover rounded-lg"
                     >
                     <!-- Additional images (static placeholders for now) -->
                     <img 
-                    src="{{ $product->image ? asset('storage/' . $product->image) : asset('images/default-placeholder.png') }}" 
+                    src="{{ $donation->image ? asset('storage/' . $donation->image) : asset('images/default-placeholder.png') }}" 
                         alt="Additional 1"
                         class="w-full h-64 object-cover rounded-lg"
                     >
                     <img 
-                    src="{{ $product->image ? asset('storage/' . $product->image) : asset('images/default-placeholder.png') }}" 
+                    src="{{ $donation->image ? asset('storage/' . $donation->image) : asset('images/default-placeholder.png') }}" 
                         alt="Additional 2"
                         class="w-full h-64 object-cover rounded-lg"
                     >
                 </div>
 
-                <!-- Right Column: User Info, Product Details, Comments -->
+                <!-- Right Column: User Info, donation Details, Comments -->
                 <div class="md:w-2/3 flex flex-col gap-6">
 
                     <!-- User & Rating Section -->
                     <div class="flex items-center gap-4">
                         <!-- Avatar -->
                         {{-- <img 
-                            src="{{ $product->user->profile_photo_url ?? asset('images/default-avatar.png') }}" 
-                            alt="{{ $product->user->fname }} {{ $product->user->lname }}"
+                            src="{{ $donation->user->profile_photo_url ?? asset('images/default-avatar.png') }}" 
+                            alt="{{ $donation->user->fname }} {{ $donation->user->lname }}"
                             class="w-12 h-12 rounded-full"
                         > --}}
                         <div class="flex flex-col">
                             <p class="font-semibold text-gray-800 dark:text-gray-200">
-                                {{ $product->user->fname }} {{ $product->user->lname }}
+                                {{ $donation->user->fname }} {{ $donation->user->lname }}
                             </p>
                             <!-- Static rating for demonstration -->
                             <div class="flex items-center text-sm text-yellow-500">
@@ -57,7 +57,7 @@
                        <!-- Action Buttons -->
                             <div class="ml-auto flex gap-2 text-sm">
                                 <!-- Message Seller -->
-                                <a href="{{ route('private.chat', $product->user->id) }}"
+                                <a href="{{ route('private.chat', $donation->user->id) }}"
                                 class="flex items-center gap-1 px-3 py-1.5 border border-gray-300 text-gray-700 rounded hover:bg-gray-100 transition">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
                                         viewBox="0 0 24 24" stroke="currentColor">
@@ -68,7 +68,7 @@
                                 </a>
 
                                 <!-- Visit Profile -->
-                                <a href="{{ route('profile.show', $product->user->id) }}"
+                                <a href="{{ route('profile.show', $donation->user->id) }}"
                                 class="flex items-center gap-1 px-3 py-1.5 border border-gray-300 text-gray-700 rounded hover:bg-gray-100 transition">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
                                         viewBox="0 0 24 24" stroke="currentColor">
@@ -80,8 +80,8 @@
                                 </a>
 
                                 <!-- Report User -->
-                                @if(Auth::id() !== $product->user_id)
-                                    <a href="{{ route('reports.create', $product->user->id) }}"
+                                @if(Auth::id() !== $donation->user_id)
+                                    <a href="{{ route('reports.create', $donation->user->id) }}"
                                     class="flex items-center gap-1 px-3 py-1.5 border border-red-300 text-red-600 rounded hover:bg-red-50 transition">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
                                             viewBox="0 0 24 24" stroke="currentColor">
@@ -95,38 +95,38 @@
 
                     </div>
 
-                    <!-- Product Title & Short Info -->
+                    <!-- donation Title & Short Info -->
                     <div>
                         <h1 class="text-2xl font-bold mb-1">
-                            {{ $product->name }}
+                            {{ $donation->name }}
                         </h1>
                         <!-- Example: "Size: L . Excellent condition . Carhart" -->
                         <p class="text-sm text-gray-600">
-                            Size: {{ $product->size }} · 
-                            {{ ucfirst($product->condition) }} condition · 
-                            {{ $product->category->name ?? 'No Category' }}
+                            Size: {{ $donation->size }} · 
+                            {{ ucfirst($donation->condition) }} condition · 
+                            {{ $donation->category->name ?? 'No Category' }}
                         </p>
                     </div>
 
-                 <!-- Product Details -->
+                 <!-- donation Details -->
                     <div class="space-y-2">
                         <h2 class="font-semibold text-gray-800 dark:text-gray-200">Details</h2>
-                        <p class="text-gray-600">{{ $product->description }}</p>
+                        <p class="text-gray-600">{{ $donation->description }}</p>
                         
-                        @if($product->listingtype === 'for donation')
+                        @if($donation->listingtype === 'for donation')
                             <p class="text-lg font-bold text-green-600">For Donation</p>
                         @else
-                            <p class="text-lg font-bold text-gray-900">₱{{ number_format($product->price, 2) }}</p>
+                            <p class="text-lg font-bold text-gray-900">₱{{ number_format($donation->price, 2) }}</p>
                         @endif
                         
-                        <p class="text-sm text-gray-500">Quantity: {{ $product->qty }}</p>
-                        <p class="text-sm text-gray-500">Status: {{ ucfirst($product->status) }}</p>
+                        <p class="text-sm text-gray-500">Quantity: {{ $donation->qty }}</p>
+                        <p class="text-sm text-gray-500">Status: {{ ucfirst($donation->status) }}</p>
                         
-                        <!-- Show Update Button if User Owns the Product -->
-                        @if(Auth::id() === $product->user_id)
-                            <a href="{{ route('products.edit', $product->id) }}" 
+                        <!-- Show Update Button if User Owns the donation -->
+                        @if(Auth::id() === $donation->user_id)
+                            <a href="{{ route('donations.edit', $donation->id) }}" 
                                 class="inline-block mt-3 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition">
-                                Update Product
+                                Update donation
                             </a>
                         @endif
                     </div>
@@ -139,7 +139,7 @@
 
                     <!-- Scrollable Comment List -->
                     <div class="max-h-60 overflow-y-auto space-y-4 pr-2">
-                        @forelse($product->comments as $comment)
+                        @forelse($donation->comments as $comment)
                             <div class="bg-white dark:bg-gray-700 p-4 rounded-lg shadow-md hover:bg-gray-50 dark:hover:bg-gray-600 transition">
                                 <div class="flex items-center gap-3">
                                     <!-- User Profile Picture -->
@@ -181,6 +181,7 @@
                                                     </svg>
                                                     Delete
                                                 </button>
+
                                             </form>
                                         @endif
                                     </div>
@@ -199,26 +200,30 @@
                     <!-- Comment Form -->
                     @auth
                         <form action="{{ route('comments.store') }}" method="POST" class="mt-4 flex items-start gap-3">
-                            @csrf
-                            <input type="hidden" name="product_id" value="{{ $product->id }}">
-                            <img 
-                                src="https://ui-avatars.com/api/?name={{ urlencode(auth()->user()->fname . ' ' . auth()->user()->lname) }}&background=random" 
-                                alt="{{ auth()->user()->fname }} {{ auth()->user()->lname }}"
-                                class="w-10 h-10 rounded-full border"
-                            >
-                            <div class="flex-1">
-                                <textarea name="content" rows="3" maxlength="1000"
-                                        class="w-full border rounded-lg p-2 focus:ring focus:ring-blue-300" 
-                                        required
-                                        oninput="document.getElementById('char-count').innerText = this.value.length + '/1000';"></textarea>
-                                <div class="flex justify-between items-center mt-2">
-                                    <span id="char-count" class="text-xs text-gray-500">0/1000</span>
-                                    <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
-                                        Post Comment
-                                    </button>
-                                </div>
+                        @csrf
+
+                        {{-- This is crucial --}}
+                        <input type="hidden" name="donation_id" value="{{ $donation->id }}">
+
+                        <img 
+                            src="https://ui-avatars.com/api/?name={{ urlencode(auth()->user()->fname . ' ' . auth()->user()->lname) }}&background=random" 
+                            alt="{{ auth()->user()->fname }} {{ auth()->user()->lname }}"
+                            class="w-10 h-10 rounded-full border"
+                        >
+                        <div class="flex-1">
+                            <textarea name="content" rows="3" maxlength="1000"
+                                    class="w-full border rounded-lg p-2 focus:ring focus:ring-blue-300" 
+                                    required></textarea>
+                            <div class="flex justify-between items-center mt-2">
+                                <span id="char-count" class="text-xs text-gray-500">0/1000</span>
+                                <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
+                                    Post Comment
+                                </button>
                             </div>
-                        </form>
+                        </div>
+                    </form>
+
+
 
                     @else
                         <p class="mt-3 text-gray-600">
@@ -227,12 +232,12 @@
                     @endauth
                 </div>
 
-                    <!-- Back to Products -->
+                    <!-- Back to donations -->
                     <a 
-                        href="{{ route('products.index') }}" 
+                        href="{{ route('donations.index') }}" 
                         class="mt-4 inline-block text-blue-500 hover:underline"
                     >
-                        Back to Products
+                        Back to donations
                     </a>
                 </div>
             </div>

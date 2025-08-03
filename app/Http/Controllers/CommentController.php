@@ -36,17 +36,21 @@ class CommentController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreCommentRequest $request, $productId)
+    public function store(StoreCommentRequest $request)
     {
+  
         $this->commentService->createComment([
-            'user_id'=> Auth::id(),
-            'product_id'=> $productId,
-            'content'=> $request->content,
-            'parent_id' => $request->parent_id,
+            'user_id'     => Auth::id(),
+            'product_id'  => $request->product_id,   // null for donation comments
+            'donation_id' => $request->donation_id,  // null for product comments
+            'content'     => $request->content,
+            'parent_id'   => $request->parent_id,
         ]);
 
-        return redirect()->back()->with('success','Comment added successfully!');
+        return redirect()->back()->with('success', 'Comment added successfully!');
     }
+
+
 
     /**
      * Display the specified resource.

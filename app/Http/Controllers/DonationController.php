@@ -45,13 +45,15 @@ class DonationController extends Controller
          return redirect()->route('donations.index')->with('success', 'Donation created successfully!');
     }
 
-
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show($id)
     {
-        //
+        $donation = $this->donationService->getDonationWithRelations($id);
+        // return dd($donation);
+        return view('donations.show',compact('donation'));
+
     }
 
     /**
@@ -59,15 +61,22 @@ class DonationController extends Controller
      */
     public function edit(string $id)
     {
-        //
+       $categories = Categories::all();
+       $donation = $this->donationService->getDonationById($id);
+    
+       return view('donations.edit', ['donation' => $donation, 'categories' => $categories]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateDonationRequest $request, Donation $donation)
     {
-        //
+        $data = $request->validated();
+        $this->donationService->updateDonation($donation, $data, $request->file('image') ?? null);
+       
+        return redirect()->route('donations.index')->with('success', 'donation updated successfully!');
+
     }
 
     /**
@@ -75,6 +84,8 @@ class DonationController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $donation = $this->donationService->getDonationById($id);
+        $donation->delete();
+        return redirect()->route('donations.index')->with('success', 'Donation deleted successfully!');
     }
 }
