@@ -28,12 +28,13 @@ Route::get('/dashboard', [UserDashboardController::class, 'index'])
     ->name('dashboard');
 
 Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])
-        ->middleware(['auth', 'verified', 'rolemiddleware:admin'])
-        ->name('admin.dashboard');
+    ->middleware(['auth', 'verified', 'rolemiddleware:admin'])
+    ->name('admin.dashboard');
     
 Route::get('upcycler/dashboard', function () {
-    return view('upcycler');
-})->middleware(['auth', 'verified','rolemiddleware:upcycler'])->name('upcycler');
+    return view('upcycler');})
+    ->middleware(['auth', 'verified','rolemiddleware:upcycler'])
+    ->name('upcycler');
 
 
 //to make sure only a verified user can access the user routes, 
@@ -42,10 +43,13 @@ Route::middleware(['auth', 'verified', 'rolemiddleware:user'])->group(function (
     Route::resource('products', ProductController::class);
     Route::resource('categories', CategoriesController::class);
     Route::resource('appointments', AppointmentController::class);
-    Route::resource('comments', CommentController::class)->only(['edit', 'update', 'destroy']);
+    Route::resource('comments', CommentController::class);
     Route::resource('donations',DonationController::class);
+
     Route::patch('/appointments/{appointment}/cancel', [AppointmentController::class, 'cancel'])->name('appointments.cancel');
-    Route::post('/products/{product}/comments', [CommentController::class, 'store'])->name('comments.store');
+    // Route::post('/products/{product}/comments', [CommentController::class, 'store'])->name('comments.store');
+    // Route::post('/donations/{donation}/comments', [CommentController::class, 'storeDonation'])->name('donations.comments.store');
+
     Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
     Route::get('/users/{user}/report', [ReportController::class, 'create'])->name('reports.create');
     Route::post('/users/{user}/report', [ReportController::class, 'store'])->name('reports.store');
@@ -55,10 +59,20 @@ Route::middleware(['auth', 'verified', 'rolemiddleware:user'])->group(function (
     Route::post('/users/{user}/review',[ReviewController::class,'store'])->name('reviews.store');
 });
 
-
 //Upcycler Routes
 Route::middleware(['auth', 'verified', 'rolemiddleware:upcycler'])->group(function () {
     Route::resource('upcycler', UpcyclerController::class);
+});
+
+// Admin Routes
+Route::middleware(['auth', 'verified', 'rolemiddleware:admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
+    Route::resource('reports', AdminReportController::class);
+    Route::resource('users', AdminUserController::class);
+    Route::resource('products', AdminProductController::class);
+    // Sales Report Routes
+    Route::get('/sales/monthly-report/{month}', [App\Http\Controllers\Admin\SalesReportController::class, 'generateMonthlyReport'])->name('sales.monthly-report');
+    Route::get('/sales/yearly-report', [App\Http\Controllers\Admin\SalesReportController::class, 'generateYearlyReport'])->name('sales.yearly-report');
 });
 
 //Global Routes
@@ -72,24 +86,6 @@ Route::middleware('auth')->group(function () {
     Route::post('/private-chat/{user}/send', [PrivateChatController::class, 'send'])->name('private.chat.send');
 });
 
-// // Report Routes
-// Route::middleware(['auth'])->group(function () {
-//     Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
-//     Route::get('/users/{user}/report', [ReportController::class, 'create'])->name('reports.create');
-//     Route::post('/users/{user}/report', [ReportController::class, 'store'])->name('reports.store');
-// });
 
-// Admin Routes
-Route::middleware(['auth', 'verified', 'rolemiddleware:admin'])->prefix('admin')->name('admin.')->group(function () {
-    Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
-    Route::resource('reports', AdminReportController::class);
-    Route::resource('users', AdminUserController::class);
-    Route::resource('products', AdminProductController::class);
-
-    
-    // Sales Report Routes
-    Route::get('/sales/monthly-report/{month}', [App\Http\Controllers\Admin\SalesReportController::class, 'generateMonthlyReport'])->name('sales.monthly-report');
-    Route::get('/sales/yearly-report', [App\Http\Controllers\Admin\SalesReportController::class, 'generateYearlyReport'])->name('sales.yearly-report');
-});
 
 require __DIR__.'/auth.php';
