@@ -25,8 +25,7 @@ class UpdateDonationRequest extends FormRequest
         return [
             'category_id' => 'required|exists:categories,id',
             'name' => 'required|string|max:255',
-            'price' => 'required|numeric|min:0',
-            'status' => 'required|in:available,sold',
+            'status' => 'required|in:available,donated',
             'image' => 'nullable|image|max:2048',
         ];
     }
