@@ -1,106 +1,46 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="flex items-center justify-between">
-            <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-                {{ $donation->name }}
-            </h2>
-        </div>
+        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+            {{ $donation->name }}
+        </h2>
     </x-slot>
 
     <div class="py-12">
-        <div class="max-w-6xl mx-auto bg-white dark:bg-gray-800 shadow rounded-lg p-6">
-            <!-- Two-Column Layout -->
+        <div class="max-w-4xl mx-auto bg-white dark:bg-gray-800 shadow rounded-lg p-6">
+
             <div class="flex flex-col md:flex-row gap-6">
-                
-                <!-- Left Column: Multiple Images -->
-                <div class="md:w-1/3 flex flex-col gap-4">
-                    <!-- Main Image (or multiple stacked images) -->
+                <!-- Left Column: Image -->
+                <div class="md:w-1/3">
                     <img 
                         src="{{ $donation->image ? asset('storage/' . $donation->image) : asset('images/default-placeholder.png') }}" 
                         alt="{{ $donation->name }}"
                         class="w-full h-64 object-cover rounded-lg"
                     >
-                    <!-- Additional images (static placeholders for now) -->
-                    <img 
-                    src="{{ $donation->image ? asset('storage/' . $donation->image) : asset('images/default-placeholder.png') }}" 
-                        alt="Additional 1"
-                        class="w-full h-64 object-cover rounded-lg"
-                    >
-                    <img 
-                    src="{{ $donation->image ? asset('storage/' . $donation->image) : asset('images/default-placeholder.png') }}" 
-                        alt="Additional 2"
-                        class="w-full h-64 object-cover rounded-lg"
-                    >
                 </div>
 
-                <!-- Right Column: User Info, donation Details, Comments -->
+                <!-- Right Column -->
                 <div class="md:w-2/3 flex flex-col gap-6">
 
-                    <!-- User & Rating Section -->
+                    <!-- User Info -->
                     <div class="flex items-center gap-4">
-                        <!-- Avatar -->
-                        {{-- <img 
-                            src="{{ $donation->user->profile_photo_url ?? asset('images/default-avatar.png') }}" 
-                            alt="{{ $donation->user->fname }} {{ $donation->user->lname }}"
-                            class="w-12 h-12 rounded-full"
-                        > --}}
-                        <div class="flex flex-col">
+                        <div>
                             <p class="font-semibold text-gray-800 dark:text-gray-200">
                                 {{ $donation->user->fname }} {{ $donation->user->lname }}
                             </p>
-                            <!-- Static rating for demonstration -->
-                            <div class="flex items-center text-sm text-yellow-500">
-                                <span class="mr-1">★★★★★</span>
-                                <span class="text-gray-500"> (5)</span>
-                            </div>
                         </div>
-                       <!-- Action Buttons -->
-                            <div class="ml-auto flex gap-2 text-sm">
-                                <!-- Message Seller -->
-                                <a href="{{ route('private.chat', $donation->user->id) }}"
-                                class="flex items-center gap-1 px-3 py-1.5 border border-gray-300 text-gray-700 rounded hover:bg-gray-100 transition">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
-                                        viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                            d="M8 10h.01M12 10h.01M16 10h.01M21 12c0 4.418-4.03 8-9 8-1.325 0-2.58-.26-3.68-.725L3 20l1.32-3.96C3.474 15.003 3 13.55 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
-                                    </svg>
-                                    Message
-                                </a>
-
-                                <!-- Visit Profile -->
-                                <a href="{{ route('profile.show', $donation->user->id) }}"
-                                class="flex items-center gap-1 px-3 py-1.5 border border-gray-300 text-gray-700 rounded hover:bg-gray-100 transition">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
-                                        viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                            d="M12 14c-2.5 0-4 1.5-4 3v1h8v-1c0-1.5-1.5-3-4-3z"/>
-                                        <circle cx="12" cy="8" r="3"/>
-                                    </svg>
-                                    Profile
-                                </a>
-
-                                <!-- Report User -->
-                                @if(Auth::id() !== $donation->user_id)
-                                    <a href="{{ route('reports.create', $donation->user->id) }}"
-                                    class="flex items-center gap-1 px-3 py-1.5 border border-red-300 text-red-600 rounded hover:bg-red-50 transition">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
-                                            viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                                d="M12 9v2m0 4h.01M5.455 4.455a2.836 2.836 0 012-1.455h9.09a2.836 2.836 0 012 1.455l3.182 5.455a2.836 2.836 0 010 2.182L18.545 17.09a2.836 2.836 0 01-2 1.455H7.455a2.836 2.836 0 01-2-1.455L2.273 12.09a2.836 2.836 0 010-2.182L5.455 4.455z"/>
-                                        </svg>
-                                        Report
-                                    </a>
-                                @endif
-                            </div>
-
+                        <div class="ml-auto flex gap-2 text-sm">
+                            <a href="{{ route('private.chat', $donation->user->id) }}" class="px-3 py-1.5 border border-gray-300 text-gray-700 rounded hover:bg-gray-100">
+                                Message
+                            </a>
+                            <a href="{{ route('profile.show', $donation->user->id) }}" class="px-3 py-1.5 border border-gray-300 text-gray-700 rounded hover:bg-gray-100">
+                                Profile
+                            </a>
+                        </div>
                     </div>
 
-                    <!-- donation Title & Short Info -->
+                    <!-- Donation Info -->
                     <div>
-                        <h1 class="text-2xl font-bold mb-1">
-                            {{ $donation->name }}
-                        </h1>
-                        <!-- Example: "Size: L . Excellent condition . Carhart" -->
+                        <h1 class="text-2xl font-bold mb-1">{{ $donation->name }}</h1>
                         <p class="text-sm text-gray-600">
                             Size: {{ $donation->size }} · 
                             {{ ucfirst($donation->condition) }} condition · 
@@ -108,139 +48,75 @@
                         </p>
                     </div>
 
-                 <!-- donation Details -->
-                    <div class="space-y-2">
-                        <h2 class="font-semibold text-gray-800 dark:text-gray-200">Details</h2>
-                        <p class="text-gray-600">{{ $donation->description }}</p>
-                        
-                        @if($donation->listingtype === 'for donation')
-                            <p class="text-lg font-bold text-green-600">For Donation</p>
-                        @else
-                            <p class="text-lg font-bold text-gray-900">₱{{ number_format($donation->price, 2) }}</p>
-                        @endif
-                        
+                    <!-- Always show Free in red -->
+                    <div>
+                        <p class="text-lg font-bold text-red-600">Free</p>
                         <p class="text-sm text-gray-500">Quantity: {{ $donation->qty }}</p>
                         <p class="text-sm text-gray-500">Status: {{ ucfirst($donation->status) }}</p>
-                        
-                        <!-- Show Update Button if User Owns the donation -->
+
                         @if(Auth::id() === $donation->user_id)
                             <a href="{{ route('donations.edit', $donation->id) }}" 
-                                class="inline-block mt-3 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition">
+                               class="inline-block mt-3 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
                                 Update donation
                             </a>
                         @endif
                     </div>
 
-
-
-                   <!-- Comments Section -->
-                <div class="border p-6 rounded-lg shadow bg-gray-100 dark:bg-gray-800">
-                    <h3 class="text-lg font-bold mb-4">Comments</h3>
-
-                    <!-- Scrollable Comment List -->
-                    <div class="max-h-60 overflow-y-auto space-y-4 pr-2">
-                        @forelse($donation->comments as $comment)
-                            <div class="bg-white dark:bg-gray-700 p-4 rounded-lg shadow-md hover:bg-gray-50 dark:hover:bg-gray-600 transition">
-                                <div class="flex items-center gap-3">
-                                    <!-- User Profile Picture -->
-                                    <img 
-                                        src="https://ui-avatars.com/api/?name={{ urlencode($comment->user->fname . ' ' . $comment->user->lname) }}&background=random" 
-                                        alt="{{ $comment->user->fname }} {{ $comment->user->lname }}"
-                                        class="w-10 h-10 rounded-full border"
-                                    >
-
-                                    <!-- User Info -->
-                                    <div>
-                                        <a href="{{ route('profile.show', $comment->user->id) }}" class="text-blue-500 hover:underline">
-                                            <p class="font-semibold text-gray-800 dark:text-gray-200">
-                                                {{ $comment->user->fname }} {{ $comment->user->lname }}
-                                            </p>
-                                        </a>
-                                        <p class="text-gray-500 dark:text-gray-400 text-xs">
-                                            {{ $comment->created_at->diffForHumans() }}
-                                        </p>
-                                    </div>
-                                    <div class="ml-auto flex gap-2">
-                                        @if(Auth::id() === $comment->user_id)
-                                            <a href="{{ route('comments.edit', $comment->id) }}" 
-                                               class="px-2 py-1 bg-blue-100 text-blue-700 rounded hover:bg-blue-200 text-xs flex items-center gap-1">
-                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536M9 13l6-6m2 2l-6 6m-2 2h6" />
-                                                </svg>
-                                                Edit
-                                            </a>
-                                            <form action="{{ route('comments.destroy', $comment->id) }}" method="POST" 
-                                                  class="inline" 
-                                                  onsubmit="return confirm('Are you sure you want to delete this comment?');">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" 
-                                                        class="px-2 py-1 bg-red-100 text-red-700 rounded hover:bg-red-200 text-xs flex items-center gap-1">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                                                    </svg>
-                                                    Delete
-                                                </button>
-
-                                            </form>
-                                        @endif
-                                    </div>
+                    <!-- Comments -->
+                    <div class="border p-4 rounded-lg bg-gray-50 dark:bg-gray-800">
+                        <h3 class="text-lg font-bold mb-4">Comments</h3>
+                        <div class="max-h-60 overflow-y-auto space-y-4">
+                            @forelse($donation->comments as $comment)
+                                <div class="bg-white dark:bg-gray-700 p-3 rounded-lg shadow">
+                                    <p class="font-semibold">{{ $comment->user->fname }} {{ $comment->user->lname }}</p>
+                                    <p class="text-gray-500 text-xs">{{ $comment->created_at->diffForHumans() }}</p>
+                                    <p class="mt-1 text-gray-800 dark:text-gray-200">{{ $comment->content }}</p>
                                 </div>
-                                <!-- Comment Content -->
-                                <p class="mt-2 text-gray-800 dark:text-gray-200">{{ $comment->content }}</p>
-                            </div>
-                            @if(!$loop->last)
-                                <hr class="my-2 border-gray-200 dark:border-gray-600">
-                            @endif
-                        @empty
-                            <p class="text-gray-600 dark:text-gray-400 text-sm">No comments yet. Be the first to comment!</p>
-                        @endforelse
-                    </div>
+                            @empty
+                                <p class="text-gray-600 text-sm">No comments yet. Be the first to comment!</p>
+                            @endforelse
+                        </div>
 
-                    <!-- Comment Form -->
-                    @auth
-                        <form action="{{ route('comments.store') }}" method="POST" class="mt-4 flex items-start gap-3">
-                        @csrf
-
-                        {{-- This is crucial --}}
-                        <input type="hidden" name="donation_id" value="{{ $donation->id }}">
-
-                        <img 
-                            src="https://ui-avatars.com/api/?name={{ urlencode(auth()->user()->fname . ' ' . auth()->user()->lname) }}&background=random" 
-                            alt="{{ auth()->user()->fname }} {{ auth()->user()->lname }}"
-                            class="w-10 h-10 rounded-full border"
-                        >
-                        <div class="flex-1">
-                            <textarea name="content" rows="3" maxlength="1000"
-                                    class="w-full border rounded-lg p-2 focus:ring focus:ring-blue-300" 
-                                    required></textarea>
-                            <div class="flex justify-between items-center mt-2">
-                                <span id="char-count" class="text-xs text-gray-500">0/1000</span>
-                                <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
+                        @auth
+                            <form action="{{ route('comments.store') }}" method="POST" class="mt-4">
+                                @csrf
+                                <input type="hidden" name="donation_id" value="{{ $donation->id }}">
+                                <textarea name="content" rows="3" maxlength="1000"
+                                    class="w-full border rounded-lg p-2" required></textarea>
+                                <button type="submit" class="mt-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
                                     Post Comment
                                 </button>
-                            </div>
-                        </div>
-                    </form>
+                            </form>
+                        @else
+                            <p class="mt-3 text-gray-600">
+                                <a href="{{ route('login') }}" class="text-blue-500 hover:underline">Login</a> to comment.
+                            </p>
+                        @endauth
+                    </div>
 
-
-
-                    @else
-                        <p class="mt-3 text-gray-600">
-                            <a href="{{ route('login') }}" class="text-blue-500 hover:underline">Login</a> to comment.
-                        </p>
-                    @endauth
-                </div>
-
-                    <!-- Back to donations -->
-                    <a 
-                        href="{{ route('donations.index') }}" 
-                        class="mt-4 inline-block text-blue-500 hover:underline"
-                    >
+                    <!-- Back Link -->
+                    <a href="{{ route('donations.index') }}" class="mt-4 inline-block text-blue-500 hover:underline">
                         Back to donations
                     </a>
                 </div>
             </div>
         </div>
     </div>
+
+    <script>
+document.addEventListener("DOMContentLoaded", function () {
+    new Swiper(".mySwiper", {
+        loop: true,
+        pagination: {
+            el: ".swiper-pagination",
+            clickable: true,
+        },
+        navigation: {
+            nextEl: ".swiper-button-next",
+            prevEl: ".swiper-button-prev",
+        },
+    });
+});
+</script>
+
 </x-app-layout>
