@@ -90,6 +90,24 @@
                 <a href="#" class="text-gray-700 text-lg">🛒</a> <!-- Cart -->
                 <!-- Profile Dropdown -->
                 @auth
+                    @php
+                        $role = Auth::user()->role;
+                    @endphp
+
+                    @if($role === 0) <!-- Regular User -->
+                        <a href="{{ route('products.index') }}" class="text-gray-700 hidden lg:block">My Products</a>
+                        <a href="{{ route('products.create') }}" class="bg-black text-white px-3 py-1.5 text-sm rounded hover:bg-gray-800 transition">
+                            Sell now
+                        </a>
+                        <a href="{{ route('appointments.index') }}" class="bg-black text-white px-3 py-1.5 text-sm rounded hover:bg-gray-800 transition">
+                            Upcycle
+                        </a>
+                    @elseif($role === 1) <!-- Upcycler -->
+                        <a href="{{ route('upcycler.index') }}" class="bg-black text-white px-3 py-1.5 text-sm rounded hover:bg-gray-800 transition">
+                            Manage Appointments
+                        </a>
+                    @endif
+                    <!-- Profile Dropdown -->
                     <div class="relative" x-data="{ open: false }">
                         <button @click="open = ! open" class="text-gray-700 flex items-center">
                             <span>{{ Auth::user()->lname }}</span>

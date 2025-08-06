@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Product;
+use App\Models\Donation;
 use App\Models\Categories;
 use Illuminate\Support\Facades\Auth;
 
@@ -15,7 +16,8 @@ class UserDashboardController extends Controller
     public function index()
     {
         $products = Product::with(['category', 'user'])->where('status','available')->get();
-        return view('dashboard', compact('products'));
+        $donations = Donation::with(['user', 'category'])->where('status', 'available')->get();
+        return view('dashboard', compact('products','donations'));
     }
 
     /**
