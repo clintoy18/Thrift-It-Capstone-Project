@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Categories;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -12,8 +13,21 @@ class CategoriesSeeder extends Seeder
      */
     public function run(): void
     {
-        \App\Models\Categories::factory(10)->create([
-      
-        ]);
+        $categories = [
+            ['name' => 'Shirts'],
+            ['name' => 'Pants'],
+            ['name' => 'Dresses'],
+            ['name' => 'Shoes'],
+            ['name' => 'Accessories'],
+            ['name' => 'Outerwear'],
+            ['name' => 'Shorts'],
+            ['name' => 'Skirts'],
+            ['name' => 'Hats'],
+            ['name' => 'Socks'],
+        ];
+
+        foreach ($categories as $category) {
+            Categories::create($category);
+        }
     }
 }
