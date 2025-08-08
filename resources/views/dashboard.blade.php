@@ -1,6 +1,6 @@
 <x-app-layout>
     <!-- Full-width Jumbotron outside of the main content container -->
-    <div class="w-full bg-[#D9D9D9] dark:bg-gray-800 shadow-sm py-3">
+    <div class="w-full bg-[#D9D9D9] dark:bg-gray-800 shadow-sm ">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <!-- Mobile/Small screens layout (stacked) -->
             <div class="flex flex-col md:hidden">
@@ -37,7 +37,7 @@
             </div>
             
             <!-- Desktop layout (side by side) -->
-            <div class="hidden md:flex md:flex-row md:items-center md:py-2">
+            <div class="hidden md:flex md:flex-row md:items-center">
                 <!-- Text Content for Desktop -->
                 <div class="p-3 md:w-1/2">
                     <h1 class="text-5xl lg:text-4xl font-bold text-red-600 dark:text-red-400 leading-tight">
@@ -64,7 +64,7 @@
                     <div class="relative overflow-hidden">
                         <img src="{{ asset('storage/bgimages/jumbotron.png') }}" 
                             alt="Thrift-IT Sustainable Fashion" 
-                            class="w-full max-h-[440px] object-contain">
+                            class="w-full max-h-[500px] object-contain">
                     </div>
                 </div>
             </div>
@@ -74,44 +74,36 @@
     <div class="py-6 bg-white dark:bg-gray-900">
         <div class="max-w-7xl mx-auto px-4 sm:px-4 lg:px-8">
            
-    <!-- Section Title -->
-        <div class="mb-6 text-center sm:text-left">
-            
-            <p class="text-gray-600 dark:text-gray-400 text-sm sm:text-base mt-1">
-                Discover great finds from our community
-            </p>
-        </div>
-
-  <!-- Segment Showcase -->
-<div class="mb-6 text-center sm:text-left">
-   <h2 class="text-xl sm:text-2xl font-bold" style="color: #56432C; font-family: 'Poppins', sans-serif;">
-     <i>THRIFT BY FASHION</i>
-    </h2>
-</div>        
+    <!-- Segment Showcase -->
+    <div class="mb-6 text-center sm:text-left">
+    <h2 class="text-xl sm:text-2xl font-bold" style="color: #56432C; font-family: 'Poppins', sans-serif;">
+        <i>THRIFT BY FASHION</i>
+        </h2>
+    </div>        
 
 
-<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-    <!-- Women Segment -->
-    <a href="{{ route('segments.show', ['segment' => '1']) }}" class="relative group overflow-hidden rounded-md shadow-md h-[500px] w-full block">
-        <img src="{{ asset('storage/segments/women.png') }}" 
-             alt="Shop by Women" 
-             class="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-105">
-    </a>
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        <!-- Women Segment -->
+        <a href="{{ route('segments.show', ['segment' => '1']) }}" class="relative group overflow-hidden rounded-md shadow-md h-[500px] w-full block">
+            <img src="{{ asset('storage/segments/men.png') }}" 
+                alt="Shop by Women" 
+                class="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-105">
+        </a>
 
-    <!-- Men Segment -->
-    <a href="{{ route('segments.show', ['segment' => '2']) }}" class="relative group overflow-hidden rounded-md shadow-md h-[500px] w-full block">
-        <img src="{{ asset('storage/segments/men.png') }}" 
-             alt="Shop by Men" 
-             class="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-105">
-    </a>
+        <!-- Men Segment -->
+        <a href="{{ route('segments.show', ['segment' => '2']) }}" class="relative group overflow-hidden rounded-md shadow-md h-[500px] w-full block">
+            <img src="{{ asset('storage/segments/women.png') }}" 
+                alt="Shop by Men" 
+                class="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-105">
+        </a>
 
-    <!-- Kids Segment -->
-    <a href="{{ route('segments.show', ['segment' => '3']) }}" class="relative group overflow-hidden rounded-md shadow-md h-[500px] w-full block">
-        <img src="{{ asset('storage/segments/kids.png') }}" 
-             alt="Shop by Kids" 
-             class="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-105">
-    </a>
-</div>
+        <!-- Kids Segment -->
+        <a href="{{ route('segments.show', ['segment' => '3']) }}" class="relative group overflow-hidden rounded-md shadow-md h-[500px] w-full block">
+            <img src="{{ asset('storage/segments/kids.png') }}" 
+                alt="Shop by Kids" 
+                class="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-105">
+        </a>
+    </div>
 
 
 

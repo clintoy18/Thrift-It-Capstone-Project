@@ -13,7 +13,7 @@ class SegmentController extends Controller
    public function show(Segment $segment)
     {
         // Eager load products for the segment
-        $products = $segment->products()->with(['category'])->where('status', 'available')->get();
+        $products = $segment->products()->with(['category'])->get();
 
         return view('segments.show', compact('segment', 'products'));
     }
