@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Services\LandingService;
+use App\Models\Product;
+use App\Models\Donation;
+use App\Models\Segment;
 
 class LandingPageController extends Controller
 {
@@ -16,10 +19,11 @@ class LandingPageController extends Controller
 
     public function index()
     {
-       $data =  $this->landingService->getLandingData();
-       $products = $data['products'];
-       $categories = $data['categories'];
+  
        
-       return view('landing.index', compact('products','categories'));
+        $products = Product::with(['category', 'user'])->where('status','available')->get();
+        $donations = Donation::with(['user', 'category'])->where('status', 'available')->get();
+        $segments = Segment::all();
+        return view('dashboard', compact('products','donations','segments'));
     }
 }
