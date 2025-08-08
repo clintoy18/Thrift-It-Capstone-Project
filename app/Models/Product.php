@@ -26,8 +26,8 @@ class Product extends Model
         'size',
         'image',
         'qty',
-        'listingtype',
         'status',
+        'segment_id' 
     ];
 
     protected $casts = [
@@ -60,6 +60,10 @@ class Product extends Model
         return $this->hasMany(Comment::class);
     }
 
+    public function segment()
+    {
+        return $this->belongsTo(Segment::class, 'segment_id');
+    }
         /**
      * Get the indexable data array for the model.
      *

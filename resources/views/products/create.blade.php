@@ -1,13 +1,11 @@
 <x-app-layout>
-
-
     <div class="py-12">
         <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 shadow-lg rounded-lg overflow-hidden">
                 <div class="p-6">
                     <form action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data" class="space-y-8">
                         @csrf
-                        
+
                         <!-- Image Upload Section -->
                         <div class="space-y-4">
                             <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">Product Image</h3>
@@ -27,14 +25,14 @@
                                 </div>
                             </div>
                             @error('image')
-                                <p class="text-red-600 text-sm">{{ $message }}</p>
+                            <p class="text-red-600 text-sm">{{ $message }}</p>
                             @enderror
                         </div>
 
                         <!-- Basic Information Section -->
                         <div class="space-y-4">
                             <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">Basic Information</h3>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                                 <div>
                                     <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Item Name</label>
                                     <input type="text" id="name" name="name" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-gray-500 focus:ring-gray-500" placeholder="Enter item name" value="{{ old('name') }}" required>
@@ -52,6 +50,21 @@
                                         @endforeach
                                     </select>
                                     @error('category_id')
+                                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                    @enderror
+                                </div>
+
+                                <div>
+                                    <label for="segment_id" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Target Audience</label>
+                                    <select id="segment_id" name="segment_id" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-gray-500 focus:ring-gray-500" required>
+                                        <option value="" disabled selected>Select a segment</option>
+                                        @foreach ($segments as $segment)
+                                            <option value="{{ $segment->id }}" {{ old('segment_id') == $segment->id ? 'selected' : '' }}>
+                                                {{ ucfirst($segment->name) }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    @error('segment_id')
                                         <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                                     @enderror
                                 </div>
@@ -73,113 +86,108 @@
                                 <div>
                                     <label for="condition" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Condition</label>
                                     <select id="condition" name="condition" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-gray-500 focus:ring-gray-500" required>
-                                        <option value="new">New</option>
-                                        <option value="used">Used</option>
+                                        <option value="new" {{ old('condition') == 'new' ? 'selected' : '' }}>New</option>
+                                        <option value="used" {{ old('condition') == 'used' ? 'selected' : '' }}>Used</option>
                                     </select>
                                     @error('condition')
                                         <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                                     @enderror
                                 </div>
+                              {{-- MAKE IT AVAILABLE ON DEFAULT --}}
+                              <input type="hidden" name="status" value="available">
+
 
                                 <div>
-                                    <label for="size" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Size</label>
-                                    <select id="size" name="size" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-gray-500 focus:ring-gray-500" required>
-                                        <option value="">Select size</option>
-                                        <!-- Clothing Sizes -->
-                                        <optgroup label="Clothing" class="clothing-sizes hidden">
-                                            <option value="S" {{ old('size') == 'S' ? 'selected' : '' }}>S</option>
-                                            <option value="M" {{ old('size') == 'M' ? 'selected' : '' }}>M</option>
-                                            <option value="L" {{ old('size') == 'L' ? 'selected' : '' }}>L</option>
-                                            <option value="XL" {{ old('size') == 'XL' ? 'selected' : '' }}>XL</option>
-                                            <option value="XXL" {{ old('size') == 'XXL' ? 'selected' : '' }}>XXL</option>
-                                            <option value="3XL" {{ old('size') == '3XL' ? 'selected' : '' }}>3XL</option>
-                                            <option value="4XL" {{ old('size') == '4XL' ? 'selected' : '' }}>4XL</option>
-                                            <option value="5XL" {{ old('size') == '5XL' ? 'selected' : '' }}>5XL</option>
-                                        </optgroup>
-                                        <!-- Shoe Sizes -->
-                                        <optgroup label="Shoes" class="shoe-sizes hidden">
-                                            <option value="4" {{ old('size') == '4' ? 'selected' : '' }}>4</option>
-                                            <option value="4.5" {{ old('size') == '4.5' ? 'selected' : '' }}>4.5</option>
-                                            <option value="5" {{ old('size') == '5' ? 'selected' : '' }}>5</option>
-                                            <option value="5.5" {{ old('size') == '5.5' ? 'selected' : '' }}>5.5</option>
-                                            <option value="6" {{ old('size') == '6' ? 'selected' : '' }}>6</option>
-                                            <option value="6.5" {{ old('size') == '6.5' ? 'selected' : '' }}>6.5</option>
-                                            <option value="7" {{ old('size') == '7' ? 'selected' : '' }}>7</option>
-                                            <option value="7.5" {{ old('size') == '7.5' ? 'selected' : '' }}>7.5</option>
-                                            <option value="8" {{ old('size') == '8' ? 'selected' : '' }}>8</option>
-                                            <option value="8.5" {{ old('size') == '8.5' ? 'selected' : '' }}>8.5</option>
-                                            <option value="9" {{ old('size') == '9' ? 'selected' : '' }}>9</option>
-                                            <option value="9.5" {{ old('size') == '9.5' ? 'selected' : '' }}>9.5</option>
-                                            <option value="10" {{ old('size') == '10' ? 'selected' : '' }}>10</option>
-                                            <option value="10.5" {{ old('size') == '10.5' ? 'selected' : '' }}>10.5</option>
-                                            <option value="11" {{ old('size') == '11' ? 'selected' : '' }}>11</option>
-                                            <option value="11.5" {{ old('size') == '11.5' ? 'selected' : '' }}>11.5</option>
-                                            <option value="12" {{ old('size') == '12' ? 'selected' : '' }}>12</option>
-                                        </optgroup>
-                                        <!-- Accessories -->
-                                        <optgroup label="Accessories" class="accessory-sizes hidden">
-                                            <option value="One Size" {{ old('size') == 'One Size' ? 'selected' : '' }}>One Size</option>
-                                        </optgroup>
-                                    </select>
-                                    @error('size')
-                                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                                    @enderror
-                                </div>
+                                <label for="size" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Size</label>
+                                <select id="size" name="size" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-gray-500 focus:ring-gray-500" required>
+                                    <option value="" disabled selected>Select size</option>
 
-                                <div>
-                                    <label for="listingtype" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Listing Type</label>
-                                    <select id="listingtype" name="listingtype" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-gray-500 focus:ring-gray-500" required onchange="togglePriceField()">
-                                        <option value="for sale" {{ old('listingtype') == 'for sale' ? 'selected' : '' }}>For Sale</option>
-                                        <option value="for donation" {{ old('listingtype') == 'for donation' ? 'selected' : '' }}>For Donation</option>
-                                    </select>
-                                    @error('listingtype')
-                                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                                    @enderror
-                                </div>
+                                    <!-- Clothing Sizes -->
+                                    <optgroup label="Shirts, Dresses, Outerwear, Pants, Shorts, Skirts">
+                                        <option value="XS" {{ old('size') == 'XS' ? 'selected' : '' }}>XS</option>
+                                        <option value="S" {{ old('size') == 'S' ? 'selected' : '' }}>S</option>
+                                        <option value="M" {{ old('size') == 'M' ? 'selected' : '' }}>M</option>
+                                        <option value="L" {{ old('size') == 'L' ? 'selected' : '' }}>L</option>
+                                        <option value="XL" {{ old('size') == 'XL' ? 'selected' : '' }}>XL</option>
+                                        <option value="XXL" {{ old('size') == 'XXL' ? 'selected' : '' }}>XXL</option>
+                                        <option value="3XL" {{ old('size') == '3XL' ? 'selected' : '' }}>3XL</option>
+                                        <option value="4XL" {{ old('size') == '4XL' ? 'selected' : '' }}>4XL</option>
+                                        <option value="5XL" {{ old('size') == '5XL' ? 'selected' : '' }}>5XL</option>
+                                    </optgroup>
 
-                                <div>
-                                    <label for="status" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Status</label>
-                                    <select id="status" name="status" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-gray-500 focus:ring-gray-500" required>
-                                        <option value="available" {{ old('status') == 'available' ? 'selected' : '' }}>Available</option>
-                                        <option value="sold" {{ old('status') == 'sold' ? 'selected' : '' }}>Sold</option>
-                                    </select>
-                                    @error('status')
-                                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                                    @enderror
-                                </div>
+                                    <!-- Shoe Sizes (US Unisex) -->
+                                    <optgroup label="Shoes">
+                                        <option value="3" {{ old('size') == '3' ? 'selected' : '' }}>3</option>
+                                        <option value="3.5" {{ old('size') == '3.5' ? 'selected' : '' }}>3.5</option>
+                                        <option value="4" {{ old('size') == '4' ? 'selected' : '' }}>4</option>
+                                        <option value="4.5" {{ old('size') == '4.5' ? 'selected' : '' }}>4.5</option>
+                                        <option value="5" {{ old('size') == '5' ? 'selected' : '' }}>5</option>
+                                        <option value="5.5" {{ old('size') == '5.5' ? 'selected' : '' }}>5.5</option>
+                                        <option value="6" {{ old('size') == '6' ? 'selected' : '' }}>6</option>
+                                        <option value="6.5" {{ old('size') == '6.5' ? 'selected' : '' }}>6.5</option>
+                                        <option value="7" {{ old('size') == '7' ? 'selected' : '' }}>7</option>
+                                        <option value="7.5" {{ old('size') == '7.5' ? 'selected' : '' }}>7.5</option>
+                                        <option value="8" {{ old('size') == '8' ? 'selected' : '' }}>8</option>
+                                        <option value="8.5" {{ old('size') == '8.5' ? 'selected' : '' }}>8.5</option>
+                                        <option value="9" {{ old('size') == '9' ? 'selected' : '' }}>9</option>
+                                        <option value="9.5" {{ old('size') == '9.5' ? 'selected' : '' }}>9.5</option>
+                                        <option value="10" {{ old('size') == '10' ? 'selected' : '' }}>10</option>
+                                        <option value="10.5" {{ old('size') == '10.5' ? 'selected' : '' }}>10.5</option>
+                                        <option value="11" {{ old('size') == '11' ? 'selected' : '' }}>11</option>
+                                        <option value="11.5" {{ old('size') == '11.5' ? 'selected' : '' }}>11.5</option>
+                                        <option value="12" {{ old('size') == '12' ? 'selected' : '' }}>12</option>
+                                        <option value="13" {{ old('size') == '13' ? 'selected' : '' }}>13</option>
+                                        <option value="14" {{ old('size') == '14' ? 'selected' : '' }}>14</option>
+                                    </optgroup>
+
+                                    <!-- Accessories -->
+                                    <optgroup label="Accessories">
+                                        <option value="One Size" {{ old('size') == 'One Size' ? 'selected' : '' }}>One Size</option>
+                                        <option value="Adjustable" {{ old('size') == 'Adjustable' ? 'selected' : '' }}>Adjustable</option>
+                                        <option value="Small" {{ old('size') == 'Small' ? 'selected' : '' }}>Small</option>
+                                        <option value="Medium" {{ old('size') == 'Medium' ? 'selected' : '' }}>Medium</option>
+                                        <option value="Large" {{ old('size') == 'Large' ? 'selected' : '' }}>Large</option>
+                                    </optgroup>
+
+                                    <!-- Socks & Hosiery -->
+                                    <optgroup label="Socks & Hosiery">
+                                        <option value="Small (S)" {{ old('size') == 'Small (S)' ? 'selected' : '' }}>Small (S)</option>
+                                        <option value="Medium (M)" {{ old('size') == 'Medium (M)' ? 'selected' : '' }}>Medium (M)</option>
+                                        <option value="Large (L)" {{ old('size') == 'Large (L)' ? 'selected' : '' }}>Large (L)</option>
+                                        <option value="Extra Large (XL)" {{ old('size') == 'Extra Large (XL)' ? 'selected' : '' }}>Extra Large (XL)</option>
+                                    </optgroup>
+                                </select>
+
+                                @error('size')
+                                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                @enderror
                             </div>
 
-                            <div id="price-field">
-                                <label for="price" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Item Price</label>
-                                <div class="mt-1 relative rounded-md shadow-sm">
-                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                        <span class="text-gray-500 sm:text-sm">₱</span>
-                                    </div>
-                                    <input type="number" 
-                                           id="price" 
-                                           name="price" 
-                                           value="{{ old('price') }}" 
-                                           class="block w-full pl-7 pr-12 rounded-md border-gray-300 focus:border-gray-500 focus:ring-gray-500" 
-                                           placeholder="0.00" 
-                                           min="0" 
-                                           step="0.01"
-                                           pattern="^\d+(\.\d{1,2})?$"
-                                           oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
-                                           required>
-                                </div>
-                                <p class="mt-1 text-sm text-gray-500">Enter amount in PHP (e.g., 100.75)</p>
+                            </div>
+
+                            <div>
+                                <label for="price" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Price (USD)</label>
+                                <input type="number" step="0.01" id="price" name="price" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-gray-500 focus:ring-gray-500" placeholder="Enter price" value="{{ old('price') }}" required>
                                 @error('price')
+                                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                @enderror
+                            </div>
+
+                            <div>
+                                <label for="stock" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Stock Quantity</label>
+                                <input type="number" id="stock" name="stock" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-gray-500 focus:ring-gray-500" placeholder="Enter stock quantity" value="{{ old('stock') }}" required>
+                                @error('stock')
                                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                                 @enderror
                             </div>
                         </div>
 
-                        <!-- Submit Button -->
-                        <div class="flex justify-end">
-                            <button type="submit" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-gray-900 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors duration-200">
-                                List Item
+                        <div>
+                            <button type="submit" class="inline-flex justify-center py-2 px-6 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-gray-900 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
+                                Submit
                             </button>
                         </div>
+
                     </form>
                 </div>
             </div>
@@ -187,73 +195,42 @@
     </div>
 
     <script>
-        function togglePriceField() {
-            const listingType = document.getElementById('listingtype').value;
-            const priceField = document.getElementById('price-field');
-            const priceInput = document.getElementById('price');
-            if (listingType === 'for donation') {
-                priceField.style.display = 'none';
-                priceInput.removeAttribute('required');
-            } else {
-                priceField.style.display = 'block';
-                priceInput.setAttribute('required', 'required');
-            }
-        }
-
-        function updateSizeOptions() {
+            function updateSizeOptions() {
             const categorySelect = document.getElementById('category_id');
             const sizeSelect = document.getElementById('size');
-            const clothingSizes = document.querySelector('.clothing-sizes');
-            const shoeSizes = document.querySelector('.shoe-sizes');
-            const accessorySizes = document.querySelector('.accessory-sizes');
-            
-            // Hide all size groups first
-            clothingSizes.classList.add('hidden');
-            shoeSizes.classList.add('hidden');
-            accessorySizes.classList.add('hidden');
-            
-            // Reset size selection
-            sizeSelect.value = '';
-            
-            // Get the selected category name
-            const selectedOption = categorySelect.options[categorySelect.selectedIndex];
-            const categoryName = selectedOption.text.toLowerCase();
-            
-            // Show relevant size group based on category
-            if (categoryName.includes('shirt') || categoryName.includes('clothing') || categoryName.includes('dress') || categoryName.includes('pants')) {
-                clothingSizes.classList.remove('hidden');
-            } else if (categoryName.includes('shoe') || categoryName.includes('footwear')) {
-                shoeSizes.classList.remove('hidden');
+            const options = sizeSelect.querySelectorAll('optgroup');
+
+            // Hide all groups first
+            options.forEach(group => group.style.display = 'none');
+
+            // Get selected category text
+            const selectedText = categorySelect.options[categorySelect.selectedIndex]?.text.toLowerCase();
+
+            if (!selectedText) return;
+
+            if (['shirts', 'dresses', 'outerwear', 'pants', 'shorts', 'skirts'].some(cat => selectedText.includes(cat))) {
+                sizeSelect.querySelector('optgroup[label="Shirts, Dresses, Outerwear, Pants, Shorts, Skirts"]').style.display = 'block';
+            } else if (selectedText.includes('shoe')) {
+                sizeSelect.querySelector('optgroup[label="Shoes"]').style.display = 'block';
+            } else if (selectedText.includes('accessories') || selectedText.includes('hat') || selectedText.includes('belt')) {
+                sizeSelect.querySelector('optgroup[label="Accessories"]').style.display = 'block';
+            } else if (selectedText.includes('sock') || selectedText.includes('hosiery')) {
+                sizeSelect.querySelector('optgroup[label="Socks & Hosiery"]').style.display = 'block';
             } else {
-                accessorySizes.classList.remove('hidden');
+                // default fallback
+                sizeSelect.querySelector('optgroup[label="Accessories"]').style.display = 'block';
             }
+
+            // reset selection when category changes
+            sizeSelect.value = '';
         }
 
-        function previewImage(input) {
-            const preview = document.getElementById('preview');
-            const imagePreview = document.getElementById('imagePreview');
-            const uploadText = document.getElementById('uploadText');
-            
-            if (input.files && input.files[0]) {
-                const reader = new FileReader();
-                
-                reader.onload = function(e) {
-                    preview.src = e.target.result;
-                    imagePreview.classList.remove('hidden');
-                    uploadText.classList.add('hidden');
-                }
-                
-                reader.readAsDataURL(input.files[0]);
-            }
-        }
+        document.getElementById('category_id').addEventListener('change', updateSizeOptions);
 
-        // Initialize size options on page load
-        document.addEventListener('DOMContentLoaded', function() {
-            togglePriceField();
+        document.addEventListener('DOMContentLoaded', () => {
             updateSizeOptions();
-            
-            // Add event listener for category change
-            document.getElementById('category_id').addEventListener('change', updateSizeOptions);
         });
+
     </script>
+
 </x-app-layout>

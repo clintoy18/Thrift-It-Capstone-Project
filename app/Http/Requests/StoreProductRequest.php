@@ -30,8 +30,8 @@ class StoreProductRequest extends FormRequest
             'size' => 'required|string',
             'image' => 'nullable|image|max:2048',
             'qty' => 'integer',
-            'listingtype' => 'required|in:for sale,for donation',
             'status' => 'required|in:available,sold',
+            'segment_id' => 'required|exists:segments,id', 
         ];
     }
 }
