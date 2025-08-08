@@ -7,6 +7,7 @@ use App\Models\Product;
 use App\Models\Donation;
 use App\Models\Categories;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Segment;
 
 class UserDashboardController extends Controller
 {
@@ -17,7 +18,8 @@ class UserDashboardController extends Controller
     {
         $products = Product::with(['category', 'user'])->where('status','available')->get();
         $donations = Donation::with(['user', 'category'])->where('status', 'available')->get();
-        return view('dashboard', compact('products','donations'));
+        $segments = Segment::all();
+        return view('dashboard', compact('products','donations','segments'));
     }
 
     /**

@@ -74,16 +74,48 @@
     <div class="py-6 bg-white dark:bg-gray-900">
         <div class="max-w-7xl mx-auto px-4 sm:px-4 lg:px-8">
            
-<!-- Section Title -->
-    <div class="mb-6 text-center sm:text-left">
-        <h2 class="text-xl sm:text-2xl font-bold text-red-600 dark:text-red-400">
-            Featured Products
-        </h2>
-        <p class="text-gray-600 dark:text-gray-400 text-sm sm:text-base mt-1">
-            Discover great finds from our community
-        </p>
-    </div>
-<!-- Products Section -->
+    <!-- Section Title -->
+        <div class="mb-6 text-center sm:text-left">
+            
+            <p class="text-gray-600 dark:text-gray-400 text-sm sm:text-base mt-1">
+                Discover great finds from our community
+            </p>
+        </div>
+
+  <!-- Segment Showcase -->
+<div class="mb-6 text-center sm:text-left">
+   <h2 class="text-xl sm:text-2xl font-bold" style="color: #56432C; font-family: 'Poppins', sans-serif;">
+     <i>THRIFT BY FASHION</i>
+    </h2>
+</div>        
+
+
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+    <!-- Women Segment -->
+    <a href="{{ route('segments.show', ['segment' => '1']) }}" class="relative group overflow-hidden rounded-md shadow-md h-[500px] w-full block">
+        <img src="{{ asset('storage/segments/women.png') }}" 
+             alt="Shop by Women" 
+             class="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-105">
+    </a>
+
+    <!-- Men Segment -->
+    <a href="{{ route('segments.show', ['segment' => '2']) }}" class="relative group overflow-hidden rounded-md shadow-md h-[500px] w-full block">
+        <img src="{{ asset('storage/segments/men.png') }}" 
+             alt="Shop by Men" 
+             class="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-105">
+    </a>
+
+    <!-- Kids Segment -->
+    <a href="{{ route('segments.show', ['segment' => '3']) }}" class="relative group overflow-hidden rounded-md shadow-md h-[500px] w-full block">
+        <img src="{{ asset('storage/segments/kids.png') }}" 
+             alt="Shop by Kids" 
+             class="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-105">
+    </a>
+</div>
+
+
+
+{{-- <!-- Products Section -->
     <div class="rounded-xl shadow-sm overflow-hidden">
       <div class="p-4 md:p-6">
 
@@ -143,7 +175,7 @@
             <x-empty-message message="No active products found." link="{{ route('products.create') }}" />
         @endif
     </div>
-</div>
+</div> --}}
 <!-- Section Title -->
     <div class="mb-6 text-center sm:text-left">
         <h2 class="text-xl sm:text-2xl font-bold text-red-600 dark:text-red-400">
