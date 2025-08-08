@@ -1,14 +1,14 @@
 <x-app-layout>
-    <div class="py-12">
+    <div class="py-12  dark:bg-[#F4F2ED]">
         <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-800 shadow-lg rounded-lg overflow-hidden">
+            <div class="bg-white shadow-lg rounded-lg overflow-hidden">
                 <div class="p-6">
                     <form action="{{ route('donations.store') }}" method="POST" enctype="multipart/form-data" class="space-y-8">
                         @csrf
                         
                         <!-- Image Upload Section -->
                         <div class="space-y-4">
-                            <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">Product Image</h3>
+                            <h3 class="text-lg font-medium text-gray-1500 dark:text-gray-500">Product Image</h3>
                             <div class="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-6">
                                 <div class="flex flex-col items-center justify-center space-y-4 relative">
                                     <input type="file" name="image" id="image" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" accept="image/*" required onchange="previewImage(this)">
@@ -28,15 +28,15 @@
 
                         <!-- Basic Information Section -->
                         <div class="space-y-4">
-                            <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">Basic Information</h3>
+                            <h3 class="text-lg font-medium text-gray-1500 dark:text-gray-500">Basic Information</h3>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>
-                                    <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Item Name</label>
+                                    <label for="name" class="block text-sm font-medium text-[#000000] dark:text-[#000000]">Item Name</label>
                                     <input type="text" id="name" name="name" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-gray-500 focus:ring-gray-500" placeholder="Enter item name" value="{{ old('name') }}" required>
                                 </div>
 
                                 <div>
-                                    <label for="category_id" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Category</label>
+                                    <label for="category_id" class="block text-sm font-medium text-[#000000] dark:text-[#000000]">Category</label>
                                     <select id="category_id" name="category_id" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-gray-500 focus:ring-gray-500" required>
                                         <option value="" disabled selected>Select a category</option>
                                         @foreach ($categories as $category)
@@ -47,17 +47,17 @@
                             </div>
 
                             <div>
-                                <label for="description" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Description</label>
+                                <label for="description" class="block text-sm font-medium text-[#000000] dark:text-[#000000]">Description</label>
                                 <textarea id="description" name="description" rows="4" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-gray-500 focus:ring-gray-500" placeholder="Enter detailed description" required>{{ old('description') }}</textarea>
                             </div>
                         </div>
 
                         <!-- Product Details Section -->
                         <div class="space-y-4">
-                            <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">Product Details</h3>
+                            <h3 class="text-lg font-medium text-gray-1500 dark:text-gray-500">Product Details</h3>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>
-                                    <label for="condition" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Condition</label>
+                                    <label for="condition" class="block text-sm font-medium text-[#000000] dark:text-[#000000]">Condition</label>
                                     <select id="condition" name="condition" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-gray-500 focus:ring-gray-500" required>
                                         <option value="new">New</option>
                                         <option value="used">Used</option>
@@ -65,7 +65,7 @@
                                 </div>
 
                                 <div>
-                                    <label for="size" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Size</label>
+                                    <label for="size" class="block text-sm font-medium text-[#000000] dark:text-[#000000]">Size</label>
                                     <select id="size" name="size" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-gray-500 focus:ring-gray-500" required>
                                         <option value="">Select size</option>
                                         <optgroup label="Clothing" class="clothing-sizes hidden">
@@ -88,7 +88,7 @@
                                 </div>
 
                                <div>
-                                    <label for="status" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Status</label>
+                                    <label for="status" class="block text-sm font-medium text-[#000000] dark:text-[#000000]">Status</label>
                                     <select id="status" name="status" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-gray-500 focus:ring-gray-500">
                                         <option value="available" selected>Available</option>
                                         <option value="sold">Sold</option>

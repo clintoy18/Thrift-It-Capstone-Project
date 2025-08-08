@@ -7,10 +7,9 @@
                 <h1 class="text-4xl sm:text-5xl font-bold leading-tight text-[#634600]">Refresh Your Wardrobe Sustainably With Thrift-IT's Unique Finds</h1>
                 <p class="mt-4 text-lg leading-relaxed text-gray-700">Fashion meets purpose — shop, sell, and donate thrifted clothing to embrace a greener future.</p>
                 <div class="mt-8 text-center w-full md:flex md:justify-start md:ml-[550px]">
-                    
                     <a href="{{ route('products.create') }}" class="inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-3xl w-40 h-12 text-sm font-semibold text-white bg-gradient-to-r from-[#CBBC96] to-[#B59F84] shadow-md transform transition-all duration-200 hover:from-[#b3a87e] hover:to-[#a08e77] hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#B59F84]">
-                            Get Started
-                        </a>
+                        Get Started
+                    </a>
                 </div>
             </div>
             
@@ -23,7 +22,7 @@
     
     <div class="py-6 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-4 lg:px-8">
-<<<<<<< HEAD
+
             <!-- Section Title -->
             <div class="mb-6 scroll-animate">
                 <h2 class="text-xl font-bold text-[#56432C]">Featured Products</h2>
@@ -92,145 +91,79 @@
                                             </div>
                                         </div>
                                     </a>
-=======
-           
-<!-- Section Title -->
-    <div class="mb-6 text-center sm:text-left">
-        <h2 class="text-xl sm:text-2xl font-bold text-red-600 dark:text-red-400">
-            Featured Products
-        </h2>
-        <p class="text-gray-600 dark:text-gray-400 text-sm sm:text-base mt-1">
-            Discover great finds from our community
-        </p>
-    </div>
-<!-- Products Section -->
-    <div class="rounded-xl shadow-sm overflow-hidden">
-      <div class="p-4 md:p-6">
-
-        @if($products->count() > 0)
-            <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-4 md:gap-6">
-                @foreach ($products as $product)
-                    <div class="group relative bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition duration-200 border border-[#D9D9D9] dark:border-gray-700">
-                        <a href="{{ route('products.show', $product->id) }}" class="block h-full">
-                            @if($product->listingtype === 'for donation')
-                                <div class="absolute top-1 left-1 z-10 bg-[#D9D9D9] text-gray-700 text-[10px] sm:text-xs px-1.5 py-0.5 sm:px-2 sm:py-1 rounded-full">
-                                    Donation
->>>>>>> e31d62c81caa697ba46c770138de1f0f9ed93fac
                                 </div>
-                            @endif
-
-                            <div class="relative aspect-square overflow-hidden">
-                                <img src="{{ $product->image ? asset('storage/' . $product->image) : asset('images/default-placeholder.png') }}" 
-                                     alt="{{ $product->name }}" 
-                                     class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105">
-                                <div class="absolute inset-0 bg-gray-800 bg-opacity-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                                    <span class="bg-white text-gray-800 px-2 py-0.5 rounded-full text-[10px] sm:text-xs font-medium">Quick view</span>
-                                </div>
-                            </div>
-
-                            <div class="p-2 sm:p-3 md:p-4">
-                                <div class="flex justify-between items-start">
-                                    <h3 class="text-xs sm:text-sm md:text-base font-bold text-gray-900 dark:text-white group-hover:text-red-600 transition-colors truncate max-w-[70%]">
-                                        {{ $product->name }}
-                                    </h3>
-                                    <span class="text-[10px] sm:text-xs font-medium px-1 py-0.5 sm:px-2 sm:py-1 bg-[#D9D9D9] dark:bg-gray-700 rounded text-gray-700 dark:text-gray-300">
-                                        {{ $product->size ?? 'L' }}
-                                    </span>
-                                </div>
-
-                                <p class="text-gray-500 dark:text-gray-400 text-[10px] sm:text-xs md:text-sm mt-0.5 sm:mt-1 truncate">
-                                    {{ $product->category->name ?? 'No Category' }}
-                                </p>
-
-                                <div class="flex justify-between items-center mt-1 sm:mt-2 md:mt-3">
-                                    <p class="text-xs sm:text-sm font-bold {{ $product->listingtype === 'for donation' ? 'text-gray-700' : 'text-red-600' }}">
-                                        {{ $product->listingtype === 'for donation' ? 'For Donation' : '₱' . number_format($product->price, 2) }}
-                                    </p>
-                                    <button class="favorite-btn text-gray-400 hover:text-red-500 focus:outline-none transition-colors" 
-                                            data-id="{{ $product->id }}" 
-                                            type="button"
-                                            onclick="event.preventDefault(); event.stopPropagation();">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:h-5 sm:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                                        </svg>
-                                    </button>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                @endforeach
+                            @endforeach
+                        </div>
+                    @else
+                        <x-empty-message message="No active products found." link="{{ route('products.create') }}" />
+                    @endif
+                </div>
             </div>
-        @else
-            <x-empty-message message="No active products found." link="{{ route('products.create') }}" />
-        @endif
-    </div>
-</div>
-<!-- Section Title -->
-    <div class="mb-6 text-center sm:text-left">
-        <h2 class="text-xl sm:text-2xl font-bold text-red-600 dark:text-red-400">
-            Featured Donations
-        </h2>
-        <p class="text-gray-600 dark:text-gray-400 text-sm sm:text-base mt-1">
-            Discover great finds from our community
-        </p>
-    </div>
-<!-- Donations Section (Secondary) -->
-<div class="rounded-xl shadow-sm overflow-hidden mt-8">
-    <div class="p-4 sm:p-6">
 
-        @if($donations->count() > 0)
-            <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-4 md:gap-6">
-                @foreach ($donations as $donation)
-                    <div class="group relative bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition duration-200 border border-[#D9D9D9] dark:border-gray-700">
-                        <a href="{{ route('donations.show', $donation->id) }}" class="block h-full">
-                            @if($donation->listingtype === 'for donation')
-                                <div class="absolute top-1 left-1 z-10 bg-[#D9D9D9] text-gray-700 text-[10px] sm:text-xs px-1.5 py-0.5 sm:px-2 sm:py-1 rounded-full">
-                                    Donation
-                                </div>
-                            @endif
-
-                            <div class="relative aspect-square overflow-hidden">
-                                <img src="{{ $donation->image ? asset('storage/' . $donation->image) : asset('images/default-placeholder.png') }}" 
-                                     alt="{{ $donation->name }}" 
-                                     class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105">
-                                <div class="absolute inset-0 bg-gray-800 bg-opacity-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                                    <span class="bg-white text-gray-800 px-2 py-0.5 rounded-full text-[10px] sm:text-xs font-medium">Quick view</span>
-                                </div>
-                            </div>
-
-                            <div class="p-2 sm:p-3">
-                                <div class="flex justify-between items-start">
-                                    <h3 class="text-xs sm:text-sm font-bold text-gray-900 dark:text-white group-hover:text-red-600 transition-colors truncate max-w-[70%]">
-                                        {{ $donation->name }}
-                                    </h3>
-                                    <span class="text-[10px] sm:text-xs font-medium px-1 py-0.5 bg-[#D9D9D9] dark:bg-gray-700 rounded text-gray-700 dark:text-gray-300">
-                                        {{ $donation->size ?? 'L' }}
-                                    </span>
-                                </div>
-
-                                <p class="text-gray-500 dark:text-gray-400 text-[10px] sm:text-xs mt-0.5 truncate">
-                                    {{ $donation->category->name ?? 'No Category' }}
-                                </p>
-                            </div>
-                        </a>
-                    </div>
-                @endforeach
+            <!-- Section Title for Donations -->
+            <div class="mb-6 scroll-animate">
+                <h2 class="text-xl font-bold text-[#56432C]">
+                    Featured Donations
+                </h2>
+                <p class="text-[#56432C] text-sm">
+                    Discover great finds from our community
+                </p>
             </div>
-        @else
-            <x-empty-message message="No active donations found." link="{{ route('donations.create') }}" />
-        @endif
-    </div>
-</div>
 
-         
+            <!-- Donations Section (Secondary) -->
+            <div class="rounded-xl shadow-sm overflow-hidden">
+                <div class="p-4 sm:p-6">
+                    @if($donations->count() > 0)
+                        <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-4 md:gap-6">
+                            @foreach ($donations as $donation)
+                                <div class="group relative bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition duration-200 border border-[#D9D9D9] dark:border-gray-700">
+                                    <a href="{{ route('donations.show', $donation->id) }}" class="block h-full">
+                                        @if($donation->listingtype === 'for donation')
+                                            <div class="absolute top-1 left-1 z-10 bg-[#D9D9D9] text-gray-700 text-[10px] sm:text-xs px-1.5 py-0.5 sm:px-2 sm:py-1 rounded-full">
+                                                Donation
+                                            </div>
+                                        @endif
+
+                                        <div class="relative aspect-square overflow-hidden">
+                                            <img src="{{ $donation->image ? asset('storage/' . $donation->image) : asset('images/default-placeholder.png') }}" 
+                                                 alt="{{ $donation->name }}" 
+                                                 class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105">
+                                            <div class="absolute inset-0 bg-gray-800 bg-opacity-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                                                <span class="bg-white text-gray-800 px-2 py-0.5 rounded-full text-[10px] sm:text-xs font-medium">Quick view</span>
+                                            </div>
+                                        </div>
+
+                                        <div class="p-2 sm:p-3">
+                                            <div class="flex justify-between items-start">
+                                                <h3 class="text-xs sm:text-sm font-bold text-gray-900 dark:text-white group-hover:text-red-600 transition-colors truncate max-w-[70%]">
+                                                    {{ $donation->name }}
+                                                </h3>
+                                                <span class="text-[10px] sm:text-xs font-medium px-1 py-0.5 bg-[#D9D9D9] dark:bg-gray-700 rounded text-gray-700 dark:text-gray-300">
+                                                    {{ $donation->size ?? 'L' }}
+                                                </span>
+                                            </div>
+
+                                            <p class="text-gray-500 dark:text-gray-400 text-[10px] sm:text-xs mt-0.5 truncate">
+                                                {{ $donation->category->name ?? 'No Category' }}
+                                            </p>
+                                        </div>
+                                    </a>
+                                </div>
+                            @endforeach
+                        </div>
+                    @else
+                        <x-empty-message message="No active donations found." link="{{ route('donations.create') }}" />
+                    @endif
+                </div>
+            </div>
         </div>
     </div>
-      <!-- Upcycling and Donate Sections -->
-<div class="py-16 bg-[#F4F2ED]">
-    <div class=" mx-auto px-4 sm:px-6 lg:px-8">
 
+    <!-- Upcycling and Donate Sections -->
+    <div class="py-16 bg-[#F4F2ED]">
+        <div class="mx-auto px-4 sm:px-6 lg:px-8">
             {{-- Upcycling Section --}}
-            <div class="flex flex-col md:flex-row bg-white p-8  shadow-md items-center scroll-animate">
+            <div class="flex flex-col md:flex-row bg-white p-8 shadow-md items-center scroll-animate">
                 {{-- Text Content --}}
                 <div class="md:w-1/2 md:pr-8 mb-6 md:mb-0">
                     <h2 class="text-3xl font-bold text-[#634600] mb-4 leading-tight">
@@ -250,7 +183,7 @@
             </div>
 
             {{-- Donate Section --}}
-            <div class="flex flex-col md:flex-row bg-white p-8  shadow-md items-center scroll-animate">
+            <div class="flex flex-col md:flex-row bg-white p-8 shadow-md items-center scroll-animate mt-8">
                 {{-- Image --}}
                 <div class="md:w-1/2 mb-6 md:mb-0">
                     <img src="{{ asset('images/donate-image.jpg') }}" alt="Donate" class="rounded-lg shadow-md w-full h-80 object-cover">
@@ -268,57 +201,56 @@
                     </a>
                 </div>
             </div>
-
+        </div>
     </div>
-</div>
 
-<style>
-    /* Animation classes */
-    .animate-fade-in-left {
-        animation: fadeInLeft 1.2s ease-out;
-    }
-    
-    .animate-fade-in-right {
-        animation: fadeInRight 1.2s ease-out;
-    }
-    
-    .scroll-animate {
-        opacity: 0;
-        transform: translateY(50px);
-        transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-        will-change: opacity, transform;
-    }
-    
-    .scroll-animate.animate {
-        opacity: 1;
-        transform: translateY(0);
-    }
-    
-    @keyframes fadeInLeft {
-        from {
+    <style>
+        /* Animation classes */
+        .animate-fade-in-left {
+            animation: fadeInLeft 1.2s ease-out;
+        }
+        
+        .animate-fade-in-right {
+            animation: fadeInRight 1.2s ease-out;
+        }
+        
+        .scroll-animate {
             opacity: 0;
-            transform: translateX(-100px);
+            transform: translateY(50px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            will-change: opacity, transform;
         }
-        to {
+        
+        .scroll-animate.animate {
             opacity: 1;
-            transform: translateX(0);
+            transform: translateY(0);
         }
-    }
-    
-    @keyframes fadeInRight {
-        from {
-            opacity: 0;
-            transform: translateX(100px);
+        
+        @keyframes fadeInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-100px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
         }
-        to {
-            opacity: 1;
-            transform: translateX(0);
+        
+        @keyframes fadeInRight {
+            from {
+                opacity: 0;
+                transform: translateX(100px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
         }
-    }
-</style>
+    </style>
 
     <script>
-    // Favorite button functionality
+        // Favorite button functionality
         document.querySelectorAll('.favorite-btn').forEach(button => {
             button.addEventListener('click', function() {
                 // Toggle the favorite icon
@@ -335,41 +267,39 @@
             });
         });
 
-    // Improved scroll animation functionality
-    function handleScrollAnimation() {
-        const elements = document.querySelectorAll('.scroll-animate');
-        
-        elements.forEach(element => {
-            const rect = element.getBoundingClientRect();
-            const windowHeight = window.innerHeight;
+        // Improved scroll animation functionality
+        function handleScrollAnimation() {
+            const elements = document.querySelectorAll('.scroll-animate');
             
-            // Check if element is in viewport (80% up the screen)
-            if (rect.top < windowHeight * 0.8) {
-                element.classList.add('animate');
-            } else {
-                // Remove animate class when element goes out of view
-                element.classList.remove('animate');
-            }
+            elements.forEach(element => {
+                const rect = element.getBoundingClientRect();
+                const windowHeight = window.innerHeight;
+                
+                // Check if element is in viewport (80% up the screen)
+                if (rect.top < windowHeight * 0.8) {
+                    element.classList.add('animate');
+                } else {
+                    // Remove animate class when element goes out of view
+                    element.classList.remove('animate');
+                }
+            });
+        }
+
+        // Initialize animations on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Run once on load
+            handleScrollAnimation();
+            
+            // Add scroll event listener
+            window.addEventListener('scroll', handleScrollAnimation);
+            
+            // Also run after a short delay to catch any missed elements
+            setTimeout(handleScrollAnimation, 100);
         });
-    }
 
-    // Initialize animations on page load
-    document.addEventListener('DOMContentLoaded', function() {
-        // Run once on load
-        handleScrollAnimation();
-        
-        // Add scroll event listener
-        window.addEventListener('scroll', handleScrollAnimation);
-        
-        // Also run after a short delay to catch any missed elements
-        setTimeout(handleScrollAnimation, 100);
-    });
-
-    // Fallback: also run on window load
-    window.addEventListener('load', handleScrollAnimation);
+        // Fallback: also run on window load
+        window.addEventListener('load', handleScrollAnimation);
     </script>
-    
-    </div>
 </x-app-layout>
 
 
