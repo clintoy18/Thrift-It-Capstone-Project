@@ -23,7 +23,7 @@ class ProductSeeder extends Seeder
             'image' => 'products_images/sample.jpg',
             'qty' => '1',
             'approval_status' => 'approved',
-            'listingtype' => 'for sale',
+            'segment_id' =>'1',
             'status' => 'available',
             ]);
     }

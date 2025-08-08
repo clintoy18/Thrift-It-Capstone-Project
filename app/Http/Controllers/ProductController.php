@@ -12,6 +12,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use App\Services\ProductService;
+use App\Models\Segment;
 
 
 
@@ -33,7 +34,8 @@ class ProductController extends Controller
     public function create(): View
     {
         $categories = Categories::all(); 
-        return view('products.create', compact('categories'));
+        $segments = Segment::all(); 
+        return view('products.create', compact('categories', 'segments'));
     }
 
     public function store(StoreProductRequest $request): RedirectResponse
@@ -41,15 +43,23 @@ class ProductController extends Controller
          $validated = $request->validated();
          $validated['user_id'] = Auth::id();
          $this->productService->createProduct($validated,$request->file('image')?? null);
-           
+        // dd($validated);    
          return redirect()->route('products.index')->with('success', 'Product created successfully!');
         }
 
     public function edit(Product $product): View
     {
         $categories = Categories::all();
-        return view('products.edit', ['product' => $product, 'categories' => $categories]);
+        $segments = Segment::all();
+        
+
+        return view('products.edit', [
+            'product' => $product,
+            'categories' => $categories,
+            'segments' => $segments,
+        ]);
     }
+
 
     public function update(UpdateProductRequest $request, Product $product)
     {

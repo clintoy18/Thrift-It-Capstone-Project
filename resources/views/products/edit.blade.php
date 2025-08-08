@@ -30,6 +30,21 @@
                             @endforeach
                         </select>
                     </div>
+                  <!-- Segment -->
+                    <div class="mt-4">
+                        <x-input-label for="segment_id" :value="__('Segment')" />
+                        <select name="segment_id" id="segment_id" class="block w-full mt-1 p-2 border rounded" required>
+                            <option value="" disabled {{ old('segment_id', $product->segment_id ?? '') === '' ? 'selected' : '' }}>Select a segment</option>
+                            @foreach ($segments as $segment)
+                                <option value="{{ $segment->id }}" {{ old('segment_id', $product->segment_id ?? '') == $segment->id ? 'selected' : '' }}>
+                                    {{ ucfirst($segment->name) }}
+                                </option>
+                            @endforeach
+                        </select>
+                        @error('segment_id')
+                            <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
 
                     <!-- Price -->
                     <div class="mt-4">
