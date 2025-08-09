@@ -1,3 +1,5 @@
+@props(['containerClass' => 'max-w-md', 'reverseColumns' => false])
+
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
@@ -14,28 +16,116 @@
   <!-- Scripts -->
   @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="font-sans antialiased">
+<body class="font-sans antialiased ">
 
   <!-- Full-height 2-column grid -->
-  <div class="h-screen grid grid-cols-1 md:grid-cols-2">
+  <div class="h-screen grid grid-cols-1 md:grid-cols-2 ">
 
-    <!-- LEFT COLUMN: Logo + Auth Card -->
-    <div class="flex flex-col justify-center items-center px-8 py-12 bg-[#D9D9D9]">
-     
-      <div class="w-full max-w-md bg-white p-6 rounded-lg shadow-md">
-        {{ $slot }}
+    @if($reverseColumns)
+      <!-- RIGHT COLUMN: Full-height Background Image (Rendered first if reverseColumns is true) -->
+      <div class="hidden md:block h-[125vh] ">
+        <img
+          src="{{ asset('images/loginbg.png') }}"
+          alt="Login background"
+          class="w-full h-[125vh]  object-cover object-center"
+        >
       </div>
-    </div>
 
-    <!-- RIGHT COLUMN: Full-height Background Image -->
-    <div class="hidden md:block h-screen">
-      <img
-        src="{{ asset('storage/bgimages/login.png') }}"
-        alt="Login background"
-        class="w-full h-full object-cover object-center"
-      >
-    </div>
+       <!-- LEFT COLUMN: Logo + Auth Card (Default order) -->
+       <div class="flex flex-col justify-center items-center px-8 py-12 relative" style="background-color: #CBBC968F;">
+        <!-- Background Images at Top Right -->
+        <div class="absolute bottom-0 left-0 z-0">
+          <img src="{{ asset('images/Ellipse 25.png') }}" alt="Background decoration" class="w-50 h-100 opacity-60">
+        </div>
+        <div class="absolute bottom-0 left-0 z-0">
+          <img src="{{ asset('images/Ellipse 26.png') }}" alt="Background decoration" class="w-45 h-90 opacity-50">
+        </div>
+        <div class="absolute bottom-0 left-0 z-0">
+          <img src="{{ asset('images/Ellipse 27.png') }}" alt="Background decoration" class="w-45 h-80 opacity-40">
+        </div>
+        
+        <!-- Background Images at Top Right -->
+        <div class="absolute top-4 right-4 z-0">
+          <img src="{{ asset('images/Ellipse 25.png') }}" alt="Background decoration" class="w-32 h-32 opacity-60 transform rotate-0">
+        </div>
+        <div class="absolute top-12 right-12 z-0">
+          <img src="{{ asset('images/Ellipse 26.png') }}" alt="Background decoration" class="w-24 h-24 opacity-50 transform -rotate-6">
+        </div>
+        <div class="absolute top-8 right-20 z-0">
+          <img src="{{ asset('images/Ellipse 27.png') }}" alt="Background decoration" class="w-20 h-20 opacity-40 transform rotate-45">
+        </div>
 
+        <a href="{{ Auth::check() ? (Auth::user()->role === 2 ? route('admin.dashboard') : (Auth::user()->role === 1 ? route('upcycler') : route('dashboard'))) : url('/') }}" class="flex-shrink-0 mb-8 relative z-10">
+                  <img src="{{ asset('images/logo.png') }}" alt="Thrift-IT Logo" class="h-8 w-[120px] h-[100px]">
+         </a>
+        <div {{ $attributes->merge(['class' => 'w-full '.$containerClass.' bg-white p-4 rounded-lg shadow-md relative z-10']) }}>
+          {{ $slot }}
+        </div>
+      </div>
+
+    @else
+      <!-- LEFT COLUMN: Logo + Auth Card (Default order) -->
+      <div class="flex flex-col justify-center items-center px-8 py-12 relative"   style="background: linear-gradient(to bottom, 
+        #F4F2ED,
+        #EFE7DB,
+        #FAF8F5,
+        #E5D2B8,
+        #DEC19C,
+        #D7B384,
+        #CFA268,
+        #CD9C5E,
+        #CC9B5C,
+        #CA9654
+      );" >
+        <!-- Background Images at Bottom Left -->
+        <div class="absolute bottom-0 left-0 z-0">
+          <img src="{{ asset('images/Ellipse 25.png') }}" alt="Background decoration" class="w-45 h-100  ">
+        </div>
+        <div class="absolute bottom-0 left-0 z-0">
+          <img src="{{ asset('images/Ellipse 26.png') }}" alt="Background decoration" class="w-45 h-90 ">
+        </div>
+        <div class="absolute bottom-0 left-0 z-0">
+          <img src="{{ asset('images/Ellipse 27.png') }}" alt="Background decoration" class="w-45 h-80 ">
+        </div>  
+        
+        <!-- Background Images at Top Right -->
+        <div class="absolute top-0 right-0 z-0">
+    <img src="{{ asset('images/Ellipse 25.png') }}" 
+         alt="Background decoration" 
+         class="w-[500px] h-50 transform -rotate-[180deg]">
+</div>
+
+<div class="absolute top-0 right-0 z-0">
+    <img src="{{ asset('images/Ellipse 26.png') }}" 
+         alt="Background decoration" 
+         class="w-[450px] h-50 transform -rotate-[180deg]">
+</div>
+
+<div class="absolute top-0 right-0 z-0">
+    <img src="{{ asset('images/Ellipse 27.png') }}" 
+         alt="Background decoration" 
+         class="w-[400px] h-30 transform -rotate-[180deg]">
+</div>
+
+
+        <a href="{{ Auth::check() ? (Auth::user()->role === 2 ? route('admin.dashboard') : (Auth::user()->role === 1 ? route('upcycler') : route('dashboard'))) : url('/') }}" class="flex-shrink-0 mb-8 relative z-10">
+                  <img src="{{ asset('images/logo.png') }}" alt="Thrift-IT Logo" class="h-8 w-[120px] h-[100px]">
+         </a>
+        <div {{ $attributes->merge(['class' => 'w-full '.$containerClass.' bg-white p-4 rounded-lg shadow-md relative z-10']) }}>
+          {{ $slot }}
+        </div>
+      </div>
+
+      <!-- RIGHT COLUMN: Full-height Background Image (Default order) -->
+      <div class="hidden md:block h-screen ">
+        <img
+          src="{{ asset('/images/loginbg.png') }}"
+          alt="Login background"
+          class="w-full h-screen  object-cover object-center"
+        >
+      </div>
+    @endif
+  
   </div>
 
 </body>
