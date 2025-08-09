@@ -18,9 +18,7 @@ class LandingPageController extends Controller
     }
 
     public function index()
-    {
-  
-       
+    { 
         $products = Product::with(['category', 'user'])->where('status','available')->get();
         $donations = Donation::with(['user', 'category'])->where('status', 'available')->get();
         $segments = Segment::all();
