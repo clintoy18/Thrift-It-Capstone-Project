@@ -1,35 +1,90 @@
-<x-guest-layout>
+<x-guest-layout containerClass="max-w-[400px]" reverseColumns="true">
+    {{-- Removed wrapper for smaller form size --}}
+    <div class="max-w-[300px] mx-auto"> 
     <form method="POST" action="{{ route('register') }}">
         @csrf
+        <div class="mb-4 text-center">
+            <h1 class="text-3xl font-bold text-black dark:text-black">Register</h1>
+        </div>
         <!-- Name -->
-        <div>
-            <x-input-label for="fname" :value="__('First Name')" />
-            <x-text-input id="fname" class="block mt-1 w-full" type="text" name="fname" :value="old('fname')" required autofocus autocomplete="fname" />
-            <x-input-error :messages="$errors->get('name')" class="mt-2" />
-        </div>
-        <div>
-            <x-input-label for="lname" :value="__('Last Name')" />
-            <x-text-input id="lname" class="block mt-1 w-full" type="text" name="lname" :value="old('lname')" required autofocus autocomplete="lname" />
-            <x-input-error :messages="$errors->get('lname')" class="mt-2" />
-        </div>
+ <div class="flex flex-col items-center mt-8" >
+    <x-input-label for="fname" />
+    <x-text-input 
+        id="fname" 
+        class="w-[295px] h-[40px] t-[405px] placeholder:text-[15px] placeholder:leading-[24px] placeholder:text-base placeholder:font-poppins" 
+        type="text" 
+        name="fname" 
+        placeholder="First Name"
+        :value="old('fname')" 
+        required 
+        autofocus 
+        autocomplete="fname" 
+    />
+    <x-input-error :messages="$errors->get('fname')" class="mt-2" />
+</div>
+
+<div class="flex flex-col items-center mt-2"> 
+    <x-input-label for="lname" />
+    <x-text-input 
+        id="lname" 
+        class="w-[295px] h-[40px] t-[405px] placeholder:text-[15px] placeholder:leading-[24px] placeholder:text-base placeholder:font-poppins"  
+        type="text" 
+        name="lname" 
+        placeholder="Last Name"
+        :value="old('lname')"
+        required 
+        autocomplete="lname" 
+    />
+    <x-input-error :messages="$errors->get('lname')" class="mt-2" />
+</div>
 
 
         <!-- Email Address -->
-        <div class="mt-4">
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
-        </div>
-            <!-- Role Selection -->
-        <div class="mt-4">
-            <x-input-label for="role" :value="__('Role')" />
-            <select id="role" name="role" class="block mt-1 w-full border-gray-300 rounded-md shadow-sm">
-                <option value="0" {{ old('role') == 0 ? 'selected' : '' }}>User</option>
-                <option value="1" {{ old('role') == 1 ? 'selected' : '' }}>Upcycler</option>
-            </select>
-            <x-input-error :messages="$errors->get('role')" class="mt-2" />
-        </div>
+     <div class="flex flex-col items-center mt-2"> 
+            <x-input-label for="email" />
+            <x-text-input 
+                id="email" 
+                class="w-[295px] h-[40px] t-[405px] placeholder:text-[15px] placeholder:leading-[24px] placeholder:text-base placeholder:font-poppins"  
+                type="text" 
+                name="email" 
+                placeholder="Email"
+                :value="old('email')"
+                required 
+                autocomplete="username" 
+            />
+    <x-input-error :messages="$errors->get('email')" class="mt-2" />
+</div>
+        
+        <!-- Role Selection -->
+        <div class="flex flex-col items-center mt-2">
+    <x-input-label for="role"  />
 
+    <select 
+    id="role" 
+    name="role" 
+    class="w-[295px] h-[40px] t-[405px] text-[15px] leading-[24px] text-base font-poppins
+           border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-full shadow-sm"
+    required
+>
+    <option  
+        class="text-gray-400 text-[15px] leading-[24px] text-base font-poppins"
+        value="" 
+        disabled 
+        {{ old('role') === null || old('role') === '' ? 'selected' : '' }}
+    >
+        Select Role
+    </option>
+    <option value="0" {{ old('role') == '0' ? 'selected' : '' }}>User</option>
+    <option value="1" {{ old('role') == '1' ? 'selected' : '' }}>Upcycler</option>
+</select>
+
+<x-input-error :messages="$errors->get('role')" class="mt-2" />
+
+</div>
+
+
+
+  
         <!-- Password -->
         <div class="mt-4">
             <x-input-label for="password" :value="__('Password')" />
@@ -53,16 +108,17 @@
             <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
         </div>
         <div class="mt-4">
-            <x-primary-button class="w-full flex items-center justify-center">
+        <button type="submit" class="w-full flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-[#B59F84] hover:bg-[#a08e77] hover:scale-105 transition-all duration-200 ">
               <i class="fas fa-user-plus mr-2"></i>
               {{ __('Register') }}
-            </x-primary-button>
+            </button>
           </div>
           
         <div class="flex items-center justify-end mt-4">
-            <a class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800" href="{{ route('login') }}">
+            <a class="underline text-sm text-[#B59F84] hover:text-[#a08e77] transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-[#B59F84] focus:ring-offset-2" href="{{ route('login') }}">
                 {{ __('Already registered?') }}
             </a>
         </div>
     </form>
+</div>
 </x-guest-layout>
