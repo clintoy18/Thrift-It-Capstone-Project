@@ -166,20 +166,14 @@
                             </div>
 
                             <div>
-                                <label for="price" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Price (USD)</label>
+                                <label for="price" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Price (PHP)</label>
                                 <input type="number" step="0.01" id="price" name="price" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-gray-500 focus:ring-gray-500" placeholder="Enter price" value="{{ old('price') }}" required>
                                 @error('price')
                                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                                 @enderror
                             </div>
 
-                            <div>
-                                <label for="stock" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Stock Quantity</label>
-                                <input type="number" id="stock" name="stock" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-gray-500 focus:ring-gray-500" placeholder="Enter stock quantity" value="{{ old('stock') }}" required>
-                                @error('stock')
-                                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                                @enderror
-                            </div>
+                            
                         </div>
 
                         <div>

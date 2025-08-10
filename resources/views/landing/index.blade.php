@@ -163,7 +163,50 @@
             </div>
         </div>
     </div>
+    <div class="py-16 bg-[#F4F2ED]">
+        <div class="mx-auto px-4 sm:px-6 lg:px-8">
+            {{-- Upcycling Section --}}
+            <div class="flex flex-col md:flex-row bg-white p-8 shadow-md items-center scroll-animate">
+                {{-- Text Content --}}
+                <div class="md:w-1/2 md:pr-8 mb-6 md:mb-0">
+                    <h2 class="text-3xl font-bold text-[#634600] mb-4 leading-tight">
+                        Revamp Your Wardrobe with Upcycling: Discover Sustainable Style <span class="text-yellow-500">✨</span>
+                    </h2>
+                    <p class="text-[#786126] mb-6 text-lg">
+                        Fashion with a Purpose—Shop, Upcycle, and Donate to Create a Sustainable Tomorrow.
+                    </p>
+                    <a href="#" class="inline-block bg-[#B59F84] text-white px-8 py-3 rounded-md text-lg font-semibold hover:bg-[#a08e77] hover:scale-105 transition-all duration-200">
+                        Upcycle Now
+                    </a>
+                </div>
+                {{-- Image --}}
+                <div class="md:w-1/2">
+                    <img src="{{ asset('images/upcycling-image.jpg') }}" alt="Upcycling" class="rounded-lg shadow-md w-full h-80 object-cover">
+                </div>
+            </div>
 
+            {{-- Donate Section --}}
+            <div class="flex flex-col md:flex-row bg-white p-8 shadow-md items-center scroll-animate mt-8">
+                {{-- Image --}}
+                <div class="md:w-1/2 mb-6 md:mb-0">
+                    <img src="{{ asset('images/donate-image.jpg') }}" alt="Donate" class="rounded-lg shadow-md w-full h-80 object-cover">
+                </div>
+                {{-- Text Content --}}
+                <div class="md:w-1/2 md:pl-8">
+                    <h2 class="text-3xl font-bold text-[#634600] mb-4 leading-tight">
+                        Style with a Purpose: Donate Your Pre-Loved Clothes and Create a Sustainable Future <span class="text-yellow-500">😊</span>
+                    </h2>
+                    <p class="text-[#786126] mb-6 text-lg">
+                        Fashion with a Purpose—Shop, Upcycle, and Donate to Create a Sustainable Tomorrow.
+                    </p>
+                    <a href="#" class="inline-block bg-[#B59F84] text-white px-8 py-3 rounded-md text-lg font-semibold hover:bg-[#a08e77] hover:scale-105 transition-all duration-200">
+                        Donate Now
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
     <script>
         document.querySelectorAll('.favorite-btn').forEach(button => {
             button.addEventListener('click', function() {

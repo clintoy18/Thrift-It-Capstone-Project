@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\Product;
+use App\Models\Segment;
 
 class ProductRepository
 {
@@ -39,6 +40,14 @@ class ProductRepository
     public function findWithRelations($id)
     {
         return Product::with(['user','category','comments'])->findOrFail($id);
+    }
+
+    public function getApproveProducts(Segment $segment)
+    {
+        return $segment->products()
+            ->where('approval_status', 'approved')
+            ->with(['category'])
+            ->get();
     }
 
 }
