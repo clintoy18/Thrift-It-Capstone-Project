@@ -3,20 +3,22 @@
 namespace App\Http\Controllers;
 
 use App\Models\Segment;
-use Illuminate\Http\Request;
+use App\Services\ProductService;
 
 class SegmentController extends Controller
 {
-    /**
-     * Display the specified segment.
-     */
+
+
+    protected $productService;
+    
+    public function __construct(ProductService $productService)
+    {
+        $this->productService = $productService;
+    }
+
     public function show(Segment $segment)
     {
-        // Only fetch approved products for the segment
-        $products = $segment->products()
-            ->where('approval_status', 'approved')
-            ->with(['category'])
-            ->get();
+        $products = $this->productService->getApprovedProductsBySegment($segment);
 
         return view('segments.show', compact('segment', 'products'));
     }

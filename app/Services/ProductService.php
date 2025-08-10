@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Repositories\ProductRepository;
 use App\Models\Product;
+use App\Models\Segment;
 use Illuminate\Support\Facades\Storage;
 
 class ProductService
@@ -61,5 +62,10 @@ class ProductService
     {
         // Add business logic here if needed
         return $this->productRepository->delete($product);
+    }
+
+    public function getApprovedProductsBySegment(Segment $segment)
+    {
+        return $this->productRepository->getApproveProducts($segment);
     }
 }
