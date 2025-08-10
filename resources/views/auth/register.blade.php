@@ -1,11 +1,14 @@
-<x-guest-layout containerClass="max-w-[400px]" reverseColumns="true">
+<x-guest-layout containerClass="max-w-[413px]" reverseColumns="true">
     {{-- Removed wrapper for smaller form size --}}
     <div class="max-w-[300px] mx-auto"> 
     <form method="POST" action="{{ route('register') }}">
         @csrf
-        <div class="mb-4 text-center">
-            <h1 class="text-3xl font-bold text-black dark:text-black">Register</h1>
+        <div class="flex flex-col items-center mt-8">
+            <h1 class="text-3xl font-poppins font-bold text-black dark:text-black">
+                Sign Up
+            </h1>
         </div>
+
         <!-- Name -->
  <div class="flex flex-col items-center mt-8" >
     <x-input-label for="fname" />
@@ -23,7 +26,7 @@
     <x-input-error :messages="$errors->get('fname')" class="mt-2" />
 </div>
 
-<div class="flex flex-col items-center mt-2"> 
+<div class="flex flex-col items-center mt-4"> 
     <x-input-label for="lname" />
     <x-text-input 
         id="lname" 
@@ -40,7 +43,7 @@
 
 
         <!-- Email Address -->
-     <div class="flex flex-col items-center mt-2"> 
+     <div class="flex flex-col items-center mt-4"> 
             <x-input-label for="email" />
             <x-text-input 
                 id="email" 
@@ -54,16 +57,16 @@
             />
     <x-input-error :messages="$errors->get('email')" class="mt-2" />
 </div>
-        
+            
         <!-- Role Selection -->
-        <div class="flex flex-col items-center mt-2">
+        <div class="flex flex-col items-center mt-4">
     <x-input-label for="role"  />
 
     <select 
     id="role" 
     name="role" 
     class="w-[295px] h-[40px] t-[405px] text-[15px] leading-[24px] text-base font-poppins
-           border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-full shadow-sm"
+           focus:border-[#B59F84]  focus:ring-2 focus:ring-[#B59F84] rounded-full shadow-sm"
     required
 >
     <option  
@@ -86,29 +89,43 @@
 
   
         <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
+    
+        <div class="flex flex-col items-center mt-4">
+            <x-input-label for="password"  />
 
-            <x-text-input id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="new-password" />
+            <x-text-input 
+            id="password" 
+            class="w-[295px] h-[40px] t-[405px] placeholder:text-[15px] placeholder:leading-[24px]
+            placeholder:text-base placeholder:font-poppins"     
+            type="password"
+            name="password"
+            placeholder="Password"
+            :value="old('Password')"
+            required 
+            autocomplete="new-password" />
 
             <x-input-error :messages="$errors->get('password')" class="mt-2" />
         </div>
 
         <!-- Confirm Password -->
-        <div class="mt-4">
-            <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
+        <div class="flex flex-col items-center mt-4">
+            <x-input-label for="password_confirmation"  />
 
-            <x-text-input id="password_confirmation" class="block mt-1 w-full"
-                            type="password"
-                            name="password_confirmation" required autocomplete="new-password" />
+            <x-text-input 
+            id="password_confirmation" 
+            class="w-[295px] h-[40px] t-[405px] placeholder:text-[15px] placeholder:leading-[24px]
+            placeholder:text-base placeholder:font-poppins"
+            type="password"
+            name="password_confirmation" 
+            placeholder="Confirm Password"
+            :value="old('Confirm Password')"
+            required 
+            autocomplete="new-password" />
 
             <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
         </div>
-        <div class="mt-4">
-        <button type="submit" class="w-full flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-[#B59F84] hover:bg-[#a08e77] hover:scale-105 transition-all duration-200 ">
+        <div class="flex flex-col items-center mt-7">
+        <button type="submit" class="w-full flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-[25px] shadow-sm text-white bg-[#B59F84] hover:bg-[#a08e77] hover:scale-105 transition-all duration-200 ">
               <i class="fas fa-user-plus mr-2"></i>
               {{ __('Register') }}
             </button>
