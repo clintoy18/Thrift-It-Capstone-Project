@@ -33,27 +33,30 @@
       </div>
 
        <!-- LEFT COLUMN: Logo + Auth Card (Default order) -->
-       <div class="flex flex-col justify-center items-center px-8 py-12 relative" style="background-color: #CBBC968F;">
+       <div class="flex flex-col justify-center items-center px-8 py-12 relative" style="background: linear-gradient(to bottom, 
+       #F4F2ED,
+       #C68A40
+      );">
         <!-- Background Images at Top Right -->
-        <div class="absolute bottom-0 left-0 z-0">
-          <img src="{{ asset('images/Ellipse 25.png') }}" alt="Background decoration" class="w-50 h-100 opacity-60">
+        <div class="absolute bottom-0 right-0 z-0">
+          <img src="{{ asset('images/Ellipse 31.png') }}" alt="Background decoration" class="w-50 h-100 ">
         </div>
-        <div class="absolute bottom-0 left-0 z-0">
-          <img src="{{ asset('images/Ellipse 26.png') }}" alt="Background decoration" class="w-45 h-90 opacity-50">
+        <div class="absolute bottom-0 right-0 z-0">
+          <img src="{{ asset('images/Ellipse 30x.png') }}" alt="Background decoration" class="w-45 h-90 ">
         </div>
-        <div class="absolute bottom-0 left-0 z-0">
-          <img src="{{ asset('images/Ellipse 27.png') }}" alt="Background decoration" class="w-45 h-80 opacity-40">
+        <div class="absolute bottom-0 right-0 z-0">
+          <img src="{{ asset('images/Ellipse 29x.png') }}" alt="Background decoration" class="w-45 h-100 ">
         </div>
         
         <!-- Background Images at Top Right -->
-        <div class="absolute top-4 right-4 z-0">
-          <img src="{{ asset('images/Ellipse 25.png') }}" alt="Background decoration" class="w-32 h-32 opacity-60 transform rotate-0">
+        <div class="absolute top-0 left-0 z-0">
+          <img src="{{ asset('images/Ellipse 31.png') }}" alt="Background decoration" class="w-50 h-100 opacity-60 transform -rotate-[180deg]">
         </div>
-        <div class="absolute top-12 right-12 z-0">
-          <img src="{{ asset('images/Ellipse 26.png') }}" alt="Background decoration" class="w-24 h-24 opacity-50 transform -rotate-6">
+        <div class="absolute top-0 left-0 z-0">
+          <img src="{{ asset('images/Ellipse 30x.png') }}" alt="Background decoration" class="w-45 h-90 opacity-50 transform -rotate-[180deg]">
         </div>
-        <div class="absolute top-8 right-20 z-0">
-          <img src="{{ asset('images/Ellipse 27.png') }}" alt="Background decoration" class="w-20 h-20 opacity-40 transform rotate-45">
+        <div class="absolute top-0 left-0 z-0">
+          <img src="{{ asset('images/Ellipse 29x.png') }}" alt="Background decoration" class="w-45 h-100 opacity-40 transform -rotate-[180deg]">
         </div>
 
         <a href="{{ Auth::check() ? (Auth::user()->role === 2 ? route('admin.dashboard') : (Auth::user()->role === 1 ? route('upcycler') : route('dashboard'))) : url('/') }}" class="flex-shrink-0 mb-8 relative z-10">
