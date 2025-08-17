@@ -20,15 +20,23 @@ class UserSeeder extends Seeder
             'lname' => 'User',
             'email' => 'admin@example.com',
             'password' => Hash::make('password123'),
-            'role' => 'admin',
+            'role' => '2',
         ]);
 
         User::create([
+            'fname' => 'Upcycler',
+            'lname' => 'User',
+            'email' => 'upcycler@example.com',
+            'password' => Hash::make('password123'),
+            'role' => '1',
+        ]);
+
+          User::create([
             'fname' => 'Regular',
             'lname' => 'User',
             'email' => 'user@example.com',
             'password' => Hash::make('password123'),
-            'role' => 'user',
+            'role' => '0',
         ]);
     }
 }
