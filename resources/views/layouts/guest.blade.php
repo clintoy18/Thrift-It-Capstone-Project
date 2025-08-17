@@ -26,7 +26,7 @@
       <!-- RIGHT COLUMN: Full-height Background Image (Rendered first if reverseColumns is true) -->
       <div class="hidden md:block h-[125vh] ">
         <img
-          src="{{ asset('images/loginbg.png') }}"
+          src="{{ asset('images/registerbg.png') }}"
           alt="Login background"
           class="w-full h-[125vh]  object-cover object-center"
         >
