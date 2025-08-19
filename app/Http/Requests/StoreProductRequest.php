@@ -28,7 +28,7 @@ class StoreProductRequest extends FormRequest
             'price' => 'required|numeric|min:0',
             'approval_status' => 'in:approved,pending,rejected',
             'size' => 'required|string',
-            'image' => 'nullable|image|max:2048',
+            'image' => 'required|image|max:2048',
             'qty' => 'integer',
             'status' => 'required|in:available,sold',
             'segment_id' => 'required|exists:segments,id', 
