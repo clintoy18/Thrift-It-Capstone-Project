@@ -32,6 +32,7 @@ class StoreProductRequest extends FormRequest
             'qty' => 'integer',
             'status' => 'required|in:available,sold',
             'segment_id' => 'required|exists:segments,id', 
+            'barangay_id'   => 'required|exists:barangays,id',
         ];
     }
 }

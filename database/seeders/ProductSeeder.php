@@ -25,6 +25,7 @@ class ProductSeeder extends Seeder
             'approval_status' => 'approved',
             'segment_id' =>'1',
             'status' => 'available',
+            'barangay_id' => '1', 
             ]);
     }
 }
