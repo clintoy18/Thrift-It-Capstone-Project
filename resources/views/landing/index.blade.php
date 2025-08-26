@@ -165,7 +165,7 @@
                                 </div>
                             @endforeach
                         </div>
-                    @else
+                    @elsedaszQ11QWAw
                         <x-empty-message message="No active donations found." link="{{ route('donations.create') }}" />
                     @endif
                 </div>

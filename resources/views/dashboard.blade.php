@@ -130,7 +130,7 @@
                     @if($donations->count() > 0)
                         <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-4 md:gap-6">
                             @foreach ($donations as $donation)
-                                <div class="group relative bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition duration-200 border border-[#D9D9D9] dark:border-gray-700">
+                                <div class="group relative  dark:bg-gray-800 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition duration-200 border border-[#D9D9D9] dark:border-gray-700">
                                     <a href="{{ route('donations.show', $donation->id) }}" class="block h-full">
                                         @if($donation->listingtype === 'for donation')
                                             <div class="absolute top-1 left-1 z-10 bg-[#D9D9D9] text-gray-700 text-[10px] sm:text-xs px-1.5 py-0.5 sm:px-2 sm:py-1 rounded-full">
@@ -175,46 +175,56 @@
     <div class="py-16 bg-[#F4F2ED]">
         <div class="mx-auto px-4 sm:px-6 lg:px-8">
             {{-- Upcycling Section --}}
-            <div class="flex flex-col md:flex-row bg-white p-8 shadow-md items-center scroll-animate">
+            <div class="flex flex-col md:flex-row  p-8  items-center scroll-animate">
                 {{-- Text Content --}}
-                <div class="md:w-1/2 md:pr-8 mb-6 md:mb-0">
-                    <h2 class="text-3xl font-bold text-[#634600] mb-4 leading-tight">
-                        Revamp Your Wardrobe with Upcycling: Discover Sustainable Style <span class="text-yellow-500">✨</span>
-                    </h2>
+                <div class="md:w-[800px] md:pr-4 mb-3 md:mb-0">
+                <h2 class="text-3xl font-bold text-[#634600] mb-2 leading-tight" 
+                    style="font-family: Poppins; font-weight: 800; font-size: 40px; line-height: 100%; letter-spacing: 5%;">
+                    Revamp Your Wardrobe With 
+                    Upcycling: Discover Sustainable  
+                     Style
+                    <span class="text-yellow-500">😊</span>
+                </h2>
+
                     <p class="text-[#786126] mb-6 text-lg">
                         Fashion with a Purpose—Shop, Upcycle, and Donate to Create a Sustainable Tomorrow.
                     </p>
-                    <a href="#" class="inline-block bg-[#B59F84] text-white px-8 py-3 rounded-md text-lg font-semibold hover:bg-[#a08e77] hover:scale-105 transition-all duration-200">
-                        Upcycle Now
-                    </a>
+                    <a href="#" class="inline-flex items-center justify-center bg-[#816849] text-white px-[15px] leading-[48px] h-[40px] rounded-[20px] w-[140px] text-lg font-semibold hover:bg-[#a08e77] hover:scale-105 transition-all duration-200">
+                            Upcycle Now
+                     </a>
                 </div>
                 {{-- Image --}}
-                <div class="md:w-1/2">
+                <div class="md:w-1/3 flex flex-col relative left-[100px]">
                     <img src="{{ asset('images/upcycling-image.jpg') }}" alt="Upcycling" class="rounded-lg shadow-md w-full h-80 object-cover">
                 </div>
             </div>
 
             {{-- Donate Section --}}
-            <div class="flex flex-col md:flex-row bg-white p-8 shadow-md items-center scroll-animate mt-8">
+            <div class="flex flex-col md:flex-row  items-center scroll-animate ">
                 {{-- Image --}}
-                <div class="md:w-1/2 mb-6 md:mb-0">
+                <div class="md:w-1/3  flex flex-col relative right-[-30px] ">
                     <img src="{{ asset('images/donate-image.jpg') }}" alt="Donate" class="rounded-lg shadow-md w-full h-80 object-cover">
                 </div>
                 {{-- Text Content --}}
-                <div class="md:w-1/2 md:pl-8">
-                    <h2 class="text-3xl font-bold text-[#634600] mb-4 leading-tight">
-                        Style with a Purpose: Donate Your Pre-Loved Clothes and Create a Sustainable Future <span class="text-yellow-500">😊</span>
+                <div class="md:w-[800px] flex flex-col relative md:pr-4 mb-3 md:mb-0  left-[200px] ">
+                    <h2 class="text-3xl font-bold text-[#634600] mb-2 leading-tight" 
+                        style="font-family: Poppins; font-weight: 800; font-size: 40px; line-height: 100%; letter-spacing: %;">
+                        Style with a Purpose: Donate Your 
+                        Pre-Loved Clothes and Create a 
+                        Sustainable Future 
+                        <span class="text-yellow-500">😊</span>
                     </h2>
                     <p class="text-[#786126] mb-6 text-lg">
                         Fashion with a Purpose—Shop, Upcycle, and Donate to Create a Sustainable Tomorrow.
                     </p>
-                    <a href="#" class="inline-block bg-[#B59F84] text-white px-8 py-3 rounded-md text-lg font-semibold hover:bg-[#a08e77] hover:scale-105 transition-all duration-200">
+                    <a href="#" class="inline-flex items-center justify-center bg-[#816849] text-white px-[15px] leading-[48px] h-[40px] rounded-[20px] w-[140px] text-lg font-semibold hover:bg-[#a08e77] hover:scale-105 transition-all duration-200">
                         Donate Now
                     </a>
                 </div>
-            </div>
+            </div>                                     
         </div>
     </div>
+    
     
     <script>
         document.querySelectorAll('.favorite-btn').forEach(button => {
@@ -234,3 +244,4 @@
         });
     </script>
 </x-app-layout>
+    
