@@ -27,7 +27,7 @@
                 
                 <!-- Image for Mobile -->
                 <div class="mt-2 relative rounded-lg overflow-hidden">
-                    <img src="{{ asset('storage/bgimages/jumbotron.png') }}" 
+                    <img src="{{ asset('images/image152.png') }}" 
                         alt="Thrift-IT Sustainable Fashion" 
                         class="w-full max-h-[180px] object-contain">
                     <div class="absolute bottom-2 right-2 bg-white px-2 py-0.5 rounded-full text-xs text-red-600 font-medium shadow-md">
@@ -38,31 +38,40 @@
             
             <!-- Desktop layout (side by side) -->
             <div class="hidden md:flex md:flex-row md:items-center">
-                <!-- Text Content for Desktop -->
-                <div class="p-3 md:w-1/2 font-poppins">
-                    <h1 class="text-5xl lg:text-4xl font-bold text-custom-brown leading-tight dark:text-white">
-                        Refresh Your Wardrobe Sustainably With Thrift-IT's Unique Finds
-                    </h1>
-                    <p class="mt-2 text-gray-700 dark:text-gray-300 text-sm leading-relaxed">
-                        Fashion meets purpose — shop, sell, and donate thrifted clothing to embrace a greener future.
-                    </p>
-                    <div class="mt-4">
-                        <a href="#" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 shadow-sm transition-colors">
-                            Explore Collection
-                            <svg xmlns="http://www.w3.org/2000/svg" class="ml-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                            </svg>
-                        </a>
-                        <a href="{{ route('products.create') }}" class="ml-3 inline-flex items-center px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-sm font-medium text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 shadow-sm transition-colors">
-                            Start Selling
-                        </a>
+                <!-- Text Content for Desktop with Background Image -->
+                <div class="p-3 md:w-1/2 font-poppins relative">
+                    <!-- Background Image - Adjustable positioning -->
+                    <div class="absolute top-[-100px] left-[-135px] z-0 w-[145px] h-[445px]">
+                        <img src="{{ asset('images/Rectangle123.png') }}" 
+                             alt="Background" 
+                             class="w-full h-full  ">
+                    </div>
+                    <!-- Text Content (with higher z-index) -->
+                    <div class="relative z-10">
+                        <h1 class="text-5xl lg:text-4xl font-bold text-custom-brown leading-tight dark:text-white">
+                            Refresh Your Wardrobe Sustainably With Thrift-IT's Unique Finds
+                        </h1>
+                        <p class="mt-2 text-gray-700 dark:text-gray-300 text-sm leading-relaxed">
+                            Fashion meets purpose — shop, sell, and donate thrifted clothing to embrace a greener future.
+                        </p>
+                        <div class="mt-4">
+                            <a href="#" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 shadow-sm transition-colors">
+                                Explore Collection
+                                <svg xmlns="http://www.w3.org/2000/svg" class="ml-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                                </svg>
+                            </a>
+                            <a href="{{ route('products.create') }}" class="ml-3 inline-flex items-center px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-sm font-medium text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-700 hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 shadow-sm transition-colors">
+                                Start Selling
+                            </a>
+                        </div>
                     </div>
                 </div>
                 
                 <!-- Image for Desktop -->
                 <div class="md:w-1/2 relative overflow-hidden">
                     <div class="relative overflow-hidden">
-                        <img src="{{ asset('storage/bgimages/jumbotron.png') }}" 
+                        <img src="{{ asset('images/image152.png') }}" 
                             alt="Thrift-IT Sustainable Fashion" 
                             class="w-full max-h-[500px] object-contain">
                     </div>
@@ -121,7 +130,7 @@
                     @if($donations->count() > 0)
                         <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-4 md:gap-6">
                             @foreach ($donations as $donation)
-                                <div class="group relative bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition duration-200 border border-[#D9D9D9] dark:border-gray-700">
+                                <div class="group relative  dark:bg-gray-800 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition duration-200 border border-[#D9D9D9] dark:border-gray-700">
                                     <a href="{{ route('donations.show', $donation->id) }}" class="block h-full">
                                         @if($donation->listingtype === 'for donation')
                                             <div class="absolute top-1 left-1 z-10 bg-[#D9D9D9] text-gray-700 text-[10px] sm:text-xs px-1.5 py-0.5 sm:px-2 sm:py-1 rounded-full">
@@ -163,7 +172,60 @@
             </div>
         </div>
     </div>
+    <div class="py-16 bg-[#F4F2ED]">
+        <div class="mx-auto px-4 sm:px-6 lg:px-8">
+            {{-- Upcycling Section --}}
+            <div class="flex flex-col md:flex-row  p-8  items-center scroll-animate">
+                {{-- Text Content --}}
+                <div class="md:w-[800px] md:pr-4 mb-3 md:mb-0">
+                <h2 class="text-3xl font-bold text-[#634600] mb-2 leading-tight" 
+                    style="font-family: Poppins; font-weight: 800; font-size: 40px; line-height: 100%; letter-spacing: 5%;">
+                    Revamp Your Wardrobe With 
+                    Upcycling: Discover Sustainable  
+                     Style
+                    <span class="text-yellow-500">😊</span>
+                </h2>
 
+                    <p class="text-[#786126] mb-6 text-lg">
+                        Fashion with a Purpose—Shop, Upcycle, and Donate to Create a Sustainable Tomorrow.
+                    </p>
+                    <a href="#" class="inline-flex items-center justify-center bg-[#816849] text-white px-[15px] leading-[48px] h-[40px] rounded-[20px] w-[140px] text-lg font-semibold hover:bg-[#a08e77] hover:scale-105 transition-all duration-200">
+                            Upcycle Now
+                     </a>
+                </div>
+                {{-- Image --}}
+                <div class="md:w-1/3 flex flex-col relative left-[100px]">
+                    <img src="{{ asset('images/upcycling-image.jpg') }}" alt="Upcycling" class="rounded-lg shadow-md w-full h-80 object-cover">
+                </div>
+            </div>
+
+            {{-- Donate Section --}}
+            <div class="flex flex-col md:flex-row  items-center scroll-animate ">
+                {{-- Image --}}
+                <div class="md:w-1/3  flex flex-col relative right-[-30px] ">
+                    <img src="{{ asset('images/donate-image.jpg') }}" alt="Donate" class="rounded-lg shadow-md w-full h-80 object-cover">
+                </div>
+                {{-- Text Content --}}
+                <div class="md:w-[800px] flex flex-col relative md:pr-4 mb-3 md:mb-0  left-[200px] ">
+                    <h2 class="text-3xl font-bold text-[#634600] mb-2 leading-tight" 
+                        style="font-family: Poppins; font-weight: 800; font-size: 40px; line-height: 100%; letter-spacing: %;">
+                        Style with a Purpose: Donate Your 
+                        Pre-Loved Clothes and Create a 
+                        Sustainable Future 
+                        <span class="text-yellow-500">😊</span>
+                    </h2>
+                    <p class="text-[#786126] mb-6 text-lg">
+                        Fashion with a Purpose—Shop, Upcycle, and Donate to Create a Sustainable Tomorrow.
+                    </p>
+                    <a href="#" class="inline-flex items-center justify-center bg-[#816849] text-white px-[15px] leading-[48px] h-[40px] rounded-[20px] w-[140px] text-lg font-semibold hover:bg-[#a08e77] hover:scale-105 transition-all duration-200">
+                        Donate Now
+                    </a>
+                </div>
+            </div>                                     
+        </div>
+    </div>
+    
+    
     <script>
         document.querySelectorAll('.favorite-btn').forEach(button => {
             button.addEventListener('click', function() {
@@ -182,3 +244,4 @@
         });
     </script>
 </x-app-layout>
+    

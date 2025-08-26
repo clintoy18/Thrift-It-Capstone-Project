@@ -38,24 +38,33 @@
             
             <!-- Desktop layout (side by side) -->
             <div class="hidden md:flex md:flex-row md:items-center">
-                <!-- Text Content for Desktop -->
-                <div class="p-3 md:w-1/2 font-poppins">
-                    <h1 class="text-5xl lg:text-4xl font-bold text-custom-brown leading-tight dark:text-white">
-                        Refresh Your Wardrobe Sustainably With Thrift-IT's Unique Finds
-                    </h1>
-                    <p class="mt-2 text-gray-700 dark:text-gray-300 text-sm leading-relaxed">
-                        Fashion meets purpose — shop, sell, and donate thrifted clothing to embrace a greener future.
-                    </p>
-                    <div class="mt-4">
-                        <a href="#" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 shadow-sm transition-colors">
-                            Explore Collection
-                            <svg xmlns="http://www.w3.org/2000/svg" class="ml-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                            </svg>
-                        </a>
-                        <a href="{{ route('products.create') }}" class="ml-3 inline-flex items-center px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-sm font-medium text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 shadow-sm transition-colors">
-                            Start Selling
-                        </a>
+                <!-- Text Content for Desktop with Background Image -->
+                <div class="p-3 md:w-1/2 font-poppins relative">
+                    <!-- Background Image -->
+                    <div class="absolute inset-0 z-0">
+                        <img src="{{ asset('images/Rectangle123.png') }}" 
+                             alt="Background" 
+                             class="w-full h-full object-cover opacity-20">
+                    </div>
+                    <!-- Text Content (with higher z-index) -->
+                    <div class="relative z-10">
+                        <h1 class="text-5xl lg:text-4xl font-bold text-custom-brown leading-tight dark:text-white">
+                            Refresh Your Wardrobe Sustainably With Thrift-IT's Unique Finds
+                        </h1>
+                        <p class="mt-2 text-gray-700 dark:text-gray-300 text-sm leading-relaxed">
+                            Fashion meets purpose — shop, sell, and donate thrifted clothing to embrace a greener future.
+                        </p>
+                        <div class="mt-4">
+                            <a href="#" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 shadow-sm transition-colors">
+                                Explore Collection
+                                <svg xmlns="http://www.w3.org/2000/svg" class="ml-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                                </svg>
+                            </a>
+                            <a href="{{ route('products.create') }}" class="ml-3 inline-flex items-center px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-sm font-medium text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 shadow-sm transition-colors">
+                                Start Selling
+                            </a>
+                        </div>
                     </div>
                 </div>
                 
@@ -156,7 +165,7 @@
                                 </div>
                             @endforeach
                         </div>
-                    @else
+                    @elsedaszQ11QWAw
                         <x-empty-message message="No active donations found." link="{{ route('donations.create') }}" />
                     @endif
                 </div>
