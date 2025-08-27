@@ -14,7 +14,10 @@ class SearchRepository
     {
         return Product::where(function ($q) use ($query) {
             $q->where('name', 'like', "%{$query}%")
-            ->orWhere('description', 'like', "%{$query}%");
+            ->orWhere('description', 'like', "%{$query}%")
+             ->orWhereHas('barangay',function($b) use ($query){
+                $b->where('name','like',"%{$query}%");
+             });
         })
         ->where('status', 'available')
         ->paginate(10);
