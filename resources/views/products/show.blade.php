@@ -22,12 +22,12 @@
                     >
                     <!-- Additional images (static placeholders for now) -->
                     <img 
-                    src="{{ $product->image ? asset('storage/' . $product->image) : asset('images/default-placeholder.png') }}" 
+                        src="{{ $product->image ? asset('storage/' . $product->image) : asset('images/default-placeholder.png') }}" 
                         alt="Additional 1"
                         class="w-full h-64 object-cover rounded-lg"
                     >
                     <img 
-                    src="{{ $product->image ? asset('storage/' . $product->image) : asset('images/default-placeholder.png') }}" 
+                        src="{{ $product->image ? asset('storage/' . $product->image) : asset('images/default-placeholder.png') }}" 
                         alt="Additional 2"
                         class="w-full h-64 object-cover rounded-lg"
                     >
@@ -38,12 +38,6 @@
 
                     <!-- User & Rating Section -->
                     <div class="flex items-center gap-4">
-                        <!-- Avatar -->
-                        {{-- <img 
-                            src="{{ $product->user->profile_photo_url ?? asset('images/default-avatar.png') }}" 
-                            alt="{{ $product->user->fname }} {{ $product->user->lname }}"
-                            class="w-12 h-12 rounded-full"
-                        > --}}
                         <div class="flex flex-col">
                             <p class="font-semibold text-gray-800 dark:text-gray-200">
                                 {{ $product->user->fname }} {{ $product->user->lname }}
@@ -54,45 +48,44 @@
                                 <span class="text-gray-500"> (5)</span>
                             </div>
                         </div>
-                       <!-- Action Buttons -->
-                            <div class="ml-auto flex gap-2 text-sm">
-                                <!-- Message Seller -->
-                                <a href="{{ route('private.chat', $product->user->id) }}"
-                                class="flex items-center gap-1 px-3 py-1.5 border border-gray-300 text-gray-700 rounded hover:bg-gray-100 transition">
+                        <!-- Action Buttons -->
+                        <div class="ml-auto flex gap-2 text-sm">
+                            <!-- Message Seller -->
+                            <a href="{{ route('private.chat', $product->user->id) }}"
+                               class="flex items-center gap-1 px-3 py-1.5 border border-gray-300 text-gray-700 rounded hover:bg-gray-100 transition">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
+                                     viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                          d="M8 10h.01M12 10h.01M16 10h.01M21 12c0 4.418-4.03 8-9 8-1.325 0-2.58-.26-3.68-.725L3 20l1.32-3.96C3.474 15.003 3 13.55 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+                                </svg>
+                                Message
+                            </a>
+
+                            <!-- Visit Profile -->
+                            <a href="{{ route('profile.show', $product->user->id) }}"
+                               class="flex items-center gap-1 px-3 py-1.5 border border-gray-300 text-gray-700 rounded hover:bg-gray-100 transition">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
+                                     viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                          d="M12 14c-2.5 0-4 1.5-4 3v1h8v-1c0-1.5-1.5-3-4-3z"/>
+                                    <circle cx="12" cy="8" r="3"/>
+                                </svg>
+                                Profile
+                            </a>
+
+                            <!-- Report User -->
+                            @if(Auth::id() !== $product->user_id)
+                                <a href="{{ route('reports.create', $product->user->id) }}"
+                                   class="flex items-center gap-1 px-3 py-1.5 border border-red-300 text-red-600 rounded hover:bg-red-50 transition">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
-                                        viewBox="0 0 24 24" stroke="currentColor">
+                                         viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                            d="M8 10h.01M12 10h.01M16 10h.01M21 12c0 4.418-4.03 8-9 8-1.325 0-2.58-.26-3.68-.725L3 20l1.32-3.96C3.474 15.003 3 13.55 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+                                              d="M12 9v2m0 4h.01M5.455 4.455a2.836 2.836 0 012-1.455h9.09a2.836 2.836 0 012 1.455l3.182 5.455a2.836 2.836 0 010 2.182L18.545 17.09a2.836 2.836 0 01-2 1.455H7.455a2.836 2.836 0 01-2-1.455L2.273 12.09a2.836 2.836 0 010-2.182L5.455 4.455z"/>
                                     </svg>
-                                    Message
+                                    Report
                                 </a>
-
-                                <!-- Visit Profile -->
-                                <a href="{{ route('profile.show', $product->user->id) }}"
-                                class="flex items-center gap-1 px-3 py-1.5 border border-gray-300 text-gray-700 rounded hover:bg-gray-100 transition">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
-                                        viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                            d="M12 14c-2.5 0-4 1.5-4 3v1h8v-1c0-1.5-1.5-3-4-3z"/>
-                                        <circle cx="12" cy="8" r="3"/>
-                                    </svg>
-                                    Profile
-                                </a>
-
-                                <!-- Report User -->
-                                @if(Auth::id() !== $product->user_id)
-                                    <a href="{{ route('reports.create', $product->user->id) }}"
-                                    class="flex items-center gap-1 px-3 py-1.5 border border-red-300 text-red-600 rounded hover:bg-red-50 transition">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
-                                            viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                                d="M12 9v2m0 4h.01M5.455 4.455a2.836 2.836 0 012-1.455h9.09a2.836 2.836 0 012 1.455l3.182 5.455a2.836 2.836 0 010 2.182L18.545 17.09a2.836 2.836 0 01-2 1.455H7.455a2.836 2.836 0 01-2-1.455L2.273 12.09a2.836 2.836 0 010-2.182L5.455 4.455z"/>
-                                        </svg>
-                                        Report
-                                    </a>
-                                @endif
-                            </div>
-
+                            @endif
+                        </div>
                     </div>
 
                     <!-- Product Title & Short Info -->
@@ -100,7 +93,6 @@
                         <h1 class="text-2xl font-bold mb-1">
                             {{ $product->name }}
                         </h1>
-                        <!-- Example: "Size: L . Excellent condition . Carhart" -->
                         <p class="text-sm text-gray-600">
                             Size: {{ $product->size }} · 
                             {{ ucfirst($product->condition) }} condition · 
@@ -108,7 +100,7 @@
                         </p>
                     </div>
 
-                 <!-- Product Details -->
+                    <!-- Product Details -->
                     <div class="space-y-2">
                         <h2 class="font-semibold text-gray-800 dark:text-gray-200">Details</h2>
                         <p class="text-gray-600">{{ $product->description }}</p>
@@ -121,111 +113,107 @@
                         
                         <p class="text-sm text-gray-500">Quantity: {{ $product->qty }}</p>
                         <p class="text-sm text-gray-500">Status: {{ ucfirst($product->status) }}</p>
+                        <p class="text-sm text-gray-500">
+                            Location: {{ $product->barangay->name ?? 'N/A' }}, Cebu City, Cebu 6000
+                        </p>
                         
                         <!-- Show Update Button if User Owns the Product -->
                         @if(Auth::id() === $product->user_id)
                             <a href="{{ route('products.edit', $product->id) }}" 
-                                class="inline-block mt-3 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition">
+                               class="inline-block mt-3 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition">
                                 Update Product
                             </a>
                         @endif
                     </div>
 
+                    <!-- Comments Section -->
+                    <div class="border p-6 rounded-lg shadow bg-gray-100 dark:bg-gray-800">
+                        <h3 class="text-lg font-bold mb-4">Comments</h3>
 
-
-                   <!-- Comments Section -->
-                <div class="border p-6 rounded-lg shadow bg-gray-100 dark:bg-gray-800">
-                    <h3 class="text-lg font-bold mb-4">Comments</h3>
-
-                    <!-- Scrollable Comment List -->
-                    <div class="max-h-60 overflow-y-auto space-y-4 pr-2">
-                        @forelse($product->comments as $comment)
-                            <div class="bg-white dark:bg-gray-700 p-4 rounded-lg shadow-md hover:bg-gray-50 dark:hover:bg-gray-600 transition">
-                                <div class="flex items-center gap-3">
-                                    <!-- User Profile Picture -->
-                                    <img 
-                                        src="https://ui-avatars.com/api/?name={{ urlencode($comment->user->fname . ' ' . $comment->user->lname) }}&background=random" 
-                                        alt="{{ $comment->user->fname }} {{ $comment->user->lname }}"
-                                        class="w-10 h-10 rounded-full border"
-                                    >
-
-                                    <!-- User Info -->
-                                    <div>
-                                        <a href="{{ route('profile.show', $comment->user->id) }}" class="text-blue-500 hover:underline">
-                                            <p class="font-semibold text-gray-800 dark:text-gray-200">
-                                                {{ $comment->user->fname }} {{ $comment->user->lname }}
-                                            </p>
-                                        </a>
-                                        <p class="text-gray-500 dark:text-gray-400 text-xs">
-                                            {{ $comment->created_at->diffForHumans() }}
-                                        </p>
-                                    </div>
-                                    <div class="ml-auto flex gap-2">
-                                        @if(Auth::id() === $comment->user_id)
-                                            <a href="{{ route('comments.edit', $comment->id) }}" 
-                                               class="px-2 py-1 bg-blue-100 text-blue-700 rounded hover:bg-blue-200 text-xs flex items-center gap-1">
-                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536M9 13l6-6m2 2l-6 6m-2 2h6" />
-                                                </svg>
-                                                Edit
+                        <!-- Scrollable Comment List -->
+                        <div class="max-h-60 overflow-y-auto space-y-4 pr-2">
+                            @forelse($product->comments as $comment)
+                                <div class="bg-white dark:bg-gray-700 p-4 rounded-lg shadow-md hover:bg-gray-50 dark:hover:bg-gray-600 transition">
+                                    <div class="flex items-center gap-3">
+                                        <img 
+                                            src="https://ui-avatars.com/api/?name={{ urlencode($comment->user->fname . ' ' . $comment->user->lname) }}&background=random" 
+                                            alt="{{ $comment->user->fname }} {{ $comment->user->lname }}"
+                                            class="w-10 h-10 rounded-full border"
+                                        >
+                                        <div>
+                                            <a href="{{ route('profile.show', $comment->user->id) }}" class="text-blue-500 hover:underline">
+                                                <p class="font-semibold text-gray-800 dark:text-gray-200">
+                                                    {{ $comment->user->fname }} {{ $comment->user->lname }}
+                                                </p>
                                             </a>
-                                            <form action="{{ route('comments.destroy', $comment->id) }}" method="POST" 
-                                                  class="inline" 
-                                                  onsubmit="return confirm('Are you sure you want to delete this comment?');">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" 
-                                                        class="px-2 py-1 bg-red-100 text-red-700 rounded hover:bg-red-200 text-xs flex items-center gap-1">
+                                            <p class="text-gray-500 dark:text-gray-400 text-xs">
+                                                {{ $comment->created_at->diffForHumans() }}
+                                            </p>
+                                        </div>
+                                        <div class="ml-auto flex gap-2">
+                                            @if(Auth::id() === $comment->user_id)
+                                                <a href="{{ route('comments.edit', $comment->id) }}" 
+                                                   class="px-2 py-1 bg-blue-100 text-blue-700 rounded hover:bg-blue-200 text-xs flex items-center gap-1">
                                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536M9 13l6-6m2 2l-6 6m-2 2h6" />
                                                     </svg>
-                                                    Delete
-                                                </button>
-                                            </form>
-                                        @endif
+                                                    Edit
+                                                </a>
+                                                <form action="{{ route('comments.destroy', $comment->id) }}" method="POST" 
+                                                      class="inline" 
+                                                      onsubmit="return confirm('Are you sure you want to delete this comment?');">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" 
+                                                            class="px-2 py-1 bg-red-100 text-red-700 rounded hover:bg-red-200 text-xs flex items-center gap-1">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                                        </svg>
+                                                        Delete
+                                                    </button>
+                                                </form>
+                                            @endif
+                                        </div>
+                                    </div>
+                                    <p class="mt-2 text-gray-800 dark:text-gray-200">{{ $comment->content }}</p>
+                                </div>
+                                @if(!$loop->last)
+                                    <hr class="my-2 border-gray-200 dark:border-gray-600">
+                                @endif
+                            @empty
+                                <p class="text-gray-600 dark:text-gray-400 text-sm">No comments yet. Be the first to comment!</p>
+                            @endforelse
+                        </div>
+
+                        <!-- Comment Form -->
+                        @auth
+                            <form action="{{ route('comments.store') }}" method="POST" class="mt-4 flex items-start gap-3">
+                                @csrf
+                                <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                <img 
+                                    src="https://ui-avatars.com/api/?name={{ urlencode(auth()->user()->fname . ' ' . auth()->user()->lname) }}&background=random" 
+                                    alt="{{ auth()->user()->fname }} {{ auth()->user()->lname }}"
+                                    class="w-10 h-10 rounded-full border"
+                                >
+                                <div class="flex-1">
+                                    <textarea name="content" rows="3" maxlength="1000"
+                                              class="w-full border rounded-lg p-2 focus:ring focus:ring-blue-300" 
+                                              required
+                                              oninput="document.getElementById('char-count').innerText = this.value.length + '/1000';"></textarea>
+                                    <div class="flex justify-between items-center mt-2">
+                                        <span id="char-count" class="text-xs text-gray-500">0/1000</span>
+                                        <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
+                                            Post Comment
+                                        </button>
                                     </div>
                                 </div>
-                                <!-- Comment Content -->
-                                <p class="mt-2 text-gray-800 dark:text-gray-200">{{ $comment->content }}</p>
-                            </div>
-                            @if(!$loop->last)
-                                <hr class="my-2 border-gray-200 dark:border-gray-600">
-                            @endif
-                        @empty
-                            <p class="text-gray-600 dark:text-gray-400 text-sm">No comments yet. Be the first to comment!</p>
-                        @endforelse
+                            </form>
+                        @else
+                            <p class="mt-3 text-gray-600">
+                                <a href="{{ route('login') }}" class="text-blue-500 hover:underline">Login</a> to comment.
+                            </p>
+                        @endauth
                     </div>
-
-                    <!-- Comment Form -->
-                    @auth
-                        <form action="{{ route('comments.store') }}" method="POST" class="mt-4 flex items-start gap-3">
-                            @csrf
-                            <input type="hidden" name="product_id" value="{{ $product->id }}">
-                            <img 
-                                src="https://ui-avatars.com/api/?name={{ urlencode(auth()->user()->fname . ' ' . auth()->user()->lname) }}&background=random" 
-                                alt="{{ auth()->user()->fname }} {{ auth()->user()->lname }}"
-                                class="w-10 h-10 rounded-full border"
-                            >
-                            <div class="flex-1">
-                                <textarea name="content" rows="3" maxlength="1000"
-                                        class="w-full border rounded-lg p-2 focus:ring focus:ring-blue-300" 
-                                        required
-                                        oninput="document.getElementById('char-count').innerText = this.value.length + '/1000';"></textarea>
-                                <div class="flex justify-between items-center mt-2">
-                                    <span id="char-count" class="text-xs text-gray-500">0/1000</span>
-                                    <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
-                                        Post Comment
-                                    </button>
-                                </div>
-                            </div>
-                        </form>
-
-                    @else
-                        <p class="mt-3 text-gray-600">
-                            <a href="{{ route('login') }}" class="text-blue-500 hover:underline">Login</a> to comment.
-                        </p>
-                    @endauth
-                </div>
 
                     <!-- Back to Products -->
                     <a 

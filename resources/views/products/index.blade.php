@@ -48,6 +48,9 @@
                                             <p class="text-gray-500 dark:text-gray-400 text-[10px] sm:text-xs mt-0.5 truncate">
                                                 {{ $product->category->name ?? 'No Category' }}
                                             </p>
+                                            <p class="text-gray-500 dark:text-gray-400 text-[10px] sm:text-xs mt-0.5 truncate">
+                                              <i>  {{ $product->barangay->name ?? 'N/A' }}, Cebu City</i>
+                                            </p>
 
                                             <div class="flex justify-between items-center mt-1">
                                                 <p class="text-xs sm:text-sm font-bold {{ $product->listingtype === 'for donation' ? 'text-gray-700' : 'text-red-600' }}">

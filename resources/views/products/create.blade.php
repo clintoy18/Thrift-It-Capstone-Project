@@ -70,6 +70,25 @@
                                 </div>
                             </div>
 
+                            <!-- Location Section -->
+                                <div class="space-y-4">
+                                    <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">Location</h3>
+                                    <div>
+                                        <label for="barangay_id" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Barangay</label>
+                                        <select id="barangay_id" name="barangay_id" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-gray-500 focus:ring-gray-500" required>
+                                            <option value="" disabled selected>Select a barangay</option>
+                                            @foreach ($barangays as $barangay)
+                                                <option value="{{ $barangay->id }}" {{ old('barangay_id') == $barangay->id ? 'selected' : '' }}>
+                                                    {{ $barangay->name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                        @error('barangay_id')
+                                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                        @enderror
+                                    </div>
+                                </div>
+
                             <div>
                                 <label for="description" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Description</label>
                                 <textarea id="description" name="description" rows="4" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-gray-500 focus:ring-gray-500" placeholder="Enter detailed description" required>{{ old('description') }}</textarea>
