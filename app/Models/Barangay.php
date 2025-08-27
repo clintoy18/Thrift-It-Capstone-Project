@@ -11,12 +11,11 @@ class Barangay extends Model
 
     public function products()
     {
-        return $this->hasMany(Product::class,'barangay_id');
+        return $this->hasMany(Product::class, 'barangay_id');
     }
 
     public function users()
     {
-        return $this->hasMany(User::class,'barangay_id');
+        return $this->hasMany(User::class, 'barangay_id');
     }
-
 }

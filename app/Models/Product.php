@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\User;
 use App\Models\Categories;
 use App\Models\Comment;
+use App\Models\Barangay;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
@@ -27,7 +28,9 @@ class Product extends Model
         'image',
         'qty',
         'status',
-        'segment_id' 
+        'segment_id',
+        'barangay_id',
+
     ];
 
     protected $casts = [

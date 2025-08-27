@@ -17,7 +17,9 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,  
             SegmentSeeder::class,
             CategoriesSeeder::class,
+            BarangaySeeder::class,
             ProductSeeder::class,
+          
            
         ]);
 

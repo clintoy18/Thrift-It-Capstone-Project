@@ -30,6 +30,7 @@ class UpdateProductRequest extends FormRequest
             'status' => 'required|in:available,sold',
             'image' => 'nullable|image|max:2048',
             'segment_id' => 'required|exists:segments,id',
+            'barangay_id' => 'required|exists:barangays,id',
         ];
     }
 }
