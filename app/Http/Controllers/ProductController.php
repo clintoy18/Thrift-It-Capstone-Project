@@ -59,7 +59,7 @@ class ProductController extends Controller
             'product' => $product,
             'categories' => $categories,
             'segments' => $segments,
-            // 'barangays' => $barangays,
+            'barangays' => $barangays,
         ]);
     }
 
