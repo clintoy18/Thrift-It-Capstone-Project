@@ -3,83 +3,73 @@
     <div class="w-full bg-[#F4F2ED] dark:bg-gray-800 shadow-sm ">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <!-- Mobile/Small screens layout (stacked) -->
-           <div class="flex flex-col md:hidden text-center">
+            <div class="flex flex-col md:hidden">
                 <!-- Text Content for Mobile -->
-                <div class="p-4 font-poppins">
-                    <h1 class="text-xl sm:text-2xl font-bold text-[#634600] leading-tight">
+                <div class="p-2 font-poppins">
+                    <h1 class="text-xl sm:text-2xl font-bold text-red-600 dark:text-red-400 leading-tight">
                         Refresh Your Wardrobe Sustainably With Thrift-IT's Unique Finds
                     </h1>
-                    <p class="mt-3 text-[#786126] text-sm sm:text-base leading-relaxed">
-                        Fashion with a Purpose—Shop, Upcycle, and Donate to Create a Sustainable Tomorrow.
+                    <p class="mt-2 text-gray-700 dark:text-gray-300 text-xs sm:text-sm leading-relaxed">
+                        Fashion meets purpose — shop, sell, and donate thrifted clothing to embrace a greener future.
                     </p>
-                    <div class="mt-4 flex flex-col relative sm:flex-row justify-center align-items-center gap-3">
-                       <div class="flex justify-center">
-                        <a href="{{ route('products.create') }}"
-                        class="inline-flex items-center justify-center bg-[#B59F84] text-white 
-                                px-[20px] py-1.5 rounded-[25px] text-base font-semibold 
-                                hover:bg-[#a08e77] hover:scale-105 transition-all duration-200 w-[140px]">
-                            Get Started
+                    <div class="mt-3 flex flex-wrap gap-2">
+                        <a href="#" class="inline-flex items-center px-3 py-1.5 border border-transparent rounded-md text-xs font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 shadow-sm transition-colors">
+                            Explore Collection
+                            <svg xmlns="http://www.w3.org/2000/svg" class="ml-1 h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                            </svg>
                         </a>
-                       </div>
+                        <a href="{{ route('products.create') }}" class="inline-flex items-center px-3 py-1.5 border border-gray-300 dark:border-gray-600 rounded-md text-xs font-medium text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 shadow-sm transition-colors">
+                            Start Selling
+                        </a>
                     </div>
                 </div>
-
+                
                 <!-- Image for Mobile -->
-                <div class="mt-4 relative rounded-lg overflow-hidden mx-auto max-w-[280px]">
+                <div class="mt-2 relative rounded-lg overflow-hidden">
                     <img src="{{ asset('images/image152.png') }}" 
                         alt="Thrift-IT Sustainable Fashion" 
                         class="w-full max-h-[180px] object-contain">
-                    <div class="absolute bottom-2 right-2 bg-white px-2 py-0.5 rounded-full text-xs text-[#7C6A46] font-medium shadow-md">
+                    <div class="absolute bottom-2 right-2 bg-white px-2 py-0.5 rounded-full text-xs text-red-600 font-medium shadow-md">
                         Sustainable fashion
                     </div>
                 </div>
             </div>
-
-
             
             <!-- Desktop layout (side by side) -->
             <div class="hidden md:flex md:flex-row md:items-center">
                 <!-- Text Content for Desktop with Background Image -->
                 <div class="p-3 md:w-1/2 font-poppins relative">
                     <!-- Background Image - Adjustable positioning -->
-                    <div class="absolute top-[-100px] left-[-150px] z-0 w-[145px] h-[485px]">
+                    <div class="absolute top-[-100px] left-[-135px] z-0 w-[145px] h-[445px]">
                         <img src="{{ asset('images/Rectangle123.png') }}" 
                              alt="Background" 
                              class="w-full h-full  ">
-                    </div>  
+                    </div>
                     <!-- Text Content (with higher z-index) -->
                     <div class="relative z-10">
                         <h1 class="text-5xl lg:text-4xl font-bold text-custom-brown leading-tight dark:text-white">
-                            Refresh Your Wardrobe 
-                        <span class="block h-[20px]" aria-hidden="true"></span>
-                            Sustainably With Thrift-IT's 
-                        <span class="block h-[20px]" aria-hidden="true"></span>
-                            Unique Finds
-                        <span class="block h-[20px]" aria-hidden="true"></span>
+                            Refresh Your Wardrobe Sustainably With Thrift-IT's Unique Finds
                         </h1>
-                        <p class="mt-2 text-[#603E14] dark:text-gray-300 text-sm leading-relaxed">
-                            Fashion meets purpose — shop, sell, and donate
-                        <span class="block h-[0px]" aria-hidden="true"></span>
-                            thrifted clothing to embrace a greener future.
-                        <span class="block h-[20px]" aria-hidden="true"></span>
-
+                        <p class="mt-2 text-gray-700 dark:text-gray-300 text-sm leading-relaxed">
+                            Fashion meets purpose — shop, sell, and donate thrifted clothing to embrace a greener future.
                         </p>
                         <div class="mt-4">
-                           
-                        <div class="flex flex-col relative left-[500px]">
-                        <a href="{{ route('products.create') }}" 
-                        class="inline-flex items-center justify-center bg-[#B59F84] text-white 
-                                px-[20px] py-1.5 rounded-[25px] text-base font-semibold 
-                                hover:bg-[#a08e77] hover:scale-105 transition-all duration-200 w-[140px]">
-                            Get Started
-                        </a>
-                     </div>
+                            <a href="#" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 shadow-sm transition-colors">
+                                Explore Collection
+                                <svg xmlns="http://www.w3.org/2000/svg" class="ml-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                                </svg>
+                            </a>
+                            <a href="{{ route('products.create') }}" class="ml-3 inline-flex items-center px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-sm font-medium text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-700 hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 shadow-sm transition-colors">
+                                Start Selling
+                            </a>
                         </div>
                     </div>
                 </div>
                 
                 <!-- Image for Desktop -->
-                <div class="md:w-1/2 flex felx-col relative left-[70px] overflow-hidden">
+                <div class="md:w-1/2 relative overflow-hidden">
                     <div class="relative overflow-hidden">
                         <img src="{{ asset('images/image152.png') }}" 
                             alt="Thrift-IT Sustainable Fashion" 
@@ -182,132 +172,59 @@
             </div>
         </div>
     </div>
-   <div class="py-16  bg-[#F8EED6] overflow-hidden">
-  <div class="hidden md:block">
-    <div class="absolute top-[1610px] left-[-30px] z-0">
-        <img src="{{ asset('images/Ellipse 23.png') }}" alt="Background decoration" class="w-[196px] h-[221px] ">
+    <div class="py-16 bg-[#F4F2ED]">
+        <div class="mx-auto px-4 sm:px-6 lg:px-8">
+            {{-- Upcycling Section --}}
+            <div class="flex flex-col md:flex-row  p-8  items-center scroll-animate">
+                {{-- Text Content --}}
+                <div class="md:w-[800px] md:pr-4 mb-3 md:mb-0">
+                <h2 class="text-3xl font-bold text-[#634600] mb-2 leading-tight" 
+                    style="font-family: Poppins; font-weight: 800; font-size: 40px; line-height: 100%; letter-spacing: 5%;">
+                    Revamp Your Wardrobe With 
+                    Upcycling: Discover Sustainable  
+                     Style
+                    <span class="text-yellow-500">😊</span>
+                </h2>
+
+                    <p class="text-[#786126] mb-6 text-lg">
+                        Fashion with a Purpose—Shop, Upcycle, and Donate to Create a Sustainable Tomorrow.
+                    </p>
+                    <a href="#" class="inline-flex items-center justify-center bg-[#816849] text-white px-[15px] leading-[48px] h-[40px] rounded-[20px] w-[140px] text-lg font-semibold hover:bg-[#a08e77] hover:scale-105 transition-all duration-200">
+                            Upcycle Now
+                     </a>
+                </div>
+                {{-- Image --}}
+                <div class="md:w-1/3 flex flex-col relative left-[100px]">
+                    <img src="{{ asset('images/upcycling-image.jpg') }}" alt="Upcycling" class="rounded-lg shadow-md w-full h-80 object-cover">
+                </div>
+            </div>
+
+            {{-- Donate Section --}}
+            <div class="flex flex-col md:flex-row  items-center scroll-animate ">
+                {{-- Image --}}
+                <div class="md:w-1/3  flex flex-col relative right-[-30px] ">
+                    <img src="{{ asset('images/donate-image.jpg') }}" alt="Donate" class="rounded-lg shadow-md w-full h-80 object-cover">
+                </div>
+                {{-- Text Content --}}
+                <div class="md:w-[800px] flex flex-col relative md:pr-4 mb-3 md:mb-0  left-[200px] ">
+                    <h2 class="text-3xl font-bold text-[#634600] mb-2 leading-tight" 
+                        style="font-family: Poppins; font-weight: 800; font-size: 40px; line-height: 100%; letter-spacing: %;">
+                        Style with a Purpose: Donate Your 
+                        Pre-Loved Clothes and Create a 
+                        Sustainable Future 
+                        <span class="text-yellow-500">😊</span>
+                    </h2>
+                    <p class="text-[#786126] mb-6 text-lg">
+                        Fashion with a Purpose—Shop, Upcycle, and Donate to Create a Sustainable Tomorrow.
+                    </p>
+                    <a href="#" class="inline-flex items-center justify-center bg-[#816849] text-white px-[15px] leading-[48px] h-[40px] rounded-[20px] w-[140px] text-lg font-semibold hover:bg-[#a08e77] hover:scale-105 transition-all duration-200">
+                        Donate Now
+                    </a>
+                </div>
+            </div>                                     
+        </div>
     </div>
-
-    <div class="mx-auto px-4 sm:px-6 lg:px-8">
-                {{-- Upcycling Section --}}
-                <div class="flex flex-col md:flex-row relative p-8 items-center scroll-animate left-[50px]">
-                    {{-- Text Content --}}
-                    <div class="md:w-[800px] md:pr-4 mb-3 md:mb-0">
-                        <h2 class="text-3xl font-bold text-[#634600] mb-2 leading-tight" style="font-family: Poppins; font-weight: 800; font-size: 40px; line-height: 100%; letter-spacing: 5%;">
-                            Revamp Your Wardrobe With 
-                            <span class="block h-[20px]" aria-hidden="true"></span>
-                            Upcycling: Discover Sustainable 
-                            <span class="block h-[20px]" aria-hidden="true"></span>
-                            Style 
-                            <img src="{{ asset('images/image 157.png') }}" alt="emoji" class="inline-block h-6 w-6 align-middle h-[40px] w-[40px]">
-                            <span class="block h-[20px]" aria-hidden="true"></span>
-                        </h2>
-                        <p class="font-poppins text-[#603E14] mb-6 text-lg leading-[30px] tracking-[0.1em]">
-                            Fashion with a Purpose—Shop, Upcycle, and Donate to Create a Sustainable Tomorrow.
-                        </p>
-                        <a href="#" class="inline-flex items-center justify-center bg-[#816849] text-white px-4 py-3 rounded-[30px] text-lg font-semibold hover:bg-[#a08e77] hover:scale-105 transition-all duration-200 w-[200px]">
-                            Upcycle Now
-                        </a>
-                    </div>
-
-                    {{-- Image --}}
-                    <div class="md:w-1/3 flex flex-col relative left-[30px]">
-                        <img src="{{ asset('images/upcycling-image.jpg') }}" alt="Upcycling" class="rounded-lg shadow-md w-full h-80 object-cover">
-                    </div>
-                </div>
-
-                {{-- Donate Section --}}
-                <div class="flex flex-col md:flex-row items-center scroll-animate ">
-                    {{-- Image --}}
-                    <div class="md:w-1/3 flex flex-col relative right-[-80px] ">
-                        <img src="{{ asset('images/donate-image.jpg') }}" alt="Donate" class="rounded-lg shadow-md w-full h-80 object-cover">
-                    </div>
-
-                    {{-- Text Content --}}
-                    <div class="md:w-[800px] flex flex-col relative md:pr-4 mb-3 md:mb-0 left-[200px] ">
-                        <h2 class="text-3xl font-bold text-[#634600] mb-2 leading-tight" style="font-family: Poppins; font-weight: 800; font-size: 40px; line-height: 100%; letter-spacing: %;">
-                            Style with a Purpose: Donate Your 
-                            <span class="block h-[20px]" aria-hidden="true"></span>
-                            Pre-Loved Clothes and Create a 
-                            <span class="block h-[20px]" aria-hidden="true"></span>
-                            Sustainable Future 
-                            <img src="{{ asset('images/Rectangle 142.png') }}" alt="emoji" class="inline-block h-6 w-6 align-middle h-[40px] w-[40px]">
-                            <span class="block h-[20px]" aria-hidden="true"></span>
-                        </h2>
-                        <p class="font-poppins text-[#603E14] mb-6 text-lg leading-[30px] tracking-[0.1em]">
-                            Fashion with a Purpose—Shop, Upcycle, and Donate to Create a Sustainable Tomorrow.
-                        </p>
-                        <a href="#" class="inline-flex items-center justify-center bg-[#816849] text-white px-4 py-3 rounded-[30px] text-lg font-semibold hover:bg-[#a08e77] hover:scale-105 transition-all duration-200 w-[200px]">
-                            Donate Now
-                        </a>
-                    </div>
-                </div>
-                </div>
-
-            </div>
-
-            <div class="absolute top-[2110px] right-[0px] hidden md:block z-0">
-                <img src="{{ asset('images/Ellipse 21.png') }}" alt="Background decoration" class="w-[90px] h-[330px] ">
-            </div>
-        </div>
-
-        {{-- Mobile Version --}}
-        <div class="md:hidden  bg-[#F8EED6]">
-            <div class="mx-auto px-4 sm:px-10">
-                {{-- Mobile Upcycling Section --}}
-                <div class="mb-9">
-                    <div class="text-center mb-6">
-                        <h2 class="text-2xl font-bold text-[#634600] mb-3 leading-tight" style="font-family: Poppins; font-weight: 800; line-height: 120%; letter-spacing: 2%;">
-                            Revamp Your Wardrobe With Upcycling: Discover Sustainable Style 
-                            <img src="{{ asset('images/image 157.png') }}" alt="emoji" class="inline-block h-5 w-5 align-middle ml-1">
-                        </h2>
-                        <p class="font-poppins text-[#603E14] mb-6 text-base leading-[24px] tracking-[0.05em] px-4">
-                            Fashion with a Purpose—Shop, Upcycle, and Donate to Create a Sustainable Tomorrow.
-                        </p>
-                    </div>
-                    
-                    <div class="mb-6">
-                        <img src="{{ asset('images/upcycling-image.jpg') }}" alt="Upcycling" class="rounded-lg shadow-md w-full h-64 object-cover">
-                    </div>
-                       
-                    <div class="text-center">
-                        <a href="#" class="inline-flex items-center justify-center bg-[#816849] text-white px-10 py-3 rounded-[30px] text-base font-semibold hover:bg-[#a08e77] transition-all duration-200">
-                            Upcycle Now
-                        </a>
-                    </div>
-                </div>
-
-                {{-- Mobile Donate Section --}}
-                <div class="mb-16">
-                    <div class="text-center mb-6">
-                        <h2 class="text-2xl font-bold text-[#634600] mb-3 leading-tight" style="font-family: Poppins; font-weight: 800; line-height: 120%; letter-spacing: 2%;">
-                            Style with a Purpose: Donate Your Pre-Loved Clothes and Create a Sustainable Future 
-                            <img src="{{ asset('images/Rectangle 142.png') }}" alt="emoji" class="inline-block h-5 w-5 align-middle ml-1">
-                        </h2>
-                        <p class="font-poppins text-[#603E14] mb-6 text-base leading-[24px] tracking-[0.05em] px-4">
-                            Fashion with a Purpose—Shop, Upcycle, and Donate to Create a Sustainable Tomorrow.
-                        </p>
-                    </div>
-                    
-                    <div class="mb-6">
-                        <img src="{{ asset('images/donate-image.jpg') }}" alt="Donate" class="rounded-lg shadow-md w-full h-64 object-cover">
-                    </div>
-                    
-                    <div class="text-center mb-8">
-                        <a href="#" class="inline-flex items-center justify-center bg-[#816849] text-white px-10 py-3 rounded-[30px] text-base font-semibold hover:bg-[#a08e77] transition-all duration-200">
-                            Donate Now
-                         
-                        </a>
-                    </div>
-                </div>
-                
-                <!-- Extra bottom spacing -->
-                <div class="pb-12"></div>
-            </div>
-        </div>
-
-     
-
+    
     
     <script>
         document.querySelectorAll('.favorite-btn').forEach(button => {

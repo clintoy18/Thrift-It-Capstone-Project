@@ -53,7 +53,7 @@ class ProductController extends Controller
     {
         $categories = Categories::all();
         $segments = Segment::all();
-        
+        $barangays = Barangay::all();
 
         return view('products.edit', [
             'product' => $product,
