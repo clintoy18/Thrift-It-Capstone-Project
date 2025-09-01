@@ -21,6 +21,7 @@ class UserSeeder extends Seeder
             'email' => 'admin@example.com',
             'password' => Hash::make('password123'),
             'role' => '2',
+            'email_verified_at' => now(),
         ]);
 
         User::create([
@@ -29,6 +30,7 @@ class UserSeeder extends Seeder
             'email' => 'upcycler@example.com',
             'password' => Hash::make('password123'),
             'role' => '1',
+            'email_verified_at' => now(),
         ]);
 
           User::create([
@@ -37,6 +39,7 @@ class UserSeeder extends Seeder
             'email' => 'user@example.com',
             'password' => Hash::make('password123'),
             'role' => '0',
+            'email_verified_at' => now(),
         ]);
     }
 }

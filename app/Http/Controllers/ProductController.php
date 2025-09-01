@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use App\Services\ProductService;
 use App\Models\Segment;
+use App\Models\Barangay;
 
 
 
@@ -35,7 +36,8 @@ class ProductController extends Controller
     {
         $categories = Categories::all(); 
         $segments = Segment::all(); 
-        return view('products.create', compact('categories', 'segments'));
+        $barangays = Barangay::all(); 
+        return view('products.create', compact('categories', 'segments', 'barangays'));
     }
 
     public function store(StoreProductRequest $request): RedirectResponse
@@ -51,12 +53,13 @@ class ProductController extends Controller
     {
         $categories = Categories::all();
         $segments = Segment::all();
-        
+        $barangays = Barangay::all();
 
         return view('products.edit', [
             'product' => $product,
             'categories' => $categories,
             'segments' => $segments,
+            'barangays' => $barangays,
         ]);
     }
 

@@ -24,6 +24,8 @@ class Donation extends Model
         'size',
         'image',
         'status',
+        'segment_id',
+        'barangay_id',
     ];
 
 
@@ -65,4 +67,17 @@ class Donation extends Model
             'updated_at' => $this->updated_at->timestamp,        
         ]);
     }
+    
+     public function segment()
+     {
+        return $this->belongsTo(Segment::class, 'segment_id');
+     }
+
+    public function barangay()
+    {
+        return $this->belongsTo(Barangay::class, 'barangay_id');
+    }
 }
+
+
+    
