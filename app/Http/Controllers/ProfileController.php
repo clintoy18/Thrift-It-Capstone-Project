@@ -17,9 +17,17 @@ class ProfileController extends Controller
      */
     public function edit(Request $request): View
     {
-        return view('profile.edit', [
-            'user' => $request->user(),
-        ]);
+
+           $user = $request->user(); // logged-in user only
+
+    $totalListings = $user->products()->count();
+    $itemsSold = $user->products()->where('status', 'sold')->count();
+    $revenue = $user->products()->where('status', 'sold')->sum('price');
+    // $unreadMessages = $user->receivedMessages()->where('is_read', false)->count();
+
+        return view('profile.edit', compact(
+        'user', 'totalListings', 'itemsSold', 'revenue'));
+    
     }
 
     /**
@@ -64,4 +72,5 @@ class ProfileController extends Controller
 
         return Redirect::to('/');
     }
+
 }
