@@ -48,7 +48,7 @@
                     </div>
                     <!-- Text Content (with higher z-index) -->
                     <div class="relative z-10">
-                        <h1 class="text-5xl lg:text-4xl font-bold text-custom-brown leading-tight dark:text-white">
+                        <h1 class="text-5xl text-[#634600] lg:text-4xl font-bold text-custom-brown leading-tight dark:text-white">
                             Refresh Your Wardrobe Sustainably With Thrift-IT's Unique Finds
                         </h1>
                         <p class="mt-2 text-gray-700 dark:text-gray-300 text-sm leading-relaxed">
