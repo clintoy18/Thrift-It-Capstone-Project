@@ -88,6 +88,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
+    Route::get('/messages', [PrivateChatController::class, 'index'])->name('messages.index');
     Route::get('/private-chat/{user}', [PrivateChatController::class, 'show'])->name('private.chat');
     Route::post('/private-chat/{user}/send', [PrivateChatController::class, 'send'])->name('private.chat.send');
 });
