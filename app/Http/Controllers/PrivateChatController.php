@@ -16,6 +16,15 @@ class PrivateChatController extends Controller
         $this->messageService = $messageService;
     }
 
+    public function index()
+    {
+        $conversations = $this->messageService->getUserConversations(Auth::id());
+        
+        return view('messages.index', [
+            'conversations' => $conversations
+        ]);
+    }
+
     public function show(User $user)
     {
         $chatData = $this->messageService->getChatData(Auth::id(), $user->id);
@@ -24,9 +33,13 @@ class PrivateChatController extends Controller
             abort(403, $chatData['error']);
         }
 
+        // Get all conversations for the sidebar
+        $conversations = $this->messageService->getUserConversations(Auth::id());
+
         return view('private-chat', [
             'recipient' => $chatData['receiver'],
-            'privateMessages' => $chatData['messages']
+            'privateMessages' => $chatData['messages'],
+            'conversations' => $conversations
         ]);
     }
 

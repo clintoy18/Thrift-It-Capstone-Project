@@ -45,6 +45,22 @@
                             <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
                         @enderror
                     </div>
+                    <!-- Barangay -->
+                    <div class="mt-4">
+                        <x-input-label for="barangay_id" :value="__('Barangay')" />
+                        <select name="barangay_id" id="barangay_id" class="block w-full mt-1 p-2 border rounded" required>
+                            <option value="" disabled {{ old('barangay_id', $product->barangay_id ?? '') === '' ? 'selected' : '' }}>Select a barangay</option>
+                            @foreach ($barangays as $barangay)
+                                <option value="{{ $barangay->id }}" {{ old('barangay_id', $product->barangay_id ?? '') == $barangay->id ? 'selected' : '' }}>
+                                    {{ ucfirst($barangay->name) }}
+                                </option>
+                            @endforeach
+                        </select>
+                        @error('barangay_id')
+                            <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
 
                     <!-- Price -->
                     <div class="mt-4">

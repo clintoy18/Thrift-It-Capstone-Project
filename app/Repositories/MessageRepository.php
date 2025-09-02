@@ -55,4 +55,34 @@ class MessageRepository
 
         return $message->load('user');
     }
+
+    public function getUserConversations($userId)
+    {
+        // Get all unique conversation partners for the user
+        $conversations = Message::select('user_id', 'receiver_id', 'message', 'created_at')
+            ->with(['user:id,fname,lname', 'receiver:id,fname,lname'])
+            ->where(function ($query) use ($userId) {
+                $query->where('user_id', $userId)
+                      ->orWhere('receiver_id', $userId);
+            })
+            ->orderBy('created_at', 'desc')
+            ->get()
+            ->groupBy(function ($message) use ($userId) {
+                // Group by the other user in the conversation
+                return $message->user_id == $userId ? $message->receiver_id : $message->user_id;
+            })
+            ->map(function ($messages) use ($userId) {
+                $latestMessage = $messages->first();
+                $otherUser = $latestMessage->user_id == $userId ? $latestMessage->receiver : $latestMessage->user;
+                
+                return [
+                    'user' => $otherUser,
+                    'latest_message' => $latestMessage,
+                    'unread_count' => $messages->where('receiver_id', $userId)->where('is_read', false)->count(),
+                ];
+            })
+            ->values();
+
+        return $conversations;
+    }
 } 
