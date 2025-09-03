@@ -18,12 +18,12 @@ class ProfileController extends Controller
     public function edit(Request $request): View
     {
 
-           $user = $request->user(); // logged-in user only
+        $user = $request->user(); // logged-in user only
 
-    $totalListings = $user->products()->count();
-    $itemsSold = $user->products()->where('status', 'sold')->count();
-    $revenue = $user->products()->where('status', 'sold')->sum('price');
-    $itemsDonated = $user->donations()->where('status', 'donated')->count();
+        $totalListings = $user->products()->count();
+        $itemsSold = $user->products()->where('status', 'sold')->count();
+        $revenue = $user->products()->where('status', 'sold')->sum('price');
+        $itemsDonated = $user->donations()->where('status', 'donated')->count();
     // $unreadMessages = $user->receivedMessages()->where('is_read', false)->count();
 
         return view('profile.edit', compact(
