@@ -4,7 +4,7 @@
      <div class="flex justify-between items-center">
     <!-- Logo -->
    <a href="{{ Auth::check() ? (Auth::user()->role === 2 ? route('admin.dashboard') : (Auth::user()->role === 1 ? route('upcycler') : route('dashboard'))) : url('/') }}" class="flex-shrink-0">
-        <img src="{{ asset('storage/bgimages/logo.png') }}"" alt="THRIFT - IT Logo" class="h-10 sm:h-12">                      
+        <img src="{{ asset('storage/bgimages/logo.png') }}" alt="THRIFT - IT Logo" class="h-10 sm:h-12">                      
     </a>
 
     <!-- Navigation Links for Authenticated User -->
@@ -71,8 +71,12 @@
                 </div>
             </div>
         @else
-            <a href="{{ route('register') }}" class="border border-gray-400 px-3 py-1.5 text-sm rounded hover:bg-gray-100 transition">Sign up</a>
-            <a href="{{ route('login') }}" class="text-gray-700 hover:text-gray-900">Login</a>
+            <a href="{{ route('register') }}" class="inline-flex items-center justify-center bg-[#B59F84] text-white 
+                                        px-[20px] py-1.5 rounded-[25px] text-base font-semibold 
+                                        hover:bg-[#a08e77] hover:scale-105 transition-all duration-200 w-[100px]">Sign up</a>
+            <a href="{{ route('login') }}" class="inline-flex items-center justify-center bg-[#B59F84] text-white 
+                                        px-[20px] py-1.5 rounded-[25px] text-base font-semibold 
+                                        hover:bg-[#a08e77] hover:scale-105 transition-all duration-200 w-[100px]">Login</a>
         @endauth
     </div>
 

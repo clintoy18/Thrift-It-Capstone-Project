@@ -61,9 +61,8 @@
                                 
                                 <div class="flex flex-col relative left-[500px]">
                                 <a href="{{ route('products.create') }}" 
-                                class="inline-flex items-center justify-center bg-[#B59F84] text-white 
-                                        px-[20px] py-1.5 rounded-[25px] text-base font-semibold 
-                                        hover:bg-[#a08e77] hover:scale-105 transition-all duration-200 w-[140px]">
+                               class="inline-flex items-center justify-center bg-[#B59F84] text-white px-3 py-3 rounded-full text-base
+                                font-semibold hover:bg-[#a08e77] transform hover:scale-105 transition-all duration-300 shadow-md w-[140px]">
                                     Get Started
                                 </a>
                             </div>
@@ -83,108 +82,97 @@
                 </div>
             </div>
             
-            <div class="py-6 bg-white dark:bg-gray-900">
-                <div class="max-w-7xl mx-auto px-4 sm:px-4 lg:px-8 font-poppins">
-                
-                    <!-- Segment Showcase -->
-                    <div class="mb-6 text-center sm:text-left">
-                        <h2 class="text-xl sm:text-2xl font-bold text-custom-dark-brown">
-                            <i>THRIFT BY FASHION</i>
-                        </h2>
-                    </div>        
+           <!-- First Segment -->
+<div class="py-6 bg-white dark:bg-gray-900">
+    <div class="max-w-7xl mx-auto px-4 sm:px-4 lg:px-8 font-poppins">
 
-                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-                        <!-- Women Segment -->
-                        <a href="{{ route('segments.show', ['segment' => '1']) }}" class="relative group overflow-hidden rounded-md shadow-md h-[500px] w-full block">
-                            <img src="{{ asset('storage/segments/women.png') }}" 
-                                alt="Shop by Women" 
-                                class="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-105">
-                        </a>
+        <!-- Segment Showcase -->
+        <div class="mb-6 text-center sm:text-left">
+            <h2 class="text-xl sm:text-2xl font-bold text-custom-dark-brown">
+                <i>THRIFT BY FASHION</i>
+            </h2>
+        </div>
 
-                        <!-- Men Segment -->
-                        <a href="{{ route('segments.show', ['segment' => '2']) }}" class="relative group overflow-hidden rounded-md shadow-md h-[500px] w-full block">
-                            <img src="{{ asset('storage/segments/men.png') }}" 
-                                alt="Shop by Men" 
-                                class="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-105">
-                        </a>
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+            <!-- Women Segment -->
+            <a href="{{ route('segments.show', ['segment' => '1']) }}"
+                class="relative group overflow-hidden rounded-md shadow-md h-[500px] w-full block">
+                <img src="{{ asset('storage/segments/women.png') }}"
+                    alt="Shop by Women"
+                    class="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-105">
+            </a>
 
-                        <!-- Kids Segment -->
-                        <a href="{{ route('segments.show', ['segment' => '3']) }}" class="relative group overflow-hidden rounded-md shadow-md h-[500px] w-full block">
-                            <img src="{{ asset('storage/segments/kids.png') }}" 
-                                alt="Shop by Kids" 
-                                class="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-105">
-                        </a>
-                    </div>
+            <!-- Men Segment -->
+            <a href="{{ route('segments.show', ['segment' => '2']) }}"
+                class="relative group overflow-hidden rounded-md shadow-md h-[500px] w-full block">
+                <img src="{{ asset('storage/segments/men.png') }}"
+                    alt="Shop by Men"
+                    class="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-105">
+            </a>
 
-                    <!-- Section Title -->
-                    <div class="mb-6 text-center sm:text-left mt-12">
-                        <h2 class="text-xl sm:text-2xl font-bold text-red-600 dark:text-red-400">
-                            Featured Donations
-                        </h2>
-                        <p class="text-gray-600 dark:text-gray-400 text-sm sm:text-base mt-1">
-                            Discover great finds from our community
-                        </p>
-                    </div>
+            <!-- Kids Segment -->
+            <a href="{{ route('segments.show', ['segment' => '3']) }}"
+                class="relative group overflow-hidden rounded-md shadow-md h-[500px] w-full block">
+                <img src="{{ asset('storage/segments/kids.png') }}"
+                    alt="Shop by Kids"
+                    class="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-105">
+            </a>
+        </div>
 
-                    <!-- Donations Section (Secondary) -->
-                    <div class="rounded-xl shadow-sm overflow-hidden mt-8">
-                        <div class="p-4 sm:p-6">
+    </div>
+</div>
 
-                            @if($donations->count() > 0)
-                                <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-4 md:gap-6">
-                                    @foreach ($donations as $donation)
-                                        <div class="group relative  dark:bg-gray-800 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition duration-200 border border-[#D9D9D9] dark:border-gray-700">
-                                            <a href="{{ route('donations.show', $donation->id) }}" class="block h-full">
-                                                @if($donation->listingtype === 'for donation')
-                                                    <div class="absolute top-1 left-1 z-10 bg-[#D9D9D9] text-gray-700 text-[10px] sm:text-xs px-1.5 py-0.5 sm:px-2 sm:py-1 rounded-full">
-                                                        Donation
-                                                    </div>
-                                                @endif
+<!-- Second Segment (Duplicate) -->
+<div class="py-6 bg-white dark:bg-gray-900">
+    <div class="max-w-7xl mx-auto px-4 sm:px-4 lg:px-8 font-poppins">
 
-                                                <div class="relative aspect-square overflow-hidden">
-                                                    <img src="{{ $donation->image ? asset('storage/' . $donation->image) : asset('images/default-placeholder.png') }}" 
-                                                        alt="{{ $donation->name }}" 
-                                                        class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105">
-                                                    <div class="absolute inset-0 bg-gray-800 bg-opacity-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                                                        <span class="bg-white text-gray-800 px-2 py-0.5 rounded-full text-[10px] sm:text-xs font-medium">Quick view</span>
-                                                    </div>
-                                                </div>
+        <!-- Segment Showcase -->
+        <div class="mb-6 flex items-center justify-center text-center  sm:text-left">
+            <h2 class="text-xl sm:text-2xl font-bold text-custom-dark">
+                <i>POPULAR THIS WEEK</i>
+            </h2>
+        </div>
 
-                                                <div class="p-2 sm:p-3 font-poppins">
-                                                    <div class="flex justify-between items-start">
-                                                        <h3 class="text-xs sm:text-sm font-bold text-gray-900 dark:text-white group-hover:text-red-600 transition-colors truncate max-w-[70%]">
-                                                            {{ $donation->name }}
-                                                        </h3>
-                                                        <span class="text-[10px] sm:text-xs font-medium px-1 py-0.5 bg-[#D9D9D9] dark:bg-gray-700 rounded text-gray-700 dark:text-gray-300">
-                                                            {{ $donation->size ?? 'L' }}
-                                                        </span>
-                                                    </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+            <!-- Women Segment -->
+            <a href="{{ route('segments.show', ['segment' => '1']) }}"
+                class="relative group overflow-hidden rounded-md shadow-md h-[500px] w-full block">
+                <img src="{{ asset('storage/segments/women.png') }}"
+                    alt="Shop by Women"
+                    class="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-105">
+            </a>
 
-                                                    <p class="text-gray-500 dark:text-gray-400 text-[10px] sm:text-xs mt-0.5 truncate">
-                                                        {{ $donation->category->name ?? 'No Category' }}
-                                                    </p>
-                                                </div>
-                                            </a>
-                                        </div>
-                                    @endforeach
-                                </div>
-                            @else
-                                <x-empty-message message="No active donations found." link="{{ route('donations.create') }}" />
-                            @endif
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <!-- Men Segment -->
+            <a href="{{ route('segments.show', ['segment' => '2']) }}"
+                class="relative group overflow-hidden rounded-md shadow-md h-[500px] w-full block">
+                <img src="{{ asset('storage/segments/men.png') }}"
+                    alt="Shop by Men"
+                    class="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-105">
+            </a>
+
+            <!-- Kids Segment -->
+            <a href="{{ route('segments.show', ['segment' => '3']) }}"
+                class="relative group overflow-hidden rounded-md shadow-md h-[500px] w-full block">
+                <img src="{{ asset('storage/segments/kids.png') }}"
+                    alt="Shop by Kids"
+                    class="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-105">
+            </a>
+        </div>
+
+    </div>
+</div>
+
         <div class="py-16  bg-[#F8EED6] overflow-hidden">
         <div class="hidden md:block">
-            <div class="absolute top-[1710px] left-[-30px] z-0">
-                <img src="{{ asset('images/Ellipse 23.png') }}" alt="Background decoration" class="w-[196px] h-[221px] ">
-            </div>
+            
 
             <div class="mx-auto px-4 sm:px-6 lg:px-8">
                         {{-- Upcycling Section --}}
                         <div class="flex flex-col md:flex-row relative p-8 items-center scroll-animate left-[50px]">
                             {{-- Text Content --}}
+                            <div class="absolute top-[1710px] left-[-30px] z-0">
+                                    <img src="{{ asset('images/Ellipse 23.png') }}" alt="Background decoration" class="w-[196px] h-[221px] ">
+                                </div>
                             <div class="md:w-[800px] md:pr-4 mb-3 md:mb-0">
                                 <h2 class="text-3xl font-bold text-[#634600] mb-2 leading-tight" style="font-family: Poppins; font-weight: 800; font-size: 40px; line-height: 100%; letter-spacing: 5%;">
                                     Revamp Your Wardrobe With 
