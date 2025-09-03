@@ -99,4 +99,9 @@ class MessageService
             'receiver' => $receiver
         ];
     }
+
+    public function getUserConversations($userId)
+    {
+        return $this->messageRepository->getUserConversations($userId);
+    }
 } 

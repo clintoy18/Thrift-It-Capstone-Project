@@ -42,6 +42,14 @@
     <div class="hidden md:flex items-center gap-2 lg:gap-4">
         <a href="#" class="text-gray-700">🤍</a> <!-- Wishlist -->
         <a href="#" class="text-gray-700">🛒</a> <!-- Cart -->
+        @auth
+            <a href="{{ route('messages.index') }}" class="text-gray-700 relative">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8-1.325 0-2.58-.26-3.68-.725L3 20l1.32-3.96C3.474 15.003 3 13.55 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                </svg>
+                <!-- Unread indicator could go here -->
+            </a>
+        @endauth
 
         @auth
             <!-- Profile Dropdown -->
@@ -107,6 +115,14 @@
                 <a href="#" class="flex items-center text-gray-700 py-2 hover:text-red-600">
                     <span class="mr-2">🛒</span> Cart
                 </a>
+                @auth
+                    <a href="{{ route('messages.index') }}" class="flex items-center text-gray-700 py-2 hover:text-red-600">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8-1.325 0-2.58-.26-3.68-.725L3 20l1.32-3.96C3.474 15.003 3 13.55 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                        </svg>
+                        Messages
+                    </a>
+                @endauth
                 
                 @auth
                     @if($role === 0)
