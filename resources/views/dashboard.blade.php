@@ -122,45 +122,45 @@
     </div>
 </div>
 
-<!-- Second Segment (Duplicate) -->
-<div class="py-6 bg-white dark:bg-gray-900">
-    <div class="max-w-7xl mx-auto px-4 sm:px-4 lg:px-8 font-poppins">
+            <!-- Second Segment (Duplicate) -->
+            <div class="py-6 bg-white dark:bg-gray-900">
+                <div class="max-w-7xl mx-auto px-4 sm:px-4 lg:px-8 font-poppins">
 
-        <!-- Segment Showcase -->
-        <div class="mb-6 flex items-center justify-center text-center  sm:text-left">
-            <h2 class="text-xl sm:text-2xl font-bold text-custom-dark">
-                <i>POPULAR THIS WEEK</i>
-            </h2>
-        </div>
+                    <!-- Segment Showcase -->
+                    <div class="mb-6 flex items-center justify-center text-center  sm:text-left">
+                        <h2 class="text-xl sm:text-2xl font-bold text-custom-dark">
+                            <i>POPULAR THIS WEEK</i>
+                        </h2>
+                    </div>
+                                 
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+                        <!-- Women Segment -->
+                        <a href="{{ route('segments.show', ['segment' => '1']) }}"
+                            class="relative group overflow-hidden rounded-md shadow-md h-[500px] w-full block">
+                            <img src="{{ asset('storage/segments/women.png') }}"
+                                alt="Shop by Women"
+                                class="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-105">
+                        </a>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-            <!-- Women Segment -->
-            <a href="{{ route('segments.show', ['segment' => '1']) }}"
-                class="relative group overflow-hidden rounded-md shadow-md h-[500px] w-full block">
-                <img src="{{ asset('storage/segments/women.png') }}"
-                    alt="Shop by Women"
-                    class="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-105">
-            </a>
+                        <!-- Men Segment -->
+                        <a href="{{ route('segments.show', ['segment' => '2']) }}"
+                            class="relative group overflow-hidden rounded-md shadow-md h-[500px] w-full block">
+                            <img src="{{ asset('storage/segments/men.png') }}"
+                                alt="Shop by Men"
+                                class="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-105">
+                        </a>
 
-            <!-- Men Segment -->
-            <a href="{{ route('segments.show', ['segment' => '2']) }}"
-                class="relative group overflow-hidden rounded-md shadow-md h-[500px] w-full block">
-                <img src="{{ asset('storage/segments/men.png') }}"
-                    alt="Shop by Men"
-                    class="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-105">
-            </a>
+                        <!-- Kids Segment -->
+                        <a href="{{ route('segments.show', ['segment' => '3']) }}"
+                            class="relative group overflow-hidden rounded-md shadow-md h-[500px] w-full block">
+                            <img src="{{ asset('storage/segments/kids.png') }}"
+                                alt="Shop by Kids"
+                                class="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-105">
+                        </a>
+                    </div>
 
-            <!-- Kids Segment -->
-            <a href="{{ route('segments.show', ['segment' => '3']) }}"
-                class="relative group overflow-hidden rounded-md shadow-md h-[500px] w-full block">
-                <img src="{{ asset('storage/segments/kids.png') }}"
-                    alt="Shop by Kids"
-                    class="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-105">
-            </a>
-        </div>
-
-    </div>
-</div>
+                </div>
+            </div>
 
         <div class="py-16  bg-[#F8EED6] overflow-hidden">
         <div class="hidden md:block">

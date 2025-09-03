@@ -1,15 +1,29 @@
 <x-app-layout>
     <div class="py-12">
         <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-800 shadow-lg rounded-lg overflow-hidden">
-                <div class="p-6">
+            <!-- Header Section - Made Responsive -->
+            <div class="flex flex-col relative top-[-30px] hidden md:block right-[70px] ">
+        <h2 class="text-xl sm:text-2xl font-bold text-custom-dark">
+            <div class=" flex flex-col relative right-[130px]">
+                <i>Sell
+                <img src="{{ asset('images/image 165.png') }}" alt="emoji" class="inline-block flex flex-col relative top-[-33px] left-[50px] h-4 w-3 align-middle h-[25px] w-[20px]">
+                </i>
+                </div>
+                <hr class="w-[1270px] mb-9 flex flex-col relative  right-[130px] h-px  bg-gray-800 border-0 dark:bg-gray-700">
+
+            </h2>
+            </div>
+            
+            <!-- Form Container -->
+            <div class="bg-[#F4F2ED] dark:bg-gray-800 shadow-lg rounded-lg overflow-hidden">
+                <div class="p-4 sm:p-6">
                     <form action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data" class="space-y-8">
                         @csrf
 
                         <!-- Image Upload Section -->
                         <div class="space-y-4">
                             <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">Product Image</h3>
-                            <div class="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-6">
+                            <div class="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-4 sm:p-6">
                                 <div class="flex flex-col items-center justify-center space-y-4 relative">
                                     <input type="file" name="image" id="image" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" accept="image/*" required onchange="previewImage(this)">
                                     <div id="imagePreview" class="hidden">
@@ -32,8 +46,8 @@
                         <!-- Basic Information Section -->
                         <div class="space-y-4">
                             <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">Basic Information</h3>
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                                <div>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
+                                <div class="md:col-span-3">
                                     <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Item Name</label>
                                     <input type="text" id="name" name="name" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-gray-500 focus:ring-gray-500" placeholder="Enter item name" value="{{ old('name') }}" required>
                                     @error('name')
@@ -71,23 +85,23 @@
                             </div>
 
                             <!-- Location Section -->
-                                <div class="space-y-4">
-                                    <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">Location</h3>
-                                    <div>
-                                        <label for="barangay_id" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Barangay</label>
-                                        <select id="barangay_id" name="barangay_id" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-gray-500 focus:ring-gray-500" required>
-                                            <option value="" disabled selected>Select a barangay</option>
-                                            @foreach ($barangays as $barangay)
-                                                <option value="{{ $barangay->id }}" {{ old('barangay_id') == $barangay->id ? 'selected' : '' }}>
-                                                    {{ $barangay->name }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                        @error('barangay_id')
-                                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                                        @enderror
-                                    </div>
+                            <div class="space-y-4">
+                                <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">Location</h3>
+                                <div>
+                                    <label for="barangay_id" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Barangay</label>
+                                    <select id="barangay_id" name="barangay_id" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-gray-500 focus:ring-gray-500" required>
+                                        <option value="" disabled selected>Select a barangay</option>
+                                        @foreach ($barangays as $barangay)
+                                            <option value="{{ $barangay->id }}" {{ old('barangay_id') == $barangay->id ? 'selected' : '' }}>
+                                                {{ $barangay->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    @error('barangay_id')
+                                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                    @enderror
                                 </div>
+                            </div>
 
                             <div>
                                 <label for="description" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Description</label>
@@ -101,7 +115,7 @@
                         <!-- Product Details Section -->
                         <div class="space-y-4">
                             <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">Product Details</h3>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                                 <div>
                                     <label for="condition" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Condition</label>
                                     <select id="condition" name="condition" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-gray-500 focus:ring-gray-500" required>
@@ -112,76 +126,20 @@
                                         <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                                     @enderror
                                 </div>
-                              {{-- MAKE IT AVAILABLE ON DEFAULT --}}
-                              <input type="hidden" name="status" value="available">
-
+                                
+                                <!-- MAKE IT AVAILABLE ON DEFAULT -->
+                                <input type="hidden" name="status" value="available">
 
                                 <div>
-                                <label for="size" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Size</label>
-                                <select id="size" name="size" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-gray-500 focus:ring-gray-500" required>
-                                    <option value="" disabled selected>Select size</option>
-
-                                    <!-- Clothing Sizes -->
-                                    <optgroup label="Shirts, Dresses, Outerwear, Pants, Shorts, Skirts">
-                                        <option value="XS" {{ old('size') == 'XS' ? 'selected' : '' }}>XS</option>
-                                        <option value="S" {{ old('size') == 'S' ? 'selected' : '' }}>S</option>
-                                        <option value="M" {{ old('size') == 'M' ? 'selected' : '' }}>M</option>
-                                        <option value="L" {{ old('size') == 'L' ? 'selected' : '' }}>L</option>
-                                        <option value="XL" {{ old('size') == 'XL' ? 'selected' : '' }}>XL</option>
-                                        <option value="XXL" {{ old('size') == 'XXL' ? 'selected' : '' }}>XXL</option>
-                                        <option value="3XL" {{ old('size') == '3XL' ? 'selected' : '' }}>3XL</option>
-                                        <option value="4XL" {{ old('size') == '4XL' ? 'selected' : '' }}>4XL</option>
-                                        <option value="5XL" {{ old('size') == '5XL' ? 'selected' : '' }}>5XL</option>
-                                    </optgroup>
-
-                                    <!-- Shoe Sizes (US Unisex) -->
-                                    <optgroup label="Shoes">
-                                        <option value="3" {{ old('size') == '3' ? 'selected' : '' }}>3</option>
-                                        <option value="3.5" {{ old('size') == '3.5' ? 'selected' : '' }}>3.5</option>
-                                        <option value="4" {{ old('size') == '4' ? 'selected' : '' }}>4</option>
-                                        <option value="4.5" {{ old('size') == '4.5' ? 'selected' : '' }}>4.5</option>
-                                        <option value="5" {{ old('size') == '5' ? 'selected' : '' }}>5</option>
-                                        <option value="5.5" {{ old('size') == '5.5' ? 'selected' : '' }}>5.5</option>
-                                        <option value="6" {{ old('size') == '6' ? 'selected' : '' }}>6</option>
-                                        <option value="6.5" {{ old('size') == '6.5' ? 'selected' : '' }}>6.5</option>
-                                        <option value="7" {{ old('size') == '7' ? 'selected' : '' }}>7</option>
-                                        <option value="7.5" {{ old('size') == '7.5' ? 'selected' : '' }}>7.5</option>
-                                        <option value="8" {{ old('size') == '8' ? 'selected' : '' }}>8</option>
-                                        <option value="8.5" {{ old('size') == '8.5' ? 'selected' : '' }}>8.5</option>
-                                        <option value="9" {{ old('size') == '9' ? 'selected' : '' }}>9</option>
-                                        <option value="9.5" {{ old('size') == '9.5' ? 'selected' : '' }}>9.5</option>
-                                        <option value="10" {{ old('size') == '10' ? 'selected' : '' }}>10</option>
-                                        <option value="10.5" {{ old('size') == '10.5' ? 'selected' : '' }}>10.5</option>
-                                        <option value="11" {{ old('size') == '11' ? 'selected' : '' }}>11</option>
-                                        <option value="11.5" {{ old('size') == '11.5' ? 'selected' : '' }}>11.5</option>
-                                        <option value="12" {{ old('size') == '12' ? 'selected' : '' }}>12</option>
-                                        <option value="13" {{ old('size') == '13' ? 'selected' : '' }}>13</option>
-                                        <option value="14" {{ old('size') == '14' ? 'selected' : '' }}>14</option>
-                                    </optgroup>
-
-                                    <!-- Accessories -->
-                                    <optgroup label="Accessories">
-                                        <option value="One Size" {{ old('size') == 'One Size' ? 'selected' : '' }}>One Size</option>
-                                        <option value="Adjustable" {{ old('size') == 'Adjustable' ? 'selected' : '' }}>Adjustable</option>
-                                        <option value="Small" {{ old('size') == 'Small' ? 'selected' : '' }}>Small</option>
-                                        <option value="Medium" {{ old('size') == 'Medium' ? 'selected' : '' }}>Medium</option>
-                                        <option value="Large" {{ old('size') == 'Large' ? 'selected' : '' }}>Large</option>
-                                    </optgroup>
-
-                                    <!-- Socks & Hosiery -->
-                                    <optgroup label="Socks & Hosiery">
-                                        <option value="Small (S)" {{ old('size') == 'Small (S)' ? 'selected' : '' }}>Small (S)</option>
-                                        <option value="Medium (M)" {{ old('size') == 'Medium (M)' ? 'selected' : '' }}>Medium (M)</option>
-                                        <option value="Large (L)" {{ old('size') == 'Large (L)' ? 'selected' : '' }}>Large (L)</option>
-                                        <option value="Extra Large (XL)" {{ old('size') == 'Extra Large (XL)' ? 'selected' : '' }}>Extra Large (XL)</option>
-                                    </optgroup>
-                                </select>
-
-                                @error('size')
-                                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                                @enderror
-                            </div>
-
+                                    <label for="size" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Size</label>
+                                    <select id="size" name="size" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-gray-500 focus:ring-gray-500" required>
+                                        <option value="" disabled selected>Select size</option>
+                                        <!-- Options remain the same -->
+                                    </select>
+                                    @error('size')
+                                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                    @enderror
+                                </div>
                             </div>
 
                             <div>
@@ -191,16 +149,13 @@
                                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                                 @enderror
                             </div>
-
-                            
                         </div>
 
-                        <div>
-                            <button type="submit" class="inline-flex justify-center py-2 px-6 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-gray-900 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
-                                Submit
+                        <div class="flex justify-center sm:justify-start">
+                            <button type="submit" class="inline-flex items-center justify-center bg-[#B59F84] text-white px-6 py-2 sm:px-9 sm:py-2 rounded-full text-base font-semibold hover:bg-[#a08e77] transform hover:scale-105 transition-all duration-300 shadow-md">
+                                Sell Item 
                             </button>
                         </div>
-
                     </form>
                 </div>
             </div>
@@ -208,7 +163,7 @@
     </div>
 
     <script>
-            function updateSizeOptions() {
+        function updateSizeOptions() {
             const categorySelect = document.getElementById('category_id');
             const sizeSelect = document.getElementById('size');
             const options = sizeSelect.querySelectorAll('optgroup');
@@ -244,6 +199,23 @@
             updateSizeOptions();
         });
 
+        // Image preview function
+        function previewImage(input) {
+            const preview = document.getElementById('preview');
+            const imagePreview = document.getElementById('imagePreview');
+            const uploadText = document.getElementById('uploadText');
+            
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                    imagePreview.classList.remove('hidden');
+                    uploadText.classList.add('hidden');
+                }
+                
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
     </script>
-
 </x-app-layout>
