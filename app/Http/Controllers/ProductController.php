@@ -12,6 +12,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use App\Services\ProductService;
+use App\Services\CategoriesService;
 use App\Models\Segment;
 use App\Models\Barangay;
 
@@ -20,11 +21,13 @@ use App\Models\Barangay;
 class ProductController extends Controller
 {
 
-    protected $productService;
+    protected $productService,$categoryService;
+    
 
-    public function __construct(ProductService $productService)
+    public function __construct(ProductService $productService, CategoriesService $categoryService)
     {
         $this->productService = $productService;
+        $this->categoryService = $categoryService;
     }
 
     public function index(): View
@@ -34,7 +37,7 @@ class ProductController extends Controller
     }
     public function create(): View
     {
-        $categories = Categories::all(); 
+        $categories = $this->categoryService->getAllCategories(); 
         $segments = Segment::all(); 
         $barangays = Barangay::all(); 
         return view('products.create', compact('categories', 'segments', 'barangays'));
@@ -51,7 +54,7 @@ class ProductController extends Controller
 
     public function edit(Product $product): View
     {
-        $categories = Categories::all();
+        $categories = $this->categoryService->getAllCategories(); 
         $segments = Segment::all();
         $barangays = Barangay::all();
 
