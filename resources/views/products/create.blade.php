@@ -18,10 +18,10 @@
                     <form action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data" class="space-y-8">
                         @csrf
 
-                        <!-- Image Upload Section -->
-                        <div class="space-y-4">
+                         <!-- Image Upload Section -->
+                         <div class="space-y-4">
                             <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">Product Image</h3>
-                            <div class="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-6">
+                            <div class="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-4 sm:p-6">
                                 <div class="flex flex-col items-center justify-center space-y-4 relative">
                                     <input type="file" name="image" id="image" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" accept="image/*" required onchange="previewImage(this)">
                                     <div id="imagePreview" class="hidden">
@@ -221,6 +221,22 @@
     </div>
 
     <script>
+            function previewImage(input) {
+            const preview = document.getElementById('preview');
+            const imagePreview = document.getElementById('imagePreview');
+            const uploadText = document.getElementById('uploadText');
+
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                    imagePreview.classList.remove('hidden');
+                    uploadText.classList.add('hidden');
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
             function updateSizeOptions() {
             const categorySelect = document.getElementById('category_id');
             const sizeSelect = document.getElementById('size');
