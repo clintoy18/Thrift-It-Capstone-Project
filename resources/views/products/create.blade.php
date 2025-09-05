@@ -1,57 +1,73 @@
 <x-app-layout>
-    <div class="py-12">
-        <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
-    <div class="flex flex-col relative top-[-30px] hidden md:block right-[70px] ">
-        <h2 class="text-xl sm:text-2xl font-bold text-custom-dark">
-            <div class=" flex flex-col relative right-[130px]">
-                <i>Sell
-                <img src="{{ asset('images/image 165.png') }}" alt="emoji" class="inline-block flex flex-col relative top-[-33px] left-[50px] h-4 w-3 align-middle h-[25px] w-[20px]">
-                </i>
-                </div>
-                <hr class="w-[1270px] mb-9 flex flex-col relative  right-[130px] h-px  bg-gray-800 border-0 dark:bg-gray-700">
-
-            </h2>
+    <div class="py-6 sm:py-12">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- Mobile Header -->
+            <div class="block md:hidden mb-6">
+                <h2 class="text-xl font-bold text-custom-dark text-center">
+                    <i>Sell
+                    <img src="{{ asset('images/image 165.png') }}" alt="emoji" class="inline-block h-5 w-4 align-middle ml-1">
+                    </i>
+                </h2>
+                <hr class="w-full mt-4 h-px bg-gray-800 border-0 dark:bg-gray-700">
             </div>
-            <div class=" bg-[#F4F2ED] dark:bg-gray-800 shadow-lg rounded-lg overflow-hidden">
-           
-                <div class="p-6">
-                    <form action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data" class="space-y-8">
-                        @csrf
+            
+            <!-- Desktop Header -->
+            <div class="hidden md:block relative top-[-30px]">
+                <h2 class="text-xl sm:text-2xl font-bold text-custom-dark">
+                    <div class="flex flex-col relative right-[130px]">
+                        <i>Sell
+                        <img src="{{ asset('images/image 165.png') }}" alt="emoji" class="inline-block flex flex-col relative top-[-33px] left-[50px] h-4 w-3 align-middle h-[25px] w-[20px]">
+                        </i>
+                    </div>
+                    <hr class="w-[1270px] mb-9 flex flex-col relative right-[130px] h-px bg-gray-800 border-0 dark:bg-gray-700">
+                </h2>
+            </div>
 
-                         <!-- Image Upload Section -->
-                         <div class="space-y-4">
-                            <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">Product Image</h3>
-                            <div class="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-4 sm:p-6">
-                                <div class="flex flex-col items-center justify-center space-y-4 relative">
-                                    <input type="file" name="image" id="image" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" accept="image/*" required onchange="previewImage(this)">
-                                    <div id="imagePreview" class="hidden">
-                                        <img id="preview" class="max-h-48 w-auto object-contain rounded-lg" src="" alt="Preview">
-                                    </div>
-                                    <div id="uploadText" class="text-center z-0">
-                                        <svg class="w-12 h-12 mx-auto text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                                        </svg>
-                                        <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">Click to upload or drag and drop</p>
-                                        <p class="text-xs text-gray-500 dark:text-gray-500">PNG, JPG up to 10MB</p>
-                                    </div>
+            <!-- Main Layout with Image Upload Outside -->
+            <div class="grid grid-cols-1 lg:grid-cols-5 gap-8 lg:gap-20">
+                <!-- Left Side - Image Upload Section (Outside the form container) -->
+                <div class="lg:col-span-2 flex flex-col lg:relative lg:right-[100px] lg:top-[150px] w-full lg:w-[400px]">
+                    <div class="space-y-4">
+                        <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">Product Image</h3>
+                        <div class="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-6 sm:p-8 bg-white dark:bg-gray-700 min-h-[300px]">
+                            <div class="flex flex-col items-center justify-center space-y-6 relative h-full">
+                                <input type="file" name="image" id="image" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" accept="image/*" required onchange="previewImage(this)">
+                                <div id="imagePreview" class="hidden">
+                                    <img id="preview" class="max-h-64 w-auto object-contain rounded-lg" src="" alt="Preview">
+                                </div>
+                                <div id="uploadText" class="text-center z-0">
+                                    <svg class="w-16 h-16 mx-auto text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                    </svg>
+                                    <p class="mt-4 text-base text-gray-600 dark:text-gray-400">Click to upload or drag and drop</p>
+                                    <p class="text-sm text-gray-500 dark:text-gray-500">PNG, JPG up to 10MB</p>
                                 </div>
                             </div>
-                            @error('image')
-                            <p class="text-red-600 text-sm">{{ $message }}</p>
-                            @enderror
                         </div>
+                        @error('image')
+                        <p class="text-red-600 text-sm">{{ $message }}</p>
+                        @enderror
+                    </div>
+                </div>
 
-                        <!-- Basic Information Section -->
+                <!-- Right Side - Form Container -->
+                <div class="lg:col-span-3">
+                    <div class="bg-[#F4F2ED] dark:bg-gray-800 shadow-lg rounded-lg overflow-hidden w-full lg:w-[643px]">
+                        <div class="p-4 sm:p-6">
+                            <form action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data" class="space-y-8">
+                                @csrf
+                                <!-- Basic Information Section -->
                         <div class="space-y-4">
                             <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">Basic Information</h3>
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                                <div>
+                            <div>
                                     <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Item Name</label>
                                     <input type="text" id="name" name="name" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-gray-500 focus:ring-gray-500" placeholder="Enter item name" value="{{ old('name') }}" required>
                                     @error('name')
                                         <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                                     @enderror
                                 </div>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+                                
 
                                 <div>
                                     <label for="category_id" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Category</label>
@@ -113,7 +129,7 @@
                         <!-- Product Details Section -->
                         <div class="space-y-4">
                             <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">Product Details</h3>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                                 <div>
                                     <label for="condition" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Condition</label>
                                     <select id="condition" name="condition" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-gray-500 focus:ring-gray-500" required>
@@ -207,14 +223,16 @@
                             
                         </div>
 
-                        <div class="flex justify-center sm:justify-start">
-                            <button type="submit"   class="inline-flex items-center justify-center bg-[#B59F84] text-white px-9 py-2 rounded-full
-                             text-base font-semibold hover:bg-[#a08e77] transform hover:scale-105 transition-all duration-300 shadow-md">
-                                Sell Item 
-                            </button>
-                        </div>
+                                <!-- Submit Button -->
+                                <div class="flex justify-center sm:justify-end">
+                                    <button type="submit" class="inline-flex items-center justify-center bg-[#B59F84] text-white px-8 sm:px-10 py-2 rounded-[10px] text-sm sm:text-base font-semibold hover:bg-[#a08e77] transform hover:scale-105 transition-all duration-300 shadow-md w-full sm:w-auto">
+                                        Sell Item 
+                                    </button>
+                                </div>
 
-                    </form>
+                            </form>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
