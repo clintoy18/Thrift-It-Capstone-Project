@@ -42,28 +42,57 @@
                 </div>
 
                 <!-- Right Column -->
-                <div class="md:w-2/3 flex flex-col gap-6">
+                <div class="md:w-2/3 flex flex-col gap-8">
 
                     <!-- User Info -->
-                    <div class="flex items-center gap-4">
-                       
-                        <div class="ml-auto flex gap-2 text-sm w-full sm:w-auto hidden md:flex">
-                            <a href="{{ route('private.chat', $donation->user->id) }}" class="inline-flex items-center justify-center bg-[#B59F84] text-white 
-                                        px-[20px] py-2 rounded-[25px] text-base font-semibold 
-                                        hover:bg-[#a08e77] hover:scale-105 transition-all duration-200 w-full sm:w-[120px] text-center">
-                                Message
-                            </a>
-                            <a href="{{ route('profile.show', $donation->user->id) }}" class="inline-flex items-center justify-center bg-[#B59F84] text-white 
-                                        px-[20px] py-2 rounded-[25px] text-base font-semibold 
-                                        hover:bg-[#a08e77] hover:scale-105 transition-all duration-200 w-full sm:w-[120px] text-center">
-                                Profile
-                            </a>
+            
+                     <div>    <!-- User Profile Card -->
+                    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden">
+                        <!-- Background Image Section -->
+                        <div class="relative h-32 bg-gradient-to-r from-blue-400 to-purple-500">                                        
+                            <!-- You can replace this with an actual background image -->
+                            <div class="absolute inset-0 bg-black bg-opacity-20"></div>
                         </div>
+                        
+                        <!-- User Info Section -->
+                        <div class="relative bg-[#E1D5B6] p-4">
+                            <!-- Avatar -->
+                            
+                            
+                            <!-- User Details -->
+                            <div class="flex items-start justify-between pt-4">
+                                <div class="flex-1">
+                                    
+                                    <!-- Rating -->
+                                    <div class="flex items-center mt-1">
+                                        <div class="flex text-yellow-500">
+                                            <span>★★★★★</span>
+                                        </div>
+                                        <span class="ml-2 text-sm text-gray-600 dark:text-gray-400">(5)</span>
+                                    </div>
+                                </div>
+                                
+                                <!-- Action Buttons -->
+                                <div class="flex flex-col gap-2 ml-4">
+                                    <!-- Add Friend Button -->
+                                    <a href="{{ route('private.chat', $donation->user->id) }}"
+                                       class="px-4 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 transition text-sm font-medium">
+                                        Message
+                                    </a>
+                                    
+                                    <!-- Visit Profile Button -->
+                                    <a href="{{ route('profile.show', $donation->user->id) }}"
+                                       class="px-4 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 transition text-sm font-medium">
+                                        Visit Profile
+                                    </a>
+                                </div>
+                            </div>
+                            </div>
                     </div>
 
                     <!-- Donation Info -->
-                    <div>
-                        <h1 class="text-xl sm:text-2xl font-bold mb-1">{{ $donation->name }}</h1>
+                    <div class="mt-6 mb-[-20px]">
+                        <h1 class="text-xl sm:text-2xl font-bold mb-1 ">{{ $donation->name }}</h1>
                         <p class="text-xs sm:text-sm text-gray-600">
                             Size: {{ $donation->size }} · 
                             {{ ucfirst($donation->condition) }} condition · 
@@ -75,8 +104,8 @@
                     
 
                     <!-- Comments -->
-                    <h3 class="text-base sm:text-lg font-bold mt-6 mb-[-20px]">Comments</h3>
-                    <div class="border p-3 sm:p-4 rounded-lg bg-[#F4F2ED]">
+                    <h3 class="text-base sm:text-lg font-bold mt-9 mb-[-40px]">Comments</h3>
+                    <div class="border p-3 sm:p-4 rounded-lg mt-9 mb-[-30px] bg-[#F4F2ED]">
                         
                         <div class="max-h-80 overflow-y-auto space-y-3 sm:space-y-4">
                             @forelse($donation->comments as $comment)
