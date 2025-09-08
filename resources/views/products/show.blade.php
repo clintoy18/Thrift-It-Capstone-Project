@@ -36,54 +36,66 @@
                 <!-- Right Column: User Info, Product Details, Comments -->
                 <div class="md:w-2/3 flex flex-col gap-6">
 
-                    <!-- User & Rating Section -->
-                    <div class="flex items-center gap-4">
-                        <div class="flex flex-col">
-                            <p class="font-semibold text-gray-800 dark:text-gray-200">
-                                {{ $product->user->fname }} {{ $product->user->lname }}
-                            </p>
-                            <!-- Static rating for demonstration -->
-                            <div class="flex items-center text-sm text-yellow-500">
-                                <span class="mr-1">★★★★★</span>
-                                <span class="text-gray-500"> (5)</span>
-                            </div>
+                    <!-- User Profile Card -->
+                    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden">
+                        <!-- Background Image Section -->
+                        <div class="relative h-32 bg-gradient-to-r from-blue-400 to-purple-500">                                        
+                            <!-- You can replace this with an actual background image -->
+                            <div class="absolute inset-0 bg-black bg-opacity-20"></div>
                         </div>
-                        <!-- Action Buttons -->
-                        <div class="ml-auto flex gap-2 text-sm">
-                            <!-- Message Seller -->
-                            <a href="{{ route('private.chat', $product->user->id) }}"
-                               class="flex items-center gap-1 px-3 py-1.5 border border-gray-300 text-gray-700 rounded hover:bg-gray-100 transition">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
-                                     viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                          d="M8 10h.01M12 10h.01M16 10h.01M21 12c0 4.418-4.03 8-9 8-1.325 0-2.58-.26-3.68-.725L3 20l1.32-3.96C3.474 15.003 3 13.55 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
-                                </svg>
-                                Message
-                            </a>
-
-                            <!-- Visit Profile -->
-                            <a href="{{ route('profile.show', $product->user->id) }}"
-                               class="flex items-center gap-1 px-3 py-1.5 border border-gray-300 text-gray-700 rounded hover:bg-gray-100 transition">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
-                                     viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                          d="M12 14c-2.5 0-4 1.5-4 3v1h8v-1c0-1.5-1.5-3-4-3z"/>
-                                    <circle cx="12" cy="8" r="3"/>
-                                </svg>
-                                Profile
-                            </a>
-
-                            <!-- Report User -->
+                        
+                        <!-- User Info Section -->
+                        <div class="relative bg-[#E1D5B6] p-4">
+                            <!-- Avatar -->
+                            <div class="absolute -top-8 left-4 w-16 h-16 bg-white dark:bg-gray-700 rounded-full border-4 border-white dark:border-gray-800 flex items-center justify-center">
+                                <span class="text-xl font-bold text-gray-800 dark:text-gray-200">
+                                    {{ strtoupper(substr($product->user->fname, 0, 1) . substr($product->user->lname, 0, 1)) }}
+                                </span>
+                            </div>
+                            
+                            <!-- User Details -->
+                            <div class="flex items-start justify-between pt-4">
+                                <div class="flex-1">
+                                    <h3 class="font-semibold text-gray-800 dark:text-gray-200 text-lg">
+                                        {{ $product->user->fname }}{{ $product->user->lname }}_14
+                                    </h3>
+                                    <!-- Rating -->
+                                    <div class="flex items-center mt-1">
+                                        <div class="flex text-yellow-500">
+                                            <span>★★★★★</span>
+                                        </div>
+                                        <span class="ml-2 text-sm text-gray-600 dark:text-gray-400">(5)</span>
+                                    </div>
+                                </div>
+                                
+                                <!-- Action Buttons -->
+                                <div class="flex flex-col gap-2 ml-4">
+                                    <!-- Add Friend Button -->
+                                    <a href="{{ route('private.chat', $product->user->id) }}"
+                                       class="px-4 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 transition text-sm font-medium">
+                                        Message
+                                    </a>
+                                    
+                                    <!-- Visit Profile Button -->
+                                    <a href="{{ route('profile.show', $product->user->id) }}"
+                                       class="px-4 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 transition text-sm font-medium">
+                                        Visit Profile
+                                    </a>
+                                </div>
+                            </div>
+                            
+                            <!-- Report Button (if not the owner) -->
                             @if(Auth::id() !== $product->user_id)
-                                <a href="{{ route('reports.create', $product->user->id) }}"
-                                   class="flex items-center gap-1 px-3 py-1.5 border border-red-300 text-red-600 rounded hover:bg-red-50 transition">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
-                                         viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                              d="M12 9v2m0 4h.01M5.455 4.455a2.836 2.836 0 012-1.455h9.09a2.836 2.836 0 012 1.455l3.182 5.455a2.836 2.836 0 010 2.182L18.545 17.09a2.836 2.836 0 01-2 1.455H7.455a2.836 2.836 0 01-2-1.455L2.273 12.09a2.836 2.836 0 010-2.182L5.455 4.455z"/>
-                                    </svg>
-                                    Report
-                                </a>
+                                <div class="mt-3 pt-3 border-t border-gray-200 dark:border-gray-600">
+                                    <a href="{{ route('reports.create', $product->user->id) }}"
+                                       class="inline-flex items-center gap-2 px-3 py-1.5 text-sm text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 transition">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                                  d="M12 9v2m0 4h.01M5.455 4.455a2.836 2.836 0 012-1.455h9.09a2.836 2.836 0 012 1.455l3.182 5.455a2.836 2.836 0 010 2.182L18.545 17.09a2.836 2.836 0 01-2 1.455H7.455a2.836 2.836 0 01-2-1.455L2.273 12.09a2.836 2.836 0 010-2.182L5.455 4.455z"/>
+                                        </svg>
+                                        Report User
+                                    </a>
+                                </div>
                             @endif
                         </div>
                     </div>
