@@ -79,6 +79,10 @@ Route::middleware(['auth', 'verified', 'rolemiddleware:admin'])->prefix('admin')
     // Sales Report Routes
     Route::get('/sales/monthly-report/{month}', [App\Http\Controllers\Admin\SalesReportController::class, 'generateMonthlyReport'])->name('sales.monthly-report');
     Route::get('/sales/yearly-report', [App\Http\Controllers\Admin\SalesReportController::class, 'generateYearlyReport'])->name('sales.yearly-report');
+
+    // Route::post('/admin/users/{user}/verify', [\App\Http\Controllers\Admin\AdminUserController::class, 'verify'])
+    //     ->name('admin.users.verify');
+
 });
 
 //Global Routes

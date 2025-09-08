@@ -7,14 +7,26 @@ use App\Models\User;
 use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use App\Services\UserVerificationService; 
 use App\Models\Report;
 
 class AdminUserController extends Controller
+
 {
+
+     protected $service;
+
+    public function __construct(UserVerificationService $service)
+    {
+        $this->service = $service;
+    }
+
     public function index(): View
     {
-        $users = User::orderBy('lname', 'asc')->paginate(10);
-        return view('admin.users.index', compact('users'));
+        $users =  $this->service->verified()->paginate(10);
+        $pendingUsers = $this->service->pending();
+        // dd($pendingVerifications);
+        return view('admin.users.index', compact('users','pendingUsers'));
     }
     
     public function show(User $user): View
@@ -26,7 +38,10 @@ class AdminUserController extends Controller
     public function update(Request $request, User $user): RedirectResponse
     {
         $validated = $request->validate([
-            'is_active' => 'boolean'
+            'is_active' => 'boolean',
+            'verification_status' => 'in:pending,approved,rejected',
+            'is_verified' => 'boolean',
+
         ]);
 
         $user->update($validated);
@@ -42,6 +57,8 @@ class AdminUserController extends Controller
         return redirect()->route('admin.users.index')
             ->with('success', 'User deleted successfully.');
     }
+
+    
 
   
 } 
