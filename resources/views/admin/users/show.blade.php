@@ -63,6 +63,14 @@
             <!-- Update Form -->
             <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
                 <h3 class="text-xl font-bold text-gray-900 dark:text-gray-100 mb-4">Update User Status</h3>
+                @if($user->verification_document)
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Verification Document</label>
+                        <a href="{{ Storage::url($user->verification_document) }}" target="_blank" class="text-blue-600 underline">
+                            View Document
+                        </a>
+                    </div>
+                @endif
                 <form action="{{ route('admin.users.update', $user) }}" method="POST">
                     @csrf
                     @method('PUT')
@@ -75,6 +83,17 @@
                                 <option value="0" {{ !$user->is_active ? 'selected' : '' }}>Inactive</option>
                             </select>
                         </div>
+
+                         <!-- Verification Status -->
+                    <div>
+                        <label for="verification_status" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Verification Status</label>
+                        <select name="verification_status" id="verification_status"
+                            class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300">
+                            <option value="pending" {{ $user->verification_status === 'pending' ? 'selected' : '' }}>Pending</option>
+                            <option value="approved" {{ $user->verification_status === 'approved' ? 'selected' : '' }}>Approved</option>
+                            <option value="rejected" {{ $user->verification_status === 'rejected' ? 'selected' : '' }}>Rejected</option>
+                        </select>
+                    </div>
 
                         <div class="flex justify-end">
                             <button type="submit"
