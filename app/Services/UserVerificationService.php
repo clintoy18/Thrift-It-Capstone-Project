@@ -15,7 +15,7 @@ class UserVerificationService
 
     public function all()
     {
-         return User::orderBy('lname', 'asc');
+        return $this->repo->all();
     }
 
     public function submit(User $user, $document)

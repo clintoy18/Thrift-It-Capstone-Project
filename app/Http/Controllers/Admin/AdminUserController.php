@@ -35,20 +35,22 @@ class AdminUserController extends Controller
         return view('admin.users.show', compact('user'));
     }
 
-    public function update(Request $request, User $user): RedirectResponse
-    {
-        $validated = $request->validate([
-            'is_active' => 'boolean',
-            'verification_status' => 'in:pending,approved,rejected',
-            'is_verified' => 'boolean',
+        public function update(Request $request, User $user): RedirectResponse
+        {
+            $validated = $request->validate([
+                'is_active' => 'boolean',
+                'verification_status' => 'in:pending,approved,rejected',
+            ]);
 
-        ]);
+            //set is_verified based on verification_status
+            $validated['is_verified'] = ($validated['verification_status'] ?? $user->verification_status) === 'approved';
 
-        $user->update($validated);
+            $user->update($validated);
 
-        return redirect()->route('admin.users.show', $user)
-            ->with('success', 'User updated successfully.');
-    }
+            return redirect()
+                ->route('admin.users.show', $user)
+                ->with('success', 'User updated successfully.');
+        }
 
     public function destroy(User $user): RedirectResponse
     {

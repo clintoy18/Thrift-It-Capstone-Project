@@ -1,44 +1,55 @@
 <x-app-layout>
     <div class="py-6 bg-white dark:bg-gray-900">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center mb-6">
-                <h2 class="text-xl font-bold text-red-600 dark:text-red-400">
-                    {{ Auth::id() === $user->id ? 'My Products' : $user->fname . "'s Products" }}
-                </h2>
-
+            <!-- Profile Header -->
+            <div class="flex flex-col sm:flex-row justify-between items-center mb-8 gap-4">
+                <div class="flex items-center gap-3">
+                    <h2 class="text-2xl font-extrabold text-gray-900 dark:text-gray-100 flex items-center">
+                        {{ Auth::id() === $user->id ? 'My Products' : $user->fname . "'s Products" }}
+                        @if($user->is_verified)
+                            <span class="ml-2 inline-flex items-center px-2 py-0.5 rounded-full bg-green-100 dark:bg-green-900">
+                                <svg class="w-5 h-5 text-green-600 dark:text-green-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                                </svg>
+                                <span class="ml-1 text-xs font-semibold text-green-700 dark:text-green-200">Verified User</span>
+                            </span>
+                        @endif
+                    </h2>
+                </div>
                 @if (Auth::id() === $user->id)
-                    <!-- Show button only if current user is viewing their own profile -->
-                    <a href="{{ route('products.create') }}" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 focus:outline-none transition">
-                        <span class="font-semibold">List a Product</span>
+                    <a href="{{ route('products.create') }}" class="inline-flex items-center px-5 py-2 bg-red-600 text-white font-semibold rounded-lg shadow hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition">
+                        <span class="mr-2">+</span> List a Product
                     </a>
                 @endif
             </div>
             
-               <!-- Profile Information Section -->
-               <div class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
+            <!-- Profile Information Section -->
+            <div class="p-6 bg-white dark:bg-gray-800 shadow-lg rounded-xl mb-8">
                 <div class="max-w-xl">
-                    <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">Profile Information</h3>
-
-                    <!-- Display User Information -->
-                    <div class="mt-2">
-                        <p><strong>Name:</strong> {{ $user->fname }}  {{ $user->lname }}</p>
-                        <p><strong>Email:</strong> {{ $user->email }}</p>
-                        <p><strong>Bio:</strong> {{ $user->bio ?? 'No bio available' }}</p>
-                        
-                        @if (Auth::id() !== $user->id)
-                        <div class="mt-4 space-y-4">
+                    <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100 mb-4">Profile Information</h3>
+                    <div class="space-y-2">
+                        <div class="flex items-center gap-2">
+                            <span class="font-semibold text-gray-700 dark:text-gray-200">Name:</span>
+                            <span class="text-gray-900 dark:text-gray-100">{{ $user->fname }} {{ $user->lname }}</span>
+                        </div>
+                        <div>
+                            <span class="font-semibold text-gray-700 dark:text-gray-200">Bio:</span>
+                            <span class="text-gray-700 dark:text-gray-300">{{ $user->bio ?? 'No bio available' }}</span>
+                        </div>
+                    </div>
+                    @if (Auth::id() !== $user->id)
+                        <div class="mt-6 flex flex-col sm:flex-row gap-4">
                             <!-- Report User Button -->
                             <a href="{{ route('reports.create', $user) }}" 
-                               class="inline-flex items-center justify-center px-4 py-2 text-sm font-semibold text-white bg-red-600 rounded-lg hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-colors duration-200 w-full sm:w-auto">
+                               class="inline-flex items-center justify-center px-5 py-2 text-sm font-semibold text-white bg-red-600 rounded-lg shadow hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-colors duration-200">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                                 </svg>
                                 Report User
                             </a>
-                    
                             <!-- Review User Button -->
                             <a href="{{ route('reviews.create', $user) }}" 
-                               class="inline-flex items-center justify-center px-4 py-2 text-sm font-semibold text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200 w-full sm:w-auto">
+                               class="inline-flex items-center justify-center px-5 py-2 text-sm font-semibold text-white bg-blue-600 rounded-lg shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                                 </svg>
@@ -46,60 +57,53 @@
                             </a>
                         </div>
                     @endif
-                    
-                        
-                    </div>
                 </div>
             </div>
 
-            <div class="rounded-xl shadow-sm overflow-hidden">
-                <div class="p-4 sm:p-6">
+            <!-- Products Grid -->
+            <div class="rounded-xl shadow-lg overflow-hidden mb-8 bg-white dark:bg-gray-800">
+                <div class="p-6">
                     @if($products->count() > 0)
-                        <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-4 md:gap-6">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                             @foreach ($products as $product)
-                                <div class="group relative bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition duration-200 border border-[#D9D9D9] dark:border-gray-700">
+                                <div class="group relative bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow hover:shadow-lg transition duration-200 border border-gray-200 dark:border-gray-700">
                                     <a href="{{ route('products.show', $product->id) }}" class="block h-full">
                                         @if($product->listingtype === 'for donation')
-                                            <div class="absolute top-1 left-1 z-10 bg-[#D9D9D9] text-gray-700 text-[10px] sm:text-xs px-1.5 py-0.5 sm:px-2 sm:py-1 rounded-full">
+                                            <div class="absolute top-2 left-2 z-10 bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded-full font-semibold shadow">
                                                 Donation
                                             </div>
                                         @endif
-
                                         <div class="relative aspect-square overflow-hidden">
                                             <img src="{{ $product->image ? asset('storage/' . $product->image) : asset('images/default-placeholder.png') }}" 
                                                 alt="{{ $product->name }}" 
                                                 class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105">
-
                                             <div class="absolute inset-0 bg-gray-800 bg-opacity-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                                                <span class="bg-white text-gray-800 px-2 py-0.5 rounded-full text-[10px] sm:text-xs font-medium">
+                                                <span class="bg-white text-gray-800 px-3 py-1 rounded-full text-xs font-medium shadow">
                                                     Quick view
                                                 </span>
                                             </div>
                                         </div>
-
-                                        <div class="p-2 sm:p-3">
-                                            <div class="flex justify-between items-start">
-                                                <h3 class="text-xs sm:text-sm font-bold text-gray-900 dark:text-white group-hover:text-red-600 transition-colors truncate max-w-[70%]">
+                                        <div class="p-4">
+                                            <div class="flex justify-between items-center mb-2">
+                                                <h3 class="text-sm font-bold text-gray-900 dark:text-white group-hover:text-red-600 transition-colors truncate max-w-[70%]">
                                                     {{ $product->name }}
                                                 </h3>
-                                                <span class="text-[10px] sm:text-xs font-medium px-1 py-0.5 bg-[#D9D9D9] dark:bg-gray-700 rounded text-gray-700 dark:text-gray-300">
+                                                <span class="text-xs font-medium px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded text-gray-700 dark:text-gray-300">
                                                     {{ $product->size ?? 'L' }}
                                                 </span>
                                             </div>
-
-                                            <p class="text-gray-500 dark:text-gray-400 text-[10px] sm:text-xs mt-0.5 truncate">
+                                            <p class="text-gray-500 dark:text-gray-400 text-xs mb-2 truncate">
                                                 {{ $product->category->name ?? 'No Category' }}
                                             </p>
-
-                                            <div class="flex justify-between items-center mt-1">
-                                                <p class="text-xs sm:text-sm font-bold {{ $product->listingtype === 'for donation' ? 'text-gray-700' : 'text-red-600' }}">
+                                            <div class="flex justify-between items-center">
+                                                <p class="text-sm font-bold {{ $product->listingtype === 'for donation' ? 'text-yellow-700' : 'text-red-600' }}">
                                                     {{ $product->listingtype === 'for donation' ? 'For Donation' : '₱' . number_format($product->price, 0) }}
                                                 </p>
                                                 <button class="favorite-btn text-gray-400 hover:text-red-500 focus:outline-none transition-colors" 
                                                         data-id="{{ $product->id }}" 
                                                         type="button"
                                                         onclick="event.preventDefault(); event.stopPropagation();">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:h-5 sm:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                                                     </svg>
                                                 </button>
@@ -116,12 +120,11 @@
             </div>
 
             <!-- Reviews Received -->
-            <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+            <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg">
                 <h3 class="text-xl font-bold text-gray-900 dark:text-gray-100 mb-4">Reviews Received</h3>
-
                 @forelse($user->reviewsReceived as $review)
-                    <div class="mb-4 p-4 border dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700">
-                        <div class="flex justify-between items-center mb-1">
+                    <div class="mb-6 p-4 border dark:border-gray-700 rounded-lg bg-gray-50 dark:bg-gray-700 shadow-sm">
+                        <div class="flex justify-between items-center mb-2">
                             <div class="text-sm font-semibold text-gray-800 dark:text-gray-200">
                                 {{ $review->reviewer->fname ?? 'Anonymous' }}
                             </div>
@@ -133,13 +136,11 @@
                                 @endfor
                             </div>
                         </div>
-
                         @if($review->comment)
                             <p class="text-sm text-gray-700 dark:text-gray-300 mt-1">
                                 {{ $review->comment }}
                             </p>
                         @endif
-
                         <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
                             Reviewed on {{ $review->created_at->format('F j, Y') }}
                         </p>
@@ -148,7 +149,6 @@
                     <p class="text-gray-500 dark:text-gray-400">No reviews received yet.</p>
                 @endforelse
             </div>
-
         </div>
     </div>
 </x-app-layout>
