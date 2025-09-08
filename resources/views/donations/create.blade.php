@@ -1,7 +1,18 @@
 <x-app-layout>
     <div class="py-12">
         <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-800 shadow-lg rounded-lg overflow-hidden">
+        <div class="flex flex-col relative top-[-30px] hidden md:block right-[70px] ">
+        <h2 class="text-xl sm:text-2xl font-bold text-custom-dark">
+            <div class=" flex flex-col relative right-[130px]">
+                <i>Donate
+                <img src="{{ asset('images/Rectangle 147.png') }}" alt="emoji" class="inline-block flex flex-col relative top-[-28px] left-[80px] h-4 w-3 align-middle h-[25px] w-[20px]">
+                </i>
+                </div>
+                <hr class="w-[1270px] mb-9 flex flex-col relative  right-[130px] h-px  bg-gray-800 border-0 dark:bg-gray-700">
+
+            </h2>
+            </div>
+            <div class="bg-[#F4F2ED] dark:bg-gray-800 shadow-lg rounded-lg overflow-hidden">
                 <div class="p-6">
                     <form action="{{ route('donations.store') }}" method="POST" enctype="multipart/form-data" class="space-y-8">
                         @csrf
@@ -99,9 +110,9 @@
                         </div>
 
                         <!-- Submit Button -->
-                        <div class="flex justify-end">
-                            <button type="submit" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-gray-900 hover:bg-gray-800">
-                                List Item
+                        <div class="flex justify-center sm:justify-start">
+                            <button type="submit" class="inline-flex items-center justify-center bg-[#B59F84] text-white px-6 py-2 sm:px-9 sm:py-2 rounded-full text-base font-semibold hover:bg-[#a08e77] transform hover:scale-105 transition-all duration-300 shadow-md">
+                                Donate Item
                             </button>
                         </div>
                     </form>
