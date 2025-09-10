@@ -63,14 +63,7 @@
             <!-- Update Form -->
             <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
                 <h3 class="text-xl font-bold text-gray-900 dark:text-gray-100 mb-4">Update User Status</h3>
-                @if($user->verification_document)
-                    <div class="mb-4">
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Verification Document</label>
-                        <a href="{{ Storage::url($user->verification_document) }}" target="_blank" class="text-blue-600 underline">
-                            View Document
-                        </a>
-                    </div>
-                @endif
+               
                 <form action="{{ route('admin.users.update', $user) }}" method="POST">
                     @csrf
                     @method('PUT')
@@ -84,6 +77,7 @@
                             </select>
                         </div>
 
+                  
                          <!-- Verification Status -->
                     <div>
                         <label for="verification_status" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Verification Status</label>
@@ -94,6 +88,10 @@
                             <option value="rejected" {{ $user->verification_status === 'rejected' ? 'selected' : '' }}>Rejected</option>
                         </select>
                     </div>
+                     @if($user->verification_document)
+                        <a href="{{ asset('storage/' . $user->verification_document) }}" target="_blank" 
+                        class="text-blue-600 underline">View Document</a>
+                    @endif
 
                         <div class="flex justify-end">
                             <button type="submit"

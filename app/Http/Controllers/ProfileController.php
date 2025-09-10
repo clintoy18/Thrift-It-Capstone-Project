@@ -8,10 +8,13 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
+use App\Http\Requests\VerificationDocumentRequest;
 use App\Models\User;
 
 class ProfileController extends Controller
 {
+
+    
     /**
      * Display the user's profile form.
      */
@@ -73,5 +76,25 @@ class ProfileController extends Controller
 
         return Redirect::to('/');
     }
+
+     public function uploadVerificationDocument(Request $request)
+        {
+            $request->validate([
+                'verification_document' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+            ]);
+
+            if ($request->hasFile('verification_document')) {
+                $path = $request->file('verification_document')->store('verification-documents', 'public');
+
+                $request->user()->update([
+                    'verification_document' => $path,
+                    'verification_status' => 'pending',
+                ]);
+            }
+
+            return back()->with('status', 'Verification document uploaded successfully and sent for review.');
+        }
+
+
 
 }
