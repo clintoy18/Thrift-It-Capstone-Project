@@ -9,8 +9,8 @@ class UserVerificationRepository
     {
         return $user->update([
             'verification_document' => $documentPath,
-            'verification_status' => 'pending',
-            'is_verified' => false,
+            // 'verification_status' => 'pending',
+            // 'is_verified' => false,
         ]);
     }
 
