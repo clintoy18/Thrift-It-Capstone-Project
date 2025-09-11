@@ -60,6 +60,7 @@ Route::middleware(['auth', 'verified', 'rolemiddleware:user'])->group(function (
     Route::get('/leaderboard', [LeaderboardController::class, 'index'])
     ->name('leaderboard.index');
 
+
 });
 
 //Upcycler Routes
@@ -92,6 +93,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/messages', [PrivateChatController::class, 'index'])->name('messages.index');
     Route::get('/private-chat/{user}', [PrivateChatController::class, 'show'])->name('private.chat');
     Route::post('/private-chat/{user}/send', [PrivateChatController::class, 'send'])->name('private.chat.send');
+
+    //upload verification document user/upcycler 
+     Route::post('/profile/verification-document', [ProfileController::class, 'uploadVerificationDocument'])
+        ->name('profile.verification.upload');
 });
 
 

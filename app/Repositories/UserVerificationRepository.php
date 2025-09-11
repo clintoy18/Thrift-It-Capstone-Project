@@ -8,9 +8,9 @@ class UserVerificationRepository
     public function submitDocument(User $user, $documentPath)
     {
         return $user->update([
-            'verification_document' => $documentPath,
-            'verification_status' => 'pending',
-            'is_verified' => false,
+            'verification_document' => $documentPath
+            // 'verification_status' => 'pending',
+            // 'is_verified' => false,
         ]);
     }
 

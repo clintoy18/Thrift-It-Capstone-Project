@@ -36,6 +36,30 @@
                             <a href="{{ route('donations.edit', $donation->id) }}" 
                                class="inline-block mt-3 px-4 py-2 bg-[#B59F84] text-white rounded-lg  hover:bg-[#a08e77] w-full sm:w-auto text-center">
                                 Update donation
+<<<<<<< HEAD
+=======
+                            </a>
+                        @endif
+                    </div>
+                </div>
+
+                <!-- Right Column -->
+                <div class="md:w-2/3 flex flex-col gap-6">
+
+                    <!-- User Info -->
+                    <div class="flex items-center gap-4">
+                       
+                        <div class="ml-auto flex gap-2 text-sm w-full sm:w-auto hidden md:flex">
+                            <a href="{{ route('private.chat', $donation->user->id) }}" class="inline-flex items-center justify-center bg-[#B59F84] text-white 
+                                        px-[20px] py-2 rounded-[25px] text-base font-semibold 
+                                        hover:bg-[#a08e77] hover:scale-105 transition-all duration-200 w-full sm:w-[120px] text-center">
+                                Message
+                            </a>
+                            <a href="{{ route('profile.show', $donation->user->id) }}" class="inline-flex items-center justify-center bg-[#B59F84] text-white 
+                                        px-[20px] py-2 rounded-[25px] text-base font-semibold 
+                                        hover:bg-[#a08e77] hover:scale-105 transition-all duration-200 w-full sm:w-[120px] text-center">
+                                Profile
+>>>>>>> 42c27a126a1ef83c8f8624e9040fde07613e5120
                             </a>
                         @endif
                     </div>
@@ -91,8 +115,13 @@
                     </div>
 
                     <!-- Donation Info -->
+<<<<<<< HEAD
                     <div class="mt-6 mb-[-20px]">
                         <h1 class="text-xl sm:text-2xl font-bold mb-1 ">{{ $donation->name }}</h1>
+=======
+                    <div>
+                        <h1 class="text-xl sm:text-2xl font-bold mb-1">{{ $donation->name }}</h1>
+>>>>>>> 42c27a126a1ef83c8f8624e9040fde07613e5120
                         <p class="text-xs sm:text-sm text-gray-600">
                             Size: {{ $donation->size }} · 
                             {{ ucfirst($donation->condition) }} condition · 
@@ -104,8 +133,13 @@
                     
 
                     <!-- Comments -->
+<<<<<<< HEAD
                     <h3 class="text-base sm:text-lg font-bold mt-9 mb-[-40px]">Comments</h3>
                     <div class="border p-3 sm:p-4 rounded-lg mt-9 mb-[-30px] bg-[#F4F2ED]">
+=======
+                    <h3 class="text-base sm:text-lg font-bold mt-6 mb-[-20px]">Comments</h3>
+                    <div class="border p-3 sm:p-4 rounded-lg bg-[#F4F2ED]">
+>>>>>>> 42c27a126a1ef83c8f8624e9040fde07613e5120
                         
                         <div class="max-h-80 overflow-y-auto space-y-3 sm:space-y-4">
                             @forelse($donation->comments as $comment)

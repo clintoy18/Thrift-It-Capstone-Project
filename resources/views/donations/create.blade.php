@@ -1,28 +1,20 @@
 <x-app-layout>
-<div class="pt-0 sm:pt-10 pb-0 ">     
-      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8"> 
-                 <!-- Mobile Header -->
-                      <div class="block md:hidden mb-6">
-                            <h2 class="text-xl font-bold text-custom-dark text-center">
-                                <i>Sell
-                                <img src="{{ asset('images/image 147.png') }}" alt="emoji" class="inline-block h-5 w-4 align-middle ml-1">
-                                </i>
-                            </h2>
-                            <hr class="w-full mt-4 h-px bg-gray-800 border-0 dark:bg-gray-700">
-                        </div>
-                         <!-- Desktop Header -->
-                    <div class="hidden md:block flex flex-col relative left-[-150px] top-[-30px]">
-                        <h2 class="text-xl sm:text-2xl font-bold text-custom-dark">
-                            <div  class="flex flex-col relative left-[-90px]">
-                                <i>Sell
-                                <img src="{{ asset('images/image 147.png') }}" alt="emoji" class="inline-block flex flex-col relative top-[-33px] left-[50px] h-4 w-3 align-middle h-[25px] w-[20px]">
-                                </i>
-                            </div>
-                            <hr class="w-[1270px] mb-9 flex flex-col relative right-[90px] h-px bg-gray-800 border-0 dark:bg-gray-700">
-                        </h2>
-                    </div>
-            <!-- Main Layout with Form Container -->
-                    <form action="{{ route('donations.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
+    <div class="py-12">
+        <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
+        <div class="flex flex-col relative top-[-30px] hidden md:block right-[70px] ">
+        <h2 class="text-xl sm:text-2xl font-bold text-custom-dark">
+            <div class=" flex flex-col relative right-[130px]">
+                <i>Donate
+                <img src="{{ asset('images/Rectangle 147.png') }}" alt="emoji" class="inline-block flex flex-col relative top-[-28px] left-[80px] h-4 w-3 align-middle h-[25px] w-[20px]">
+                </i>
+                </div>
+                <hr class="w-[1270px] mb-9 flex flex-col relative  right-[130px] h-px  bg-gray-800 border-0 dark:bg-gray-700">
+
+            </h2>
+            </div>
+            <div class="bg-[#F4F2ED] dark:bg-gray-800 shadow-lg rounded-lg overflow-hidden">
+                <div class="p-6">
+                    <form action="{{ route('donations.store') }}" method="POST" enctype="multipart/form-data" class="space-y-8">
                         @csrf
                   <div class="grid grid-cols-1 lg:grid-cols-5 gap-6 lg:gap-10 items-start lg:relative lg:left-[-150px]">
                         <!-- Left Side - Image Upload Section (structure only) -->
@@ -182,11 +174,11 @@
                         </div>
 
                         <!-- Submit Button -->
-                      
-                         </div>
-                       </div>
-                      </div>
-                    </div>
+                        <div class="flex justify-center sm:justify-start">
+                            <button type="submit" class="inline-flex items-center justify-center bg-[#B59F84] text-white px-6 py-2 sm:px-9 sm:py-2 rounded-full text-base font-semibold hover:bg-[#a08e77] transform hover:scale-105 transition-all duration-300 shadow-md">
+                                Donate Item
+                            </button>
+                        </div>
                     </form>
                 </div>
             </div>
