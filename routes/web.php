@@ -47,12 +47,9 @@ Route::middleware(['auth', 'verified', 'rolemiddleware:user'])->group(function (
     Route::resource('appointments', AppointmentController::class);
     Route::resource('comments', CommentController::class);
     Route::resource('donations',DonationController::class);
-     Route::resource('segments', SegmentController::class)->only(['show']);
+    Route::resource('segments', SegmentController::class)->only(['show']);
 
     Route::patch('/appointments/{appointment}/cancel', [AppointmentController::class, 'cancel'])->name('appointments.cancel');
-    // Route::post('/products/{product}/comments', [CommentController::class, 'store'])->name('comments.store');
-    // Route::post('/donations/{donation}/comments', [CommentController::class, 'storeDonation'])->name('donations.comments.store');
-
     Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
     Route::get('/users/{user}/report', [ReportController::class, 'create'])->name('reports.create');
     Route::post('/users/{user}/report', [ReportController::class, 'store'])->name('reports.store');
@@ -62,6 +59,7 @@ Route::middleware(['auth', 'verified', 'rolemiddleware:user'])->group(function (
     Route::post('/users/{user}/review',[ReviewController::class,'store'])->name('reviews.store');
     Route::get('/leaderboard', [LeaderboardController::class, 'index'])
     ->name('leaderboard.index');
+
 
 });
 
@@ -95,6 +93,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/messages', [PrivateChatController::class, 'index'])->name('messages.index');
     Route::get('/private-chat/{user}', [PrivateChatController::class, 'show'])->name('private.chat');
     Route::post('/private-chat/{user}/send', [PrivateChatController::class, 'send'])->name('private.chat.send');
+
+    //upload verification document user/upcycler 
+     Route::post('/profile/verification-document', [ProfileController::class, 'uploadVerificationDocument'])
+        ->name('profile.verification.upload');
 });
 
 
