@@ -8,33 +8,79 @@
     </x-slot>
 
     <div class="py-12">
-        <div class="max-w-6xl mx-auto bg-white dark:bg-gray-800 shadow rounded-lg p-6">
+        <div class="max-w-7xl mx-auto p-4">
             <!-- Two-Column Layout -->
             <div class="flex flex-col md:flex-row gap-6">
                 
-                <!-- Left Column: Multiple Images -->
-                <div class="md:w-1/3 flex flex-col gap-4">
-                    <!-- Main Image (or multiple stacked images) -->
+               <div class="md:w-1/3 flex flex-col gap-6">
+                <div class="swiper mySwiper rounded-lg overflow-hidden">
+                    <div class="swiper-wrapper">
+                        <!-- Slide 1 -->
+                        <div class="swiper-slide">
                     <img 
                         src="{{ $product->image ? asset('storage/' . $product->image) : asset('images/default-placeholder.png') }}" 
                         alt="{{ $product->name }}"
-                        class="w-full h-64 object-cover rounded-lg"
-                    >
-                    <!-- Additional images (static placeholders for now) -->
+                                class="w-full h-64 object-cover transition-transform duration-500 hover:scale-105">
+                        </div>
+                        <!-- Slide 2 -->
+                        <div class="swiper-slide">
                     <img 
                         src="{{ $product->image ? asset('storage/' . $product->image) : asset('images/default-placeholder.png') }}" 
                         alt="Additional 1"
-                        class="w-full h-64 object-cover rounded-lg"
-                    >
+                                class="w-full h-64 object-cover transition-transform duration-500 hover:scale-105">
+                        </div>
+                        <!-- Slide 3 -->
+                        <div class="swiper-slide">
                     <img 
                         src="{{ $product->image ? asset('storage/' . $product->image) : asset('images/default-placeholder.png') }}" 
                         alt="Additional 2"
-                        class="w-full h-64 object-cover rounded-lg"
-                    >
+                                class="w-full h-64 object-cover transition-transform duration-500 hover:scale-105">
+                        </div>
+                    </div>
+                    <!-- Pagination (dots) -->
+                    <div class="swiper-pagination"></div>
+                    <!-- Navigation buttons -->
+                    <div class="swiper-button-next"></div>
+                    <div class="swiper-button-prev"></div>
+                </div>
+                 <!-- Product Title & Short Info -->
+                 <hr class="w-full mt-1 h-px bg-gray-800 border-0 dark:bg-gray-700">
+               <div>
+                
+                        <h1 class="text-2xl font-bold mb-1">
+                            {{ $product->name }}
+                        </h1>
+                        <p class="text-sm text-gray-600">
+                            Size: {{ $product->size }} · 
+                            {{ ucfirst($product->condition) }} condition · 
+                            {{ $product->category->name ?? 'No Category' }}
+                        </p>
+                    </div>
+                    <hr class="w-full mt-1 h-px bg-gray-800 border-0 dark:bg-gray-700">
+                     <!-- Product Details -->
+                     <div class="space-y-2">
+                        <h2 class=" text-xl  font-semibold text-gray-800 dark:text-gray-200 text-center">Details</h2>
+                        <h2 class=" text-xl  text-gray-800 dark:text-gray-200 ">Condition</h2>
+                        <h2 class="text-xl text-gray-800 dark:text-gray-200 flex flex-col relative top-[-32px] text-right"> New </h2>
+    
+                        <p class="text-gray-600 flex flex-col relative top-[-32px]">{{ $product->description }}</p>
+                        <p class="text-gray-600 flex flex-col relative top-[-32px]">Mine: 1500</p>
+                        <p class="text-gray-600 flex flex-col relative top-[-32px]">Steal: 2000</p>
+                        <p class="text-gray-600 flex flex-col relative top-[-32px]">Lock: 3000(Automatically Yours)</p>
+                        <div class="flex justify-center">
+                                <a class="inline-block mt-3 px-4 py-2 bg-[#B59F84] text-white rounded-lg hover:bg-[#a08e77] w-full sm:w-auto text-center">
+                                    Purchase Item
+                                </a>
+                                </div>
+
                 </div>
 
+            </div>
+             
+
+                 
                 <!-- Right Column: User Info, Product Details, Comments -->
-                <div class="md:w-2/3 flex flex-col gap-6">
+                <div class="md:w-2/3 flex flex-col gap-9">
 
                     <!-- User Profile Card -->
                     <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden">
@@ -100,22 +146,9 @@
                         </div>
                     </div>
 
-                    <!-- Product Title & Short Info -->
-                    <div>
-                        <h1 class="text-2xl font-bold mb-1">
-                            {{ $product->name }}
-                        </h1>
-                        <p class="text-sm text-gray-600">
-                            Size: {{ $product->size }} · 
-                            {{ ucfirst($product->condition) }} condition · 
-                            {{ $product->category->name ?? 'No Category' }}
-                        </p>
-                    </div>
-
                     <!-- Product Details -->
                     <div class="space-y-2">
-                        <h2 class="font-semibold text-gray-800 dark:text-gray-200">Details</h2>
-                        <p class="text-gray-600">{{ $product->description }}</p>
+                      
                         
                         @if($product->listingtype === 'for donation')
                             <p class="text-lg font-bold text-green-600">For Donation</p>
@@ -136,7 +169,7 @@
                                 Update Product
                             </a>
                         @endif
-                    </div>
+                </div>
 
                     <!-- Comments Section -->
                     <div class="border p-6 rounded-lg shadow bg-gray-100 dark:bg-gray-800">
@@ -145,13 +178,14 @@
                         <!-- Scrollable Comment List -->
                         <div class="max-h-60 overflow-y-auto space-y-4 pr-2">
                             @forelse($product->comments as $comment)
-                                <div class="bg-white dark:bg-gray-700 p-4 rounded-lg shadow-md hover:bg-gray-50 dark:hover:bg-gray-600 transition">
-                                    <div class="flex items-center gap-3">
-                                        <img 
+                                          <img 
                                             src="https://ui-avatars.com/api/?name={{ urlencode($comment->user->fname . ' ' . $comment->user->lname) }}&background=random" 
                                             alt="{{ $comment->user->fname }} {{ $comment->user->lname }}"
                                             class="w-10 h-10 rounded-full border"
                                         >
+                                <div class="inline-block max-w-full bg-[#E1D5B6] dark:bg-gray-700 p-3 rounded-lg shadow">
+                                    <div class="flex items-center gap-3">
+                                       
                                         <div>
                                             <a href="{{ route('profile.show', $comment->user->id) }}" class="text-blue-500 hover:underline">
                                                 <p class="font-semibold text-gray-800 dark:text-gray-200">
@@ -228,14 +262,55 @@
                     </div>
 
                     <!-- Back to Products -->
-                    <a 
-                        href="{{ route('products.index') }}" 
-                        class="mt-4 inline-block text-blue-500 hover:underline"
-                    >
-                        Back to Products
-                    </a>
+                
                 </div>
             </div>
+            <h2 class=" text-xl  font-semibold text-gray-800 dark:text-gray-200 ">More for this Seller</h2>
+           
+            <div class="bg-white dark:bg-gray-800 shadow rounded-lg">
+              
+                    <!-- Slide 1 -->
+                    <div class="grid grid-cols-4 md:grid-cols-3 gap-6 p-4">
+                    <div class="rounded-lg overflow-hidden">
+                        <img src="{{ $product->image ? asset('storage/' . $product->image) : asset('images/default-placeholder.png') }}" 
+                            alt="{{ $product->name }}"
+                            class="w-full h-64 object-cover transition-transform duration-500 hover:scale-105">
+                    </div>
+                    <div class="rounded-lg overflow-hidden">
+                        <img src="{{ $product->image ? asset('storage/' . $product->image) : asset('images/default-placeholder.png') }}" 
+                            alt="Additional 1"
+                            class="w-full h-64 object-cover transition-transform duration-500 hover:scale-105">
+                    </div>
+                    <div class="rounded-lg overflow-hidden">
+                        <img src="{{ $product->image ? asset('storage/' . $product->image) : asset('images/default-placeholder.png') }}" 
+                            alt="Additional 2"
+                            class="w-full h-64 object-cover transition-transform duration-500 hover:scale-105">
+                    </div>
+                    </div>
+
+
+                </div>
+
+        </div>
+        <div class="flex flex-col overflow-hidden ml-[60px]">
+            <a 
+                href="{{ route('products.index') }}" 
+                class="flex items-center gap-2 text-[#B59F84] hover:underline"
+            >
+                <svg xmlns="http://www.w3.org/2000/svg" 
+                    class="w-4 h-4" 
+                    fill="none" viewBox="0 0 24 24" 
+                    stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7 7-7M3 12h18" />
+                </svg>
+                <span>Back to Products</span> 
+            </a>
+        </div>
+
+
+                
         </div>
     </div>
+
+ 
 </x-app-layout>

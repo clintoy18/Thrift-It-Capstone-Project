@@ -29,3 +29,17 @@
 @keyframes spin {
     to { transform: rotate(360deg); }
 }
+
+/* Make swiper navigation buttons gray and smaller */
+.swiper-button-next,
+.swiper-button-prev {
+    color: #e6e9f0; /* Tailwind gray-500 */
+    width: 25px; /* reduce size */
+    height: 25px;
+}
+
+.swiper-button-next::after,
+.swiper-button-prev::after {
+    font-size: 20px; /* reduce arrow size */
+}
+

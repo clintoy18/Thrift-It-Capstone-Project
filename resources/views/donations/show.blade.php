@@ -6,7 +6,7 @@
     </x-slot>
 
     <div class="py-8 sm:py-12">
-        <div class="max-w-4xl mx-auto bg-white dark:bg-gray-800 shadow rounded-lg p-4 sm:p-6">
+        <div class="max-w-6xl mx-auto bg-white dark:bg-gray-800 shadow rounded-lg p-4 sm:p-6">
 
             <!-- Mobile: Actions at top -->
             <div class="flex gap-2 text-sm mb-4 md:hidden">
