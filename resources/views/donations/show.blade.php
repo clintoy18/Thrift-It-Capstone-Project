@@ -37,6 +37,7 @@
                                class="inline-block mt-3 px-4 py-2 bg-[#B59F84] text-white rounded-lg  hover:bg-[#a08e77] w-full sm:w-auto text-center">
                                 Update donation
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
                             </a>
                         @endif
@@ -60,6 +61,8 @@
                                         hover:bg-[#a08e77] hover:scale-105 transition-all duration-200 w-full sm:w-[120px] text-center">
                                 Profile
 >>>>>>> 42c27a126a1ef83c8f8624e9040fde07613e5120
+=======
+>>>>>>> d41e44a6e5e56dea04ae610bd642fd1330d453c7
                             </a>
                         @endif
                     </div>
@@ -116,12 +119,17 @@
 
                     <!-- Donation Info -->
 <<<<<<< HEAD
+<<<<<<< HEAD
                     <div class="mt-6 mb-[-20px]">
                         <h1 class="text-xl sm:text-2xl font-bold mb-1 ">{{ $donation->name }}</h1>
 =======
                     <div>
                         <h1 class="text-xl sm:text-2xl font-bold mb-1">{{ $donation->name }}</h1>
 >>>>>>> 42c27a126a1ef83c8f8624e9040fde07613e5120
+=======
+                    <div class="mt-6 mb-[-20px]">
+                        <h1 class="text-xl sm:text-2xl font-bold mb-1 ">{{ $donation->name }}</h1>
+>>>>>>> d41e44a6e5e56dea04ae610bd642fd1330d453c7
                         <p class="text-xs sm:text-sm text-gray-600">
                             Size: {{ $donation->size }} · 
                             {{ ucfirst($donation->condition) }} condition · 
@@ -134,12 +142,17 @@
 
                     <!-- Comments -->
 <<<<<<< HEAD
+<<<<<<< HEAD
                     <h3 class="text-base sm:text-lg font-bold mt-9 mb-[-40px]">Comments</h3>
                     <div class="border p-3 sm:p-4 rounded-lg mt-9 mb-[-30px] bg-[#F4F2ED]">
 =======
                     <h3 class="text-base sm:text-lg font-bold mt-6 mb-[-20px]">Comments</h3>
                     <div class="border p-3 sm:p-4 rounded-lg bg-[#F4F2ED]">
 >>>>>>> 42c27a126a1ef83c8f8624e9040fde07613e5120
+=======
+                    <h3 class="text-base sm:text-lg font-bold mt-9 mb-[-40px]">Comments</h3>
+                    <div class="border p-3 sm:p-4 rounded-lg mt-9 mb-[-30px] bg-[#F4F2ED]">
+>>>>>>> d41e44a6e5e56dea04ae610bd642fd1330d453c7
                         
                         <div class="max-h-80 overflow-y-auto space-y-3 sm:space-y-4">
                             @forelse($donation->comments as $comment)
