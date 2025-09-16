@@ -35,7 +35,7 @@
                                         </p>
                                         
                                         <!-- Favorite Button -->
-                                        <button class="favorite-btn text-gray-400 hover:text-red-500 transition" data-id="{{ $product->id }}">
+                                        <button class="favorite-btn text-gray-400 hover:text-black-500 transition" data-id="{{ $product->id }}">
                                             🤍
                                         </button>
                                     </div>

@@ -7,8 +7,8 @@
         </div>
     </x-slot>
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto p-4">
+    <div class="py-12 overflow-x-hidden">
+        <div class="max-w-7xl mx-auto p-4 overflow-x-hidden">
             <!-- Two-Column Layout -->
             <div class="flex flex-col md:flex-row gap-6">
                 
@@ -24,7 +24,7 @@
                         </div>
                         <!-- Slide 2 -->
                         <div class="swiper-slide">
-                    <img 
+                    <img      
                         src="{{ $product->image ? asset('storage/' . $product->image) : asset('images/default-placeholder.png') }}" 
                         alt="Additional 1"
                                 class="w-full h-64 object-cover transition-transform duration-500 hover:scale-105">
@@ -85,9 +85,8 @@
                     <!-- User Profile Card -->
                     <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden">
                         <!-- Background Image Section -->
-                        <div class="relative h-32 bg-gradient-to-r from-blue-400 to-purple-500">                                        
-                            <!-- You can replace this with an actual background image -->
-                            <div class="absolute inset-0 bg-black bg-opacity-20"></div>
+                        <div class="relative h-32 bg-center bg-cover" style="background-image: url('{{ asset('images/Rectangle 99.png') }}');">                                        
+                            <div class="absolute inset-0 bg-black/20"></div>
                         </div>
                         
                         <!-- User Info Section -->
@@ -103,7 +102,7 @@
                             <div class="flex items-start justify-between pt-4">
                                 <div class="flex-1">
                                     <h3 class="font-semibold text-gray-800 dark:text-gray-200 text-lg">
-                                        {{ $product->user->fname }}{{ $product->user->lname }}_14
+                                        {{ $product->user->fname }}{{ $product->user->lname }}
                                     </h3>
                                     <!-- Rating -->
                                     <div class="flex items-center mt-1">
@@ -165,63 +164,56 @@
                         <!-- Show Update Button if User Owns the Product -->
                         @if(Auth::id() === $product->user_id)
                             <a href="{{ route('products.edit', $product->id) }}" 
-                               class="inline-block mt-3 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition">
+                               class="inline-block mt-3 px-4 py-2 bg-[#B59F84] text-white rounded-lg hover:bg-[#a08e77] transition">
                                 Update Product
                             </a>
                         @endif
                 </div>
 
                     <!-- Comments Section -->
-                    <div class="border p-6 rounded-lg shadow bg-gray-100 dark:bg-gray-800">
+                    <div class="border p-6 rounded-lg shadow bg-[#F4F2ED]">
                         <h3 class="text-lg font-bold mb-4">Comments</h3>
 
                         <!-- Scrollable Comment List -->
-                        <div class="max-h-60 overflow-y-auto space-y-4 pr-2">
+                        <div class="max-h-60 overflow-y-auto overflow-x-hidden space-y-3 pr-2">
                             @forelse($product->comments as $comment)
-                                          <img 
-                                            src="https://ui-avatars.com/api/?name={{ urlencode($comment->user->fname . ' ' . $comment->user->lname) }}&background=random" 
-                                            alt="{{ $comment->user->fname }} {{ $comment->user->lname }}"
-                                            class="w-10 h-10 rounded-full border"
-                                        >
-                                <div class="inline-block max-w-full bg-[#E1D5B6] dark:bg-gray-700 p-3 rounded-lg shadow">
-                                    <div class="flex items-center gap-3">
-                                       
-                                        <div>
+                                <div class="flex items-start gap-3">
+                                    <img 
+                                        src="https://ui-avatars.com/api/?name={{ urlencode($comment->user->fname . ' ' . $comment->user->lname) }}&background=random" 
+                                        alt="{{ $comment->user->fname }} {{ $comment->user->lname }}"
+                                        class="w-10 h-10 rounded-full border"
+                                    >
+                                    <div class="inline-block max-w-full bg-[#E1D5B6] dark:bg-gray-700 p-3 rounded-lg ">
+                                        <div class="flex items-center gap-2">
                                             <a href="{{ route('profile.show', $comment->user->id) }}" class="text-blue-500 hover:underline">
                                                 <p class="font-semibold text-gray-800 dark:text-gray-200">
                                                     {{ $comment->user->fname }} {{ $comment->user->lname }}
                                                 </p>
                                             </a>
-                                            <p class="text-gray-500 dark:text-gray-400 text-xs">
-                                                {{ $comment->created_at->diffForHumans() }}
-                                            </p>
-                                        </div>
-                                        <div class="ml-auto flex gap-2">
+                                           
                                             @if(Auth::id() === $comment->user_id)
-                                                <a href="{{ route('comments.edit', $comment->id) }}" 
-                                                   class="px-2 py-1 bg-blue-100 text-blue-700 rounded hover:bg-blue-200 text-xs flex items-center gap-1">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536M9 13l6-6m2 2l-6 6m-2 2h6" />
+                                            <div class="ml-auto relative">
+                                                <button type="button" class="p-1 rounded hover:bg-black/10 dark:hover:bg-white/10" onclick="toggleDropdown({{ $comment->id }})">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-600 dark:text-gray-200" viewBox="0 0 20 20" fill="currentColor">
+                                                        <path d="M6 10a2 2 0 11-4 0 2 2 0 014 0zm6 0a2 2 0 11-4 0 2 2 0 014 0zm6 0a2 2 0 11-4 0 2 2 0 014 0z" />
                                                     </svg>
-                                                    Edit
-                                                </a>
-                                                <form action="{{ route('comments.destroy', $comment->id) }}" method="POST" 
-                                                      class="inline" 
-                                                      onsubmit="return confirm('Are you sure you want to delete this comment?');">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" 
-                                                            class="px-2 py-1 bg-red-100 text-red-700 rounded hover:bg-red-200 text-xs flex items-center gap-1">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                                                        </svg>
-                                                        Delete
-                                                    </button>
-                                                </form>
+                                                </button>
+                                                <div id="dropdown-{{ $comment->id }}" class="absolute right-0 mt-1 w-28 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded shadow z-10 hidden">
+                                                    <a href="{{ route('comments.edit', $comment->id) }}" class="block px-3 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700">Edit</a>
+                                                    <form action="{{ route('comments.destroy', $comment->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this comment?');">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="w-full text-left px-3 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-gray-50 dark:hover:bg-gray-700">Delete</button>
+                                                    </form>
+                                                </div>
+                                            </div>
                                             @endif
                                         </div>
+                                        <p class="mt-2 text-gray-800 dark:text-gray-200 break-words">{{ $comment->content }}</p>
                                     </div>
-                                    <p class="mt-2 text-gray-800 dark:text-gray-200">{{ $comment->content }}</p>
+                                </div>
+                                <div class="flex flex-col overflow-hidden relative left-[50px]">
+                                <p class="text-gray-500   dark:text-gray-400 text-xs">{{ $comment->created_at->diffForHumans() }}</p>
                                 </div>
                                 @if(!$loop->last)
                                     <hr class="my-2 border-gray-200 dark:border-gray-600">
@@ -233,25 +225,21 @@
 
                         <!-- Comment Form -->
                         @auth
-                            <form action="{{ route('comments.store') }}" method="POST" class="mt-4 flex items-start gap-3">
+                            <form action="{{ route('comments.store') }}" method="POST" class="mt-4">
                                 @csrf
-                                <input type="hidden" name="product_id" value="{{ $product->id }}">
-                                <img 
-                                    src="https://ui-avatars.com/api/?name={{ urlencode(auth()->user()->fname . ' ' . auth()->user()->lname) }}&background=random" 
-                                    alt="{{ auth()->user()->fname }} {{ auth()->user()->lname }}"
-                                    class="w-10 h-10 rounded-full border"
-                                >
-                                <div class="flex-1">
-                                    <textarea name="content" rows="3" maxlength="1000"
-                                              class="w-full border rounded-lg p-2 focus:ring focus:ring-blue-300" 
-                                              required
-                                              oninput="document.getElementById('char-count').innerText = this.value.length + '/1000';"></textarea>
-                                    <div class="flex justify-between items-center mt-2">
-                                        <span id="char-count" class="text-xs text-gray-500">0/1000</span>
-                                        <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
-                                            Post Comment
-                                        </button>
-                                    </div>
+                                <div class="flex flex-col md:flex-row items-stretch md:items-center gap-3 w-full max-w-xl bg-white dark:bg-gray-800 p-3 rounded-2xl border border-gray-200 dark:border-gray-600 shadow-md">
+                                    <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                    <textarea
+                                        name="content"
+                                        placeholder="Write a comment..."
+                                        class="flex-1 w-full resize-none overflow-hidden rounded-full px-4 py-2 text-sm text-gray-800 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-[#E1D5B6] border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700"
+                                        rows="1"
+                                        oninput="this.style.height='auto';this.style.height=this.scrollHeight+'px';"
+                                        required></textarea>
+                                    <button type="submit"
+                                        class="mt-2 md:mt-0 md:self-center bg-[#E1D5B6] text-white font-semibold px-4 py-2 rounded-full shadow hover:shadow-md hover:bg-[#d1c29f] transition-all duration-300 ease-in-out w-full md:w-auto">
+                                        <i class="fas fa-paper-plane"></i>
+                                    </button>
                                 </div>
                             </form>
                         @else
@@ -311,6 +299,45 @@
                 
         </div>
     </div>
+
+    <script>
+        function toggleDropdown(commentId) {
+            const dropdown = document.getElementById('dropdown-' + commentId);
+            if (dropdown.classList.contains('hidden')) {
+                // Close all other dropdowns first
+                document.querySelectorAll('[id^="dropdown-"]').forEach(el => {
+                    el.classList.add('hidden');
+                });
+                // Open this dropdown
+                dropdown.classList.remove('hidden');
+            } else {
+                dropdown.classList.add('hidden');
+            }
+        }
+
+        // Close dropdowns when clicking outside
+        document.addEventListener('click', function(event) {
+            if (!event.target.closest('[onclick^="toggleDropdown"]') && !event.target.closest('[id^="dropdown-"]')) {
+                document.querySelectorAll('[id^="dropdown-"]').forEach(el => {
+                    el.classList.add('hidden');
+                });
+            }
+        });
+        document.addEventListener("DOMContentLoaded", function () {
+        new Swiper(".mySwiper", {
+            loop: true,
+            pagination: {
+                el: ".swiper-pagination",
+                clickable: true,
+            },
+            navigation: {
+                nextEl: ".swiper-button-next",
+                prevEl: ".swiper-button-prev",
+            },
+        });
+    });
+
+    </script>
 
  
 </x-app-layout>
