@@ -77,6 +77,12 @@ Route::middleware(['auth', 'verified', 'rolemiddleware:admin'])->prefix('admin')
     // Sales Report Routes
     Route::get('/sales/monthly-report/{month}', [App\Http\Controllers\Admin\SalesReportController::class, 'generateMonthlyReport'])->name('sales.monthly-report');
     Route::get('/sales/yearly-report', [App\Http\Controllers\Admin\SalesReportController::class, 'generateYearlyReport'])->name('sales.yearly-report');
+   
+    //approve and reject product
+    Route::put('/products/{product}/approve', [AdminProductController::class, 'approve'])
+    ->name('products.approve');
+    Route::put('/products/{product}/reject', [AdminProductController::class, 'reject'])
+    ->name('products.reject');
 
     // Route::post('/admin/users/{user}/verify', [\App\Http\Controllers\Admin\AdminUserController::class, 'verify'])
     //     ->name('admin.users.verify');

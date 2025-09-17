@@ -57,5 +57,22 @@ class AdminProductController extends Controller
             ->with('success', 'Product deleted successfully.');
     }
 
+    public function approve(Product $product): RedirectResponse
+    {
+        $this->productService->updateProduct($product, ['approval_status' => 'approved']);
+
+        return redirect()->route('admin.products.index')
+            ->with('success', 'Product approved successfully.');
+    }
+
+    public function reject(Product $product): RedirectResponse
+    {
+        $this->productService->updateProduct($product, ['approval_status' => 'rejected']);
+
+        return redirect()->route('admin.products.index')
+            ->with('success', 'Product rejected successfully.');
+    }
+
+
     
 } 
