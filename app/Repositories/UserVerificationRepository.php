@@ -21,24 +21,64 @@ class UserVerificationRepository
 
     public function all()
     {
-        return User::orderBy('lname','asc');
+        return User::orderBy('lname', 'asc')->get();
     }
 
     public function getVerifiedUsers()
     {
-         return User::where('is_verified', true)->orWhere('verification_status','approved')->orderBy('lname','asc');
+        return User::where(function ($query) {
+                $query->where('verification_status', 'approved');
+            })
+            ->orderBy('lname', 'asc')
+            ->paginate(10);
     }
+
 
     public function getPendingVerifications()
     {
-        return User::where('verification_status', 'pending')->get();
+        return User::where(function ($query) {
+                $query->where('verification_status', 'pending');
+            })
+            ->orderBy('lname', 'asc')
+            ->paginate(10);
+    }
+    
+    public function getUnverifiedUsers()
+    {
+        return User::where(function ($query){
+               $query->where('verification_status', 'unverified');
+        })
+        ->orderBy('lname', 'asc')
+            ->paginate(10);
+    }
+    public function getRejectedUsers()
+    {
+        return User::where(function ($query){
+               $query->where('verification_status', 'rejected');
+        })
+        ->orderBy('lname', 'asc')
+            ->paginate(10);
     }
 
-    public function updateStatus(User $user, $status)
+   public function verify(User $user)
     {
-        return $user->update([
-            'verification_status' => $status,
-            'is_verified' => $status === 'approved',
+        $user->update([
+            'is_verified' => true,
+            'verification_status' => 'approved',
         ]);
+
+        return redirect()->back()->with('success', 'User verified successfully.');
     }
+    public function reject(User $user)
+    {
+        $user->update([
+            'is_verified' => false,
+            'verification_status' => 'rejected',
+        ]);
+
+        return redirect()->back()->with('success', 'User rejected successfully.');
+    }
+
+    
+
 }

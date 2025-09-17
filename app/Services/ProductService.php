@@ -68,4 +68,11 @@ class ProductService
     {
         return $this->productRepository->getApproveProducts($segment);
     }
+
+    public function getProductsByStatusPaginated(string $status, int $perPage = 10)
+    {
+        return $this->productRepository->getByStatusPaginated($status, $perPage);
+    }
+
+
 }

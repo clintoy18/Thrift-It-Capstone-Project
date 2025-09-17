@@ -50,4 +50,14 @@ class ProductRepository
             ->get();
     }
 
+   public function getByStatusPaginated(string $status, int $perPage = 10)
+    {
+        return Product::with(['user', 'category'])
+            ->where('approval_status', $status)  
+            ->latest()
+            ->paginate($perPage);
+    }
+
+
+
 }

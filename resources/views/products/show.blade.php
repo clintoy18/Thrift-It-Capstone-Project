@@ -52,21 +52,16 @@
                         </h1>
                         <p class="text-sm text-gray-600">
                             Size: {{ $product->size }} · 
-                            {{ ucfirst($product->condition) }} condition · 
+                            {{ ucfirst($product->condition) }}
                             {{ $product->category->name ?? 'No Category' }}
                         </p>
                     </div>
                     <hr class="w-full mt-1 h-px bg-gray-800 border-0 dark:bg-gray-700">
                      <!-- Product Details -->
                      <div class="space-y-2">
-                        <h2 class=" text-xl  font-semibold text-gray-800 dark:text-gray-200 text-center">Details</h2>
-                        <h2 class=" text-xl  text-gray-800 dark:text-gray-200 ">Condition</h2>
-                        <h2 class="text-xl text-gray-800 dark:text-gray-200 flex flex-col relative top-[-32px] text-right"> New </h2>
-    
+                        <h2 class=" text-xl  font-semibold text-gray-800 dark:text-gray-200 ">Details</h2>
+                        <p class="text-gray-600 flex flex-col relative top-[-32px]">{{ $product->status }}</p>
                         <p class="text-gray-600 flex flex-col relative top-[-32px]">{{ $product->description }}</p>
-                        <p class="text-gray-600 flex flex-col relative top-[-32px]">Mine: 1500</p>
-                        <p class="text-gray-600 flex flex-col relative top-[-32px]">Steal: 2000</p>
-                        <p class="text-gray-600 flex flex-col relative top-[-32px]">Lock: 3000(Automatically Yours)</p>
                         <div class="flex justify-center">
                                 <a class="inline-block mt-3 px-4 py-2 bg-[#B59F84] text-white rounded-lg hover:bg-[#a08e77] w-full sm:w-auto text-center">
                                     Purchase Item
