@@ -47,7 +47,7 @@ class CommentController extends Controller
             'parent_id'   => $request->parent_id,
         ]);
 
-        return redirect()->back()->with('success', 'Comment added successfully!');
+        return redirect()->back();
     }
 
 
