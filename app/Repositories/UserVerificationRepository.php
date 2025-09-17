@@ -51,6 +51,14 @@ class UserVerificationRepository
         ->orderBy('lname', 'asc')
             ->paginate(10);
     }
+    public function getRejectedUsers()
+    {
+        return User::where(function ($query){
+               $query->where('verification_status', 'rejected');
+        })
+        ->orderBy('lname', 'asc')
+            ->paginate(10);
+    }
 
    public function verify(User $user)
     {

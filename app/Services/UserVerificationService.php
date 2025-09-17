@@ -38,7 +38,10 @@ class UserVerificationService
     {
           return $this->repo->getUnverifiedUsers();
     }
-    
+    public function getRejectedUsers()
+    {
+          return $this->repo->getRejectedUsers();
+    }
 
     public function update(User $user, $status)
     {

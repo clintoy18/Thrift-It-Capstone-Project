@@ -26,8 +26,9 @@ class AdminUserController extends Controller
         $users = $this->service->getVerifiedUsers();    
         $pendingUsers = $this->service->getPendingVerifications();
         $unverifiedUsers = $this->service->getUnverifiedUsers();
+        $rejectedUsers = $this->service->getRejectedUsers();
 
-        return view('admin.users.index', compact('users', 'pendingUsers','unverifiedUsers'));
+        return view('admin.users.index', compact('users', 'pendingUsers','unverifiedUsers','rejectedUsers'));
     }
 
     
