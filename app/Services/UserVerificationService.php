@@ -24,18 +24,26 @@ class UserVerificationService
         return $this->repo->submitDocument($user, $path);
     }
 
-    public function pending()
+    public function getPendingVerifications()
     {
         return $this->repo->getPendingVerifications();
     }
 
-    public function verified()
+    public function getVerifiedUsers()
     {
         return $this->repo->getVerifiedUsers();
     }
 
+    public function getUnverifiedUsers()
+    {
+          return $this->repo->getUnverifiedUsers();
+    }
+    
+
     public function update(User $user, $status)
     {
-        return $this->repo->updateStatus($user, $status);
+        return $this->repo->verify($user, $status);
     }
+
+    
 }
