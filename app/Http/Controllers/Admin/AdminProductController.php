@@ -8,16 +8,22 @@ use App\Models\Product;
 use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use App\Services\ProductService;
 
 class AdminProductController extends Controller
 {
+
+    protected $productService;
+    public function __construct(ProductService $productService)
+    {
+        $this->productService = $productService;
+    }
     public function index(): View
     {
-        $products = Product::with(['user', 'category'])
-            ->latest()
-            ->paginate(10);
+        $approvedProducts = $this->productService->getProductsByStatusPaginated('approved');
+        $pendingProducts = $this->productService->getProductsByStatusPaginated('pending');
 
-        return view('admin.products.index', compact('products'));
+        return view('admin.products.index', compact('approvedProducts', 'pendingProducts'));
     }
 
     public function show(Product $product): View
@@ -50,4 +56,6 @@ class AdminProductController extends Controller
         return redirect()->route('admin.products.index')
             ->with('success', 'Product deleted successfully.');
     }
+
+    
 } 
