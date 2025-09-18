@@ -95,7 +95,7 @@
 
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
             <!-- Women Segment -->
-            <a href="{{ route('segments.show', ['segment' => '2']) }}"
+            <a href="{{ route('segments.show', ['segment' => '1']) }}"
                 class="relative group overflow-hidden rounded-md shadow-md h-[500px] w-full block">
                 <img src="{{ asset('storage/segments/women.png') }}"
                     alt="Shop by Women"
@@ -103,7 +103,7 @@
             </a>
 
             <!-- Men Segment -->
-            <a href="{{ route('segments.show', ['segment' => '1']) }}"
+            <a href="{{ route('segments.show', ['segment' => '2']) }}"
                 class="relative group overflow-hidden rounded-md shadow-md h-[500px] w-full block">
                 <img src="{{ asset('storage/segments/men.png') }}"
                     alt="Shop by Men"
@@ -135,7 +135,7 @@
                                  
                     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
                         <!-- Women Segment -->
-                        <a href="{{ route('segments.show', ['segment' => '2']) }}"
+                        <a href="{{ route('segments.show', ['segment' => '1']) }}"
                             class="relative group overflow-hidden rounded-md shadow-md h-[500px] w-full block">
                             <img src="{{ asset('storage/segments/women.png') }}"
                                 alt="Shop by Women"
@@ -143,7 +143,7 @@
                         </a>
 
                         <!-- Men Segment -->
-                        <a href="{{ route('segments.show', ['segment' => '1']) }}"
+                        <a href="{{ route('segments.show', ['segment' => '2']) }}"
                             class="relative group overflow-hidden rounded-md shadow-md h-[500px] w-full block">
                             <img src="{{ asset('storage/segments/men.png') }}"
                                 alt="Shop by Men"
