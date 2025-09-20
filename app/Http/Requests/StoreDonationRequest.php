@@ -29,7 +29,9 @@ class StoreDonationRequest extends FormRequest
             'description' => 'required|string',
             'approval_status' => 'in:approved,pending,rejected',
             'size' => 'required|string',
-            'image' => 'nullable|image|max:2048',
+            // Multi-image input from the form: images[]
+            'images'   => 'required|array|min:1|max:8',
+            'images.*' => 'image|mimes:jpg,jpeg,png,webp,gif|max:5120',
             'status' => 'in:available,sold',
         ];
     }

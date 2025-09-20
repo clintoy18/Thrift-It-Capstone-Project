@@ -40,8 +40,9 @@ class DonationController extends Controller
     {
          $validated = $request->validated();
          $validated['user_id'] = Auth::id();
-         $this->donationService->createDonation($validated,$request->file('image')?? null);
-           
+         // Pass all images to service for multi-image handling (up to 8 validated)
+         $files = $request->hasFile('images') ? $request->file('images') : [];
+         $this->donationService->createDonation($validated, $files);
          return redirect()->route('donations.index')->with('success', 'Donation created successfully!');
     }
 

@@ -129,18 +129,22 @@
 
                     <!-- Comments -->
                 
+                        
+                        
+
                         <div class="border p-6 rounded-lg shadow bg-[#F4F2ED]">
                         <h3 class="text-lg font-bold mb-4">Comments</h3>
-                        
+
                         <!-- Scrollable Comment List -->
-                        <div class="max-h-60 overflow-y-auto overflow-x-hidden space-y-3 pr-2">
-                            @forelse($donation->comments as $comment)
-                                <div class="flex items-start gap-3">
-                                    <img 
-                                        src="https://ui-avatars.com/api/?name={{ urlencode($comment->user->fname . ' ' . $comment->user->lname) }}&background=random" 
-                                        alt="{{ $comment->user->fname }} {{ $comment->user->lname }}"
-                                        class="w-10 h-10 rounded-full border"
-                                    >
+                        <div id="comments-container" class="max-h-60 overflow-y-auto overflow-x-hidden space-y-3 pr-2">
+                           @forelse($donation->comments as $comment)
+                                <div class="comment-item flex items-start gap-3" data-comment-id="{{ $comment->id }}">
+                                    <!-- Avatar with same style as profile -->
+                                    <div class="w-10 h-10 bg-white dark:bg-gray-700 rounded-full border-2 border-white dark:border-gray-800 flex items-center justify-center flex-shrink-0">
+                                        <span class="text-sm font-bold text-gray-800 dark:text-gray-200">
+                                            {{ strtoupper(substr($comment->user->fname, 0, 1) . substr($comment->user->lname, 0, 1)) }}
+                                        </span>
+                                    </div>
                                     <div class="inline-block max-w-full bg-[#E1D5B6] dark:bg-gray-700 p-3 rounded-lg ">
                                         <div class="flex items-center gap-2">
                                             <a href="{{ route('profile.show', $comment->user->id) }}" class="text-blue-500 hover:underline">
@@ -180,28 +184,27 @@
                                 <p class="text-gray-600 dark:text-gray-400 text-sm">No comments yet. Be the first to comment!</p>
                             @endforelse
                         </div>
-                        @auth
-                            <form action="{{ route('comments.store') }}" method="POST" class="mt-4">
+
+                         <!-- Comment Form -->
+                            @auth
+                            <form id="comment-form" class="mt-4">
                                 @csrf
                                 <div class="flex flex-col md:flex-row items-stretch md:items-center gap-3 w-full max-w-xl bg-white dark:bg-gray-800 p-3 rounded-2xl border border-gray-200 dark:border-gray-600 shadow-md">
                                     <input type="hidden" name="donation_id" value="{{ $donation->id }}">
-
                                     <textarea
                                         name="content"
+                                        id="comment-content"
                                         placeholder="Write a comment..."
                                         class="flex-1 w-full resize-none overflow-hidden rounded-full px-4 py-2 text-sm text-gray-800 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-[#E1D5B6] border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700"
                                         rows="1"
                                         oninput="this.style.height='auto';this.style.height=this.scrollHeight+'px';"
                                         required></textarea>
-
-                                        <button type="submit"
-                                            class="mt-2 md:mt-0 md:self-center bg-[#E1D5B6] text-white font-semibold px-4 py-2 rounded-full shadow hover:shadow-md hover:bg-[#d1c29f] transition-all duration-300 ease-in-out w-full md:w-auto">
-                                            <i class="fas fa-paper-plane"></i>
-                                        </button>
-
+                                    <button type="submit"
+                                        class="mt-2 md:mt-0 md:self-center bg-[#E1D5B6] text-white font-semibold px-4 py-2 rounded-full shadow hover:shadow-md hover:bg-[#d1c29f] transition-all duration-300 ease-in-out w-full md:w-auto">
+                                        <i class="fas fa-paper-plane"></i>
+                                    </button>
                                 </div>
-
-
+                                <div id="comment-error" class="text-red-500 mt-2 text-sm hidden"></div>
                             </form>
                         @else
                             <p class="mt-3 text-gray-600">
@@ -280,5 +283,123 @@ document.addEventListener("DOMContentLoaded", function () {
         },
     });
 });
+   // AJAX comment submission
+   document.addEventListener('DOMContentLoaded', function() {
+        const commentForm = document.getElementById('comment-form');
+        if (commentForm) {
+            commentForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const formData = new FormData(this);
+                const errorDiv = document.getElementById('comment-error');
+                const submitButton = this.querySelector('button[type="submit"]');
+                const originalButtonText = submitButton.innerHTML;
+                
+                // Show loading state
+                submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+                submitButton.disabled = true;
+                errorDiv.classList.add('hidden');
+                
+                fetch("{{ route('comments.store') }}", {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'Accept': 'application/json'
+                    },
+                    body: formData
+                })
+                .then(async (response) => {
+                    const contentType = response.headers.get('content-type') || '';
+                    if (!response.ok) {
+                        const msg = contentType.includes('application/json')
+                            ? (await response.json()).message || 'Error'
+                            : 'Request failed (maybe login required).';
+                        throw new Error(msg);
+                    }
+                    if (!contentType.includes('application/json')) {
+                        throw new Error('Unexpected response from server.');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.success) {
+                        // Clear the textarea
+                        document.getElementById('comment-content').value = '';
+                        
+                        // Add the new comment to the list
+                        addCommentToDOM(data.comment);
+                        
+                        // If there was a "no comments" message, remove it
+                        const noCommentsMsg = document.querySelector('#comments-container > p');
+                        if (noCommentsMsg) {
+                            noCommentsMsg.remove();
+                        }
+                    } else {
+                        throw new Error(data.message || 'An error occurred');
+                    }
+                })
+                .catch(error => {
+                    errorDiv.textContent = error.message || 'Failed to post comment. Please try again.';
+                    errorDiv.classList.remove('hidden');
+                })
+                .finally(() => {
+                    submitButton.innerHTML = originalButtonText;
+                    submitButton.disabled = false;
+                });
+            });
+        }
+    });
+
+    function addCommentToDOM(commentData) {
+        const commentsContainer = document.getElementById('comments-container');
+        const commentHtml = `
+            <div class="comment-item flex items-start gap-3" data-comment-id="${commentData.id}">
+                <!-- Avatar with same style as profile -->
+                <div class="w-10 h-10 bg-white dark:bg-gray-700 rounded-full border-2 border-white dark:border-gray-800 flex items-center justify-center flex-shrink-0">
+                    <span class="text-sm font-bold text-gray-800 dark:text-gray-200">
+                        ${commentData.user.fname ? (commentData.user.fname.charAt(0) + commentData.user.lname.charAt(0)).toUpperCase() : 'U'}
+                    </span>
+                </div>
+                <div class="inline-block max-w-full bg-[#E1D5B6] dark:bg-gray-700 p-3 rounded-lg ">
+                    <div class="flex items-center gap-2">
+                        <a href="/profile/${commentData.user.id}" class="text-blue-500 hover:underline">
+                            <p class="font-semibold text-gray-800 dark:text-gray-200">
+                                ${commentData.user.fname} ${commentData.user.lname}
+                            </p>
+                        </a>
+                        <div class="ml-auto relative">
+                            <button type="button" class="p-1 rounded hover:bg-black/10 dark:hover:bg-white/10" onclick="toggleDropdown(${commentData.id})">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-600 dark:text-gray-200" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M6 10a2 2 0 11-4 0 2 2 0 014 0zm6 0a2 2 0 11-4 0 2 2 0 014 0zm6 0a2 2 0 11-4 0 2 2 0 014 0z" />
+                                </svg>
+                            </button>
+                            <div id="dropdown-${commentData.id}" class="absolute right-0 mt-1 w-28 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded shadow z-10 hidden">
+                                <a href="/comments/${commentData.id}/edit" class="block px-3 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700">Edit</a>
+                                <form action="/comments/${commentData.id}" method="POST" onsubmit="return confirm('Are you sure you want to delete this comment?');">
+                                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                    <input type="hidden" name="_method" value="DELETE">
+                                    <button type="submit" class="w-full text-left px-3 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-gray-50 dark:hover:bg-gray-700">Delete</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="mt-2 text-gray-800 dark:text-gray-200 break-words">${commentData.content}</p>
+                </div>
+            </div>
+            <div class="flex flex-col overflow-hidden relative left-[50px]">
+                <p class="text-gray-500 dark:text-gray-400 text-xs">Just now</p>
+            </div>
+            <hr class="my-2 border-gray-200 dark:border-gray-600">
+        `;
+        
+        // Add the new comment at the top of the comments container
+        commentsContainer.insertAdjacentHTML('afterbegin', commentHtml);
+        
+        // Scroll to the new comment
+        const newComment = commentsContainer.querySelector('.comment-item');
+        if (newComment) {
+            newComment.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+    }
 </script>
 </x-app-layout>

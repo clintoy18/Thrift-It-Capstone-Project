@@ -39,7 +39,7 @@ class ProductRepository
     }
     public function findWithRelations($id)
     {
-        return Product::with(['user','category','comments'])->findOrFail($id);
+        return Product::with(['user','category','comments.user'])->findOrFail($id);
     }
 
     public function getApproveProducts(Segment $segment)
