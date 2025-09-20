@@ -121,7 +121,6 @@
 
     </div>
 </div>
-
             <!-- Second Segment (Duplicate) -->
             <div class="py-6 bg-white dark:bg-gray-900">
                 <div class="max-w-7xl mx-auto px-4 sm:px-4 lg:px-8 font-poppins">
