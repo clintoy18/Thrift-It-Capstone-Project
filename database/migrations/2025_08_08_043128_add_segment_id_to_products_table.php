@@ -22,7 +22,11 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('products', function (Blueprint $table) {
-            //
+            if (Schema::hasColumn('products', 'segment_id')) {
+                // Drop FK first, then the column
+                try { $table->dropForeign(['segment_id']); } catch (\Throwable $e) {}
+                try { $table->dropColumn('segment_id'); } catch (\Throwable $e) {}
+            }
         });
     }
 };

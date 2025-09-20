@@ -24,80 +24,33 @@
             </div>
 
             <!-- Main Layout with Form Container -->
-            <form action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
+            <form id="productForm" action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
                 @csrf
                 <div class="grid grid-cols-1 lg:grid-cols-5 gap-6 lg:gap-10 items-start lg:relative lg:left-[-150px]">
-                    <!-- Left Side - Image Upload Section (structure only) -->
+                    <!-- Left Side - Image Upload Section (multiple with previews) -->
                     <div class="lg:col-span-2 flex flex-col w-full lg:w-[450px]">
                         <div class="space-y-4">
                             <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">Photos</h3>
                             <div class="w-full">
-                                <!-- Top row: Add + Cover Photo -->
-                                <div class="grid grid-cols-2 gap-4 mb-4">
-                                    <!-- Plus tile -->
-                                    <label class="upload-tile h-40 sm:h-40">
+                                <!-- Preview Grid -->
+                                <div id="previewsGrid" class="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-4"></div>
+                                
+                                <!-- Add Photos Button -->
+                                <div class="mb-4">
+                                    <label for="imageInput" class="upload-tile h-40 sm:h-40 cursor-pointer flex items-center justify-center border-2 border-dashed border-gray-300 rounded-lg">
                                         <div class="flex flex-col items-center justify-center h-full text-gray-500">
                                             <span class="text-3xl">+</span>
+                                            <span class="text-xs mt-1">Add photos</span>
                                     </div>
-                                        <input type="file" class="hidden" accept="image/*">
-                                    </label>
-                                    <!-- Cover Photo (required) -->
-                                    <label class="upload-tile h-40 sm:h-40">
-                                        <div class="tile-body">
-                                            <img class="tile-preview hidden" alt="Cover">
-                                            <span class="tile-label">Cover Photo</span>
-                                    </div>
-                                        <input type="file" id="image" name="image" class="hidden" accept="image/*">
                                     </label>
                                      </div>
-
-                                <!-- 3x2 grid: Front, Back, Side, Label, Detail, Flaw -->
+                               
+                                <!-- Hidden multiple input -->
+                                <input id="imageInput" name="images[]" type="file" accept="image/*" multiple class="hidden">
                            
-                            
-                                <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 w-full   ">
-                                <label class="upload-tile  flex flex-col lg:relative lg:left-[-120px] h-40 w-full sm:w-[210px] sm:h-40 ">
-                                        <div class="tile-body ">
-                                            <img class="tile-preview hidden" alt="Front">
-                                            <span class="tile-label">Front</span>
-                                    </div>
-                                        <input type="file" class="hidden" accept="image/*">
-                                    </label>
-                                    <label class="upload-tile h-40 flex flex-col lg:relative lg:left-[-40px] sm:h-40 w-full sm:w-[210px]">
-                                        <div class="tile-body">
-                                            <img class="tile-preview hidden" alt="Back">
-                                            <span class="tile-label">Back</span>
-                                    </div>
-                                        <input type="file" class="hidden" accept="image/*">
-                                    </label>
-                                    <label class="upload-tile flex flex-col lg:relative lg:left-[40px] h-40 sm:h-40 w-full sm:w-[210px]">
-                                        <div class="tile-body">
-                                            <img class="tile-preview hidden" alt="Side">
-                                            <span class="tile-label">Side</span>
-                                </div>
-                                        <input type="file" class="hidden" accept="image/*">
-                                    </label>
-                                    <label class="upload-tile flex flex-col lg:relative lg:left-[-120px] h-40 w-full sm:w-[210px] sm:h-40">
-                                        <div class="tile-body">
-                                            <img class="tile-preview hidden" alt="Label">
-                                            <span class="tile-label">Label</span>
-                            </div>
-                                        <input type="file" class="hidden" accept="image/*">
-                                    </label>
-                                    <label class="upload-tile h-40 flex flex-col lg:relative lg:left-[-40px] sm:h-40 w-full sm:w-[210px]">
-                                        <div class="tile-body">
-                                            <img class="tile-preview hidden" alt="Detail">
-                                            <span class="tile-label">Detail</span>
-                        </div>
-                                        <input type="file" class="hidden" accept="image/*">
-                                    </label>
-                                    <label class="upload-tile flex flex-col lg:relative lg:left-[40px] h-40 sm:h-40 w-full sm:w-[210px]">
-                                        <div class="tile-body">
-                                            <img class="tile-preview hidden" alt="Flaw">
-                                            <span class="tile-label">Flaw</span>
-                    </div>
-                                        <input type="file" class="hidden" accept="image/*">
-                                    </label>
-                                </div>
+                                <!-- Helper and error -->
+                                <p class="mt-2 text-xs text-gray-500">Upload up to 8 photos in one selection.</p>
+                                <p id="imageError" class="mt-2 text-sm text-red-600 hidden">Please upload up to 8 photos.</p>
 
                             </div>
                         </div>
@@ -408,6 +361,48 @@
             object-fit: contain;
         }
         .tile-label { pointer-events: none; }
+        
+        /* Preview grid styling */
+        #previewsGrid .preview-item {
+            position: relative;
+            height: 100px;
+            border-radius: 0.5rem;
+            overflow: hidden;
+        }
+        #previewsGrid .preview-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        #previewsGrid .preview-number {
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }
+        #previewsGrid .remove-btn {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: rgba(255,0,0,0.7);
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            cursor: pointer;
+        }
 
         /* Mobile-only overrides (no markup changes) */
         @media (max-width: 640px) {
@@ -417,28 +412,128 @@
     </style>
 
     <script>
-            // Per-tile preview (structure only)
-            document.addEventListener('change', function(e) {
-                const input = e.target;
-                if (!(input instanceof HTMLInputElement)) return;
-                if (input.type !== 'file') return;
-                const tile = input.closest('.upload-tile');
-                if (!tile) return;
-                const img = tile.querySelector('.tile-preview');
-                const label = tile.querySelector('.tile-label');
-            if (input.files && input.files[0]) {
+        document.addEventListener('DOMContentLoaded', function() {
+            const input = document.getElementById('imageInput');
+            const previewsGrid = document.getElementById('previewsGrid');
+            const form = document.getElementById('productForm');
+            const errorEl = document.getElementById('imageError');
+            let selectedFiles = [];
+            
+            // Function to render all previews
+            function renderPreviews(files) {
+                previewsGrid.innerHTML = '';
+                
+                if (!files || files.length === 0) return;
+                
+                files.forEach((file, index) => {
+                    const previewItem = document.createElement('div');
+                    previewItem.className = 'preview-item';
+                    
+                    const img = document.createElement('img');
+                    img.className = 'tile-preview';
+                    img.alt = 'Preview ' + (index + 1);
+                    
+                    const numberBadge = document.createElement('span');
+                    numberBadge.className = 'preview-number';
+                    numberBadge.textContent = index + 1;
+                    
+                    const removeBtn = document.createElement('span');
+                    removeBtn.className = 'remove-btn';
+                    removeBtn.textContent = '×';
+                    removeBtn.onclick = function(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        removeImage(index);
+                    };
+                    
+                    previewItem.appendChild(img);
+                    previewItem.appendChild(numberBadge);
+                    previewItem.appendChild(removeBtn);
+                    previewsGrid.appendChild(previewItem);
+                    
                 const reader = new FileReader();
-                    reader.onload = function(ev) {
-                        if (img) {
-                            img.src = ev.target.result;
-                            img.classList.remove('hidden');
-                        }
-                        if (label) label.classList.add('hidden');
-                };
-                reader.readAsDataURL(input.files[0]);
+                    reader.onload = (e) => { img.src = e.target.result; };
+                    reader.readAsDataURL(file);
+                });
             }
-            });
+            
+            // Function to remove an image
+            function removeImage(index) {
+                selectedFiles.splice(index, 1);
+                
+                // Update the file input
+                const dt = new DataTransfer();
+                selectedFiles.forEach(file => dt.items.add(file));
+                input.files = dt.files;
+                
+                // Re-render previews
+                renderPreviews(selectedFiles);
+                hideError();
+            }
+            
+            function showError(msg) {
+                if (!errorEl) return;
+                errorEl.textContent = msg;
+                errorEl.classList.remove('hidden');
+            }
 
+            function hideError() {
+                if (!errorEl) return;
+                errorEl.classList.add('hidden');
+            }
+            
+            // Open file chooser when clicking the plus tile
+            const plusTile = document.querySelector('label[for="imageInput"]');
+            if (plusTile) {
+                // Clear value before browser opens file dialog via label's default behavior
+                plusTile.addEventListener('mousedown', () => {
+                    if (input) input.value = '';
+                });
+            }
+            
+            // Handle file selection (accumulate up to 8)
+            input.addEventListener('change', () => {
+                hideError();
+                const newlySelected = Array.from(input.files || []);
+
+                // Build a set to avoid duplicates by name|size|lastModified
+                const makeKey = (f) => `${f.name}|${f.size}|${f.lastModified}`;
+                const existingKeys = new Set(selectedFiles.map(makeKey));
+
+                for (const file of newlySelected) {
+                    if (selectedFiles.length >= 8) break;
+                    const key = makeKey(file);
+                    if (existingKeys.has(key)) continue;
+                    selectedFiles.push(file);
+                    existingKeys.add(key);
+                }
+
+                if (selectedFiles.length >= 8 && newlySelected.length > 0) {
+                    showError('Limit reached: showing first 8 photos.');
+                }
+
+                // Rebuild input.files from accumulated selection
+                const dt = new DataTransfer();
+                selectedFiles.forEach(f => dt.items.add(f));
+                input.files = dt.files;
+
+                // Render all previews
+                renderPreviews(selectedFiles);
+            });
+            
+            // Form validation
+            form.addEventListener('submit', (e) => {
+                const count = (input.files && input.files.length) ? input.files.length : selectedFiles.length;
+                if (count === 0) {
+                    e.preventDefault();
+                    showError('Please upload at least one photo.');
+                } else if (count > 8) {
+                    e.preventDefault();
+                    showError('Please upload up to 8 photos only.');
+                }
+            });
+            
+            // Initialize size options based on category
             function updateSizeOptions() {
             const categorySelect = document.getElementById('category_id');
             const sizeSelect = document.getElementById('size');
@@ -469,34 +564,31 @@
             sizeSelect.value = '';
         }
 
-        document.getElementById('category_id').addEventListener('change', updateSizeOptions);
-
-        document.addEventListener('DOMContentLoaded', () => {
-            updateSizeOptions();
+            // Set up category change listener
+            const categorySelect = document.getElementById('category_id');
+            if (categorySelect) {
+                categorySelect.addEventListener('change', updateSizeOptions);
+                updateSizeOptions(); // Initialize on page load
+            }
             
-            // Force barangay dropdown to open downward without breaking selection
+            // Fix for barangay dropdown
             const barangaySelect = document.getElementById('barangay_id');
             if (barangaySelect) {
-                // Set initial positioning
                 barangaySelect.style.position = 'relative';
                 barangaySelect.style.zIndex = '9999';
                 barangaySelect.style.transform = 'translateY(0)';
                 
-                // Add focus event to ensure proper positioning
                 barangaySelect.addEventListener('focus', function() {
                     this.style.position = 'relative';
                     this.style.zIndex = '9999';
                     this.style.transform = 'translateY(0)';
                 });
                 
-                // Add click event to maintain positioning
                 barangaySelect.addEventListener('click', function() {
                     this.style.position = 'relative';
                     this.style.zIndex = '9999';
                 });
             }
         });
-
     </script>
-
 </x-app-layout>

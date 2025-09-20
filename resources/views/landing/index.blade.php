@@ -92,14 +92,14 @@
 
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
                 <!-- Women Segment -->
-                <a href="{{ route('segments.show', ['segment' => '1']) }}" class="relative group overflow-hidden rounded-md shadow-md h-[500px] w-full block">
+                <a href="{{ route('segments.show', ['segment' => '2']) }}" class="relative group overflow-hidden rounded-md shadow-md h-[500px] w-full block">
                     <img src="{{ asset('storage/segments/women.png') }}" 
                         alt="Shop by Women" 
                         class="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-105">
                 </a>
 
                 <!-- Men Segment -->
-                <a href="{{ route('segments.show', ['segment' => '2']) }}" class="relative group overflow-hidden rounded-md shadow-md h-[500px] w-full block">
+                <a href="{{ route('segments.show', ['segment' => '1']) }}" class="relative group overflow-hidden rounded-md shadow-md h-[500px] w-full block">
                     <img src="{{ asset('storage/segments/men.png') }}" 
                         alt="Shop by Men" 
                         class="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-105">

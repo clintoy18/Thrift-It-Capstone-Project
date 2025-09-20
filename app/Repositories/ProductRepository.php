@@ -39,7 +39,7 @@ class ProductRepository
     }
     public function findWithRelations($id)
     {
-        return Product::with(['user','category','comments'])->findOrFail($id);
+        return Product::with(['user','category','comments.user'])->findOrFail($id);
     }
 
     public function getApproveProducts(Segment $segment)
@@ -49,5 +49,15 @@ class ProductRepository
             ->with(['category'])
             ->get();
     }
+
+   public function getByStatusPaginated(string $status, int $perPage = 10)
+    {
+        return Product::with(['user', 'category'])
+            ->where('approval_status', $status)  
+            ->latest()
+            ->paginate($perPage);
+    }
+
+
 
 }

@@ -28,7 +28,9 @@ class StoreProductRequest extends FormRequest
             'price' => 'required|numeric|min:0',
             'approval_status' => 'in:approved,pending,rejected',
             'size' => 'required|string',
-            'image' => 'required|image|max:2048',
+            // Multi-image input from the form: images[]
+            'images'   => 'required|array|min:1|max:8',
+            'images.*' => 'image|mimes:jpg,jpeg,png,webp,gif|max:5120',
             'qty' => 'integer',
             'status' => 'required|in:available,sold',
             'segment_id' => 'required|exists:segments,id', 

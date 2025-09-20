@@ -22,80 +22,33 @@
                         </h2>
                     </div>
             <!-- Main Layout with Form Container -->
-                    <form action="{{ route('donations.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
+                    <form id="donationForm" action="{{ route('donations.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
                         @csrf
                   <div class="grid grid-cols-1 lg:grid-cols-5 gap-6 lg:gap-10 items-start lg:relative lg:left-[-150px]">
-                        <!-- Left Side - Image Upload Section (structure only) -->
+                        <!-- Left Side - Image Upload Section (multi-select with previews) -->
                      <div class="lg:col-span-2 flex flex-col w-full lg:w-[450px]">
                         <div class="space-y-4">
                             <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">Photos</h3>
                             <div class="w-full">
-                                <!-- Top row: Add + Cover Photo -->
-                                <div class="grid grid-cols-2 gap-4 mb-4">
-                                    <!-- Plus tile -->
-                                    <label class="upload-tile h-40 sm:h-40">
+                                <!-- Preview Grid -->
+                                <div id="donationPreviews" class="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-4"></div>
+
+                                <!-- Add Photos Button -->
+                                <div class="mb-4">
+                                    <label for="donationImages" class="upload-tile h-40 sm:h-40 cursor-pointer flex items-center justify-center border-2 border-dashed border-gray-300 rounded-lg">
                                         <div class="flex flex-col items-center justify-center h-full text-gray-500">
                                             <span class="text-3xl">+</span>
-                                    </div>
-                                        <input type="file" class="hidden" accept="image/*">
-                                    </label>
-                                    <!-- Cover Photo (required) -->
-                                    <label class="upload-tile h-40 sm:h-40">
-                                        <div class="tile-body">
-                                            <img class="tile-preview hidden" alt="Cover">
-                                            <span class="tile-label">Cover Photo</span>
-                                    </div>
-                                        <input type="file" id="image" name="image" class="hidden" accept="image/*">
-                                    </label>
-                                     </div>
-
-                                <!-- 3x2 grid: Front, Back, Side, Label, Detail, Flaw -->
-                           
-                            
-                                <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 w-full   ">
-                                    <label class="upload-tile  flex flex-col lg:relative lg:left-[-120px] h-40 w-full sm:w-[210px] sm:h-40 ">
-                                        <div class="tile-body ">
-                                            <img class="tile-preview hidden" alt="Front">
-                                            <span class="tile-label">Front</span>
-                                    </div>
-                                        <input type="file" class="hidden" accept="image/*">
-                                    </label>
-                                    <label class="upload-tile h-40 flex flex-col lg:relative lg:left-[-40px] sm:h-40 w-full sm:w-[210px]">
-                                        <div class="tile-body">
-                                            <img class="tile-preview hidden" alt="Back">
-                                            <span class="tile-label">Back</span>
-                                    </div>
-                                        <input type="file" class="hidden" accept="image/*">
-                                    </label>
-                                    <label class="upload-tile flex flex-col lg:relative lg:left-[40px] h-40 sm:h-40 w-full sm:w-[210px]">
-                                        <div class="tile-body">
-                                            <img class="tile-preview hidden" alt="Side">
-                                            <span class="tile-label">Side</span>
-                                </div>
-                                        <input type="file" class="hidden" accept="image/*">
-                                    </label>
-                                    <label class="upload-tile flex flex-col lg:relative lg:left-[-120px] h-40 w-full sm:w-[210px] sm:h-40">
-                                        <div class="tile-body">
-                                            <img class="tile-preview hidden" alt="Label">
-                                            <span class="tile-label">Label</span>
-                            </div>
-                                        <input type="file" class="hidden" accept="image/*">
-                                    </label>
-                                    <label class="upload-tile h-40 flex flex-col lg:relative lg:left-[-40px] sm:h-40 w-full sm:w-[210px]">
-                                        <div class="tile-body">
-                                            <img class="tile-preview hidden" alt="Detail">
-                                            <span class="tile-label">Detail</span>
-                        </div>
-                                        <input type="file" class="hidden" accept="image/*">
-                                    </label>
-                                    <label class="upload-tile flex flex-col lg:relative lg:left-[40px] h-40 sm:h-40 w-full sm:w-[210px]">
-                                        <div class="tile-body">
-                                            <img class="tile-preview hidden" alt="Flaw">
-                                            <span class="tile-label">Flaw</span>
+                                            <span class="text-xs mt-1">Add photos</span>
                     </div>
-                                        <input type="file" class="hidden" accept="image/*">
                                     </label>
                                 </div>
+
+                                <!-- Hidden multiple input -->
+                                <input id="donationImages" name="images[]" type="file" accept="image/*" multiple class="hidden">
+
+                                <!-- Helper and error -->
+                                <p class="mt-2 text-xs text-gray-500">Upload up to 8 photos. You can add more in steps.</p>
+                                <p id="donationImageError" class="mt-2 text-sm text-red-600 hidden">Please upload up to 8 photos.</p>
 
                             </div>
                         </div>
@@ -203,6 +156,97 @@
         
 
     <script>
+        // Multi-image selection with previews (accumulate up to 8)
+        document.addEventListener('DOMContentLoaded', function() {
+            const input = document.getElementById('donationImages');
+            const previews = document.getElementById('donationPreviews');
+            const form = document.getElementById('donationForm');
+            const errorEl = document.getElementById('donationImageError');
+            let selectedFiles = [];
+
+            function showError(msg) {
+                if (!errorEl) return;
+                errorEl.textContent = msg;
+                errorEl.classList.remove('hidden');
+            }
+            function hideError() {
+                if (!errorEl) return;
+                errorEl.classList.add('hidden');
+            }
+
+            function renderPreviews(files) {
+                previews.innerHTML = '';
+                files.forEach((file, index) => {
+                    const wrapper = document.createElement('div');
+                    wrapper.className = 'preview-item';
+                    const img = document.createElement('img');
+                    img.alt = 'Preview ' + (index + 1);
+                    const badge = document.createElement('span');
+                    badge.className = 'preview-number';
+                    badge.textContent = index + 1;
+                    const removeBtn = document.createElement('span');
+                    removeBtn.className = 'remove-btn';
+                    removeBtn.textContent = '×';
+                    removeBtn.onclick = (e) => { e.preventDefault(); e.stopPropagation(); removeAt(index); };
+                    wrapper.appendChild(img);
+                    wrapper.appendChild(badge);
+                    wrapper.appendChild(removeBtn);
+                    previews.appendChild(wrapper);
+                    const r = new FileReader();
+                    r.onload = (ev) => { img.src = ev.target.result; };
+                    r.readAsDataURL(file);
+                });
+            }
+
+            function syncInput() {
+                const dt = new DataTransfer();
+                selectedFiles.forEach(f => dt.items.add(f));
+                input.files = dt.files;
+            }
+
+            function removeAt(idx) {
+                selectedFiles.splice(idx, 1);
+                syncInput();
+                renderPreviews(selectedFiles);
+                hideError();
+            }
+
+            // Clear input before opening via label (ensures first pick registers)
+            const label = document.querySelector('label[for="donationImages"]');
+            if (label) {
+                label.addEventListener('mousedown', () => { if (input) input.value = ''; });
+            }
+
+            input.addEventListener('change', () => {
+                hideError();
+                const newly = Array.from(input.files || []);
+                const makeKey = (f) => `${f.name}|${f.size}|${f.lastModified}`;
+                const keys = new Set(selectedFiles.map(makeKey));
+                for (const f of newly) {
+                    if (selectedFiles.length >= 8) break;
+                    const k = makeKey(f);
+                    if (keys.has(k)) continue;
+                    selectedFiles.push(f);
+                    keys.add(k);
+                }
+                if (selectedFiles.length >= 8 && newly.length > 0) {
+                    showError('Limit reached: showing first 8 photos.');
+                }
+                syncInput();
+                renderPreviews(selectedFiles);
+            });
+
+            form.addEventListener('submit', (e) => {
+                const count = input.files?.length || selectedFiles.length;
+                if (count === 0) {
+                    e.preventDefault();
+                    showError('Please upload at least one photo.');
+                } else if (count > 8) {
+                    e.preventDefault();
+                    showError('Please upload up to 8 photos only.');
+                }
+            });
+        });
         function updateSizeOptions() {
             const categorySelect = document.getElementById('category_id');
             const sizeSelect = document.getElementById('size');
@@ -276,6 +320,47 @@
             object-fit: contain;
         }
         .tile-label { pointer-events: none; }
+        /* Preview grid styling */
+        #donationPreviews .preview-item {
+            position: relative;
+            height: 100px;
+            border-radius: 0.5rem;
+            overflow: hidden;
+        }
+        #donationPreviews .preview-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        #donationPreviews .preview-number {
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }
+        #donationPreviews .remove-btn {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: rgba(255,0,0,0.7);
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            cursor: pointer;
+        }
         /* Mobile-only overrides (no markup changes) */
         @media (max-width: 640px) {
             .w-\[640px\] { width: 100% !important; }

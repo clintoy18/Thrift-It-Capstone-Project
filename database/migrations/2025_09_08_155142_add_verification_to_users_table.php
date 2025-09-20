@@ -13,9 +13,10 @@ return new class extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->boolean('is_verified')->default(false);
-            $table->enum('verification_status', ['pending', 'approved', 'rejected'])
-            ->default('pending');
+            $table->enum('verification_status', ['unverified', 'pending', 'approved', 'rejected'])
+            ->default('unverified');
             $table->string('verification_document')->nullable();
+
         });
     }
 

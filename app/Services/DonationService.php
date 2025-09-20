@@ -33,23 +33,50 @@ class DonationService
         return $this->donationRepository->find($id);
     }
 
-    public function createDonation(array $data , $image = null)
+    public function createDonation(array $data , $images = null)
     {
-        // Add business logic here if needed
-        if ($image) {
-            $data['image'] = $image->store('donations_images', 'public');
+        // Support multiple images (array) or single file
+        $storedPaths = [];
+        if (is_array($images)) {
+            foreach ($images as $img) {
+                if ($img) {
+                    $storedPaths[] = $img->store('donations_images', 'public');
+                }
+            }
+        } elseif ($images) {
+            $storedPaths[] = $images->store('donations_images', 'public');
+        }
+
+        if (!empty($storedPaths)) {
+            $data['image'] = $storedPaths[0];
+            $data['images'] = json_encode($storedPaths);
         }
         return $this->donationRepository->create($data);
     }
-    public function updateDonation(Donation $donation, array $data, $image = null)
+    public function updateDonation(Donation $donation, array $data, $images = null)
     {
-        // Add business logic here if needed
-        if($image){
-            //Delete old image if exists
-            if($donation->image){
+        // Support updating image(s) with array or single
+        if ($images) {
+            // Delete old primary image if present
+            if ($donation->image) {
                 Storage::delete('public/'.$donation->image);
             }
-            $data['image'] = $image->store('donations_images', 'public');
+
+            $storedPaths = [];
+            if (is_array($images)) {
+                foreach ($images as $img) {
+                    if ($img) {
+                        $storedPaths[] = $img->store('donations_images', 'public');
+                    }
+                }
+            } else {
+                $storedPaths[] = $images->store('donations_images', 'public');
+            }
+
+            if (!empty($storedPaths)) {
+                $data['image'] = $storedPaths[0];
+                $data['images'] = json_encode($storedPaths);
+            }
         }
         return $this->donationRepository->update($donation, $data);
     }

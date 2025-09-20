@@ -60,7 +60,14 @@ class Product extends Model
 
     public function comments()
     {
-        return $this->hasMany(Comment::class);
+        return $this->hasMany(Comment::class)->latest();
+    }
+
+    // Method to force fresh comments loading
+    public function getFreshComments()
+    {
+        $this->unsetRelation('comments');
+        return $this->load(['comments.user']);
     }
 
     public function segment()
