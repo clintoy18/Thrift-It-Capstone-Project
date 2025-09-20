@@ -16,6 +16,8 @@
                 <a href="{{ route('products.create') }}" class="text-gray-700 hidden font-bold lg:block">Sell</a>
                 <a href="{{ route('donations.index') }}" class="text-gray-700 hidden font-bold lg:block">Donate</a>
                 <a href="{{ route('appointments.index') }}" class="text-gray-700 hidden font-bold lg:block">Upcycle</a>
+                <a href="{{ route('pricing.index') }}" class="text-gray-700 hidden font-bold lg:block">Pricing</a>
+
             @elseif($role === 1)
                 <a href="{{ route('upcycler.index') }}" class="bg-black text-white px-3 py-1.5 text-sm rounded hover:bg-gray-800 transition">Manage Appointments</a>
             @endif
