@@ -74,5 +74,40 @@ This project is refactored to use the Service-Repository pattern:
 ## Contribution
 Pull requests are welcome! For major changes, please open an issue first to discuss what you would like to change.
 
+Stripe Local Setup
+1. Install Stripe CLI
+
+👉 Download here
+
+2. Add Keys to .env
+STRIPE_PUBLISHABLE_KEY=pk_test_xxx
+STRIPE_SECRET_KEY=sk_test_xxx
+STRIPE_WEBHOOK_SECRET=whsec_xxx
+
+3. Install Stripe Library
+
+Node.js
+
+npm install stripe dotenv
+
+
+PHP / Laravel
+
+composer require stripe/stripe-php
+
+4. Run Local Server
+php artisan serve
+# or
+npm run dev
+
+5. Listen for Webhooks
+stripe listen --forward-to localhost:8000/webhook
+
+6. Test Cards
+
+✅ Success → 4242 4242 4242 4242
+
+❌ Decline → 4000 0000 0000 0002
+
 ## License
 [MIT](LICENSE)

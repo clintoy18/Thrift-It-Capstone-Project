@@ -20,6 +20,8 @@ use App\Http\Controllers\PrivateChatController;
 use App\Http\Controllers\DonationController;
 use App\Http\Controllers\LeaderboardController;
 use App\Http\Controllers\SegmentController;
+use App\Http\Controllers\PricingController;
+
 
 Route::get('/search', [SearchController::class, 'index'])->name('search');
 
@@ -107,6 +109,16 @@ Route::middleware('auth')->group(function () {
     //upload verification document user/upcycler 
      Route::post('/profile/verification-document', [ProfileController::class, 'uploadVerificationDocument'])
         ->name('profile.verification.upload');
+
+
+    //route for pricing page
+    Route::get('/pricing', [PricingController::class, 'index'])->name('pricing.index');
+      
+
+    //route for cehckout
+    Route::get('/checkout/{name}', [App\Http\Controllers\CheckoutController::class, 'checkout'])->name('checkout');
+    Route::get('/checkout-success', [App\Http\Controllers\CheckoutController::class, 'success'])->name('checkout.success');
+ 
 });
 
 
