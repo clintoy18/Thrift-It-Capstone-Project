@@ -101,7 +101,8 @@ php artisan serve
 npm run dev
 
 5. Listen for Webhooks
-stripe listen --forward-to localhost:8000/webhook
+
+stripe listen --forward-to http://127.0.0.1:8000/stripe/webhook
 
 6. Test Cards
 
