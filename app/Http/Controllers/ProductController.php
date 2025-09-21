@@ -30,6 +30,8 @@ class ProductController extends Controller
     {
         $this->productService = $productService;
         $this->categoryService = $categoryService;
+        $this->middleware('subscribed')->only(['create', 'store']);
+
     }
 
     public function index(): View
