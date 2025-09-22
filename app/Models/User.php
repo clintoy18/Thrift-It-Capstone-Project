@@ -127,8 +127,24 @@ class User extends Authenticatable implements MustVerifyEmail
         public function barangay()
     {
         return $this->belongsTo(Barangay::class, 'barangay_id');
-    
     }
 
+    /**
+     * Get unread notifications count
+     */
+    public function getUnreadNotificationsCountAttribute(): int
+    {
+        return $this->unreadNotifications()->count();
+    }
 
+    /**
+     * Get recent unread notifications
+     */
+    public function getRecentUnreadNotifications($limit = 5)
+    {
+        return $this->unreadNotifications()
+            ->latest()
+            ->limit($limit)
+            ->get();
+    }
 }
