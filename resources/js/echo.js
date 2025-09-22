@@ -58,37 +58,6 @@ if (currentUserId) {
         });
 }
 
-// Real-time notifications listener
-if (currentUserId) {
-    window.Echo.private(`App.Models.User.${currentUserId}`)
-        .notification((notification) => {
-            console.log('Received real-time notification:', notification);
-            
-            // Update notification count in header
-            updateNotificationCount();
-            
-            // Show browser notification if permission granted
-            if (Notification.permission === 'granted') {
-                new Notification('New Comment', {
-                    body: `${notification.data.commenter_name} commented on your product: ${notification.data.product_title}`,
-                    icon: '/images/logo.png'
-                });
-            }
-        });
-}
-
-// Function to update notification count in header
-function updateNotificationCount() {
-    // This will be called by the notification dropdown to refresh the count
-    const notificationDropdown = document.querySelector('[x-data*="loadNotifications"]');
-    if (notificationDropdown && notificationDropdown._x_dataStack) {
-        const data = notificationDropdown._x_dataStack[0];
-        if (data && typeof data.loadNotifications === 'function') {
-            data.loadNotifications();
-        }
-    }
-}
-
 // Function to create message bubble HTML
 function createMessageBubble(message, sender, isOwnMessage) {
     const initials = sender.fname.charAt(0) + sender.lname.charAt(0);
