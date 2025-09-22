@@ -134,10 +134,16 @@ class ProductController extends Controller
             
             return $commentModel;
         }));
+
+         // Fetch "More from this seller"
+        $moreProducts = $this->productService->getMoreProductsByUser(
+            $product->user_id,
+            $product->id
+        );
         
         // Disable browser cache for this page
         return response()
-            ->view('products.show', compact('product'))
+            ->view('products.show', compact('product','moreProducts'))
             ->header('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0')
             ->header('Pragma', 'no-cache')
             ->header('Expires', '0')
