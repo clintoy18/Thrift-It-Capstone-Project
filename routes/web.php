@@ -123,11 +123,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/checkout/{name}', [App\Http\Controllers\CheckoutController::class, 'checkout'])->name('checkout');
     Route::get('/checkout-success', [App\Http\Controllers\CheckoutController::class, 'success'])->name('checkout.success');
     
-    // Notification routes
-    Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
-    Route::get('/notifications/count', [NotificationController::class, 'count'])->name('notifications.count');
-    Route::patch('/notifications/{id}/read', [NotificationController::class, 'markAsRead'])->name('notifications.read');
-    Route::patch('/notifications/mark-all-read', [NotificationController::class, 'markAllAsRead'])->name('notifications.mark-all-read');
+    // // Notification routes
+    // Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+    // Route::get('/notifications/count', [NotificationController::class, 'count'])->name('notifications.count');
+    // Route::patch('/notifications/{id}/read', [NotificationController::class, 'markAsRead'])->name('notifications.read');
+    // Route::patch('/notifications/mark-all-read', [NotificationController::class, 'markAllAsRead'])->name('notifications.mark-all-read');
  
 });
 
