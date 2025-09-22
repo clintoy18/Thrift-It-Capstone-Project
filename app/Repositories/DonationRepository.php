@@ -38,7 +38,7 @@ class DonationRepository
     }
     public function findWithRelations($id)
     {
-        return Donation::with(['user','category','comments'])->findOrFail($id);
+        return Donation::with(['user','category','comments.user'])->findOrFail($id);
     }
     
 
