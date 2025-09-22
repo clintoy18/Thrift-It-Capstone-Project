@@ -40,4 +40,24 @@ class Comment extends Model
     {
         return $this->hasMany(Comment::class, 'parent_id')->with('user');
     }
+
+    public function likes()
+    {
+        return $this->hasMany(CommentLike::class);
+    }
+
+    public function userLikes()
+    {
+        return $this->hasMany(CommentLike::class)->where('user_id', auth()->id());
+    }
+
+    public function getLikesCountAttribute()
+    {
+        return $this->likes()->count();
+    }
+
+    public function getRepliesCountAttribute()
+    {
+        return $this->replies()->count();
+    }
 }

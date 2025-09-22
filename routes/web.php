@@ -7,6 +7,7 @@ use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\UserDashboardController;
 use App\Http\Controllers\UpcyclerController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\CommentLikeController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\ReportController;
@@ -20,6 +21,9 @@ use App\Http\Controllers\PrivateChatController;
 use App\Http\Controllers\DonationController;
 use App\Http\Controllers\LeaderboardController;
 use App\Http\Controllers\SegmentController;
+use App\Http\Controllers\PricingController;
+use App\Http\Controllers\NotificationController;
+
 
 Route::get('/search', [SearchController::class, 'index'])->name('search');
 
@@ -46,6 +50,8 @@ Route::middleware(['auth', 'verified', 'rolemiddleware:user'])->group(function (
     Route::resource('categories', CategoriesController::class);
     Route::resource('appointments', AppointmentController::class);
     Route::resource('comments', CommentController::class);
+    Route::post('comments/{comment}/like', [CommentLikeController::class, 'toggleLike'])->name('comments.like');
+    Route::get('comments/{comment}/reactions', [CommentLikeController::class, 'getReactions'])->name('comments.reactions');
     Route::resource('donations',DonationController::class);
     Route::resource('segments', SegmentController::class)->only(['show']);
 
@@ -107,6 +113,22 @@ Route::middleware('auth')->group(function () {
     //upload verification document user/upcycler 
      Route::post('/profile/verification-document', [ProfileController::class, 'uploadVerificationDocument'])
         ->name('profile.verification.upload');
+
+
+    //route for pricing page
+    Route::get('/pricing', [PricingController::class, 'index'])->name('pricing.index');
+      
+
+    //route for cehckout
+    Route::get('/checkout/{name}', [App\Http\Controllers\CheckoutController::class, 'checkout'])->name('checkout');
+    Route::get('/checkout-success', [App\Http\Controllers\CheckoutController::class, 'success'])->name('checkout.success');
+    
+    // Notification routes
+    Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+    Route::get('/notifications/count', [NotificationController::class, 'count'])->name('notifications.count');
+    Route::patch('/notifications/{id}/read', [NotificationController::class, 'markAsRead'])->name('notifications.read');
+    Route::patch('/notifications/mark-all-read', [NotificationController::class, 'markAllAsRead'])->name('notifications.mark-all-read');
+ 
 });
 
 

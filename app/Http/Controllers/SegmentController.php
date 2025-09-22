@@ -20,6 +20,14 @@ class SegmentController extends Controller
     {
         $products = $this->productService->getApprovedProductsBySegment($segment);
 
-        return view('segments.show', compact('segment', 'products'));
+        // Use different views based on segment name (more flexible)
+        $viewName = match(strtolower($segment->name)) {
+            'women' => 'segments.show1',
+            'men' => 'segments.show',
+            'kids' => 'segments.show2',
+            default => 'segments.show'
+        };
+
+        return view($viewName, compact('segment', 'products'));
     }
 }
