@@ -1,13 +1,13 @@
 <x-app-layout>
-    <!-- Hero Section -->
-    <div class="w-full bg-[#F4F2ED] dark:bg-gray-800 shadow-sm">
+<!-- Hero Section -->
+<div class="w-full bg-[#F4F2ED] dark:bg-gray-800 shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 md:py-12">
             <!-- Mobile Layout -->
             <div class="flex flex-col md:hidden text-center relative">
                 <div class="p-2 font-poppins">
                     <!-- Title -->
                     <h1 class="text-3xl font-bold text-custom-brown leading-tight dark:text-white">
-                        Men's
+                        Women's
                     </h1>
                     <p class="font-poppins text-xl text-custom-brown dark:text-white mb-4">
                         Clothing
@@ -68,11 +68,11 @@
                             class="w-full h-full">
                     </div>  
                     <!-- Text Content (with higher z-index) -->
-                    <div class="relative z-10">
+                    <div class="relative z-6">
                         <h1 class="text-6xl lg:text-7xl font-bold text-custom-brown leading-tight dark:text-white">
-                            Men's 
+                            Women's 
                         </h1>
-                        <p class="flex relative left-[130px] font-poppins text-6xl lg:text-3xl">
+                        <p class="flex relative left-[170px] font-poppins text-6xl lg:text-3xl">
                             <span class="block h-[10px]" aria-hidden="true"></span>
                             Clothing
                         </p>
@@ -80,25 +80,28 @@
                 </div>
                 
                 <!-- Image for Desktop -->
-                <div class="md:w-[1900px] h-[400px] flex flex-row gap-[-30] relative p-5 left-[70px] top-[55px] overflow-hidden">
-                    <img src="{{ asset('images/image 124.png') }}" alt="Thrift-IT Sustainable Fashion" class="w-full flex relative left-[180px] max-h-[200px] object-contain">
-                    <img src="{{ asset('images/image 122.png') }}" alt="Thrift-IT Sustainable Fashion" class="w-full  flex relative left-[90px] top-[50px] max-h-[240px] object-contain">
-                    <img src="{{ asset('images/image 121.png') }}" alt="Thrift-IT Sustainable Fashion" class="w-full flex relative top-[70px] max-h-[260px] object-contain">
-                    <img src="{{ asset('images/image 125.png') }}" alt="Thrift-IT Sustainable Fashion" class="w-full flex relative top-[60px] right-[60px] max-h-[200px] object-contain">
-                    <img src="{{ asset('images/image 126.png') }}" alt="Thrift-IT Sustainable Fashion" class="w-full flex relative right-[80px] bottom-[0px] max-h-[200px] object-contain">
+                <div class="md:w-[1900px] h-[400px] flex flex-row gap-[-30] relative p-6 left-[70px] top-[55px] overflow-hidden">
+                    <div class=" flex relative right-[100px]">
+
+                   
+                    <img src="{{ asset('images/image 34.png') }}" alt="Thrift-IT Sustainable Fashion" class="w-full flex relative left-[180px] max-h-[200px] object-contain">
+                    <img src="{{ asset('images/image 132.png') }}" alt="Thrift-IT Sustainable Fashion" class="w-full  flex relative left-[90px] top-[50px] max-h-[240px] object-contain">
+                    <img src="{{ asset('images/image 128.png') }}" alt="Thrift-IT Sustainable Fashion" class="w-full flex relative top-[70px] max-h-[260px] object-contain">
+                    <img src="{{ asset('images/image 129.png') }}" alt="Thrift-IT Sustainable Fashion" class="w-full flex relative top-[60px] right-[60px] max-h-[200px] object-contain">
+                    <img src="{{ asset('images/image 128.png') }}" alt="Thrift-IT Sustainable Fashion" class="w-full flex relative right-[80px] bottom-[0px] max-h-[200px] object-contain">
+                </div>
                 </div>
             </div>
         </div>
     </div>
-            
-    <div class="py-4 bg-white dark:bg-gray-900">
-        <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center mb-4">
-                <h2 class="text-lg font-bold text-red-600 dark:text-red-400">{{ $segment->name }} Products</h2>
+<div class="py-6 bg-white dark:bg-gray-900">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-xl font-bold text-red-600 dark:text-red-400">{{ $segment->name }} Products</h2>
             </div>
 
             <div class="rounded-xl shadow-sm overflow-hidden">
-                <div class="p-3 sm:p-6">
+                <div class="p-4 sm:p-6">
                     @if($products->count() > 0)
                         <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-4 md:gap-6">
                             @foreach ($products as $product)

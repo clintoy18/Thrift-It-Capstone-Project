@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Http\Request;
 use App\Services\CommentService;
+use App\Notifications\ProductCommentNotification;
+use Exception;
 
 class CommentController extends Controller
 {
@@ -39,37 +41,61 @@ class CommentController extends Controller
      */
     public function store(StoreCommentRequest $request)
     {
-        $comment = $this->commentService->createComment([
-            'user_id'     => Auth::id(),
-            'product_id'  => $request->product_id,   // null for donation comments
-            'donation_id' => $request->donation_id,  // null for product comments
-            'content'     => $request->content,
-            'parent_id'   => $request->parent_id,
-        ]);
+        try {
+            $comment = $this->commentService->createComment([
+                'user_id'     => Auth::id(),
+                'product_id'  => $request->product_id,   // null for donation comments
+                'donation_id' => $request->donation_id,  // null for product comments
+                'content'     => $request->content,
+                'parent_id'   => $request->parent_id,
+            ]);
 
-        // Clear cache for this product's comments
-        if ($request->product_id) {
-            Cache::forget("product_{$request->product_id}_comments");
-            Cache::forget("product_{$request->product_id}_with_comments");
-        }
+            // Clear cache for this product's comments
+            if ($request->product_id) {
+                Cache::forget("product_{$request->product_id}_comments");
+                Cache::forget("product_{$request->product_id}_with_comments");
+                
+                // Send notification to product owner if it's not the commenter
+                $product = Product::find($request->product_id);
+                if ($product && $product->user_id !== Auth::id()) {
+                    $product->user->notify(new ProductCommentNotification($comment, $product));
+                }
+            }
+            
+            // Clear cache for this donation's comments
+            if ($request->donation_id) {
+                Cache::forget("donation_{$request->donation_id}_comments");
+                Cache::forget("donation_{$request->donation_id}_with_comments");
+            }
 
-        if ($request->expectsJson()) {
-            $comment->load('user');
-            return response()->json([
-                'success' => true,
-                'comment' => [
-                    'id' => $comment->id,
-                    'content' => $comment->content,
-                    'user' => [
-                        'id' => $comment->user->id,
-                        'fname' => $comment->user->fname,
-                        'lname' => $comment->user->lname,
+            if ($request->expectsJson()) {
+                $comment->load('user');
+                return response()->json([
+                    'success' => true,
+                    'comment' => [
+                        'id' => $comment->id,
+                        'content' => $comment->content,
+                        'created_at' => $comment->created_at,
+                        'user' => [
+                            'id' => $comment->user->id,
+                            'fname' => $comment->user->fname,
+                            'lname' => $comment->user->lname,
+                        ],
                     ],
-                ],
-            ], 201);
-        }
+                ], 201);
+            }
 
-        return redirect()->back();
+            return redirect()->back();
+        } catch (Exception $e) {
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => $e->getMessage()
+                ], 422);
+            }
+            
+            return redirect()->back()->withErrors(['content' => $e->getMessage()]);
+        }
     }
 
 
@@ -112,8 +138,16 @@ class CommentController extends Controller
     ]);
 
     // Clear cache for this product's comments
-    Cache::forget("product_{$comment->product_id}_comments");
-    Cache::forget("product_{$comment->product_id}_with_comments");
+    if ($comment->product_id) {
+        Cache::forget("product_{$comment->product_id}_comments");
+        Cache::forget("product_{$comment->product_id}_with_comments");
+    }
+    
+    // Clear cache for this donation's comments
+    if ($comment->donation_id) {
+        Cache::forget("donation_{$comment->donation_id}_comments");
+        Cache::forget("donation_{$comment->donation_id}_with_comments");
+    }
     
     // Clear all comment-related cache
     Cache::flush();
@@ -144,12 +178,39 @@ class CommentController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Comment $comment)
+    public function destroy(Request $request, Comment $comment)
     {
-        if ($comment->user_id === Auth::id()) {
-            $this->commentService->deleteComment($comment->id);
-            return redirect()->back()->with('success', 'Comment deleted.');
+        if ($comment->user_id !== Auth::id()) {
+            if ($request->expectsJson()) {
+                return response()->json(['error' => 'Unauthorized action.'], 403);
+            }
+            return redirect()->back()->with('error', 'Unauthorized action.');
         }
-        return redirect()->back()->with('error', 'Unauthorized action.');
+
+        // Clear cache for this product's comments
+        if ($comment->product_id) {
+            Cache::forget("product_{$comment->product_id}_comments");
+            Cache::forget("product_{$comment->product_id}_with_comments");
+        }
+        
+        // Clear cache for this donation's comments
+        if ($comment->donation_id) {
+            Cache::forget("donation_{$comment->donation_id}_comments");
+            Cache::forget("donation_{$comment->donation_id}_with_comments");
+        }
+        
+        // Clear all comment-related cache
+        Cache::flush();
+
+        $this->commentService->deleteComment($comment->id);
+
+        if ($request->expectsJson()) {
+            return response()->json([
+                'success' => true
+            
+            ]);
+        }
+
+        return redirect()->back()->with('success');
     }
 }

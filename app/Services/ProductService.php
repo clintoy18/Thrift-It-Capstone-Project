@@ -74,5 +74,11 @@ class ProductService
         return $this->productRepository->getByStatusPaginated($status, $perPage);
     }
 
+    public function getMoreProductsByUser($userId, $excludeProductId, $limit = 6)
+    {
+        return $this->productRepository->getMoreByUser($userId, $excludeProductId, $limit);
+    }
+
+
 
 }

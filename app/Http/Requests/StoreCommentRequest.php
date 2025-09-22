@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
+use App\Services\ContentModerationService;
 
 class StoreCommentRequest extends FormRequest
 {
@@ -35,6 +36,14 @@ class StoreCommentRequest extends FormRequest
         $validator->after(function ($validator) {
             if (!$this->product_id && !$this->donation_id) {
                 $validator->errors()->add('product_or_donation', 'A comment must be linked to a product or a donation.');
+            }
+            
+            // Content moderation check
+            $contentModeration = new ContentModerationService();
+            $validation = $contentModeration->validateContent($this->content);
+            
+            if (!$validation['is_valid']) {
+                $validator->errors()->add('content', $validation['message']);
             }
         });
     }

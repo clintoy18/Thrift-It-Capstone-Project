@@ -37,6 +37,7 @@ class ProductRepository
     {
         return Product::where('user_id', $userId)->get();
     }
+
     public function findWithRelations($id)
     {
         return Product::with(['user','category','comments.user'])->findOrFail($id);
@@ -57,6 +58,21 @@ class ProductRepository
             ->latest()
             ->paginate($perPage);
     }
+
+    //get more product of the user excluding the current product
+    public function getMoreByUser($userId, $excludeProductId, $limit = 6)
+    {
+        return Product::where('user_id', $userId)
+            ->where('id', '!=', $excludeProductId)
+            ->latest()
+            ->take($limit)
+            ->get();
+    }
+
+
+
+
+    
 
 
 
