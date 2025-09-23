@@ -19,7 +19,7 @@ class UserDashboardController extends Controller
         $products = Product::with(['category', 'user'])->where('status','available')->orWhere('approval_status','approved')->get();
         $donations = Donation::with(['user', 'category'])->where('status', 'available')->get();
         $segments = Segment::all();
-        return view('dashboard', compact('products','donations','segments'));
+        return view('dashboard', compact('products','donations','segments','categories'));
     }
 
     /**
