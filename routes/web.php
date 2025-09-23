@@ -22,6 +22,7 @@ use App\Http\Controllers\DonationController;
 use App\Http\Controllers\LeaderboardController;
 use App\Http\Controllers\SegmentController;
 use App\Http\Controllers\PricingController;
+use App\Http\Controllers\EcoPostController;
 use App\Http\Controllers\NotificationController;
 
 
@@ -55,6 +56,7 @@ Route::middleware(['auth', 'verified', 'rolemiddleware:user'])->group(function (
     Route::get('/donation-hub', [DonationController::class, 'getAllDonations'])->name('donations.hub');
     Route::resource('donations',DonationController::class);
     Route::resource('segments', SegmentController::class)->only(['show']);
+    Route::resource(('eco-posts'), EcoPostController::class);
 
     Route::patch('/appointments/{appointment}/cancel', [AppointmentController::class, 'cancel'])->name('appointments.cancel');
     Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
@@ -66,7 +68,6 @@ Route::middleware(['auth', 'verified', 'rolemiddleware:user'])->group(function (
     Route::post('/users/{user}/review',[ReviewController::class,'store'])->name('reviews.store');
     Route::get('/leaderboard', [LeaderboardController::class, 'index'])
     ->name('leaderboard.index');
-
 
 
 });
