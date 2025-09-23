@@ -52,6 +52,7 @@ Route::middleware(['auth', 'verified', 'rolemiddleware:user'])->group(function (
     Route::resource('comments', CommentController::class);
     Route::post('comments/{comment}/like', [CommentLikeController::class, 'toggleLike'])->name('comments.like');
     Route::get('comments/{comment}/reactions', [CommentLikeController::class, 'getReactions'])->name('comments.reactions');
+    Route::get('/donation-hub', [DonationController::class, 'getAllDonations'])->name('donations.hub');
     Route::resource('donations',DonationController::class);
     Route::resource('segments', SegmentController::class)->only(['show']);
 
@@ -65,6 +66,7 @@ Route::middleware(['auth', 'verified', 'rolemiddleware:user'])->group(function (
     Route::post('/users/{user}/review',[ReviewController::class,'store'])->name('reviews.store');
     Route::get('/leaderboard', [LeaderboardController::class, 'index'])
     ->name('leaderboard.index');
+
 
 
 });
