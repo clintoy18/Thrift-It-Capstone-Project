@@ -18,9 +18,8 @@ class CategoriesService
 
     public function getAllCategories()
     {
-        return [
-           'categories' => $this->categoriesRepository->all(),
-        ];
+        return  $this->categoriesRepository->all();
+    
     }
 
     public function createCategories(array $data)
