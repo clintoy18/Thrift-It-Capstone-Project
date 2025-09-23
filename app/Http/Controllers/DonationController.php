@@ -145,5 +145,6 @@ class DonationController extends Controller
     public function getAllDonations()
     {
         $donations = $this->donationService->getAllDonations();
+        return view('donations.donation-hub', compact('donations'));
     }
 }
