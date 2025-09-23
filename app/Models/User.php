@@ -130,5 +130,9 @@ class User extends Authenticatable implements MustVerifyEmail
     
     }
 
+    public function ecoPosts()
+    {
+        return $this->hasMany(EcoEducationalPost::class);
+    }
 
 }
