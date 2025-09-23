@@ -25,7 +25,8 @@ class DonationController extends Controller
    
     public function index() : View
     {
-        $donations = $this->donationService->getAllDonations();
+        $userId = Auth::id();
+        $donations = $this->donationService->getDonationsByUser($userId);
         return view('donations.index', compact('donations'));
     }
   
@@ -139,5 +140,10 @@ class DonationController extends Controller
         $donation = $this->donationService->getDonationById($id);
         $donation->delete();
         return redirect()->route('donations.index')->with('success', 'Donation deleted successfully!');
+    }
+
+    public function getAllDonations()
+    {
+        $donations = $this->donationService->getAllDonations();
     }
 }
