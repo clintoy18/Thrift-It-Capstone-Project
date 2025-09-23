@@ -142,11 +142,14 @@
 
                     <!-- Product Details -->
                     <div class="space-y-2">
+                      
+                        
                         @if($product->listingtype === 'for donation')
                             <p class="text-lg font-bold text-green-600">For Donation</p>
                         @else
                             <p class="text-lg font-bold text-gray-900">₱{{ number_format($product->price, 2) }}</p>
                         @endif
+                        
                         <p class="text-sm text-gray-500">Quantity: {{ $product->qty }}</p>
                         <p class="text-sm text-gray-500">Status: {{ ucfirst($product->status) }}</p>
                         <p class="text-sm text-gray-500">
@@ -353,98 +356,36 @@
         </p>
     @endauth
 </div>
-    <!-- Back to Products -->          
-         </div>
-            </div>      
-            @if($moreProducts->count())
-        <div class="py-6 bg-white dark:bg-gray-900 mt-10">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="flex items-center justify-between mb-6">
-                    <h2 class="text-2xl font-extrabold tracking-tight text-gray-900 dark:text-gray-100">
-                        More from {{ $product->user->fname }}
-                    </h2>
-                </div>
-                <div class="rounded-xl shadow-sm overflow-hidden">
-                    <div class="p-4 sm:p-6">
-                        <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-4 md:gap-6">
-                            @foreach ($moreProducts as $product)
-                                <div class="group relative bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition duration-200 border border-[#D9D9D9] dark:border-gray-700">
-                                    <a href="{{ route('products.show', $product->id) }}" class="block h-full">
-                                        @if($product->listingtype === 'for donation')
-                                            <div class="absolute top-1 left-1 z-10 bg-[#D9D9D9] text-gray-700 text-[10px] sm:text-xs px-1.5 py-0.5 sm:px-2 sm:py-1 rounded-full">
-                                                Donation
-                                            </div>
-                                        @endif
 
-                                        <div class="relative aspect-square overflow-hidden">
-                                            <img src="{{ $product->image ? asset('storage/' . $product->image) : asset('images/default-placeholder.png') }}" 
-                                                alt="{{ $product->name }}" 
-                                                class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105">
-
-                                            <div class="absolute inset-0 bg-gray-800 bg-opacity-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                                                <span class="bg-white text-gray-800 px-2 py-0.5 rounded-full text-[10px] sm:text-xs font-medium">
-                                                    Quick view
-                                                </span>
-                                            </div>
-                                        </div>
-
-                                        <div class="p-2 sm:p-3">
-                                            <div class="flex justify-between items-start">
-                                                <h3 class="text-xs sm:text-sm font-bold text-gray-900 dark:text-white transition-colors truncate max-w-[70%]">
-                                                    {{ $product->name }}
-                                                </h3>
-                                                <span class="text-[10px] sm:text-xs font-medium px-1 py-0.5 bg-[#D9D9D9] dark:bg-gray-700 rounded text-gray-700 dark:text-gray-300">
-                                                    {{ $product->size ?? 'L' }}
-                                                </span>
-                                            </div>
-
-                                            <p class="text-gray-500 dark:text-gray-400 text-[10px] sm:text-xs mt-0.5 truncate">
-                                                {{ $product->category->name ?? 'No Category' }}
-                                            </p>
-                                            <p class="text-gray-500 dark:text-gray-400 text-[10px] sm:text-xs mt-0.5 truncate">
-                                                <i>{{ $product->barangay->name ?? 'N/A' }}, Cebu City</i>
-                                            </p>
-
-                                            <div class="flex justify-between items-center mt-1">
-                                                <p class="text-xs sm:text-sm font-bold {{ $product->listingtype === 'for donation' ? 'text-gray-700' : 'text-black-600' }}">
-                                                    {{ $product->listingtype === 'for donation' ? 'For Donation' : '₱' . number_format($product->price, 2) }}
-                                                </p>
-
-                                                <button class="favorite-btn text-gray-400 hover:text-red-500 focus:outline-none transition-colors" 
-                                                        data-id="{{ $product->id }}" 
-                                                        type="button"
-                                                        onclick="event.preventDefault(); event.stopPropagation();">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:h-5 sm:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                                                    </svg>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </div>
-                            @endforeach
-                        </div>
-                    </div>
+    <!-- Back to Products -->
+                
                 </div>
             </div>
-        </div>
-    <script>
-        document.querySelectorAll('.favorite-btn').forEach(button => {
-            button.addEventListener('click', function() {
-                const svg = this.querySelector('svg');
-                if (svg.getAttribute('fill') === 'none') {
-                    svg.setAttribute('fill', 'currentColor');
-                    svg.setAttribute('stroke', 'none');
-                    this.classList.add('text-red-500');
-                } else {
-                    svg.setAttribute('fill', 'none');
-                    svg.setAttribute('stroke', 'currentColor');
-                    this.classList.remove('text-red-500');
-                }
-            });
-        });
-    </script>
-@endif
+            <h2 class=" text-xl  font-semibold text-gray-800 dark:text-gray-200 ">More for this Seller</h2>
+           
+            <div class="bg-white dark:bg-gray-800 shadow rounded-lg">
+              
+                    <!-- Slide 1 -->
+                    <div class="grid grid-cols-4 md:grid-cols-3 gap-6 p-4">
+                    <div class="rounded-lg overflow-hidden">
+                        <img src="{{ $product->image ? asset('storage/' . $product->image) : asset('images/default-placeholder.png') }}" 
+                            alt="{{ $product->name }}"
+                            class="w-full h-64 object-cover transition-transform duration-500 hover:scale-105">
+                    </div>
+                    <div class="rounded-lg overflow-hidden">
+                        <img src="{{ $product->image ? asset('storage/' . $product->image) : asset('images/default-placeholder.png') }}" 
+                            alt="Additional 1"
+                            class="w-full h-64 object-cover transition-transform duration-500 hover:scale-105">
+                    </div>
+                    <div class="rounded-lg overflow-hidden">
+                        <img src="{{ $product->image ? asset('storage/' . $product->image) : asset('images/default-placeholder.png') }}" 
+                            alt="Additional 2"
+                            class="w-full h-64 object-cover transition-transform duration-500 hover:scale-105">
+                    </div>
+                    </div>
+
+
+                </div>
 
         </div>
         <div class="flex flex-col overflow-hidden ml-[60px]">
@@ -766,9 +707,48 @@ document.querySelectorAll('.comment-item').forEach(item => {
         }
     });
 
+  
     function addCommentToDOM(commentData) {
-        const commentsContainer = document.getElementById('comments-container');
-        const commentHtml = `
+    // ✅ If this is a reply
+    if (commentData.parent_id) {
+        const repliesContainer = document.getElementById(`replies-${commentData.parent_id}`);
+        if (!repliesContainer) {
+            console.warn("Replies container not found for parent:", commentData.parent_id);
+            return;
+        }
+
+        // prevent duplicate
+        if (document.getElementById(`reply-${commentData.id}`)) {
+            return;
+        }
+
+        const replyHtml = `
+            <div class="reply-item ml-12 mt-2 border-l-2 pl-4" id="reply-${commentData.id}">
+                <div class="flex items-start gap-3">
+                    <div class="w-8 h-8 bg-white dark:bg-gray-700 rounded-full border flex items-center justify-center">
+                        <span class="text-xs font-bold text-gray-800 dark:text-gray-200">
+                            ${commentData.user.fname ? (commentData.user.fname.charAt(0) + commentData.user.lname.charAt(0)).toUpperCase() : 'U'}
+                        </span>
+                    </div>
+                    <div class="flex-1">
+                        <p class="font-medium">${commentData.user.fname} ${commentData.user.lname}</p>
+                        <p class="text-gray-700 dark:text-gray-300">${commentData.content}</p>
+                    </div>
+                </div>
+            </div>
+        `;
+        repliesContainer.insertAdjacentHTML('beforeend', replyHtml);
+        return; // ✅ stop here so it won't fall into commentsContainer
+    }
+
+    // ✅ Otherwise, this is a top-level comment
+    const commentsContainer = document.getElementById('comments-container');
+
+    if (document.getElementById(`comment-${commentData.id}`)) {
+        return;
+    }
+
+    const commentHtml = `
             <div class="comment-item" data-comment-id="${commentData.id}" id="comment-${commentData.id}">
                 <div class="flex gap-3">
                     <!-- User Avatar -->
@@ -782,7 +762,7 @@ document.querySelectorAll('.comment-item').forEach(item => {
                    
                     <!-- Comment Content -->
                     <div class="flex-1">
-    <div class="bg-white dark:bg-gray-700 rounded-lg p-3">
+    <div class=" p-3">
         <!-- Comment Header -->
         <div class="flex justify-between items-start mb-1">
             <div>
@@ -875,16 +855,16 @@ document.querySelectorAll('.comment-item').forEach(item => {
             </div>
 
         `;
-        
-        // Add the new comment at the top of the comments container
-        commentsContainer.insertAdjacentHTML('afterbegin', commentHtml);
-        
-        // Scroll to the new comment
-        const newComment = commentsContainer.querySelector('.comment-item');
-        if (newComment) {
-            newComment.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        }
+
+    commentsContainer.insertAdjacentHTML('afterbegin', commentHtml);
+
+    // Scroll to the new comment
+    const newComment = document.getElementById(`comment-${commentData.id}`);
+    if (newComment) {
+        newComment.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
+}
+
 
     // Toggle like functionality
     function toggleLike(commentId) {
@@ -1017,53 +997,50 @@ document.querySelectorAll('.comment-item').forEach(item => {
         });
     });
 
-    // Add reply to DOM
-    function addReplyToDOM(replyData, parentId) {
-        const repliesContainer = document.getElementById(`replies-${parentId}`);
-        if (!repliesContainer) return;
-        
-        // Format timestamp - show "just now" for new replies
-        const timestamp = replyData.created_at ? new Date(replyData.created_at).toLocaleString() : 'Just now';
-        const timeAgo = replyData.created_at ? getTimeAgo(new Date(replyData.created_at)) : 'just now';
-        
-        const replyHtml = `
-            <div class="reply-item flex gap-3" data-comment-id="${replyData.id}">
-                <div class="flex-shrink-0">
-                   <div class="w-8 h-8 bg-white dark:bg-gray-700 rounded-full border-2 border-white dark:border-gray-800 flex items-center justify-center">
-                        <span class="text-xs font-bold text-gray-800 dark:text-gray-200">
-                            ${replyData.user.fname ? (replyData.user.fname.charAt(0) + replyData.user.lname.charAt(0)).toUpperCase() : 'U'}
-                        </span>
-                    </div>
-                </div>
-                <div class="flex-1  p-3 ">
-                    <div >
-                        <a href="/profile/${replyData.user.id}" class="text-sm font-semibold text-gray-800 dark:text-gray-200 hover:underline">
-                            ${replyData.user.fname} ${replyData.user.lname}
-                        </a>
-                        <span class="text-xs  text-gray-500 dark:text-gray-400 ml-2">
-                            ${timeAgo}
-                        </span>
-                    </div>
-                    <p class="text-sm text-gray-800 dark:text-gray-200">${replyData.content}</p>
-                    
-                    <!-- Reply Engagement -->
-                    <div class="mt-2 flex items-center gap-3 text-xs text-gray-500 dark:text-gray-400">
-                        <button onclick="toggleLike(${replyData.id})" 
-                                class="flex items-center gap-1 hover:text-blue-500 transition-colors duration-200 text-gray-500"
-                                id="like-btn-${replyData.id}">
-                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
-                            </svg>
-                            <span id="like-count-${replyData.id}">0</span>
-                        </button>
-                    </div>
+    function addReplyToDOM(commentData) {
+    // ✅ Make sure this is really a reply
+    if (!commentData.parent_id) {
+        console.warn("Tried to add a reply without parent_id:", commentData);
+        return;
+    }
+
+    const repliesContainer = document.getElementById(`replies-${commentData.parent_id}`);
+    if (!repliesContainer) {
+        console.warn("Replies container not found for parent:", commentData.parent_id);
+        return;
+    }
+
+    // ✅ Prevent duplicate reply rendering
+    if (document.getElementById(`reply-${commentData.id}`)) {
+        return;
+    }
+
+    // ✅ Build reply HTML
+    const replyHtml = `
+        <div class="reply-item flex gap-3" id="reply-${commentData.id}" data-comment-id="${commentData.id}">
+            <div class="flex-shrink-0">
+                <div class="w-8 h-8 bg-white dark:bg-gray-700 rounded-full border-2 border-white dark:border-gray-800 flex items-center justify-center">
+                    <span class="text-xs font-bold text-gray-800 dark:text-gray-200">
+                        ${commentData.user?.fname?.charAt(0).toUpperCase() ?? ''}${commentData.user?.lname?.charAt(0).toUpperCase() ?? ''}
+                    </span>
                 </div>
             </div>
-        `;
-        
-        repliesContainer.insertAdjacentHTML('beforeend', replyHtml);
-    }
-    
+            <div class="flex-1 p-3">
+                <div>
+                    <a href="/profile/${commentData.user?.id}" class="text-sm font-semibold text-gray-800 dark:text-gray-200 hover:underline">
+                        ${commentData.user?.fname ?? ''} ${commentData.user?.lname ?? ''}
+                    </a>
+                    <span class="text-xs text-gray-500 dark:text-gray-400 ml-2">just now</span>
+                </div>
+                <p class="text-sm text-gray-800 dark:text-gray-200">${commentData.content}</p>
+            </div>
+        </div>
+    `;
+
+    // ✅ Append reply
+    repliesContainer.insertAdjacentHTML('beforeend', replyHtml);
+}
+
     // Helper function to format time ago
     function getTimeAgo(date) {
         const now = new Date();

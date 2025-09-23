@@ -73,17 +73,19 @@ class CommentController extends Controller
                 return response()->json([
                     'success' => true,
                     'comment' => [
-                        'id' => $comment->id,
-                        'content' => $comment->content,
-                        'created_at' => $comment->created_at,
-                        'user' => [
-                            'id' => $comment->user->id,
+                        'id'        => $comment->id,
+                        'content'   => $comment->content,
+                        'created_at'=> $comment->created_at,
+                        'parent_id' => $comment->parent_id, // 👈 add this
+                        'user'      => [
+                            'id'    => $comment->user->id,
                             'fname' => $comment->user->fname,
                             'lname' => $comment->user->lname,
                         ],
                     ],
                 ], 201);
             }
+            
 
             return redirect()->back();
         } catch (Exception $e) {
