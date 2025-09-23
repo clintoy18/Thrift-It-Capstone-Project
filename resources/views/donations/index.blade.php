@@ -49,9 +49,7 @@
 
                                             <p class="text-gray-500 dark:text-gray-400 text-[10px] sm:text-xs mt-0.5 truncate">
                                                 {{ $donation->category->name ?? 'No Category' }}
-                                            </p>
-
-                                            
+                                            </p>  
                                         </div>
                                     </a>
                                 </div>
