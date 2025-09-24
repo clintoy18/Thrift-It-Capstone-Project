@@ -47,6 +47,7 @@ class ProductRepository
     {
         return $segment->products()
             ->where('approval_status', 'approved')
+            ->where('status', 'available')
             ->with(['category'])
             ->get();
     }
