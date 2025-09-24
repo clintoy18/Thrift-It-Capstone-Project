@@ -27,7 +27,6 @@ use App\Http\Controllers\NotificationController;
 
 
 Route::get('/search', [SearchController::class, 'index'])->name('search');
-
 Route::get('/', [LandingPageController::class, 'index'])->name('landing.index');
 
 Route::get('/dashboard', [UserDashboardController::class, 'index'])
@@ -92,6 +91,7 @@ Route::middleware(['auth', 'verified', 'rolemiddleware:admin'])->prefix('admin')
     ->name('products.approve');
     Route::put('/products/{product}/reject', [AdminProductController::class, 'reject'])
     ->name('products.reject');
+ 
 
     //verify -reject user
     Route::put('/users/{user}/verify', [AdminUserController::class, 'verify'])->name('users.verify');
@@ -116,6 +116,11 @@ Route::middleware('auth')->group(function () {
     //upload verification document user/upcycler 
      Route::post('/profile/verification-document', [ProfileController::class, 'uploadVerificationDocument'])
         ->name('profile.verification.upload');
+
+    
+    //mark item as sold
+    Route::put('/products/{product}/mark-as-sold', [ProductController::class, 'markAsSold'])
+    ->name('products.markAsSold');   
 
 
     //route for pricing page

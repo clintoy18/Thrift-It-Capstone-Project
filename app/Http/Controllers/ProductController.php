@@ -127,4 +127,13 @@ class ProductController extends Controller
         $this->productService->deleteProduct($product);
         return redirect()->route('products.index');
     }
+
+
+    public function markAsSold(Product $product): RedirectResponse
+    {
+        $this->productService->updateProduct($product, ['status' => 'sold']);
+
+        return redirect()->route('products.index')
+            ->with('success', 'Item marked as sold.');
+    }
 }
