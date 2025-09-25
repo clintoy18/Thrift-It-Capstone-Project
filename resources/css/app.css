@@ -29,46 +29,47 @@
     to { transform: rotate(360deg); }
 }
 
-/* Swiper base styles */
+/* Swiper base */
 .swiper {
     width: 100%;
-    height: 16rem; /* match h-64 */
+    height: 30rem; /* 👈 give it height */
 }
 
-/* Swiper navigation buttons */
+/* Navigation buttons */
 .swiper-button-next,
 .swiper-button-prev {
-    color: #B59F84; /* your theme color */
-    width: 42px;
-    height: 42px;
-    background: rgba(0, 0, 0, 0.35);
-    border-radius: 9999px; /* fully rounded */
-    z-index: 20;
+    width: 30px !important;   /* force override */
+    height: 30px !important;
+ 
+    border-radius: 9999px;
     top: 50%;
     transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .swiper-button-next::after,
 .swiper-button-prev::after {
-    font-size: 22px;
-    font-weight: bold;
+    font-size: 25px !important; /* force smaller icon */
+    color:rgb(12, 8, 3);
 }
 
-/* Pagination bullets */
+/* Pagination dots */
 .swiper-pagination-bullet {
-    background: #9ca3af; /* gray-400 */
+    background:rgb(5, 8, 14); /* gray-300 */
     opacity: 1;
 }
-
 .swiper-pagination-bullet-active {
-    background: #B59F84; /* match theme color */
+    background:rgb(0, 0, 0); /* theme color */
 }
 
-/* Dark mode adjustments */
+/* Dark mode */
 @media (prefers-color-scheme: dark) {
     .swiper-button-next,
     .swiper-button-prev {
-        background: rgba(255, 255, 255, 0.25);
+        background: rgba(36, 34, 34, 0.25);
         color: #B59F84;
     }
 }
+

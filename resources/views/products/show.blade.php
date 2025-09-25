@@ -13,50 +13,55 @@
     <div class="flex flex-col lg:flex-row gap-8 items-stretch">
             <!-- Left Column: Image Slider & Product Info -->
         <div class="lg:w-1/3 flex flex-col gap-6 h-full">
-                <!-- Swiper Slider -->
-        <div class="relative swiper mySwiper rounded-xl overflow-hidden shadow-lg h-96">
-          <div class="swiper-wrapper h-full">
-              <!-- Slide 1 -->
-              <div class="swiper-slide flex items-center justify-center bg-white">
-                            <div class="relative aspect-auto">
-                                <img 
-                                    src="{{ $product->image ? asset('storage/' . $product->image) : asset('images/default-placeholder.png') }}" 
-                                    alt="{{ $product->name }}"
-                                    class="w-full h-auto max-h-80 object-contain transition-transform duration-700 ease-out hover:scale-105">
-                                <div class="absolute inset-0 bg-gray-800 bg-opacity-20 opacity-0 hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                                    <span class="bg-white text-gray-800 px-3 py-1 rounded-full text-xs sm:text-sm font-medium shadow-sm">
-                                        Quick view
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                       <!-- Slide 2 -->
-                            <div class="swiper-slide flex items-center justify-center bg-white">
-                                <img src="{{ $product->image2 ?? asset('images/default-placeholder.png') }}" 
-                                    alt="Additional 1" 
-                                    class="max-h-full object-contain">
-                            </div>
-                        <!-- Slide 3 -->
-                        <div class="swiper-slide">
-                            <div class="relative aspect-auto">
-                                <img 
-                                    src="{{ $product->image3 ?? asset('images/default-placeholder.png') }}" 
-                                    alt="Additional 2"
-                                    class="w-full h-auto max-h-80 object-contain transition-transform duration-700 ease-out hover:scale-105">
-                                <div class="absolute inset-0 bg-gray-800 bg-opacity-20 opacity-0 hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                                    <span class="bg-white text-gray-800 px-3 py-1 rounded-full text-xs sm:text-sm font-medium shadow-sm">
-                                        Quick view
-                                    </span>
-                                </div>
+             <!-- Swiper Slider -->
+            <div class="relative swiper mySwiper rounded-xl overflow-hidden shadow-lg">
+                <div class="swiper-wrapper">
+                    <!-- Slide 1 -->
+                    <div class="swiper-slide flex items-center justify-center bg-white">
+                        <div class="relative">
+                            <img 
+                                src="{{ $product->image ? asset('storage/' . $product->image) : asset('images/default-placeholder.png') }}" 
+                                alt="{{ $product->name }}"
+                                class="w-full h-[22rem] sm:h-[28rem] object-contain transition-transform duration-500 ease-out hover:scale-105">
+                            <div class="absolute inset-0 bg-gray-800/20 opacity-0 hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                                <span class="bg-white text-gray-800 px-3 py-1 rounded-full text-xs sm:text-sm font-medium shadow-sm">
+                                    Quick view
+                                </span>
                             </div>
                         </div>
                     </div>
-                    <!-- Pagination (dots) -->
-                    <div class="swiper-pagination !bottom-3"></div>
-                    <!-- Navigation buttons -->
-                    <div class="swiper-button-next after:text-gray-600 dark:after:text-gray-300 after:text-sm"></div>
-                    <div class="swiper-button-prev after:text-gray-600 dark:after:text-gray-300 after:text-sm"></div>
+
+                    <!-- Slide 2 -->
+                    <div class="swiper-slide flex items-center justify-center bg-white">
+                        <img 
+                            src="{{ $product->image2 ?? asset('images/default-placeholder.png') }}" 
+                            alt="Additional 1" 
+                            class="w-full h-[22rem] sm:h-[28rem] object-contain">
+                    </div>
+
+                    <!-- Slide 3 -->
+                    <div class="swiper-slide flex items-center justify-center bg-white">
+                        <div class="relative">
+                            <img 
+                                src="{{ $product->image3 ?? asset('images/default-placeholder.png') }}" 
+                                alt="Additional 2"
+                                class="w-full h-[22rem] sm:h-[28rem] object-contain transition-transform duration-500 ease-out hover:scale-105">
+                            <div class="absolute inset-0 bg-gray-800/20 opacity-0 hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                                <span class="bg-white text-gray-800 px-3 py-1 rounded-full text-xs sm:text-sm font-medium shadow-sm">
+                                    Quick view
+                                </span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+
+                <!-- Pagination -->
+                <div class="swiper-pagination !bottom-3"></div>
+
+                <!-- Navigation -->
+                <div class="swiper-button-next"></div>
+                <div class="swiper-button-prev"></div>
+            </div>
 
                 <!-- Product Info Card -->
                 <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-md">
@@ -179,7 +184,7 @@
               
 
                 <!-- Comments Section -->
-                <div class="bg-[#F4F2ED] dark:bg-gray-800 rounded-xl p-6 shadow-md">
+                <div class="bg-[#F4F2ED] dark:bg-gray-800   rounded-xl p-10 shadow-md">
                     <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4">Comments</h3>
 
                     <!-- Scrollable Comment List -->
@@ -287,38 +292,84 @@
                                 </div>
                                 
                                 <!-- Replies Container (Hidden by Default) -->
-                                <div id="replies-{{ $comment->id }}" class="hidden ml-4 mt-3 space-y-3 border-l-2 border-gray-200 dark:border-gray-600 pl-4">
-                                    @foreach($comment->replies as $reply)
-                                        <div class="reply-item flex gap-3" data-comment-id="{{ $reply->id }}">
-                                            <div class="flex-shrink-0">
-                                                <div class="w-8 h-8 bg-[#B59F84] rounded-full border-2 border-white dark:border-gray-800 flex items-center justify-center">
-                                                    <span class="text-xs font-bold text-white">
-                                                        {{ strtoupper(substr($reply->user->fname, 0, 1) . substr($reply->user->lname, 0, 1)) }}
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="flex-1">
-                                                <div>
-                                                    <a href="{{ route('profile.show', $reply->user->id) }}" class="text-sm font-semibold text-gray-800 dark:text-gray-200 hover:underline">
-                                                        {{ $reply->user->fname }} {{ $reply->user->lname }}
-                                                    </a>
-                                                    <span class="text-xs text-gray-500 dark:text-gray-400 ml-2">
-                                                        {{ $reply->created_at->diffForHumans() }}
-                                                    </span>
-                                                </div>
-                                                <p class="text-sm text-gray-800 dark:text-gray-200">{{ $reply->content }}</p>
-                                                <div class="mt-2 flex items-center gap-3 text-xs text-gray-500 dark:text-gray-400">
-                                                    <button onclick="toggleLike({{ $reply->id }})" class="flex items-center gap-1 hover:text-[#B59F84] transition-colors duration-200 {{ $reply->userLikes->count() > 0 ? 'text-[#B59F84]' : 'text-gray-500' }}" id="like-btn-{{ $reply->id }}">
-                                                        <svg class="w-3 h-3" fill="{{ $reply->userLikes->count() > 0 ? 'currentColor' : 'none' }}" stroke="currentColor" viewBox="0 0 24 24">
-                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
-                                                        </svg>
-                                                        <span id="like-count-{{ $reply->id }}">{{ $reply->likes_count }}</span>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    @endforeach
-                                </div>
+                                <!-- Replies Container -->
+                                <div id="replies-{{ $comment->id }}" 
+     class="hidden ml-4 mt-3 space-y-3 border-l-2 border-gray-200 dark:border-gray-600 pl-4">
+    @foreach($comment->replies as $reply)
+        <div class="reply-item flex gap-3" data-comment-id="{{ $reply->id }}" id="reply-{{ $reply->id }}">
+            
+            <!-- Avatar -->
+            <div class="flex-shrink-0">
+                <div class="w-8 h-8 bg-[#B59F84] rounded-full border-2 border-white dark:border-gray-800 flex items-center justify-center">
+                    <span class="text-xs font-bold text-white">
+                        {{ strtoupper(substr($reply->user->fname, 0, 1) . substr($reply->user->lname, 0, 1)) }}
+                    </span>
+                </div>
+            </div>
+
+            <!-- Reply Content -->
+            <div class="flex-1">
+                <div>
+                    <a href="{{ route('profile.show', $reply->user->id) }}" 
+                       class="text-sm font-semibold text-gray-800 dark:text-gray-200 hover:underline">
+                        {{ $reply->user->fname }} {{ $reply->user->lname }}
+                    </a>
+                    <span class="text-xs text-gray-500 dark:text-gray-400 ml-2">
+                        {{ $reply->created_at->diffForHumans() }}
+                    </span>
+                </div>
+
+                <p class="text-sm text-gray-800 dark:text-gray-200">{{ $reply->content }}</p>
+
+                <!-- Actions -->
+                <div class="mt-2 flex items-center gap-3 text-xs text-gray-500 dark:text-gray-400">
+                    <button onclick="toggleLike({{ $reply->id }})"
+                            class="flex items-center gap-1 hover:text-[#B59F84] transition-colors duration-200 {{ $reply->userLikes->count() > 0 ? 'text-[#B59F84]' : 'text-gray-500' }}"
+                            id="like-btn-{{ $reply->id }}">
+                        <svg class="w-3 h-3" fill="{{ $reply->userLikes->count() > 0 ? 'currentColor' : 'none' }}" 
+                             stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                  d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                        </svg>
+                        <span id="like-count-{{ $reply->id }}">{{ $reply->likes_count }}</span>
+                    </button>
+
+                    <!-- Reply button -->
+                    <button onclick="toggleReplyForm({{ $reply->id }})" 
+                            class="hover:text-[#B59F84] transition-colors duration-200">
+                        Reply
+                    </button>
+                </div>
+
+                <!-- Reply Form -->
+                <div id="reply-form-{{ $reply->id }}" class="hidden mt-2 ml-8">
+                    <form class="reply-form" data-parent-id="{{ $reply->id }}">
+                        @csrf
+                        <div class="flex gap-2">
+                            <textarea name="content" placeholder="Write a reply..."
+                                      class="flex-1 p-2 border border-gray-300 dark:border-gray-600 rounded-lg resize-none 
+                                             focus:ring-2 focus:ring-[#B59F84] focus:border-transparent 
+                                             dark:bg-gray-700 dark:text-white"
+                                      rows="2" required></textarea>
+                            <button type="submit" 
+                                    class="px-3 py-2 bg-[#B59F84] text-white rounded-lg hover:bg-[#a08e77] 
+                                           transition-all duration-200 text-sm">
+                                Reply
+                            </button>
+                        </div>
+                        <input type="hidden" name="parent_id" value="{{ $reply->id }}">
+                        <input type="hidden" name="product_id" value="{{ $product->id }}">
+                    </form>
+                </div>
+
+                <!-- Nested Replies Container for this reply -->
+                <div id="replies-{{ $reply->id }}" class="hidden ml-8 mt-3 space-y-3 border-l-2 border-gray-200 dark:border-gray-600 pl-4"></div>
+            </div>
+        </div>
+    @endforeach
+</div>
+
+
                             </div>
                         @empty
                             <p class="text-gray-600 dark:text-gray-400 text-sm py-4 text-center">No comments yet. Be the first to comment!</p>
@@ -748,35 +799,50 @@ document.querySelectorAll('.comment-item').forEach(item => {
     function addCommentToDOM(commentData) {
     // ✅ If this is a reply
     if (commentData.parent_id) {
-        const repliesContainer = document.getElementById(`replies-${commentData.parent_id}`);
-        if (!repliesContainer) {
-            console.warn("Replies container not found for parent:", commentData.parent_id);
-            return;
-        }
+    let repliesContainer = document.getElementById(`replies-${commentData.parent_id}`);
 
-        // prevent duplicate
-        if (document.getElementById(`reply-${commentData.id}`)) {
-            return;
+    // If no replies container yet, create one
+    if (!repliesContainer) {
+        const parentComment = document.getElementById(`comment-${commentData.parent_id}`) || document.getElementById(`reply-${commentData.parent_id}`);
+        if (parentComment) {
+            repliesContainer = document.createElement('div');
+            repliesContainer.id = `replies-${commentData.parent_id}`;
+            repliesContainer.className = "ml-8 mt-3 space-y-3 border-l-2 border-gray-200 dark:border-gray-600 pl-4";
+            parentComment.appendChild(repliesContainer);
         }
+    }
 
-        const replyHtml = `
-            <div class="reply-item ml-12 mt-2 border-l-2 pl-4" id="reply-${commentData.id}">
-                <div class="flex items-start gap-3">
-                    <div class="w-8 h-8 bg-white dark:bg-gray-700 rounded-full border flex items-center justify-center">
-                        <span class="text-xs font-bold text-gray-800 dark:text-gray-200">
-                            ${commentData.user.fname ? (commentData.user.fname.charAt(0) + commentData.user.lname.charAt(0)).toUpperCase() : 'U'}
-                        </span>
-                    </div>
-                    <div class="flex-1">
-                        <p class="font-medium">${commentData.user.fname} ${commentData.user.lname}</p>
-                        <p class="text-gray-700 dark:text-gray-300">${commentData.content}</p>
-                    </div>
+    // prevent duplicate
+    if (document.getElementById(`reply-${commentData.id}`)) {
+        return;
+    }
+
+    const replyHtml = `
+        <div class="reply-item flex gap-3" id="reply-${commentData.id}">
+            <div class="w-8 h-8 bg-[#B59F84] rounded-full flex items-center justify-center">
+                <span class="text-xs font-bold text-white">
+                    ${(commentData.user.fname.charAt(0) + commentData.user.lname.charAt(0)).toUpperCase()}
+                </span>
+            </div>
+            <div class="flex-1">
+                <p class="font-medium">${commentData.user.fname} ${commentData.user.lname}</p>
+                <p>${commentData.content}</p>
+                <button onclick="toggleReplyForm(${commentData.id})" class="text-xs text-gray-500 hover:text-[#B59F84]">Reply</button>
+                <div id="reply-form-${commentData.id}" class="hidden mt-2 ml-6">
+                    <form class="reply-form" data-parent-id="${commentData.id}">
+                        <textarea name="content" class="w-full border rounded p-2" rows="2" required></textarea>
+                        <input type="hidden" name="parent_id" value="${commentData.id}">
+                        <input type="hidden" name="product_id" value="${commentData.product_id}">
+                        <button type="submit" class="px-3 py-1 bg-[#B59F84] text-white rounded text-sm mt-1">Reply</button>
+                    </form>
                 </div>
             </div>
-        `;
-        repliesContainer.insertAdjacentHTML('beforeend', replyHtml);
-        return; // ✅ stop here so it won't fall into commentsContainer
-    }
+        </div>
+    `;
+    repliesContainer.insertAdjacentHTML('beforeend', replyHtml);
+    return;
+}
+
 
     // ✅ Otherwise, this is a top-level comment
     const commentsContainer = document.getElementById('comments-container');
@@ -1035,16 +1101,25 @@ document.querySelectorAll('.comment-item').forEach(item => {
     });
 
     function addReplyToDOM(commentData) {
-    // ✅ Make sure this is really a reply
+    // ✅ Ensure this is a reply
     if (!commentData.parent_id) {
         console.warn("Tried to add a reply without parent_id:", commentData);
         return;
     }
 
-    const repliesContainer = document.getElementById(`replies-${commentData.parent_id}`);
+    // ✅ Get or create replies container for the parent (comment or reply)
+    let repliesContainer = document.getElementById(`replies-${commentData.parent_id}`);
     if (!repliesContainer) {
-        console.warn("Replies container not found for parent:", commentData.parent_id);
-        return;
+        const parentEl = document.getElementById(`comment-${commentData.parent_id}`) || document.getElementById(`reply-${commentData.parent_id}`);
+        if (parentEl) {
+            repliesContainer = document.createElement('div');
+            repliesContainer.id = `replies-${commentData.parent_id}`;
+            repliesContainer.className = 'ml-8 mt-3 space-y-3 border-l-2 border-gray-200 dark:border-gray-600 pl-4';
+            parentEl.appendChild(repliesContainer);
+        } else {
+            console.warn('Parent element not found for reply:', commentData.parent_id);
+            return;
+        }
     }
 
     // ✅ Prevent duplicate reply rendering
@@ -1052,29 +1127,43 @@ document.querySelectorAll('.comment-item').forEach(item => {
         return;
     }
 
-    // ✅ Build reply HTML
+    // ✅ Build reply HTML with its own reply form and nested container
     const replyHtml = `
-        <div class="reply-item flex gap-3" id="reply-${commentData.id}" data-comment-id="${commentData.id}">
-            <div class="flex-shrink-0">
-                <div class="w-8 h-8 bg-white dark:bg-gray-700 rounded-full border-2 border-white dark:border-gray-800 flex items-center justify-center">
-                    <span class="text-xs font-bold text-gray-800 dark:text-gray-200">
-                        ${commentData.user?.fname?.charAt(0).toUpperCase() ?? ''}${commentData.user?.lname?.charAt(0).toUpperCase() ?? ''}
+        <div class=\"reply-item flex gap-3\" id=\"reply-${commentData.id}\" data-comment-id=\"${commentData.id}\">
+            <div class=\"flex-shrink-0\">
+                <div class=\"w-8 h-8 bg-white dark:bg-gray-700 rounded-full border-2 border-white dark:border-gray-800 flex items-center justify-center\">
+                    <span class=\"text-xs font-bold text-gray-800 dark:text-gray-200\">
+                        ${(commentData.user?.fname?.charAt(0).toUpperCase() ?? '')}${(commentData.user?.lname?.charAt(0).toUpperCase() ?? '')}
                     </span>
                 </div>
             </div>
-            <div class="flex-1 p-3">
+            <div class=\"flex-1\">
                 <div>
-                    <a href="/profile/${commentData.user?.id}" class="text-sm font-semibold text-gray-800 dark:text-gray-200 hover:underline">
+                    <a href=\"/profile/${commentData.user?.id}\" class=\"text-sm font-semibold text-gray-800 dark:text-gray-200 hover:underline\">
                         ${commentData.user?.fname ?? ''} ${commentData.user?.lname ?? ''}
                     </a>
-                    <span class="text-xs text-gray-500 dark:text-gray-400 ml-2">just now</span>
+                    <span class=\"text-xs text-gray-500 dark:text-gray-400 ml-2\">just now</span>
                 </div>
-                <p class="text-sm text-gray-800 dark:text-gray-200">${commentData.content}</p>
+                <p class=\"text-sm text-gray-800 dark:text-gray-200\">${commentData.content}</p>
+
+                <div class=\"mt-2 flex items-center gap-3 text-xs text-gray-500 dark:text-gray-400\">
+                    <button onclick=\"toggleReplyForm(${commentData.id})\" class=\"hover:text-[#B59F84] transition-colors duration-200\">Reply</button>
+                </div>
+
+                <div id=\"reply-form-${commentData.id}\" class=\"hidden mt-2 ml-8\">
+                    <form class=\"reply-form\" data-parent-id=\"${commentData.id}\">
+                        <textarea name=\"content\" class=\"w-full border rounded p-2\" rows=\"2\" required></textarea>
+                        <input type=\"hidden\" name=\"parent_id\" value=\"${commentData.id}\">
+                        <input type=\"hidden\" name=\"product_id\" value=\"${commentData.product_id}\">
+                        <button type=\"submit\" class=\"px-3 py-1 bg-[#B59F84] text-white rounded text-sm mt-1\">Reply</button>
+                    </form>
+                </div>
+
+                <div id=\"replies-${commentData.id}\" class=\"hidden ml-8 mt-3 space-y-3 border-l-2 border-gray-200 dark:border-gray-600 pl-4\"></div>
             </div>
         </div>
     `;
 
-    // ✅ Append reply
     repliesContainer.insertAdjacentHTML('beforeend', replyHtml);
 }
 

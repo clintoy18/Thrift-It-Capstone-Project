@@ -127,116 +127,265 @@
                     <!-- Donation Info -->
                     
 
-                    <!-- Comments -->
-                    <div class="border p-6 rounded-lg shadow bg-[#F4F2ED]">
-    <h3 class="text-lg font-bold mb-4">Comments</h3>
+                   
+               
+ <!-- Comments Section -->
+ <div class="bg-[#F4F2ED] dark:bg-gray-800   rounded-xl p-10 shadow-md">
+                    <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4">Comments</h3>
 
-    <!-- Scrollable Comment List -->
-    <div id="comments-container" class="max-h-60 overflow-y-auto overflow-x-hidden space-y-3 pr-2">
-        @forelse($donation->comments as $comment)
-            <div class="comment-item flex items-start gap-3" data-comment-id="{{ $comment->id }}">
-                <!-- Avatar with same style as profile -->
-                <div class="w-10 h-10 bg-white dark:bg-gray-700 rounded-full border-2 border-white dark:border-gray-800 flex items-center justify-center flex-shrink-0">
-                    <span class="text-sm font-bold text-gray-800 dark:text-gray-200">
-                        {{ strtoupper(substr($comment->user->fname, 0, 1) . substr($comment->user->lname, 0, 1)) }}
+                    <!-- Scrollable Comment List -->
+                    <div id="comments-container" class="space-y-4 max-h-80 overflow-y-auto pr-2">
+                        @forelse($donation->comments as $comment)
+                            <!-- Comment Item -->
+                            <div class="comment-item bg-white dark:bg-gray-700 rounded-lg p-4 shadow-sm" data-comment-id="{{ $comment->id }}" id="comment-{{ $comment->id }}">
+                                <div class="flex gap-3">
+                                    <!-- User Avatar -->
+                                    <div class="flex-shrink-0">
+                                        <div class="w-10 h-10 bg-[#B59F84] rounded-full border-2 border-white dark:border-gray-800 flex items-center justify-center">
+                                            <span class="text-sm font-bold text-white">
+                                                {{ strtoupper(substr($comment->user->fname, 0, 1) . substr($comment->user->lname, 0, 1)) }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Comment Content -->
+                                    <div class="flex-1">
+                                        <div class="flex justify-between items-start mb-1">
+                                            <div>
+                                                <a href="{{ route('profile.show', $comment->user->id) }}" class="font-semibold text-gray-800 dark:text-gray-200 hover:underline">
+                                                    {{ $comment->user->fname }} {{ $comment->user->lname }}
+                                                </a>
+                                                <span class="text-xs text-gray-500 dark:text-gray-400 ml-2">
+                                                    {{ $comment->created_at->diffForHumans() }}
+                                                </span>
+                                            </div>
+                                            
+                                            <!-- Comment Options (for comment owner) -->
+                                            @if(Auth::id() === $comment->user_id)
+                                                <div class="relative">
+                                                    <button type="button" class="p-1 rounded hover:bg-gray-100 dark:hover:bg-gray-600" onclick="toggleDropdown({{ $comment->id }})">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-600 dark:text-gray-200" viewBox="0 0 20 20" fill="currentColor">
+                                                            <path d="M6 10a2 2 0 11-4 0 2 2 0 014 0zm6 0a2 2 0 11-4 0 2 2 0 014 0zm6 0a2 2 0 11-4 0 2 2 0 014 0z" />
+                                                        </svg>
+                                                    </button>
+                                                    <div id="dropdown-{{ $comment->id }}" class="absolute right-0 mt-1 w-28 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded shadow z-10 hidden">
+                                                        <button type="button" onclick="toggleEditForm({{ $comment->id }})" class="w-full text-left px-3 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700">
+                                                            Edit
+                                                        </button>
+                                                        <button type="button" onclick="deleteComment({{ $comment->id }})" class="w-full text-left px-3 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-gray-50 dark:hover:bg-gray-700">
+                                                            Delete
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            @endif
+                                        </div>
+                                        <div id="comment-content-{{ $comment->id }}" class="text-gray-800 dark:text-gray-200 mb-2">
+                                            {{ $comment->content }}
+                                        </div>
+                                        <div class="flex items-center gap-4 text-xs text-gray-500 dark:text-gray-400">
+                                            <button onclick="toggleLike({{ $comment->id }})" class="flex items-center gap-1 hover:text-[#B59F84] transition-colors duration-200 {{ $comment->userLikes->count() > 0 ? 'text-[#B59F84]' : 'text-gray-500' }}" id="like-btn-{{ $comment->id }}">
+                                                <svg class="w-4 h-4" fill="{{ $comment->userLikes->count() > 0 ? 'currentColor' : 'none' }}" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                                                </svg>
+                                                <span id="like-count-{{ $comment->id }}">{{ $comment->likes_count }}</span>
+                                            </button>
+                                            <button onclick="toggleReplyForm({{ $comment->id }})" class="flex items-center gap-1 hover:text-[#B59F84] transition-colors duration-200">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                                                </svg>
+                                                Reply
+                                            </button>
+                                            @if($comment->replies_count > 0)
+                                                <button onclick="toggleReplies({{ $comment->id }})" class="text-[#B59F84] hover:underline">
+                                                    {{ $comment->replies_count }} {{ $comment->replies_count == 1 ? 'reply' : 'replies' }}
+                                                </button>
+                                            @endif
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Edit Form (Hidden by Default) -->
+                                @if(Auth::id() === $comment->user_id)
+                                    <form id="inline-edit-form-{{ $comment->id }}" action="{{ route('comments.update', $comment->id) }}" method="POST" class="inline-edit-form hidden mt-2 bg-gray-100 dark:bg-gray-600 p-3 rounded-lg" data-id="{{ $comment->id }}">
+                                        @csrf
+                                        @method('PUT')
+                                        <textarea name="content" rows="2" class="w-full border rounded p-2 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200">{{ old('content', $comment->content) }}</textarea>
+                                        <div class="flex gap-2 mt-2">
+                                            <button type="submit" class="px-3 py-1 bg-[#B59F84] text-white rounded text-sm hover:bg-[#a08e77] transition-all duration-200">Save</button>
+                                            <button type="button" onclick="cancelEdit({{ $comment->id }})" class="px-3 py-1 bg-gray-300 text-gray-800 rounded hover:bg-gray-400 text-sm">Cancel</button>
+                                        </div>
+                                    </form>
+                                @endif
+                                
+                                <!-- Reply Form (Hidden by Default) -->
+                                <div id="reply-form-{{ $comment->id }}" class="hidden mt-3 ml-4">
+                                    <form class="reply-form" data-parent-id="{{ $comment->id }}">
+                                        @csrf
+                                        <div class="flex gap-2">
+                                            <textarea name="content" placeholder="Write a reply..." class="flex-1 p-2 border border-gray-300 dark:border-gray-600 rounded-lg resize-none focus:ring-2 focus:ring-[#B59F84] focus:border-transparent dark:bg-gray-700 dark:text-white" rows="2" required></textarea>
+                                            <div class="flex flex-col gap-2">
+                                                <button type="submit" class="px-3 py-2 bg-[#B59F84] text-white rounded-lg hover:bg-[#a08e77] transition-all duration-200 text-sm">
+                                                    Reply
+                                                </button>
+                                                <button type="button" onclick="toggleReplyForm({{ $comment->id }})" class="px-3 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-all duration-200 text-sm">
+                                                    Cancel
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <input type="hidden" name="parent_id" value="{{ $comment->id }}">
+                                        <input type="hidden" name="product_id" value="{{ $donation->id }}">
+                                    </form>
+                                </div>
+                                
+                                <!-- Replies Container (Hidden by Default) -->
+                                <!-- Replies Container -->
+                                <div id="replies-{{ $comment->id }}" 
+     class="hidden ml-4 mt-3 space-y-3 border-l-2 border-gray-200 dark:border-gray-600 pl-4">
+    @foreach($comment->replies as $reply)
+        <div class="reply-item flex gap-3" data-comment-id="{{ $reply->id }}" id="reply-{{ $reply->id }}">
+            
+            <!-- Avatar -->
+            <div class="flex-shrink-0">
+                <div class="w-8 h-8 bg-[#B59F84] rounded-full border-2 border-white dark:border-gray-800 flex items-center justify-center">
+                    <span class="text-xs font-bold text-white">
+                        {{ strtoupper(substr($reply->user->fname, 0, 1) . substr($reply->user->lname, 0, 1)) }}
                     </span>
                 </div>
-                
-                <!-- Comment container with dynamic width (max 40%) -->
-                <div class="max-w-[40%] bg-[#E1D5B6] dark:bg-gray-700 p-3 rounded-lg" style="width: fit-content;">
-                    <div class="flex items-center gap-2">
-                        <a href="{{ route('profile.show', $comment->user->id) }}" class="text-blue-500 hover:underline flex-shrink-0">
-                            <p class="font-semibold text-gray-800 dark:text-gray-200 truncate">
-                                {{ $comment->user->fname }} {{ $comment->user->lname }}
-                            </p>
-                        </a>
+            </div>
 
-                        @if(Auth::id() === $comment->user_id)
-                        <div class="ml-auto relative flex-shrink-0">
-                            <button type="button" class="p-1 rounded hover:bg-black/10 dark:hover:bg-white/10" onclick="toggleDropdown({{ $comment->id }})">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-600 dark:text-gray-200" viewBox="0 0 20 20" fill="currentColor">
+            <!-- Reply Content -->
+            <div class="flex-1">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <a href="{{ route('profile.show', $reply->user->id) }}" 
+                           class="text-sm font-semibold text-gray-800 dark:text-gray-200 hover:underline">
+                            {{ $reply->user->fname }} {{ $reply->user->lname }}
+                        </a>
+                        <span class="text-xs text-gray-500 dark:text-gray-400 ml-2">
+                            {{ $reply->created_at->diffForHumans() }}
+                        </span>
+                    </div>
+                    @if(Auth::id() === $reply->user_id)
+                        <div class="relative">
+                            <button type="button" class="p-1 rounded hover:bg-gray-100 dark:hover:bg-gray-600" onclick="toggleDropdown({{ $reply->id }})">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-600 dark:text-gray-200" viewBox="0 0 20 20" fill="currentColor">
                                     <path d="M6 10a2 2 0 11-4 0 2 2 0 014 0zm6 0a2 2 0 11-4 0 2 2 0 014 0zm6 0a2 2 0 11-4 0 2 2 0 014 0z" />
                                 </svg>
                             </button>
-
-                            <!-- Dropdown -->
-                            <div id="dropdown-{{ $comment->id }}" class="absolute right-0 mt-1 w-28 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded shadow z-10 hidden">
-                                <!-- Edit option triggers inline edit -->
-                                <button type="button"
-                                        onclick="toggleEditForm({{ $comment->id }})"
-                                        class="w-full text-left px-3 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700">
+                            <div id="dropdown-{{ $reply->id }}" class="absolute right-0 mt-1 w-28 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded shadow z-10 hidden">
+                                <button type="button" onclick="toggleEditForm({{ $reply->id }})" class="w-full text-left px-3 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700">
                                     Edit
                                 </button>
-
-                                <!-- Delete option -->
-                                <button type="button" onclick="deleteComment({{ $comment->id }})" class="w-full text-left px-3 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-gray-50 dark:hover:bg-gray-700">Delete</button>
+                                <button type="button" onclick="deleteComment({{ $reply->id }})" class="w-full text-left px-3 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-gray-50 dark:hover:bg-gray-700">
+                                    Delete
+                                </button>
                             </div>
                         </div>
-                        @endif
-                    </div>
-                    
-                    <!-- Comment content (view mode) with line-clamp -->
-                    <div id="comment-content-{{ $comment->id }}" class="mt-2 text-gray-800 dark:text-gray-200 break-words overflow-hidden">
-                        <div class="line-clamp-3">{{ $comment->content }}</div>
-                    </div>
-
-                    <!-- Inline edit form (hidden by default) -->
-                    @if(Auth::id() === $comment->user_id)
-                    <form id="inline-edit-form-{{ $comment->id }}" 
-                        action="{{ route('comments.update', $comment->id) }}" 
-                        method="POST" 
-                        class="inline-edit-form hidden mt-2" 
-                        data-id="{{ $comment->id }}">
-                        @csrf
-                        @method('PUT')
-                        <textarea name="content" rows="2" class="w-full border rounded p-2">{{ old('content', $comment->content) }}</textarea>
-                        <div class="flex gap-2 mt-2">
-                            <button type="submit" class="px-3 py-1 bg-blue-500 text-white rounded">Save</button>
-                            <button type="button" onclick="cancelEdit({{ $comment->id }})" class="px-3 py-1 bg-gray-300 text-gray-800 rounded hover:bg-gray-400">Cancel</button>
-                        </div>
-                    </form>
                     @endif
                 </div>
-            </div>
-            <div class="flex flex-col overflow-hidden relative left-[50px]">
-                <p class="text-gray-500 dark:text-gray-400 text-xs">{{ $comment->created_at->diffForHumans() }}</p>
-            </div>
-            @if(!$loop->last)
-                <hr class="my-2 border-gray-200 dark:border-gray-600">
-            @endif
-        @empty
-            <p class="text-gray-600 dark:text-gray-400 text-sm">No comments yet. Be the first to comment!</p>
-        @endforelse
-    </div>
 
-    <!-- Comment Form -->
-    @auth
-    <form id="comment-form" action="{{ route('comments.store') }}" method="POST" class="mt-4">
-        @csrf
-        <div class="flex flex-col md:flex-row items-stretch md:items-center gap-3 w-full max-w-xl bg-white dark:bg-gray-800 p-3 rounded-2xl border border-gray-200 dark:border-gray-600 shadow-md">
-            <input type="hidden" name="donation_id" value="{{ $donation->id }}">
-            <textarea
-                name="content"
-                id="comment-content"
-                placeholder="Write a comment..."
-                class="flex-1 w-full resize-none overflow-hidden rounded-full px-4 py-2 text-sm text-gray-800 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-[#E1D5B6] border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700"
-                rows="1"
-                oninput="this.style.height='auto';this.style.height=this.scrollHeight+'px';"
-                required></textarea>
-            <button type="submit"
-                class="mt-2 md:mt-0 md:self-center bg-[#E1D5B6] text-white font-semibold px-4 py-2 rounded-full shadow hover:shadow-md hover:bg-[#d1c29f] transition-all duration-300 ease-in-out w-full md:w-auto">
-                <i class="fas fa-paper-plane"></i>
-            </button>
+                <div id="comment-content-{{ $reply->id }}" class="text-sm text-gray-800 dark:text-gray-200">{{ $reply->content }}</div>
+
+                <!-- Actions -->
+                <div class="mt-2 flex items-center gap-3 text-xs text-gray-500 dark:text-gray-400">
+                    <button onclick="toggleLike({{ $reply->id }})"
+                            class="flex items-center gap-1 hover:text-[#B59F84] transition-colors duration-200 {{ $reply->userLikes->count() > 0 ? 'text-[#B59F84]' : 'text-gray-500' }}"
+                            id="like-btn-{{ $reply->id }}">
+                        <svg class="w-3 h-3" fill="{{ $reply->userLikes->count() > 0 ? 'currentColor' : 'none' }}" 
+                             stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                  d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                        </svg>
+                        <span id="like-count-{{ $reply->id }}">{{ $reply->likes_count }}</span>
+                    </button>
+
+                    <!-- Reply button -->
+                    <button onclick="toggleReplyForm({{ $reply->id }})" 
+                            class="hover:text-[#B59F84] transition-colors duration-200">
+                        Reply
+                    </button>
+                </div>
+
+                <!-- Inline Edit Form for reply -->
+                @if(Auth::id() === $reply->user_id)
+                <form id="inline-edit-form-{{ $reply->id }}" action="{{ route('comments.update', $reply->id) }}" method="POST" class="inline-edit-form hidden mt-2 bg-gray-100 dark:bg-gray-600 p-3 rounded-lg" data-id="{{ $reply->id }}">
+                    @csrf
+                    @method('PUT')
+                    <textarea name="content" rows="2" class="w-full border rounded p-2 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200">{{ old('content', $reply->content) }}</textarea>
+                    <div class="flex gap-2 mt-2">
+                        <button type="submit" class="px-3 py-1 bg-[#B59F84] text-white rounded text-sm hover:bg-[#a08e77] transition-all duration-200">Save</button>
+                        <button type="button" onclick="cancelEdit({{ $reply->id }})" class="px-3 py-1 bg-gray-300 text-gray-800 rounded hover:bg-gray-400 text-sm">Cancel</button>
+                    </div>
+                </form>
+                @endif
+
+                <!-- Reply Form -->
+                <div id="reply-form-{{ $reply->id }}" class="hidden mt-2 ml-8">
+                    <form class="reply-form" data-parent-id="{{ $reply->id }}">
+                        @csrf
+                        <div class="flex gap-2">
+                            <textarea name="content" placeholder="Write a reply..."
+                                      class="flex-1 p-2 border border-gray-300 dark:border-gray-600 rounded-lg resize-none 
+                                             focus:ring-2 focus:ring-[#B59F84] focus:border-transparent 
+                                             dark:bg-gray-700 dark:text-white"
+                                      rows="2" required></textarea>
+                            <button type="submit" 
+                                    class="px-3 py-2 bg-[#B59F84] text-white rounded-lg hover:bg-[#a08e77] 
+                                           transition-all duration-200 text-sm">
+                                Reply
+                            </button>
+                        </div>
+                        <input type="hidden" name="parent_id" value="{{ $reply->id }}">
+                        <input type="hidden" name="donation_id" value="{{ $donation->id }}">
+                    </form>
+                </div>
+
+                <!-- Nested Replies Container for this reply -->
+                <div id="replies-{{ $reply->id }}" class="hidden ml-8 mt-3 space-y-3 border-l-2 border-gray-200 dark:border-gray-600 pl-4"></div>
+            </div>
         </div>
-        <div id="comment-error" class="text-red-500 mt-2 text-sm hidden"></div>
-    </form>
-    @else
-        <p class="mt-3 text-gray-600">
-            <a href="{{ route('login') }}" class="text-blue-500 hover:underline">Login</a> to comment.
-        </p>
-    @endauth
+    @endforeach
 </div>
-                    <!-- Back Link -->
+
+
+                            </div>
+                        @empty
+                            <p class="text-gray-600 dark:text-gray-400 text-sm py-4 text-center">No comments yet. Be the first to comment!</p>
+                        @endforelse
+                    </div>
+
+                    <!-- Comment Form -->
+                    @auth
+                        <form id="comment-form" action="{{ route('comments.store') }}" method="POST" class="mt-6">
+                            @csrf
+                            <div class="flex flex-col md:flex-row items-stretch md:items-center gap-3 w-full max-w-xl bg-white dark:bg-gray-800 p-3 rounded-2xl border border-gray-200 dark:border-gray-600 shadow-md">
+                                <input type="hidden" name="product_id" value="{{ $donation->id }}">
+                                <textarea
+                                    name="content"
+                                    id="comment-content"
+                                    placeholder="Write a comment..."
+                                    class="flex-1 w-full resize-none overflow-hidden rounded-lg px-4 py-2 text-sm text-gray-800 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#B59F84] border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700"
+                                    rows="2"
+                                    oninput="this.style.height='auto';this.style.height=this.scrollHeight+'px';"
+                                    required></textarea>
+                                <button type="submit"
+                                        class="mt-2 md:mt-0 md:self-center bg-[#B59F84] text-white font-semibold px-4 py-2 rounded-lg shadow hover:bg-[#a08e77] transition-all duration-300 ease-in-out w-full md:w-auto">
+                                    <i class="fas fa-paper-plane"></i>
+                                </button>
+                            </div>
+                            <div id="comment-error" class="text-red-500 mt-2 text-sm hidden"></div>
+                        </form>
+                    @else
+                        <p class="mt-3 text-gray-600 dark:text-gray-400">
+                            <a href="{{ route('login') }}" class="text-[#B59F84] hover:underline">Login</a> to comment.
+                        </p>
+                    @endauth
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Back Link -->
                    
                 </div>
             </div>
@@ -294,6 +443,7 @@
     </div>
     <script>
 document.addEventListener("DOMContentLoaded", function () {
+    const DONATION_ID = {{ $donation->id }};
     new Swiper(".mySwiper", {
         loop: true,
         pagination: {
@@ -369,9 +519,21 @@ function cancelEdit(commentId) {
 }
 
 function deleteComment(commentId) {
-    if (!confirm('Are you sure you want to delete this comment?')) {
-        return;
-    }
+    // Confirm deletion
+  
+
+    console.log('Attempting to delete comment with ID:', commentId);
+    
+    // Debug: List all comments and their IDs
+    const allComments = document.querySelectorAll('.comment-item');
+    console.log('All comments in DOM:');
+    allComments.forEach((comment, index) => {
+        console.log(`Comment ${index}:`, {
+            id: comment.id,
+            dataId: comment.getAttribute('data-comment-id'),
+            text: comment.textContent.substring(0, 50) + '...'
+        });
+    });
 
     fetch(`/comments/${commentId}`, {
         method: 'DELETE',
@@ -382,20 +544,36 @@ function deleteComment(commentId) {
     })
     .then(response => response.json())
     .then(data => {
+        console.log('Delete response:', data);
         if (data.success) {
-            // Remove the comment from DOM
-            const commentElement = document.querySelector(`[data-comment-id="${commentId}"]`);
-            if (commentElement) {
-                // Also remove the timestamp and hr elements
-                const nextElement = commentElement.nextElementSibling;
-                const hrElement = nextElement ? nextElement.nextElementSibling : null;
+            // Find the specific comment element - be more specific to avoid conflicts
+            const commentElement = document.getElementById(`comment-${commentId}`) || document.querySelector(`.comment-item[data-comment-id="${commentId}"]`);
+            const replyElement = document.querySelector(`.reply-item[data-comment-id="${commentId}"]`);
+            
+            console.log('Found comment element:', commentElement);
+            console.log('Found reply element:', replyElement);
+            
+            const elementToRemove = commentElement || replyElement;
+            
+            if (elementToRemove) {
+                console.log('Removing element:', elementToRemove);
+                // Remove the entire comment/reply element
+                elementToRemove.remove();
                 
-                commentElement.remove();
-                if (nextElement) nextElement.remove();
-                if (hrElement) hrElement.remove();
+                // Check if there are any remaining comments
+                const remainingComments = document.querySelectorAll('.comment-item');
+                console.log('Remaining comments:', remainingComments.length);
+                if (remainingComments.length === 0) {
+                    // Show "no comments" message if no comments left
+                    const container = document.getElementById('comments-container');
+                    container.innerHTML = '<p class="text-gray-500 text-center py-4">No comments yet. Be the first to comment!</p>';
+                }
+            } else {
+                console.error('Comment element not found for ID:', commentId);
+                alert('Comment not found. Please refresh the page.');
             }
         } else {
-            alert('Failed to delete comment.');
+            alert('Failed to delete comment: ' + (data.message || 'Unknown error'));
         }
     })
     .catch(error => {
@@ -469,8 +647,8 @@ document.querySelectorAll('.comment-item').forEach(item => {
         this.querySelector('.line-clamp-3').style['-webkit-line-clamp'] = '3';
     });
 });
-   // AJAX comment submission
-   document.addEventListener('DOMContentLoaded', function() {
+    // AJAX comment submission
+    document.addEventListener('DOMContentLoaded', function() {
         const commentForm = document.getElementById('comment-form');
         if (commentForm) {
             commentForm.addEventListener('submit', function(e) {
@@ -540,103 +718,177 @@ document.querySelectorAll('.comment-item').forEach(item => {
     });
 
     function addCommentToDOM(commentData) {
-        const commentsContainer = document.getElementById('comments-container');
-        const commentHtml = `
-            <div class="comment-item flex items-start gap-3" data-comment-id="${commentData.id}">
-                <!-- Avatar with same style as profile -->
-                <div class="w-10 h-10 bg-white dark:bg-gray-700 rounded-full border-2 border-white dark:border-gray-800 flex items-center justify-center flex-shrink-0">
-                    <span class="text-sm font-bold text-gray-800 dark:text-gray-200">
-                        ${commentData.user.fname ? (commentData.user.fname.charAt(0) + commentData.user.lname.charAt(0)).toUpperCase() : 'U'}
-                    </span>
-                </div>
-                <div class="inline-block max-w-full bg-[#E1D5B6] dark:bg-gray-700 p-3 rounded-lg ">
-                    <div class="flex items-center gap-2">
-                        <a href="/profile/${commentData.user.id}" class="text-blue-500 hover:underline">
-                            <p class="font-semibold text-gray-800 dark:text-gray-200">
-                                ${commentData.user.fname} ${commentData.user.lname}
-                            </p>
-                        </a>
-                        <div class="ml-auto relative">
-                            <button type="button" class="p-1 rounded hover:bg-black/10 dark:hover:bg-white/10" onclick="toggleDropdown(${commentData.id})">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-600 dark:text-gray-200" viewBox="0 0 20 20" fill="currentColor">
-                                    <path d="M6 10a2 2 0 11-4 0 2 2 0 014 0zm6 0a2 2 0 11-4 0 2 2 0 014 0zm6 0a2 2 0 11-4 0 2 2 0 014 0z" />
-                                </svg>
-                            </button>
-                            <div id="dropdown-${commentData.id}" class="absolute right-0 mt-1 w-28 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded shadow z-10 hidden">
-                                <a href="/comments/${commentData.id}/edit" class="block px-3 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700">Edit</a>
-                                <button type="button" onclick="deleteComment(${commentData.id})" class="w-full text-left px-3 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-gray-50 dark:hover:bg-gray-700">Delete</button>
-                            </div>
-                        </div>
-                    </div>
-                    <p class="mt-2 text-gray-800 dark:text-gray-200 break-words">${commentData.content}</p>
-                    
-                    <!-- Engagement buttons -->
-                    <div class="mt-3 flex items-center gap-4 text-sm">
-                        <!-- Like button -->
-                        <button onclick="toggleLike(${commentData.id})" 
-                                class="flex items-center gap-1 hover:text-blue-500 transition-colors duration-200 text-gray-500"
-                                id="like-btn-${commentData.id}">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
-                            </svg>
-                            <span id="like-count-${commentData.id}">0</span>
-                        </button>
+    // ✅ If this is a reply
+    if (commentData.parent_id) {
+    let repliesContainer = document.getElementById(`replies-${commentData.parent_id}`);
 
-                        <!-- Reply button -->
-                        <button onclick="toggleReplyForm(${commentData.id})" 
-                                class="flex items-center gap-1 hover:text-blue-500 transition-colors duration-200 text-gray-500">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
-                            </svg>
-                            <span>Reply</span>
-                        </button>
-                    </div>
-
-                    <!-- Reply form (hidden by default) -->
-                    <div id="reply-form-${commentData.id}" class="hidden ml-12 mt-2">
-                        <form class="reply-form" data-parent-id="${commentData.id}">
-                            <div class="flex gap-2">
-                                <textarea name="content" 
-                                        placeholder="Write a reply..." 
-                                        class="flex-1 p-2 border border-gray-300 dark:border-gray-600 rounded-lg resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
-                                        rows="2"
-                                        required></textarea>
-                                <button type="submit" 
-                                        class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors duration-200 self-end">
-                                    Reply
-                                </button>
-                                <button type="button" 
-                                        onclick="toggleReplyForm(${commentData.id})"
-                                        class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors duration-200 self-end">
-                                    Cancel
-                                </button>
-                            </div>
-                            <input type="hidden" name="parent_id" value="${commentData.id}">
-                            <input type="hidden" name="donation_id" value="{{ $donation->id }}">
-                        </form>
-                    </div>
-
-                    <!-- Replies container (hidden by default) -->
-                    <div id="replies-${commentData.id}" class="hidden ml-12 mt-2 space-y-2">
-                        <!-- Replies will be added here dynamically -->
-                    </div>
-                </div>
-            </div>
-            <div class="flex flex-col overflow-hidden relative left-[50px]">
-                <p class="text-gray-500 dark:text-gray-400 text-xs">Just now</p>
-            </div>
-            <hr class="my-2 border-gray-200 dark:border-gray-600">
-        `;
-        
-        // Add the new comment at the top of the comments container
-        commentsContainer.insertAdjacentHTML('afterbegin', commentHtml);
-        
-        // Scroll to the new comment
-        const newComment = commentsContainer.querySelector('.comment-item');
-        if (newComment) {
-            newComment.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    // If no replies container yet, create one
+    if (!repliesContainer) {
+        const parentComment = document.getElementById(`comment-${commentData.parent_id}`) || document.getElementById(`reply-${commentData.parent_id}`);
+        if (parentComment) {
+            repliesContainer = document.createElement('div');
+            repliesContainer.id = `replies-${commentData.parent_id}`;
+            repliesContainer.className = "ml-8 mt-3 space-y-3 border-l-2 border-gray-200 dark:border-gray-600 pl-4";
+            parentComment.appendChild(repliesContainer);
         }
     }
+
+    // prevent duplicate
+    if (document.getElementById(`reply-${commentData.id}`)) {
+        return;
+    }
+
+    const replyHtml = `
+        <div class="reply-item flex gap-3" id="reply-${commentData.id}">
+            <div class="w-8 h-8 bg-[#B59F84] rounded-full flex items-center justify-center">
+                <span class="text-xs font-bold text-white">
+                    ${(commentData.user.fname.charAt(0) + commentData.user.lname.charAt(0)).toUpperCase()}
+                </span>
+            </div>
+            <div class="flex-1">
+                <p class="font-medium">${commentData.user.fname} ${commentData.user.lname}</p>
+                <p>${commentData.content}</p>
+                <button onclick="toggleReplyForm(${commentData.id})" class="text-xs text-gray-500 hover:text-[#B59F84]">Reply</button>
+                <div id="reply-form-${commentData.id}" class="hidden mt-2 ml-6">
+                    <form class="reply-form" data-parent-id="${commentData.id}">
+                        <textarea name="content" class="w-full border rounded p-2" rows="2" required></textarea>
+                        <input type="hidden" name="parent_id" value="${commentData.id}">
+                        <input type="hidden" name="donation_id" value="${DONATION_ID}">
+                        <button type="submit" class="px-3 py-1 bg-[#B59F84] text-white rounded text-sm mt-1">Reply</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    `;
+    repliesContainer.insertAdjacentHTML('beforeend', replyHtml);
+    return;
+}
+
+
+    // ✅ Otherwise, this is a top-level comment
+    const commentsContainer = document.getElementById('comments-container');
+
+    if (document.getElementById(`comment-${commentData.id}`)) {
+        return;
+    }
+
+    const commentHtml = `
+            <div class="comment-item" data-comment-id="${commentData.id}" id="comment-${commentData.id}">
+                <div class="flex gap-3">
+                    <!-- User Avatar -->
+                    <div class="flex-shrink-0">
+                        <div class="w-10 h-10 bg-white dark:bg-gray-700 rounded-full border-2 border-white dark:border-gray-800 flex items-center justify-center">
+                            <span class="text-sm font-bold text-gray-800 dark:text-gray-200">
+                                ${commentData.user.fname ? (commentData.user.fname.charAt(0) + commentData.user.lname.charAt(0)).toUpperCase() : 'U'}
+                            </span>
+                        </div>
+                    </div>
+                   
+                    <!-- Comment Content -->
+                    <div class="flex-1">
+    <div class=" p-3">
+        <!-- Comment Header -->
+        <div class="flex justify-between items-start mb-1">
+            <div>
+                <a href="/profile/${commentData.user.id}" class="font-semibold text-gray-800 dark:text-gray-200 hover:underline">
+                    ${commentData.user.fname} ${commentData.user.lname}
+                </a>
+                <span class="text-xs text-gray-500 dark:text-gray-400 ml-2">
+                    ${commentData.created_at ? getTimeAgo(new Date(commentData.created_at)) : 'just now'}
+                </span>
+            </div>
+            
+            <!-- Comment Options -->
+            <div class="relative">
+                <button type="button" class="p-1 rounded hover:bg-gray-100 dark:hover:bg-gray-600" onclick="toggleDropdown(${commentData.id})">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-600 dark:text-gray-200" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M6 10a2 2 0 11-4 0 2 2 0 014 0zm6 0a2 2 0 11-4 0 2 2 0 014 0zm6 0a2 2 0 11-4 0 2 2 0 014 0z" />
+                    </svg>
+                </button>
+                
+                <!-- Dropdown -->
+                <div id="dropdown-${commentData.id}" class="absolute right-0 mt-1 w-28 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded shadow z-10 hidden">
+                    <button type="button" onclick="editComment(${commentData.id})" class="w-full text-left px-3 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700">
+                        Edit
+                    </button>
+                    <button type="button" onclick="deleteComment(${commentData.id})" class="w-full text-left px-3 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-gray-50 dark:hover:bg-gray-700">
+                        Delete
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Comment Content -->
+        <div id="comment-content-${commentData.id}" class="text-gray-800 dark:text-gray-200 mb-2">
+            ${commentData.content}
+        </div>
+
+        <!-- Engagement Buttons -->
+        <div class="flex items-center gap-4 text-xs text-gray-500 dark:text-gray-400">
+            <!-- Like -->
+            <button onclick="toggleLike(${commentData.id})" 
+                    class="flex items-center gap-1 hover:text-blue-500 transition-colors duration-200 text-gray-500"
+                    id="like-btn-${commentData.id}">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                </svg>
+                <span id="like-count-${commentData.id}">0</span>
+            </button>
+
+            <!-- Reply -->
+            <button onclick="toggleReplyForm(${commentData.id})" 
+                    class="flex items-center gap-1 hover:text-blue-500 transition-colors duration-200">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                </svg>
+                Reply
+            </button>
+        </div>
+    </div>
+
+    <!-- Inline Edit Form -->
+    <form id="inline-edit-form-${commentData.id}" class="hidden mt-2 bg-gray-100 dark:bg-gray-600 p-3 rounded-lg" data-id="${commentData.id}">
+        <textarea name="content" rows="2" class="w-full border rounded p-2 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200">${commentData.content}</textarea>
+        <div class="flex gap-2 mt-2">
+            <button type="submit" class="px-3 py-1 bg-blue-500 text-white rounded text-sm">Save</button>
+            <button type="button" onclick="cancelEdit(${commentData.id})" class="px-3 py-1 bg-gray-300 text-gray-800 rounded hover:bg-gray-400 text-sm">Cancel</button>
+        </div>
+    </form>
+
+    <!-- Reply Form -->
+    <div id="reply-form-${commentData.id}" class="hidden mt-3 ml-4">
+        <form class="reply-form" data-parent-id="${commentData.id}">
+            <div class="flex gap-2">
+                <textarea name="content" placeholder="Write a reply..." class="flex-1 p-2 border border-gray-300 dark:border-gray-600 rounded-lg resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white" rows="2" required></textarea>
+                <div class="flex flex-col gap-2">
+                    <button type="submit" class="px-3 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors duration-200 text-sm">Reply</button>
+                    <button type="button" onclick="toggleReplyForm(${commentData.id})" class="px-3 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors duration-200 text-sm">Cancel</button>
+                </div>
+            </div>
+            <input type="hidden" name="parent_id" value="${commentData.id}">
+            <input type="hidden" name="donation_id" value="${DONATION_ID}">
+        </form>
+    </div>
+
+    <!-- Replies -->
+    <div id="replies-${commentData.id}" class="hidden ml-4 mt-3 space-y-3 border-l-2 border-gray-200 dark:border-gray-600 pl-4">
+        <!-- Replies will be appended here dynamically -->
+    </div>
+                    </div>
+                </div>
+            </div>
+
+        `;
+
+    commentsContainer.insertAdjacentHTML('afterbegin', commentHtml);
+
+    // Scroll to the new comment
+    const newComment = document.getElementById(`comment-${commentData.id}`);
+    if (newComment) {
+        newComment.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+}
+
 
     // Toggle like functionality
     function toggleLike(commentId) {
@@ -769,42 +1021,91 @@ document.querySelectorAll('.comment-item').forEach(item => {
         });
     });
 
-    // Add reply to DOM
-    function addReplyToDOM(replyData, parentId) {
-        const repliesContainer = document.getElementById(`replies-${parentId}`);
-        if (!repliesContainer) return;
-        
-        const replyHtml = `
-            <div class="reply-item flex items-start gap-2" data-comment-id="${replyData.id}">
-                <div class="w-8 h-8 bg-white dark:bg-gray-700 rounded-full border-2 border-white dark:border-gray-800 flex items-center justify-center flex-shrink-0">
-                    <span class="text-xs font-bold text-gray-800 dark:text-gray-200">
-                        ${replyData.user.fname ? (replyData.user.fname.charAt(0) + replyData.user.lname.charAt(0)).toUpperCase() : 'U'}
+    function addReplyToDOM(commentData) {
+    // ✅ Ensure this is a reply
+    if (!commentData.parent_id) {
+        console.warn("Tried to add a reply without parent_id:", commentData);
+        return;
+    }
+
+    // ✅ Get or create replies container for the parent (comment or reply)
+    let repliesContainer = document.getElementById(`replies-${commentData.parent_id}`);
+    if (!repliesContainer) {
+        const parentEl = document.getElementById(`comment-${commentData.parent_id}`) || document.getElementById(`reply-${commentData.parent_id}`);
+        if (parentEl) {
+            repliesContainer = document.createElement('div');
+            repliesContainer.id = `replies-${commentData.parent_id}`;
+            repliesContainer.className = 'ml-8 mt-3 space-y-3 border-l-2 border-gray-200 dark:border-gray-600 pl-4';
+            parentEl.appendChild(repliesContainer);
+        } else {
+            console.warn('Parent element not found for reply:', commentData.parent_id);
+            return;
+        }
+    }
+
+    // ✅ Prevent duplicate reply rendering
+    if (document.getElementById(`reply-${commentData.id}`)) {
+        return;
+    }
+
+    // ✅ Build reply HTML with its own reply form and nested container
+    const replyHtml = `
+        <div class=\"reply-item flex gap-3\" id=\"reply-${commentData.id}\" data-comment-id=\"${commentData.id}\">
+            <div class=\"flex-shrink-0\">
+                <div class=\"w-8 h-8 bg-white dark:bg-gray-700 rounded-full border-2 border-white dark:border-gray-800 flex items-center justify-center\">
+                    <span class=\"text-xs font-bold text-gray-800 dark:text-gray-200\">
+                        ${(commentData.user?.fname?.charAt(0).toUpperCase() ?? '')}${(commentData.user?.lname?.charAt(0).toUpperCase() ?? '')}
                     </span>
                 </div>
-                <div class="max-w-[35%] bg-gray-100 dark:bg-gray-600 p-2 rounded-lg" style="width: fit-content;">
-                    <div class="flex items-center gap-2">
-                        <a href="/profile/${replyData.user.id}" class="text-blue-500 hover:underline text-sm font-semibold">
-                            ${replyData.user.fname} ${replyData.user.lname}
-                        </a>
-                    </div>
-                    <p class="mt-1 text-sm text-gray-800 dark:text-gray-200">${replyData.content}</p>
-                    
-                    <!-- Reply engagement -->
-                    <div class="mt-2 flex items-center gap-3 text-xs">
-                        <button onclick="toggleLike(${replyData.id})" 
-                                class="flex items-center gap-1 hover:text-blue-500 transition-colors duration-200 text-gray-500"
-                                id="like-btn-${replyData.id}">
-                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
-                            </svg>
-                            <span id="like-count-${replyData.id}">0</span>
-                        </button>
-                    </div>
-                </div>
             </div>
-        `;
+            <div class=\"flex-1\">
+                <div>
+                    <a href=\"/profile/${commentData.user?.id}\" class=\"text-sm font-semibold text-gray-800 dark:text-gray-200 hover:underline\">
+                        ${commentData.user?.fname ?? ''} ${commentData.user?.lname ?? ''}
+                    </a>
+                    <span class=\"text-xs text-gray-500 dark:text-gray-400 ml-2\">just now</span>
+                </div>
+                <p class=\"text-sm text-gray-800 dark:text-gray-200\">${commentData.content}</p>
+
+                <div class=\"mt-2 flex items-center gap-3 text-xs text-gray-500 dark:text-gray-400\">
+                    <button onclick=\"toggleReplyForm(${commentData.id})\" class=\"hover:text-[#B59F84] transition-colors duration-200\">Reply</button>
+                </div>
+
+                <div id=\"reply-form-${commentData.id}\" class=\"hidden mt-2 ml-8\">
+                    <form class=\"reply-form\" data-parent-id=\"${commentData.id}\">
+                        <textarea name=\"content\" class=\"w-full border rounded p-2\" rows=\"2\" required></textarea>
+                        <input type=\"hidden\" name=\"parent_id\" value=\"${commentData.id}\">
+                        <input type=\"hidden\" name=\"product_id\" value=\"${commentData.product_id}\">
+                        <button type=\"submit\" class=\"px-3 py-1 bg-[#B59F84] text-white rounded text-sm mt-1\">Reply</button>
+                    </form>
+                </div>
+
+                <div id=\"replies-${commentData.id}\" class=\"hidden ml-8 mt-3 space-y-3 border-l-2 border-gray-200 dark:border-gray-600 pl-4\"></div>
+            </div>
+        </div>
+    `;
+
+    repliesContainer.insertAdjacentHTML('beforeend', replyHtml);
+}
+     // Helper function to format time ago
+     function getTimeAgo(date) {
+        const now = new Date();
+        const diffInSeconds = Math.floor((now - date) / 1000);
         
-        repliesContainer.insertAdjacentHTML('beforeend', replyHtml);
+        if (diffInSeconds < 60) {
+            return 'just now';
+        } else if (diffInSeconds < 3600) {
+            const minutes = Math.floor(diffInSeconds / 60);
+            return `${minutes} minute${minutes > 1 ? 's' : ''} ago`;
+        } else if (diffInSeconds < 86400) {
+            const hours = Math.floor(diffInSeconds / 3600);
+            return `${hours} hour${hours > 1 ? 's' : ''} ago`;
+        } else if (diffInSeconds < 2592000) {
+            const days = Math.floor(diffInSeconds / 86400);
+            return `${days} day${days > 1 ? 's' : ''} ago`;
+        } else {
+            return date.toLocaleDateString();
+        }
     }
 
     // Update replies count
@@ -819,4 +1120,26 @@ document.querySelectorAll('.comment-item').forEach(item => {
         }
     }
     </script>
+
+<style>
+.line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+}
+
+.comment-item:hover .line-clamp-3 {
+    -webkit-line-clamp: unset;
+    display: block;
+}
+
+/* Dynamic width for comments */
+.comment-bubble {
+    max-width: 40%;
+    width: fit-content;
+}
+</style>
 </x-app-layout>
