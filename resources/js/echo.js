@@ -104,6 +104,7 @@ if (authUserId) {
                     data: {
                         from_user: e.from_user,
                         content: e.content,
+                        product_id: e.product_id,
                     },
                     created_at: new Date().toISOString(),
                     is_read: false,
