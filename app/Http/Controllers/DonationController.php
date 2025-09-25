@@ -53,52 +53,23 @@ class DonationController extends Controller
      */
     public function show($id)
     {
-        // Clear all cache related to this donation and comments
+        // Clear cache keys for this donation
         Cache::forget("donation_{$id}_comments");
         Cache::forget("donation_{$id}_with_comments");
-        
-        // Use raw DB query to bypass all caching mechanisms
-        $donationData = DB::table('donations')
-            ->where('id', $id)
-            ->first();
-            
-        if (!$donationData) {
-            abort(404);
-        }
-        
-        // Get comments with raw query to ensure fresh data
-        $comments = DB::table('comments')
-            ->join('users', 'comments.user_id', '=', 'users.id')
-            ->where('comments.donation_id', $id)
-            ->select('comments.*', 'users.fname', 'users.lname')
-            ->orderBy('comments.created_at', 'desc')
+
+        // Load donation base relations
+        $donation = Donation::with(['user', 'category'])->findOrFail($id);
+
+        // Fetch only parent comments with their replies + users (mirror ProductController)
+        $comments = \App\Models\Comment::with(['user', 'replies.user'])
+            ->where('donation_id', $id)
+            ->whereNull('parent_id')
+            ->latest()
             ->get();
-        
-        // Convert to Eloquent models for compatibility
-        $donation = Donation::find($id);
-        $donation->load(['user', 'category']);
-        
-        // Manually attach fresh comments
-        $donation->setRelation('comments', $comments->map(function($comment) {
-            $commentModel = new \App\Models\Comment();
-            $commentModel->id = $comment->id;
-            $commentModel->content = $comment->content;
-            $commentModel->user_id = $comment->user_id;
-            $commentModel->donation_id = $comment->donation_id;
-            $commentModel->parent_id = $comment->parent_id;
-            $commentModel->created_at = $comment->created_at;
-            $commentModel->updated_at = $comment->updated_at;
-            
-            // Create user model
-            $user = new \App\Models\User();
-            $user->id = $comment->user_id;
-            $user->fname = $comment->fname;
-            $user->lname = $comment->lname;
-            $commentModel->setRelation('user', $user);
-            
-            return $commentModel;
-        }));
-        
+
+        // Attach comments to donation
+        $donation->setRelation('comments', $comments);
+
         // Disable browser cache for this page
         return response()
             ->view('donations.show', compact('donation'))
