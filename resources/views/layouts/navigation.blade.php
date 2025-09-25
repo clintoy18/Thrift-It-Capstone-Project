@@ -51,58 +51,92 @@
                 </svg>
                 <!-- Unread indicator could go here -->
             </a>
-            <!-- Notification Bell -->
-          <div id="notif-bell" 
-            x-data="{
-                open: false,
-                notifications: [],
-                markAsRead() {
-                    fetch('{{ route('notifications.read') }}', {
-                        method: 'POST',
-                        headers: {
-                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                            'Accept': 'application/json',
-                        }
-                    }).then(() => {
-                        this.notifications.forEach(n => n.is_read = true);
-                    });
-                }
-            }"
-            x-init="
-                notifications = {{ Js::from(
-                    \App\Models\Notification::where('user_id', Auth::id())->latest()->take(5)->get()
-                ) }};
-            "
-            @new-notification.window="notifications.unshift($event.detail)">
-            
-            <!-- Notification Bell -->
-            <button @click="open = !open; if(open) markAsRead()" class="relative">
-                🔔
-                <span x-show="notifications.filter(n => !n.is_read).length > 0"
-                    class="absolute top-0 right-0 bg-red-600 text-white text-xs rounded-full px-1">
-                    <span x-text="notifications.filter(n => !n.is_read).length"></span>
-                </span>
-            </button>
+          <!-- Notification Bell -->
+            <div id="notif-bell" 
+                x-data="{
+                    open: false,
+                    notifications: [],
+                    markAsRead() {
+                        fetch('{{ route('notifications.read') }}', {
+                            method: 'POST',
+                            headers: {
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                'Accept': 'application/json',
+                            }
+                        }).then(() => {
+                            this.notifications.forEach(n => n.is_read = true);
+                        });
+                    }
+                }"
+                x-init="
+                    notifications = {{ Js::from(
+                        \App\Models\Notification::where('user_id', Auth::id())->latest()->take(5)->get()
+                    ) }};
+                "
+                @new-notification.window="notifications.unshift($event.detail)">
+                
+                <!-- Bell Icon -->
+                <button @click="open = !open; if(open) markAsRead()" class="relative">
+                    🔔
+                    <span x-show="notifications.filter(n => !n.is_read).length > 0"
+                        class="absolute top-0 right-0 bg-red-600 text-white text-xs rounded-full px-1">
+                        <span x-text="notifications.filter(n => !n.is_read).length"></span>
+                    </span>
+                </button>
 
-            <!-- Dropdown -->
-            <div x-show="open" class="absolute right-0 mt-2 w-64 bg-white shadow rounded-lg overflow-hidden z-50">
-               <template x-for="notif in notifications" :key="notif.id">
-                    <a :href="`/products/${notif.data.product_id}`" class="block p-2 border-b hover:bg-gray-100">
-                        <p class="text-sm">
-                            <strong x-text="notif.data.from_user"></strong>
-                            commented: <span x-text="notif.data.content"></span>
-                        </p>
-                        <span class="text-xs text-gray-500" x-text="notif.created_at"></span>
-                    </a>
-                </template>
-                <div class="p-2 text-center text-sm text-gray-500">View all</div>
+                <!-- Dropdown -->
+                <div 
+                    x-show="open" 
+                    @click.away="open = false"
+                    x-transition
+                    class="absolute right-20 mt-2 w-72 bg-white shadow-lg rounded-xl overflow-hidden z-50 border border-gray-200"
+                >
+                    <!-- Header -->
+                    <div class="px-4 py-2 bg-gray-50 border-b border-gray-200">
+                        <span class="text-sm font-semibold text-gray-700">Notifications</span>
+                    </div>
+
+                    <!-- Notification List -->
+                    <div class="max-h-64 overflow-y-auto divide-y divide-gray-100 custom-scroll">
+                        <template x-for="notif in notifications" :key="notif.id">
+                            <a :href="`/products/${notif.data.product_id}`" 
+                            class="block px-4 py-3 hover:bg-gray-50 transition">
+                                <p class="text-sm text-gray-700">
+                                    <strong class="text-[#B59F84]" x-text="notif.data.from_user"></strong>
+                                    commented: <span x-text="notif.data.content"></span>
+                                </p>
+                                <span class="text-xs text-gray-400" x-text="notif.created_at"></span>
+                            </a>
+                        </template>
+                    </div>
+
+                    <!-- Footer -->
+                    {{-- <div class="px-4 py-2 text-center bg-gray-50 border-t border-gray-200">
+                        <a href="{{ route('notifications.index') }}" class="text-sm text-[#B59F84] hover:underline">
+                            View all
+                        </a>
+                    </div> --}}
+                </div>
             </div>
-        </div>
+
+            <!-- Custom Scrollbar (optional, Tailwind extension via CSS) -->
+            <style>
+            .custom-scroll::-webkit-scrollbar {
+                width: 6px;
+            }
+            .custom-scroll::-webkit-scrollbar-track {
+                background: #f1f1f1;
+            }
+            .custom-scroll::-webkit-scrollbar-thumb {
+                background: #b59f84;
+                border-radius: 9999px;
+            }
+            .custom-scroll::-webkit-scrollbar-thumb:hover {
+                background: #786126;
+            }
+            </style>
+
         @endauth
-        
-        
-
-
         @auth
             <!-- Profile Dropdown -->
             <div class="relative" x-data="{ open: false }">
@@ -122,27 +156,109 @@
                     </form>
                 </div>
             </div>
-        @else
-            <a href="{{ route('register') }}" class="inline-flex items-center justify-center bg-[#B59F84] text-white 
-                                        px-[20px] py-1.5 rounded-[25px] text-base font-semibold 
-                                        hover:bg-[#a08e77] hover:scale-105 transition-all duration-200 w-[100px]">Sign up</a>
-            <a href="{{ route('login') }}" class="inline-flex items-center justify-center bg-[#B59F84] text-white 
-                                        px-[20px] py-1.5 rounded-[25px] text-base font-semibold 
-                                        hover:bg-[#a08e77] hover:scale-105 transition-all duration-200 w-[100px]">Login</a>
-        @endauth
-    </div>
+            @else
+                <a href="{{ route('register') }}" class="inline-flex items-center justify-center bg-[#B59F84] text-white 
+                                            px-[20px] py-1.5 rounded-[25px] text-base font-semibold 
+                                            hover:bg-[#a08e77] hover:scale-105 transition-all duration-200 w-[100px]">Sign up</a>
+                <a href="{{ route('login') }}" class="inline-flex items-center justify-center bg-[#B59F84] text-white 
+                                            px-[20px] py-1.5 rounded-[25px] text-base font-semibold 
+                                            hover:bg-[#a08e77] hover:scale-105 transition-all duration-200 w-[100px]">Login</a>
+            @endauth
+        </div>
+            <!-- Mobile Menu Toggle -->
+            <div class="flex md:hidden items-center gap-2">
+             <!-- Notification Bell -->
+            <div id="notif-bell" 
+                x-data="{
+                    open: false,
+                    notifications: [],
+                    markAsRead() {
+                        fetch('{{ route('notifications.read') }}', {
+                            method: 'POST',
+                            headers: {
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                'Accept': 'application/json',
+                            }
+                        }).then(() => {
+                            this.notifications.forEach(n => n.is_read = true);
+                        });
+                    }
+                }"
+                x-init="
+                    notifications = {{ Js::from(
+                        \App\Models\Notification::where('user_id', Auth::id())->latest()->take(5)->get()
+                    ) }};
+                "
+                @new-notification.window="notifications.unshift($event.detail)">
+                
+                <!-- Bell Icon -->
+                <button @click="open = !open; if(open) markAsRead()" class="relative">
+                    🔔
+                    <span x-show="notifications.filter(n => !n.is_read).length > 0"
+                        class="absolute top-0 right-0 bg-red-600 text-white text-xs rounded-full px-1">
+                        <span x-text="notifications.filter(n => !n.is_read).length"></span>
+                    </span>
+                </button>
 
-    <!-- Mobile Menu Toggle -->
-    <div class="flex md:hidden items-center gap-2">
-        <button @click="mobileMenuOpen = !mobileMenuOpen" class="p-2 rounded-md text-gray-700 hover:bg-gray-200 focus:outline-none">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
-            </svg>
-        </button>
-    </div>
-</div>
+                <!-- Dropdown -->
+                <div 
+                    x-show="open" 
+                    @click.away="open = false"
+                    x-transition
+                    class="absolute right-20 mt-2 w-72 bg-white shadow-lg rounded-xl overflow-hidden z-50 border border-gray-200"
+                >
+                    <!-- Header -->
+                    <div class="px-4 py-2 bg-gray-50 border-b border-gray-200">
+                        <span class="text-sm font-semibold text-gray-700">Notifications</span>
+                    </div>
 
+                    <!-- Notification List -->
+                    <div class="max-h-64 overflow-y-auto divide-y divide-gray-100 custom-scroll">
+                        <template x-for="notif in notifications" :key="notif.id">
+                            <a :href="`/products/${notif.data.product_id}`" 
+                            class="block px-4 py-3 hover:bg-gray-50 transition">
+                                <p class="text-sm text-gray-700">
+                                    <strong class="text-[#B59F84]" x-text="notif.data.from_user"></strong>
+                                    commented: <span x-text="notif.data.content"></span>
+                                </p>
+                                <span class="text-xs text-gray-400" x-text="notif.created_at"></span>
+                            </a>
+                        </template>
+                    </div>
 
+                    <!-- Footer -->
+                    {{-- <div class="px-4 py-2 text-center bg-gray-50 border-t border-gray-200">
+                        <a href="{{ route('notifications.index') }}" class="text-sm text-[#B59F84] hover:underline">
+                            View all
+                        </a>
+                    </div> --}}
+                </div>
+            </div>
+
+            <!-- Custom Scrollbar (optional, Tailwind extension via CSS) -->
+            <style>
+            .custom-scroll::-webkit-scrollbar {
+                width: 6px;
+            }
+            .custom-scroll::-webkit-scrollbar-track {
+                background: #f1f1f1;
+            }
+            .custom-scroll::-webkit-scrollbar-thumb {
+                background: #b59f84;
+                border-radius: 9999px;
+            }
+            .custom-scroll::-webkit-scrollbar-thumb:hover {
+                background: #786126;
+            }
+            </style>
+
+                <button @click="mobileMenuOpen = !mobileMenuOpen" class="p-2 rounded-md text-gray-700 hover:bg-gray-200 focus:outline-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                    </svg>
+                </button>
+            </div>
+        </div>
         <!-- Mobile Search Bar -->
         <div class="mt-3 md:hidden">
             <form action="{{ route('search') }}" method="GET" class="flex items-center bg-white px-3 py-2 rounded-full shadow-sm border">
