@@ -87,6 +87,7 @@ function createMessageBubble(message, sender, isOwnMessage) {
     `;
 }
 
+// Notification listener
 const authUserId = Number(document.querySelector('meta[name="user-id"]')?.content);
 
 if (authUserId) {
@@ -104,6 +105,7 @@ if (authUserId) {
                     data: {
                         from_user: e.from_user,
                         content: e.content,
+                        product_id: e.product_id,
                     },
                     created_at: new Date().toISOString(),
                     is_read: false,
@@ -112,7 +114,7 @@ if (authUserId) {
         });
 }
 
-
+// Function to show toast notification
 function showNotificationToast(message) {
     const toast = document.createElement("div");
     toast.className = "fixed bottom-4 right-4 bg-[#B59F84] text-white px-4 py-2 rounded-lg shadow-lg z-50";
