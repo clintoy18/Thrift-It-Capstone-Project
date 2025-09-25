@@ -53,7 +53,21 @@
             </a>
             <!-- Notification Bell -->
           <div id="notif-bell" 
-            x-data="{ open: false, notifications: [] }"
+            x-data="{
+                open: false,
+                notifications: [],
+                markAsRead() {
+                    fetch('{{ route('notifications.read') }}', {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                            'Accept': 'application/json',
+                        }
+                    }).then(() => {
+                        this.notifications.forEach(n => n.is_read = true);
+                    });
+                }
+            }"
             x-init="
                 notifications = {{ Js::from(
                     \App\Models\Notification::where('user_id', Auth::id())->latest()->take(5)->get()
@@ -61,7 +75,8 @@
             "
             @new-notification.window="notifications.unshift($event.detail)">
             
-            <button @click="open = !open" class="relative">
+            <!-- Notification Bell -->
+            <button @click="open = !open; if(open) markAsRead()" class="relative">
                 🔔
                 <span x-show="notifications.filter(n => !n.is_read).length > 0"
                     class="absolute top-0 right-0 bg-red-600 text-white text-xs rounded-full px-1">
@@ -69,21 +84,20 @@
                 </span>
             </button>
 
+            <!-- Dropdown -->
             <div x-show="open" class="absolute right-0 mt-2 w-64 bg-white shadow rounded-lg overflow-hidden z-50">
-                <template x-for="notif in notifications" :key="notif.id">
-                    <div class="p-2 border-b">
+               <template x-for="notif in notifications" :key="notif.id">
+                    <a :href="`/products/${notif.data.product_id}`" class="block p-2 border-b hover:bg-gray-100">
                         <p class="text-sm">
                             <strong x-text="notif.data.from_user"></strong>
                             commented: <span x-text="notif.data.content"></span>
                         </p>
                         <span class="text-xs text-gray-500" x-text="notif.created_at"></span>
-                    </div>
+                    </a>
                 </template>
                 <div class="p-2 text-center text-sm text-gray-500">View all</div>
             </div>
         </div>
-
-
         @endauth
         
         

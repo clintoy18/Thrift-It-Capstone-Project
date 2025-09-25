@@ -24,6 +24,8 @@ use App\Http\Controllers\SegmentController;
 use App\Http\Controllers\PricingController;
 use App\Http\Controllers\EcoPostController;
 use App\Http\Controllers\NotificationController;
+use App\Models\Notification;
+use Illuminate\Support\Facades\Auth;
 
 
 Route::get('/search', [SearchController::class, 'index'])->name('search');
@@ -67,6 +69,16 @@ Route::middleware(['auth', 'verified', 'rolemiddleware:user'])->group(function (
     Route::post('/users/{user}/review',[ReviewController::class,'store'])->name('reviews.store');
     Route::get('/leaderboard', [LeaderboardController::class, 'index'])
     ->name('leaderboard.index');
+
+    Route::post('/notifications/read', function () {
+            Notification::where('user_id', Auth::id())
+            ->where('is_read', false)
+            ->update(['is_read' => true]);
+
+        return response()->json(['status' => 'ok']);
+    })->name('notifications.read');
+
+
 
 
 });
