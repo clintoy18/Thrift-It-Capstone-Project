@@ -13,11 +13,17 @@
                     Give your pre-loved clothes a new life 🌍
                 </p>
 
-                <!-- Button -->
+                <!-- Buttons -->
+            <div class="flex flex-col gap-3 mb-8">
                 <a href="{{ route('donations.index') }}"
-                   class="mb-8 inline-block bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-3 rounded-full shadow-lg transition">
-                    Donate Now
+                class="inline-block bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-3 rounded-full shadow-lg transition">
+                Donate Now!
                 </a>
+                <a href="{{ route('eco-posts.index') }}"
+                class="inline-block border border-green-600 text-green-700 hover:bg-green-50 dark:border-green-400 dark:text-green-400 dark:hover:bg-gray-700 font-semibold px-6 py-3 rounded-full shadow-md transition">
+                Join Our Community
+                </a>
+            </div>
 
                 <!-- Impact Box -->
                 <div class="bg-white/70 dark:bg-gray-700/60 rounded-lg p-4 shadow-sm mb-6 text-left">
@@ -64,11 +70,20 @@
                         Turn clutter into kindness 🌱
                     </p>
 
-                    <!-- Button -->
+                      <!-- Buttons -->
+                <div class="mt-8 flex flex-wrap gap-4">
                     <a href="{{ route('donations.index') }}"
-                       class="mt-8 inline-block bg-green-600 hover:bg-green-700 text-white font-semibold px-8 py-3 rounded-full shadow-lg transition">
-                        Donate Now
+                    class="inline-block border border-green-600 text-green-700 hover:bg-green-50 
+                            dark:border-green-400 dark:text-green-400 dark:hover:bg-gray-700 
+                            font-semibold px-6 py-3 rounded-full shadow-md transition">
+                       Donate Now!
                     </a>
+                    <a href="{{ route('eco-posts.index') }}"
+                    class="inline-block bg-green-600 hover:bg-green-700 text-white font-semibold 
+                            px-6 py-3 rounded-full shadow-md transition">
+                        Eco Educational Community
+                    </a>
+                </div>
                 </div>
 
                 <!-- Images -->

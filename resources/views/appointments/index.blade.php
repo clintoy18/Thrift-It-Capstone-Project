@@ -2,89 +2,71 @@
     <!-- Hero Section -->
     <section class="w-full bg-[#F4F2ED] dark:bg-gray-800 shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-16">
-            <!-- Mobile Layout -->
-            <div class="flex flex-col md:hidden text-center relative font-poppins">
-                <!-- Title -->
-                <h1 class="text-3xl font-extrabold text-green-700 leading-tight dark:text-green-400">
-                    Upcycle with Experts!
-                </h1>
-                <p class="mt-2 text-lg text-custom-brown dark:text-gray-200 mb-6">
-                    Transform your old items into something new ✂️
-                </p>
+                <!-- Mobile Layout -->
+        <div class="flex flex-col md:hidden text-center relative font-poppins">
+            <!-- Title -->
+            <h1 class="text-3xl font-extrabold text-green-700 leading-tight dark:text-green-400">
+                Upcycle with Experts!
+            </h1>
+            <p class="mt-2 text-lg text-custom-brown dark:text-gray-200 mb-6">
+                Transform your old items into something new ✂️
+            </p>
 
-                <!-- Button -->
-                <a href="{{ route('appointments.myAppointments') }}"
-                   class="mb-8 inline-block bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-3 rounded-full shadow-lg transition">
-                    Find an Upcycler
+            <!-- Buttons -->
+            <div class="flex flex-col gap-3 mb-8">
+              <a href="#upcyclers"
+                class="inline-block bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-3 rounded-full shadow-lg transition">
+               Find an Upcycler
                 </a>
-
-                <!-- Description -->
-                <div class="bg-white/70 dark:bg-gray-700/60 rounded-lg p-4 shadow-sm mb-6 text-left">
-                    <h2 class="text-lg font-semibold text-custom-brown dark:text-white mb-2">
-                        Give Items a Second Life
-                    </h2>
-                    <p class="text-sm text-gray-700 dark:text-gray-300">
-                        Work with skilled upcyclers to repurpose your clothes, accessories, 
-                        and more. Support creativity, reduce waste, and help build a sustainable future. 🌍
-                    </p>
-                </div>
-
-                <!-- Features -->
-                <div class="bg-white/70 dark:bg-gray-700/60 rounded-lg p-4 shadow-sm text-left">
-                    <h3 class="text-md font-medium text-custom-brown dark:text-white mb-2">
-                        Why Choose Upcycling?
-                    </h3>
-                    <ul class="text-sm text-gray-700 dark:text-gray-300 space-y-2">
-                        <li class="flex items-start"><span class="text-green-600 mr-2">✓</span> Unique, eco-friendly creations</li>
-                        <li class="flex items-start"><span class="text-green-600 mr-2">✓</span> Reduce textile waste and landfill use</li>
-                        <li class="flex items-start"><span class="text-green-600 mr-2">✓</span> Support local upcycling talent</li>
-                    </ul>
-                </div>
-
-                <!-- Quote -->
-                <p class="mt-6 italic text-gray-600 dark:text-gray-400 text-sm">
-                    "Waste isn’t waste until we waste it." 🌱
-                </p>
-
-                <!-- Tag -->
-                <span class="absolute bottom-1 right-1 bg-green-100 px-2 py-0.5 rounded-full text-xs text-green-700 font-medium shadow">
-                    Sustainable Upcycling
-                </span>
-            </div>
-
-            <!-- Desktop Layout -->
-            <div class="hidden md:flex md:flex-row md:items-center gap-8">
-                <!-- Text Content -->
-                <div class="md:w-1/2 font-poppins">
-                    <h1 class="text-5xl lg:text-6xl font-extrabold text-green-700 dark:text-green-400 leading-tight">
-                        Upcycle with Experts!
-                    </h1>
-                    <p class="mt-4 text-xl text-custom-brown dark:text-gray-200">
-                        Give your old items a new purpose ♻️
-                    </p>
-
-                    <!-- Button -->
-                    <a href="{{ route('appointments.myAppointments') }}"
-                       class="mt-8 inline-block bg-green-600 hover:bg-green-700 text-white font-semibold px-8 py-3 rounded-full shadow-lg transition">
-                        Find an Upcycler
-                    </a>
-                </div>
-
-                <!-- Images -->
-                <div class="md:w-1/2 h-[420px] flex gap-4 relative">
-                    <img src="{{ asset('images/upcycle-fashion.png') }}" 
-                         alt="Upcycle Fashion" 
-                         class="w-1/2 h-full object-cover rounded-xl shadow-lg hover:scale-[1.02] transition-transform duration-300">
-                    <img src="{{ asset('images/upcycle-community.png') }}" 
-                         alt="Upcycle Community" 
-                         class="w-1/2 h-full object-cover rounded-xl shadow-lg hover:scale-[1.02] transition-transform duration-300">
-                </div>
+                <a href="{{ route('eco-posts.index') }}"
+                class="inline-block border border-green-600 text-green-700 hover:bg-green-50 dark:border-green-400 dark:text-green-400 dark:hover:bg-gray-700 font-semibold px-6 py-3 rounded-full shadow-md transition">
+                Join Our Community
+                </a>
             </div>
         </div>
+
+        <!-- Desktop Layout -->
+        <div class="hidden md:flex md:flex-row md:items-center gap-8">
+            <!-- Text Content -->
+            <div class="md:w-1/2 font-poppins">
+                <h1 class="text-5xl lg:text-6xl font-extrabold text-green-700 dark:text-green-400 leading-tight">
+                    Upcycle with Experts!
+                </h1>
+                <p class="mt-4 text-xl text-custom-brown dark:text-gray-200">
+                    Give your old items a new purpose ♻️
+                </p>
+
+                <!-- Buttons -->
+                <div class="mt-8 flex flex-wrap gap-4">
+                   <a href="#upcyclers"
+                    class="inline-block border border-green-600 text-green-700 hover:bg-green-50 
+                            dark:border-green-400 dark:text-green-400 dark:hover:bg-gray-700 
+                            font-semibold px-6 py-3 rounded-full shadow-md transition">
+                        Find an Upcycler
+                    </a>
+                    <a href="{{ route('eco-posts.index') }}"
+                    class="inline-block bg-green-600 hover:bg-green-700 text-white font-semibold 
+                            px-6 py-3 rounded-full shadow-md transition">
+                                  Eco Educational Community
+                    </a>
+                </div>
+            </div>
+
+            <!-- Images -->
+            <div class="md:w-1/2 h-[420px] flex gap-4 relative">
+                <img src="{{ asset('images/upcycle-fashion.png') }}" 
+                    alt="Upcycle Fashion" 
+                    class="w-1/2 h-full object-cover rounded-xl shadow-lg hover:scale-[1.02] transition-transform duration-300">
+                <img src="{{ asset('images/upcycle-community.png') }}" 
+                    alt="Upcycle Community" 
+                    class="w-1/2 h-full object-cover rounded-xl shadow-lg hover:scale-[1.02] transition-transform duration-300">
+            </div>
+        </div>
+
     </section>
 
     <!-- Upcycler Cards -->
-    <section class="py-16">
+<section id="upcyclers" class="py-16">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <h2 class="text-3xl font-bold text-center mb-10 text-gray-900 dark:text-white">
                 Meet Our Upcyclers
@@ -139,3 +121,11 @@
         </div>
     </section>
 </x-app-layout>
+
+
+<style>
+ html {
+  scroll-behavior: smooth;
+}
+
+</style>
