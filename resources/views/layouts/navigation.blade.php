@@ -52,25 +52,37 @@
                 <!-- Unread indicator could go here -->
             </a>
             <!-- Notification Bell -->
-            <div class="relative" x-data="{ open: false, notifications: @json(\App\Models\Notification::where('user_id', Auth::id())->latest()->take(5)->get()) }">
-                <button @click="open = !open" class="relative">
-                    🔔
-                    <span x-show="notifications.filter(n => !n.is_read).length > 0"
-                        class="absolute top-0 right-0 bg-red-600 text-white text-xs rounded-full px-1">
-                        <span x-text="notifications.filter(n => !n.is_read).length"></span>
-                    </span>
-                </button>
+          <div id="notif-bell" 
+            x-data="{ open: false, notifications: [] }"
+            x-init="
+                notifications = {{ Js::from(
+                    \App\Models\Notification::where('user_id', Auth::id())->latest()->take(5)->get()
+                ) }};
+            "
+            @new-notification.window="notifications.unshift($event.detail)">
+            
+            <button @click="open = !open" class="relative">
+                🔔
+                <span x-show="notifications.filter(n => !n.is_read).length > 0"
+                    class="absolute top-0 right-0 bg-red-600 text-white text-xs rounded-full px-1">
+                    <span x-text="notifications.filter(n => !n.is_read).length"></span>
+                </span>
+            </button>
 
-                <div x-show="open" class="absolute right-0 mt-2 w-64 bg-white shadow rounded-lg overflow-hidden z-50">
-                    <template x-for="notif in notifications" :key="notif.id">
-                        <div class="p-2 border-b">
-                            <p class="text-sm"><strong x-text="notif.data.from_user"></strong> commented: <span x-text="notif.data.content"></span></p>
-                            <span class="text-xs text-gray-500" x-text="notif.created_at"></span>
-                        </div>
-                    </template>
-                    <div class="p-2 text-center text-sm text-gray-500">View all</div>
-                </div>
+            <div x-show="open" class="absolute right-0 mt-2 w-64 bg-white shadow rounded-lg overflow-hidden z-50">
+                <template x-for="notif in notifications" :key="notif.id">
+                    <div class="p-2 border-b">
+                        <p class="text-sm">
+                            <strong x-text="notif.data.from_user"></strong>
+                            commented: <span x-text="notif.data.content"></span>
+                        </p>
+                        <span class="text-xs text-gray-500" x-text="notif.created_at"></span>
+                    </div>
+                </template>
+                <div class="p-2 text-center text-sm text-gray-500">View all</div>
             </div>
+        </div>
+
 
         @endauth
         

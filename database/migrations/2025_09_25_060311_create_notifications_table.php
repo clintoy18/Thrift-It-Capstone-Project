@@ -18,7 +18,6 @@ return new class extends Migration
             $table->json('data');   // payload with message, from_user, etc.
             $table->timestamp('read_at')->nullable();
             $table->timestamps();
-
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
 

@@ -97,15 +97,21 @@ if (authUserId) {
             // Toast popup
             showNotificationToast(`${e.from_user} commented: "${e.content}"`);
 
-            // Update bell dropdown
-            const notifBell = document.querySelector('#notif-bell');
-            if (notifBell && notifBell.__x) {
-                notifBell.__x.$data.notifications.unshift(
-                    `${e.from_user} commented: "${e.content}"`
-                );
-            }
+            // Dispatch event for Alpine
+            window.dispatchEvent(new CustomEvent('new-notification', {
+                detail: {
+                    id: Date.now(),
+                    data: {
+                        from_user: e.from_user,
+                        content: e.content,
+                    },
+                    created_at: new Date().toISOString(),
+                    is_read: false,
+                }
+            }));
         });
 }
+
 
 function showNotificationToast(message) {
     const toast = document.createElement("div");
