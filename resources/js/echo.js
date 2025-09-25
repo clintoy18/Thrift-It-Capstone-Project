@@ -86,3 +86,40 @@ function createMessageBubble(message, sender, isOwnMessage) {
         </div>
     `;
 }
+
+const authUserId = Number(document.querySelector('meta[name="user-id"]')?.content);
+
+if (authUserId) {
+    window.Echo.private(`notifications-channel.${authUserId}`)
+        .listen('.comment.notification', (e) => {
+            console.log("🔔 New Comment Notification:", e);
+
+            // Toast popup
+            showNotificationToast(`${e.from_user} commented: "${e.content}"`);
+
+            // Dispatch event for Alpine
+            window.dispatchEvent(new CustomEvent('new-notification', {
+                detail: {
+                    id: Date.now(),
+                    data: {
+                        from_user: e.from_user,
+                        content: e.content,
+                    },
+                    created_at: new Date().toISOString(),
+                    is_read: false,
+                }
+            }));
+        });
+}
+
+
+function showNotificationToast(message) {
+    const toast = document.createElement("div");
+    toast.className = "fixed bottom-4 right-4 bg-[#B59F84] text-white px-4 py-2 rounded-lg shadow-lg z-50";
+    toast.innerText = message;
+
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 4000);
+}
+
+

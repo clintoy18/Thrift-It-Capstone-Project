@@ -8,7 +8,9 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Http\Request;
 use App\Services\CommentService;
-use App\Notifications\ProductCommentNotification;
+use App\Events\CommentNotification;
+use App\Models\Donation;
+use App\Models\Notification;
 use Exception;
 
 class CommentController extends Controller
@@ -39,68 +41,97 @@ class CommentController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreCommentRequest $request)
-    {
-        try {
-            $comment = $this->commentService->createComment([
-                'user_id'     => Auth::id(),
-                'product_id'  => $request->product_id,   // null for donation comments
-                'donation_id' => $request->donation_id,  // null for product comments
-                'content'     => $request->content,
-                'parent_id'   => $request->parent_id,
-            ]);
+   
+public function store(StoreCommentRequest $request)
+{
+    try {
+        $comment = $this->commentService->createComment([
+            'user_id'     => Auth::id(),
+            'product_id'  => $request->product_id,
+            'donation_id' => $request->donation_id,
+            'content'     => $request->content,
+            'parent_id'   => $request->parent_id,
+        ]);
 
-            // Clear cache for this product's comments
-            if ($request->product_id) {
-                Cache::forget("product_{$request->product_id}_comments");
-                Cache::forget("product_{$request->product_id}_with_comments");
-                
-                // Send notification to product owner if it's not the commenter
-                $product = Product::find($request->product_id);
-                if ($product && $product->user_id !== Auth::id()) {
-                    $product->user->notify(new ProductCommentNotification($comment, $product));
-                }
-            }
-            
-            // Clear cache for this donation's comments
-            if ($request->donation_id) {
-                Cache::forget("donation_{$request->donation_id}_comments");
-                Cache::forget("donation_{$request->donation_id}_with_comments");
-            }
+        // Clear product cache & notify product owner
+        if ($request->product_id) {
+            Cache::forget("product_{$request->product_id}_comments");
+            Cache::forget("product_{$request->product_id}_with_comments");
 
-            if ($request->expectsJson()) {
-                $comment->load('user');
-                return response()->json([
-                    'success' => true,
-                    'comment' => [
-                        'id'        => $comment->id,
-                        'content'   => $comment->content,
-                        'created_at'=> $comment->created_at,
-                        'parent_id' => $comment->parent_id, // 👈 add this
-                        'user'      => [
-                            'id'    => $comment->user->id,
-                            'fname' => $comment->user->fname,
-                            'lname' => $comment->user->lname,
-                        ],
+            $product = Product::find($request->product_id);
+
+            if ($product && $product->user_id !== Auth::id()) {
+                // Save notification to DB
+               Notification::create([
+                    'user_id' => $product->user_id,
+                    'type'    => 'comment',
+                    'data'    => [
+                    'from_user'  => Auth::user()->fname . ' ' . Auth::user()->lname,
+                    'content'    => $comment->content,
+                    'product_id' => $product->id,
                     ],
-                ], 201);
-            }
-            
+                ]);
 
-            return redirect()->back();
-        } catch (Exception $e) {
-            if ($request->expectsJson()) {
-                return response()->json([
-                    'success' => false,
-                    'message' => $e->getMessage()
-                ], 422);
+                // Fire real-time event
+                broadcast(new CommentNotification($comment, $product->user_id))->toOthers();
             }
-            
-            return redirect()->back()->withErrors(['content' => $e->getMessage()]);
         }
+
+        // Clear donation cache & notify donation owner
+        if ($request->donation_id) {
+            Cache::forget("donation_{$request->donation_id}_comments");
+            Cache::forget("donation_{$request->donation_id}_with_comments");
+
+            $donation = Donation::find($request->donation_id);
+
+            if ($donation && $donation->user_id !== Auth::id()) {
+                // Save notification to DB
+                Notification::create([
+                    'user_id' => $donation->user_id,
+                    'type'    => 'comment',
+                    'data'    => [
+                        'from_user'   => Auth::user()->fname . ' ' . Auth::user()->lname,
+                        'content'     => $comment->content,
+                        'donation_id' => $donation->id,
+                    ],
+                ]);
+
+                // Fire real-time event
+                broadcast(new CommentNotification($comment, $donation->user_id))->toOthers();
+            }
+        }
+
+        // If AJAX request → return JSON
+        if ($request->expectsJson()) {
+            $comment->load('user');
+            return response()->json([
+                'success' => true,
+                'comment' => [
+                    'id'        => $comment->id,
+                    'content'   => $comment->content,
+                    'created_at'=> $comment->created_at,
+                    'parent_id' => $comment->parent_id,
+                    'user'      => [
+                        'id'    => $comment->user->id,
+                        'fname' => $comment->user->fname,
+                        'lname' => $comment->user->lname,
+                    ],
+                ],
+            ], 201);
+        }
+
+        return redirect()->back();
+
+    } catch (Exception $e) {
+        if ($request->expectsJson()) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ], 422);
+        }
+        return redirect()->back()->withErrors(['content' => $e->getMessage()]);
     }
-
-
+}
 
     /**
      * Display the specified resource.
