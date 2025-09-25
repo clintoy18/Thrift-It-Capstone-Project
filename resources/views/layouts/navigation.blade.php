@@ -12,12 +12,10 @@
         @php $role = Auth::user()->role; @endphp
         <div class="hidden md:flex items-center gap-2 lg:gap-4 ml-6">
             @if($role === 0)
-                <a href="{{ route('products.index') }}" class="text-gray-700 hidden font-bold lg:block">My Products</a>
-                <a href="{{ route('products.create') }}" class="text-gray-700 hidden font-bold lg:block">Sell</a>
-                <a href="{{ route('donations.index') }}" class="text-gray-700 hidden font-bold lg:block">Donate</a>
+                <a href="{{ route('dashboard') }}" class="text-gray-700 hidden font-bold lg:block">Home</a>
+                <a href="{{ route('products.index') }}" class="text-gray-700 hidden font-bold lg:block">Sell</a>
+                <a href="{{ route('donations.hub') }}" class="text-gray-700 hidden font-bold lg:block">Donation Hub</a>
                 <a href="{{ route('appointments.index') }}" class="text-gray-700 hidden font-bold lg:block">Upcycle</a>
-                <a href="{{ route('pricing.index') }}" class="text-gray-700 hidden font-bold lg:block">Pricing</a>
-
             @elseif($role === 1)
                 <a href="{{ route('upcycler.index') }}" class="bg-black text-white px-3 py-1.5 text-sm rounded hover:bg-gray-800 transition">Manage Appointments</a>
             @endif
@@ -38,8 +36,6 @@
         </button>
     </form>
 </div>
-
-
     <!-- Icons + Dropdown -->
     <div class="hidden md:flex items-center gap-2 lg:gap-4">
         <a href="#" class="text-gray-700">🤍</a> <!-- Wishlist -->
