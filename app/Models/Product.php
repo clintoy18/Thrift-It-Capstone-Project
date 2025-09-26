@@ -98,4 +98,9 @@ class Product extends Model
         return $this->hasMany(Image::class);
     }
 
+     public function getFirstImageAttribute()
+    {
+        // Return first image path or default placeholder
+        return $this->images->first()?->image ?? 'images/default-placeholder.png';
+    }
 }
