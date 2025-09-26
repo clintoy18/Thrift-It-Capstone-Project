@@ -16,53 +16,40 @@
              <!-- Swiper Slider -->
             <div class="relative swiper mySwiper rounded-xl overflow-hidden shadow-lg">
                 <div class="swiper-wrapper">
-                    <!-- Slide 1 -->
-                    <div class="swiper-slide flex items-center justify-center bg-white">
-                        <div class="relative">
-                            <img 
-                                src="{{ $product->image ? asset('storage/' . $product->image) : asset('images/default-placeholder.png') }}" 
-                                alt="{{ $product->name }}"
-                                class="w-full h-[22rem] sm:h-[28rem] object-contain transition-transform duration-500 ease-out hover:scale-105">
-                            <div class="absolute inset-0 bg-gray-800/20 opacity-0 hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                                <span class="bg-white text-gray-800 px-3 py-1 rounded-full text-xs sm:text-sm font-medium shadow-sm">
-                                    Quick view
-                                </span>
+                    @if($product->images && $product->images->count() > 0)
+                        @foreach($product->images as $image)
+                            <div class="swiper-slide flex items-center justify-center bg-white">
+                                <div class="relative">
+                                    <img 
+                                        src="{{ asset('storage/' . $image->image) }}" 
+                                        alt="{{ $product->name }}" 
+                                        class="w-full h-[22rem] sm:h-[28rem] object-contain transition-transform duration-500 ease-out hover:scale-105">
+                                    <div class="absolute inset-0 bg-gray-800/20 opacity-0 hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                                        <span class="bg-white text-gray-800 px-3 py-1 rounded-full text-xs sm:text-sm font-medium shadow-sm">
+                                            Quick view
+                                        </span>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-
-                    <!-- Slide 2 -->
-                    <div class="swiper-slide flex items-center justify-center bg-white">
-                        <img 
-                            src="{{ $product->image2 ?? asset('images/default-placeholder.png') }}" 
-                            alt="Additional 1" 
-                            class="w-full h-[22rem] sm:h-[28rem] object-contain">
-                    </div>
-
-                    <!-- Slide 3 -->
-                    <div class="swiper-slide flex items-center justify-center bg-white">
-                        <div class="relative">
+                        @endforeach
+                    @else
+                        <!-- Fallback placeholder if no images -->
+                        <div class="swiper-slide flex items-center justify-center bg-white">
                             <img 
-                                src="{{ $product->image3 ?? asset('images/default-placeholder.png') }}" 
-                                alt="Additional 2"
-                                class="w-full h-[22rem] sm:h-[28rem] object-contain transition-transform duration-500 ease-out hover:scale-105">
-                            <div class="absolute inset-0 bg-gray-800/20 opacity-0 hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                                <span class="bg-white text-gray-800 px-3 py-1 rounded-full text-xs sm:text-sm font-medium shadow-sm">
-                                    Quick view
-                                </span>
-                            </div>
+                                src="{{ asset('images/default-placeholder.png') }}" 
+                                alt="No image" 
+                                class="w-full h-[22rem] sm:h-[28rem] object-contain">
                         </div>
-                    </div>
+                    @endif
                 </div>
 
-                <!-- Pagination -->
-                <div class="swiper-pagination !bottom-3"></div>
+                <!-- Swiper Pagination (optional) -->
+                <div class="swiper-pagination"></div>
 
-                <!-- Navigation -->
+                <!-- Swiper Navigation -->
                 <div class="swiper-button-next"></div>
                 <div class="swiper-button-prev"></div>
             </div>
-
                 <!-- Product Info Card -->
                 <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-md">
                     <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">

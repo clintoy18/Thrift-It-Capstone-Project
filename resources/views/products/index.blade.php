@@ -23,11 +23,12 @@
                                                 Donation
                                             </div>
                                         @endif
+                                       <div class="relative aspect-square overflow-hidden">
+                                            @php
+                                                $firstImage = $product->images->first()?->path ?? $product->image;
+                                            @endphp
+                                          <img src="{{ asset('storage/' . $product->first_image) }}" alt="{{ $product->name }}" class="w-full h-full object-cover">
 
-                                        <div class="relative aspect-square overflow-hidden">
-                                            <img src="{{ $product->image ? asset('storage/' . $product->image) : asset('images/default-placeholder.png') }}" 
-                                                 alt="{{ $product->name }}" 
-                                                 class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105">
 
                                             <div class="absolute inset-0 bg-gray-800 bg-opacity-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                                                 <span class="bg-white text-gray-800 px-2 py-0.5 rounded-full text-[10px] sm:text-xs font-medium">
@@ -35,7 +36,6 @@
                                                 </span>
                                             </div>
                                         </div>
-
                                         <div class="p-2 sm:p-3">
                                             <div class="flex justify-between items-start">
                                                 <h3 class="text-xs sm:text-sm font-bold text-gray-900 dark:text-white  transition-colors truncate max-w-[70%]">
