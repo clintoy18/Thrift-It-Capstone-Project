@@ -28,33 +28,23 @@
                 @csrf
                 <div class="grid grid-cols-1 lg:grid-cols-5 gap-6 lg:gap-10 items-start lg:relative lg:left-[-150px]">
                     <!-- Left Side - Image Upload Section (multiple with previews) -->
-                    <div class="lg:col-span-2 flex flex-col w-full lg:w-[450px]">
-                        <div class="space-y-4">
-                            <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">Photos</h3>
-                            <div class="w-full">
-                                <!-- Preview Grid -->
-                                <div id="previewsGrid" class="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-4"></div>
-                                
-                                <!-- Add Photos Button -->
-                                <div class="mb-4">
-                                    <label for="imageInput" class="upload-tile h-40 sm:h-40 cursor-pointer flex items-center justify-center border-2 border-dashed border-gray-300 rounded-lg">
-                                        <div class="flex flex-col items-center justify-center h-full text-gray-500">
-                                            <span class="text-3xl">+</span>
-                                            <span class="text-xs mt-1">Add photos</span>
-                                    </div>
-                                    </label>
-                                     </div>
-                               
-                                <!-- Hidden multiple input -->
-                                <input id="imageInput" name="images[]" type="file" accept="image/*" multiple class="hidden">
-                           
-                                <!-- Helper and error -->
-                                <p class="mt-2 text-xs text-gray-500">Upload up to 8 photos in one selection.</p>
-                                <p id="imageError" class="mt-2 text-sm text-red-600 hidden">Please upload up to 8 photos.</p>
-
-                            </div>
+                 <div class="lg:col-span-2 flex flex-col w-full lg:w-[450px]">
+                    <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">Photos</h3>
+                    <div id="previewsGrid" class="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-4"></div>
+                    <label for="imageInput" class="upload-tile h-40 sm:h-40 cursor-pointer flex items-center justify-center border-2 border-dashed border-gray-300 rounded-lg">
+                        <div class="flex flex-col items-center justify-center h-full text-gray-500">
+                            <span class="text-3xl">+</span>
+                            <span class="text-xs mt-1">Add photos</span>
                         </div>
-                    </div>
+                    </label>
+                    <input id="imageInput" name="images[]" type="file" accept="image/*" multiple class="hidden">
+                    <p class="mt-2 text-xs text-gray-500">Upload 2–8 photos.</p>
+
+                    <!-- Display validation error -->
+                    @error('images')
+                        <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
+                </div>
                     <!-- Right Side - Form Container -->
                     <div class="lg:col-span-3 flex lg:justify-end lg:relative lg:left-[250px] w-[640px] ">
                         <div class="bg-[#F4F2ED] dark:bg-gray-800 shadow-lg rounded-lg overflow-visible w-[150px] lg:w-[680px] ml-auto">
@@ -410,185 +400,122 @@
             .w-\[150px\] { width: 100% !important; }
         }
     </style>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const input = document.getElementById('imageInput');
+    const previewsGrid = document.getElementById('previewsGrid');
+    const form = document.getElementById('productForm');
+    const errorEl = document.getElementById('imageError');
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const input = document.getElementById('imageInput');
-            const previewsGrid = document.getElementById('previewsGrid');
-            const form = document.getElementById('productForm');
-            const errorEl = document.getElementById('imageError');
-            let selectedFiles = [];
-            
-            // Function to render all previews
-            function renderPreviews(files) {
-                previewsGrid.innerHTML = '';
-                
-                if (!files || files.length === 0) return;
-                
-                files.forEach((file, index) => {
-                    const previewItem = document.createElement('div');
-                    previewItem.className = 'preview-item';
-                    
-                    const img = document.createElement('img');
-                    img.className = 'tile-preview';
-                    img.alt = 'Preview ' + (index + 1);
-                    
-                    const numberBadge = document.createElement('span');
-                    numberBadge.className = 'preview-number';
-                    numberBadge.textContent = index + 1;
-                    
-                    const removeBtn = document.createElement('span');
-                    removeBtn.className = 'remove-btn';
-                    removeBtn.textContent = '×';
-                    removeBtn.onclick = function(e) {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        removeImage(index);
-                    };
-                    
-                    previewItem.appendChild(img);
-                    previewItem.appendChild(numberBadge);
-                    previewItem.appendChild(removeBtn);
-                    previewsGrid.appendChild(previewItem);
-                    
-                const reader = new FileReader();
-                    reader.onload = (e) => { img.src = e.target.result; };
-                    reader.readAsDataURL(file);
-                });
-            }
-            
-            // Function to remove an image
-            function removeImage(index) {
-                selectedFiles.splice(index, 1);
-                
-                // Update the file input
-                const dt = new DataTransfer();
-                selectedFiles.forEach(file => dt.items.add(file));
-                input.files = dt.files;
-                
-                // Re-render previews
-                renderPreviews(selectedFiles);
-                hideError();
-            }
-            
-            function showError(msg) {
-                if (!errorEl) return;
-                errorEl.textContent = msg;
-                errorEl.classList.remove('hidden');
-            }
+    // Track all images: existing and newly added
+    let existingFiles = Array.from(previewsGrid.querySelectorAll('img')).map(img => ({
+        src: img.src,
+        id: img.dataset.id // existing image ID
+    }));
+    let newFiles = [];
 
-            function hideError() {
-                if (!errorEl) return;
-                errorEl.classList.add('hidden');
-            }
-            
-            // Open file chooser when clicking the plus tile
-            const plusTile = document.querySelector('label[for="imageInput"]');
-            if (plusTile) {
-                // Clear value before browser opens file dialog via label's default behavior
-                plusTile.addEventListener('mousedown', () => {
-                    if (input) input.value = '';
-                });
-            }
-            
-            // Handle file selection (accumulate up to 8)
-            input.addEventListener('change', () => {
-                hideError();
-                const newlySelected = Array.from(input.files || []);
+    function renderPreviews() {
+        previewsGrid.innerHTML = '';
 
-                // Build a set to avoid duplicates by name|size|lastModified
-                const makeKey = (f) => `${f.name}|${f.size}|${f.lastModified}`;
-                const existingKeys = new Set(selectedFiles.map(makeKey));
+        // Render existing images
+        existingFiles.forEach((file, index) => {
+            const wrapper = document.createElement('div');
+            wrapper.className = 'relative group';
 
-                for (const file of newlySelected) {
-                    if (selectedFiles.length >= 8) break;
-                    const key = makeKey(file);
-                    if (existingKeys.has(key)) continue;
-                    selectedFiles.push(file);
-                    existingKeys.add(key);
-                }
+            const img = document.createElement('img');
+            img.src = file.src;
+            img.className = 'w-24 h-24 object-cover rounded-xl border';
+            wrapper.appendChild(img);
 
-                if (selectedFiles.length >= 8 && newlySelected.length > 0) {
-                    showError('Limit reached: showing first 8 photos.');
-                }
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.innerHTML = '&times;';
+            btn.className = 'absolute top-0 right-0 -translate-x-1/4 -translate-y-1/4 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center opacity-70 hover:opacity-100';
+            btn.addEventListener('click', () => removeExistingImage(index));
+            wrapper.appendChild(btn);
 
-                // Rebuild input.files from accumulated selection
-                const dt = new DataTransfer();
-                selectedFiles.forEach(f => dt.items.add(f));
-                input.files = dt.files;
+            previewsGrid.appendChild(wrapper);
+        });
 
-                // Render all previews
-                renderPreviews(selectedFiles);
-            });
-            
-            // Form validation
-            form.addEventListener('submit', (e) => {
-                const count = (input.files && input.files.length) ? input.files.length : selectedFiles.length;
-                if (count === 0) {
-                    e.preventDefault();
-                    showError('Please upload at least one photo.');
-                } else if (count > 8) {
-                    e.preventDefault();
-                    showError('Please upload up to 8 photos only.');
-                }
-            });
-            
-            // Initialize size options based on category
-            function updateSizeOptions() {
-            const categorySelect = document.getElementById('category_id');
-            const sizeSelect = document.getElementById('size');
-            const options = sizeSelect.querySelectorAll('optgroup');
+        // Render newly added files
+        newFiles.forEach((file, index) => {
+            const wrapper = document.createElement('div');
+            wrapper.className = 'relative group';
 
-            // Hide all groups first
-            options.forEach(group => group.style.display = 'none');
+            const img = document.createElement('img');
+            img.src = URL.createObjectURL(file);
+            img.className = 'w-24 h-24 object-cover rounded-xl border';
+            wrapper.appendChild(img);
 
-            // Get selected category text
-            const selectedText = categorySelect.options[categorySelect.selectedIndex]?.text.toLowerCase();
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.innerHTML = '&times;';
+            btn.className = 'absolute top-0 right-0 -translate-x-1/4 -translate-y-1/4 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center opacity-70 hover:opacity-100';
+            btn.addEventListener('click', () => removeNewFile(index));
+            wrapper.appendChild(btn);
 
-            if (!selectedText) return;
+            previewsGrid.appendChild(wrapper);
+        });
+    }
 
-            if (['shirts', 'dresses', 'outerwear', 'pants', 'shorts', 'skirts'].some(cat => selectedText.includes(cat))) {
-                sizeSelect.querySelector('optgroup[label="Shirts, Dresses, Outerwear, Pants, Shorts, Skirts"]').style.display = 'block';
-            } else if (selectedText.includes('shoe')) {
-                sizeSelect.querySelector('optgroup[label="Shoes"]').style.display = 'block';
-            } else if (selectedText.includes('accessories') || selectedText.includes('hat') || selectedText.includes('belt')) {
-                sizeSelect.querySelector('optgroup[label="Accessories"]').style.display = 'block';
-            } else if (selectedText.includes('sock') || selectedText.includes('hosiery')) {
-                sizeSelect.querySelector('optgroup[label="Socks & Hosiery"]').style.display = 'block';
-            } else {
-                // default fallback
-                sizeSelect.querySelector('optgroup[label="Accessories"]').style.display = 'block';
-            }
-
-            // reset selection when category changes
-            sizeSelect.value = '';
+    function removeExistingImage(index) {
+        if (existingFiles.length + newFiles.length <= 2) {
+            alert('You must keep at least 2 images.');
+            return;
         }
+        const removed = existingFiles.splice(index, 1)[0];
 
-            // Set up category change listener
-            const categorySelect = document.getElementById('category_id');
-            if (categorySelect) {
-                categorySelect.addEventListener('change', updateSizeOptions);
-                updateSizeOptions(); // Initialize on page load
-            }
-            
-            // Fix for barangay dropdown
-            const barangaySelect = document.getElementById('barangay_id');
-            if (barangaySelect) {
-                barangaySelect.style.position = 'relative';
-                barangaySelect.style.zIndex = '9999';
-                barangaySelect.style.transform = 'translateY(0)';
-                
-                barangaySelect.addEventListener('focus', function() {
-                    this.style.position = 'relative';
-                    this.style.zIndex = '9999';
-                    this.style.transform = 'translateY(0)';
-                });
-                
-                barangaySelect.addEventListener('click', function() {
-                    this.style.position = 'relative';
-                    this.style.zIndex = '9999';
-                });
+        // Add a hidden input for deleted images
+        const deletedInput = document.createElement('input');
+        deletedInput.type = 'hidden';
+        deletedInput.name = 'deleted_images[]';
+        deletedInput.value = removed.id;
+        form.appendChild(deletedInput);
+
+        renderPreviews();
+    }
+
+    function removeNewFile(index) {
+        if (existingFiles.length + newFiles.length <= 2) {
+            alert('You must keep at least 2 images.');
+            return;
+        }
+        newFiles.splice(index, 1);
+        updateInputFiles();
+        renderPreviews();
+    }
+
+    function updateInputFiles() {
+        const dt = new DataTransfer();
+        newFiles.forEach(f => dt.items.add(f));
+        input.files = dt.files;
+    }
+
+    input.addEventListener('change', () => {
+        const selected = Array.from(input.files);
+        selected.forEach(file => {
+            if (existingFiles.length + newFiles.length < 8) {
+                const key = `${file.name}|${file.size}|${file.lastModified}`;
+                // Avoid duplicates
+                if (!newFiles.some(f => `${f.name}|${f.size}|${f.lastModified}` === key)) {
+                    newFiles.push(file);
+                }
             }
         });
-    </script>
+        updateInputFiles();
+        renderPreviews();
+    });
+
+    form.addEventListener('submit', e => {
+        if (existingFiles.length + newFiles.length < 2) {
+            e.preventDefault();
+            errorEl.textContent = 'You must have at least 2 images.';
+            errorEl.classList.remove('hidden');
+        }
+    });
+
+    renderPreviews();
+});
+</script>
+
 </x-app-layout>

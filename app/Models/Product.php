@@ -93,4 +93,9 @@ class Product extends Model
         return $this->belongsTo(Barangay::class, 'barangay_id');
     }
 
+    public function images()
+    {
+        return $this->hasMany(Image::class);
+    }
+
 }
