@@ -36,14 +36,27 @@ class ProductService
         return $this->productRepository->find($id);
     }
 
-    public function createProduct(array $data, $image = null)
+   public function createProduct(array $data, ?array $images = null)
     {
-        // Add business logic here if needed
-        if ($image) {
-            $data['image'] = $image->store('products_images', 'public');
+        // 1️⃣ Create the product first (without images)
+        $product = $this->productRepository->create($data);
+
+        // 2️⃣ If images are uploaded, store them in product_images table
+        if ($images && count($images) > 0) {
+            foreach ($images as $image) {
+                // Store image in storage/app/public/items_images
+                $path = $image->store('items_images', 'public');
+
+                // Save record in images table
+                $product->images()->create([
+                    'image' => $path, // Make sure your column is named 'filename' or adjust accordingly
+                ]);
+            }
         }
-        return $this->productRepository->create($data);
+
+        return $product;
     }
+
 
     public function updateProduct(Product $product, array $data, $image = null)
     {
