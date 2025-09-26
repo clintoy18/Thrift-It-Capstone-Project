@@ -37,6 +37,10 @@ class ProductController extends Controller
     public function index(): View
     {
         $products = $this->productService->getProductsByUser(Auth::id());
+        //fetch images
+        $products->each(function ($product) {
+        $product->first_image = $product->images->first()?->image ?? 'images/default-placeholder.png';
+    });
         return view('products.index', compact('products'));
     }
     public function create(): View
@@ -47,21 +51,17 @@ class ProductController extends Controller
         return view('products.create', compact('categories', 'segments', 'barangays'));
     }
 
-    public function store(StoreProductRequest $request): RedirectResponse
+    public function store(StoreProductRequest $request)
     {
-         $validated = $request->validated();
-         $validated['user_id'] = Auth::id();
-         // Accept first image from images[] to maintain existing service signature
-         $firstImage = null;
-         if ($request->hasFile('images')) {
-             $files = $request->file('images');
-             if (is_array($files) && count($files) > 0) {
-                 $firstImage = $files[0];
-             }
-         }
-         $this->productService->createProduct($validated, $firstImage);
-         return redirect()->route('products.index')->with('success', 'Product created successfully!');
+        $validated = $request->validated();
+        $validated['user_id'] = Auth::id();
+
+        $images = $request->file('images');
+
+        $this->productService->createProduct($validated, $images);
+        return redirect()->route('products.index')->with('success', 'Product created successfully!');
     }
+
 
     public function edit(Product $product): View
     {
@@ -78,13 +78,38 @@ class ProductController extends Controller
     }
 
 
-    public function update(UpdateProductRequest $request, Product $product)
+    public function update(Request $request, Product $product)
     {
-        $data = $request->validated();
-        $this->productService->updateProduct($product, $data, $request->file('image') ?? null);
-       
-        return redirect()->route('products.index')->with('success', 'Product updated successfully!');
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'images.*' => 'nullable|image|mimes:jpeg,png,jpg|max:5120',
+            'deleted_images.*' => 'nullable|integer|exists:product_images,id',
+        ]);
+
+        $product->update($request->only('name', 'category_id', 'segment_id', 'barangay_id', 'price', 'status'));
+
+        // Delete marked images
+        if($request->deleted_images) {
+            foreach($request->deleted_images as $id){
+                $img = $product->images()->find($id);
+                if($img) {
+                    Storage::delete($img->image);
+                    $img->delete();
+                }
+            }
+        }
+
+        // Add new images
+        if($request->hasFile('images')) {
+            foreach($request->file('images') as $file){
+                $path = $file->store('products', 'public');
+                $product->images()->create(['image' => $path]);
+            }
+        }
+
+        return redirect()->route('products.index', $product)->with('success', 'Product updated successfully.');
     }
+
     
     public function show($id)
 {
