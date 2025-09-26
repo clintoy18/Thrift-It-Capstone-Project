@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
             BarangaySeeder::class,
             ProductSeeder::class,
             EcoPostSeeder::class,
+            PlanSeeder::class,
           
            
         ]);
