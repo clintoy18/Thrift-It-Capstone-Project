@@ -38,9 +38,9 @@ class ProductController extends Controller
     {
         $products = $this->productService->getProductsByUser(Auth::id());
         //fetch images
-        $products->each(function ($product) {
-        $product->first_image = $product->images->first()?->image ?? 'images/default-placeholder.png';
-    });
+    //     $products->each(function ($product) {
+    //     $product->first_image = $product->images->first()?->image ?? 'images/default-placeholder.png';
+    // });
         return view('products.index', compact('products'));
     }
     public function create(): View

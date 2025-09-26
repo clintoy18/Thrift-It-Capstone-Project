@@ -24,12 +24,9 @@
                                             </div>
                                         @endif
                                        <div class="relative aspect-square overflow-hidden">
-                                            @php
-                                                $firstImage = $product->images->first()?->path ?? $product->image;
-                                            @endphp
-                                          <img src="{{ asset('storage/' . $product->first_image) }}" alt="{{ $product->name }}" class="w-full h-full object-cover">
-
-
+                                       <img src="{{ asset('storage/' . $product->first_image) }}" 
+                                            alt="{{ $product->name }}" 
+                                            class="w-full h-full object-cover">
                                             <div class="absolute inset-0 bg-gray-800 bg-opacity-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                                                 <span class="bg-white text-gray-800 px-2 py-0.5 rounded-full text-[10px] sm:text-xs font-medium">
                                                     Quick view

@@ -43,14 +43,15 @@ class ProductRepository
         return Product::with(['user','category','comments.user'])->findOrFail($id);
     }
 
-    public function getApproveProducts(Segment $segment)
+   public function getApproveProducts(Segment $segment)
     {
         return $segment->products()
             ->where('approval_status', 'approved')
             ->where('status', 'available')
-            ->with(['category'])
+            ->with(['category', 'images']) // load images for accessor
             ->get();
     }
+
 
    public function getByStatusPaginated(string $status, int $perPage = 10)
     {

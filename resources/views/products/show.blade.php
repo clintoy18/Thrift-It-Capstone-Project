@@ -13,43 +13,35 @@
     <div class="flex flex-col lg:flex-row gap-8 items-stretch">
             <!-- Left Column: Image Slider & Product Info -->
         <div class="lg:w-1/3 flex flex-col gap-6 h-full">
-             <!-- Swiper Slider -->
-            <div class="relative swiper mySwiper rounded-xl overflow-hidden shadow-lg">
-                <div class="swiper-wrapper">
-                    @if($product->images && $product->images->count() > 0)
-                        @foreach($product->images as $image)
-                            <div class="swiper-slide flex items-center justify-center bg-white">
-                                <div class="relative">
-                                    <img 
-                                        src="{{ asset('storage/' . $image->image) }}" 
-                                        alt="{{ $product->name }}" 
-                                        class="w-full h-[22rem] sm:h-[28rem] object-contain transition-transform duration-500 ease-out hover:scale-105">
-                                    <div class="absolute inset-0 bg-gray-800/20 opacity-0 hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                                        <span class="bg-white text-gray-800 px-3 py-1 rounded-full text-xs sm:text-sm font-medium shadow-sm">
-                                            Quick view
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                        @endforeach
-                    @else
-                        <!-- Fallback placeholder if no images -->
-                        <div class="swiper-slide flex items-center justify-center bg-white">
+         <!-- Swiper Slider -->
+        <div class="relative swiper mySwiper rounded-xl overflow-hidden shadow-lg h-[28rem] sm:h-[32rem]">
+            <div class="swiper-wrapper h-full">
+                @if($product->images && $product->images->count() > 0)
+                    @foreach($product->images as $image)
+                        <div class="swiper-slide flex items-center justify-center bg-white h-full">
                             <img 
-                                src="{{ asset('images/default-placeholder.png') }}" 
-                                alt="No image" 
-                                class="w-full h-[22rem] sm:h-[28rem] object-contain">
+                                src="{{ asset('storage/' . $image->image) }}" 
+                                alt="{{ $product->name }}" 
+                                class="w-full h-full object-cover transition-transform duration-500 ease-out hover:scale-105">
                         </div>
-                    @endif
-                </div>
-
-                <!-- Swiper Pagination (optional) -->
-                <div class="swiper-pagination"></div>
-
-                <!-- Swiper Navigation -->
-                <div class="swiper-button-next"></div>
-                <div class="swiper-button-prev"></div>
+                    @endforeach
+                @else
+                    <!-- Fallback placeholder if no images -->
+                    <div class="swiper-slide flex items-center justify-center bg-white h-full">
+                        <img 
+                            src="{{ asset('images/default-placeholder.png') }}" 
+                            alt="No image" 
+                            class="w-full h-full object-cover">
+                    </div>
+                @endif
             </div>
+
+            <!-- Swiper Pagination (overlay) -->
+            <div class="swiper-pagination absolute bottom-4 left-1/2 transform -translate-x-1/2 z-10"></div>
+            <!-- Swiper Navigation -->
+            <div class="swiper-button-next !text-white text-3xl z-20 hover:!text-gray-200 transition-colors duration-300"></div>
+            <div class="swiper-button-prev !text-white text-3xl z-20 hover:!text-gray-200 transition-colors duration-300"></div>
+        </div>
                 <!-- Product Info Card -->
                 <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-md">
                     <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">
@@ -421,9 +413,7 @@
                                                 class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105">
 
                                             <div class="absolute inset-0 bg-gray-800 bg-opacity-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                                                <span class="bg-white text-gray-800 px-2 py-0.5 rounded-full text-[10px] sm:text-xs font-medium">
-                                                    Quick view
-                                                </span>
+                                            
                                             </div>
                                         </div>
 
