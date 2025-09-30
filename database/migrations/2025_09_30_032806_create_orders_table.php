@@ -16,6 +16,8 @@ return new class extends Migration
             $table->foreignId('product_id')->constrained()->onDelete('cascade');
             $table->foreignId('buyer_id')->constrained('users')->onDelete('cascade');
             $table->string('proof')->nullable(); // uploaded proof of payment
+            $table->enum('status', ['pending', 'approved', 'delivering', 'completed', 'cancelled'])
+             ->default('pending');
             $table->timestamps();
         });
     }

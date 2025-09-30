@@ -29,5 +29,23 @@ class OrderController extends Controller
             ->route('products.show', $product->id)
             ->with('success', 'Proof of payment uploaded successfully. Please wait for seller confirmation.');
     }
+
+
+    public function updateStatus(Order $order, $status)
+    {
+        $allowedStatuses = ['pending', 'approved', 'delivering', 'completed', 'cancelled'];
+
+        if (!in_array($status, $allowedStatuses)) {
+            return back()->with('error', 'Invalid status.');
+        }
+
+        $order->status = $status;
+        $order->save();
+
+        return back()->with('success', 'Order status updated to ' . ucfirst($status));
+    }
+
+
+
 }
 

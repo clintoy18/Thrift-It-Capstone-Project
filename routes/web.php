@@ -81,7 +81,8 @@ Route::middleware(['auth', 'verified', 'rolemiddleware:user'])->group(function (
 
 
     Route::post('/orders/{product}', [OrderController::class, 'store'])->name('orders.store');
-
+    Route::patch('/orders/{order}/{status}', [OrderController::class, 'updateStatus'])
+    ->name('orders.updateStatus');
 
 });
 

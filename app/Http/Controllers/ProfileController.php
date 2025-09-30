@@ -11,10 +11,11 @@ use Illuminate\View\View;
 use App\Http\Requests\VerificationDocumentRequest;
 use App\Models\User;
 
+
 class ProfileController extends Controller
 {
 
-    
+
     /**
      * Display the user's profile form.
      */
@@ -27,11 +28,15 @@ class ProfileController extends Controller
         $itemsSold = $user->products()->where('status', 'sold')->count();
         $revenue = $user->products()->where('status', 'sold')->sum('price');
         $itemsDonated = $user->donations()->where('status', 'donated')->count();
-       // $unreadMessages = $user->receivedMessages()->where('is_read', false)->count();
+        // $unreadMessages = $user->receivedMessages()->where('is_read', false)->count();
 
         return view('profile.edit', compact(
-        'user', 'totalListings', 'itemsSold', 'revenue','itemsDonated'));
-    
+            'user',
+            'totalListings',
+            'itemsSold',
+            'revenue',
+            'itemsDonated'
+        ));
     }
 
     /**
@@ -50,13 +55,28 @@ class ProfileController extends Controller
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }
 
-    public function show(User $user){
+    public function show(User $user)
+    {
 
 
-        return view('profile.show',[
+
+        $orders = $user->ordersAsSeller()->with(['product', 'buyer'])->get();
+
+        return view('profile.show', [
             'user' => $user,
             'products' => $user->products,
+            'orders' => $orders,
         ]);
+
+
+        //         public function show(User $user)
+        // {
+        //     return view('profile.show', [
+        //         'user' => $user,
+        //         'products' => $user->products,
+        //         'orders' => $user->orders, // as buyer
+        //     ]);
+        // }
     }
 
     /**
@@ -77,24 +97,21 @@ class ProfileController extends Controller
         return Redirect::to('/');
     }
 
-     public function uploadVerificationDocument(Request $request)
-        {
-            $request->validate([
-                'verification_document' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+    public function uploadVerificationDocument(Request $request)
+    {
+        $request->validate([
+            'verification_document' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+        ]);
+
+        if ($request->hasFile('verification_document')) {
+            $path = $request->file('verification_document')->store('verification-documents', 'public');
+
+            $request->user()->update([
+                'verification_document' => $path,
+                'verification_status' => 'pending',
             ]);
-
-            if ($request->hasFile('verification_document')) {
-                $path = $request->file('verification_document')->store('verification-documents', 'public');
-
-                $request->user()->update([
-                    'verification_document' => $path,
-                    'verification_status' => 'pending',
-                ]);
-            }
-
-            return back()->with('status', 'Verification document uploaded successfully and sent for review.');
         }
 
-
-
+        return back()->with('status', 'Verification document uploaded successfully and sent for review.');
+    }
 }
