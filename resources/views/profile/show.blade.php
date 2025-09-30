@@ -161,8 +161,9 @@
                                                 </div>
                                             @endif
                                             <div class="relative aspect-square overflow-hidden">
-                                                <img src="{{ $product->image ? asset('storage/' . $product->image) : asset('images/default-placeholder.png') }}"
-                                                    alt="{{ $product->name }}"
+                                               <img src="{{ asset('storage/' . $product->first_image) }}" 
+                                            alt="{{ $product->name }}" 
+                                            class="w-full h-full object-cover">
                                                     class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105">
                                                 <div
                                                     class="absolute inset-0 bg-gray-800 bg-opacity-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
