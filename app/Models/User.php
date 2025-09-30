@@ -63,7 +63,7 @@ class User extends Authenticatable implements MustVerifyEmail
     public function products()
     {
         return $this->hasMany(Product::class);
-    }   
+    }
 
     public function donations()
     {
@@ -99,7 +99,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function getRoleNameAttribute(): string
     {
-        return match($this->role) {
+        return match ($this->role) {
             2 => 'Admin',
             1 => 'Upcycler',
             0 => 'User',
@@ -107,27 +107,29 @@ class User extends Authenticatable implements MustVerifyEmail
         };
     }
 
-    public function reportsReceived(){
+    public function reportsReceived()
+    {
         return $this->hasMany(Report::class, 'reported_user_id');
     }
 
-    public function reviewsWritten(){
-        return $this->hasMany(Review::class,'reviewer_id');
-    }
-    
-    public function reviewsReceived(){
-        return $this->hasMany(Review::class,'reviewed_user_id');
+    public function reviewsWritten()
+    {
+        return $this->hasMany(Review::class, 'reviewer_id');
     }
 
-       public function messages()
+    public function reviewsReceived()
+    {
+        return $this->hasMany(Review::class, 'reviewed_user_id');
+    }
+
+    public function messages()
     {
         return $this->hasMany(Message::class);
     }
 
-        public function barangay()
+    public function barangay()
     {
         return $this->belongsTo(Barangay::class, 'barangay_id');
-    
     }
 
     public function ecoPosts()
@@ -135,4 +137,15 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(EcoEducationalPost::class);
     }
 
+    // Orders placed by this user (as a buyer)
+    public function orders()
+    {
+        return $this->hasMany(Order::class, 'buyer_id');
+    }
+
+     // Orders received on products this user is selling
+     public function ordersAsSeller()
+    {
+        return $this->hasManyThrough(Order::class, Product::class);
+    }
 }

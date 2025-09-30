@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Requests;
+
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -11,7 +12,7 @@ class StoreProductRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return Auth::check(); 
+        return Auth::check();
     }
 
     /**
@@ -35,8 +36,9 @@ class StoreProductRequest extends FormRequest
 
             'qty' => 'integer',
             'status' => 'required|in:available,sold',
-            'segment_id' => 'required|exists:segments,id', 
+            'segment_id' => 'required|exists:segments,id',
             'barangay_id'   => 'required|exists:barangays,id',
+            'qr_code' => ['nullable', 'image', 'mimes:jpg,jpeg,png,gif', 'max:2048']
         ];
     }
 

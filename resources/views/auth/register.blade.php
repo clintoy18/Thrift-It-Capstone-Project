@@ -77,7 +77,7 @@
     >
         Select Role
     </option>
-    <option value="0" {{ old('role') == '0' ? 'selected' : '' }}>User</option>
+git    <option value="0" {{ old('role') == '0' ? 'selected' : '' }}>Thrifter</option>
     <option value="1" {{ old('role') == '1' ? 'selected' : '' }}>Upcycler</option>
 </select>
 

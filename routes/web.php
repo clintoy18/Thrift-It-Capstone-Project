@@ -23,9 +23,10 @@ use App\Http\Controllers\LeaderboardController;
 use App\Http\Controllers\SegmentController;
 use App\Http\Controllers\PricingController;
 use App\Http\Controllers\EcoPostController;
-use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\OrderController;
 use App\Models\Notification;
 use Illuminate\Support\Facades\Auth;
+
 
 
 Route::get('/search', [SearchController::class, 'index'])->name('search');
@@ -79,7 +80,9 @@ Route::middleware(['auth', 'verified', 'rolemiddleware:user'])->group(function (
     })->name('notifications.read');
 
 
-
+    Route::post('/orders/{product}', [OrderController::class, 'store'])->name('orders.store');
+    Route::patch('/orders/{order}/{status}', [OrderController::class, 'updateStatus'])
+    ->name('orders.updateStatus');
 
 });
 
