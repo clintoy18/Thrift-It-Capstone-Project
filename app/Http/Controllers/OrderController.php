@@ -9,6 +9,7 @@ use App\Models\Product;
 
 class OrderController extends Controller
 {
+
     public function store(Request $request, Product $product)
     {
         $request->validate([
@@ -31,7 +32,7 @@ class OrderController extends Controller
     }
 
 
-    public function updateStatus(Order $order, $status)
+    public function updateStatus(Order $order, string $status)
     {
         $allowedStatuses = ['pending', 'approved', 'delivering', 'completed', 'cancelled'];
 
@@ -39,11 +40,16 @@ class OrderController extends Controller
             return back()->with('error', 'Invalid status.');
         }
 
-        $order->status = $status;
-        $order->save();
+        // Update product status if order is approved
+        if ($status === 'approved' && $order->product) {
+            $order->product->update(['status' => 'sold']);
+        }
+
+        $order->update(['status' => $status]);
 
         return back()->with('success', 'Order status updated to ' . ucfirst($status));
     }
+
 
 
 
