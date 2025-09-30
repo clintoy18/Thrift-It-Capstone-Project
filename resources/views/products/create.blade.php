@@ -28,23 +28,60 @@
                 @csrf
                 <div class="grid grid-cols-1 lg:grid-cols-5 gap-6 lg:gap-10 items-start lg:relative lg:left-[-150px]">
                     <!-- Left Side - Image Upload Section (multiple with previews) -->
-                 <div class="lg:col-span-2 flex flex-col w-full lg:w-[450px]">
-                    <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">Photos</h3>
-                    <div id="previewsGrid" class="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-4"></div>
-                    <label for="imageInput" class="upload-tile h-40 sm:h-40 cursor-pointer flex items-center justify-center border-2 border-dashed border-gray-300 rounded-lg">
-                        <div class="flex flex-col items-center justify-center h-full text-gray-500">
-                            <span class="text-3xl">+</span>
-                            <span class="text-xs mt-1">Add photos</span>
-                        </div>
-                    </label>
-                    <input id="imageInput" name="images[]" type="file" accept="image/*" multiple class="hidden">
-                    <p class="mt-2 text-xs text-gray-500">Upload 2–8 photos.</p>
+<div class="lg:col-span-2 flex flex-col w-full lg:w-[450px]">
+    <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">Photos</h3>
 
-                    <!-- Display validation error -->
-                    @error('images')
-                        <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                    @enderror
-                </div>
+    <div id="previewsGrid" class="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-4"></div>
+
+    <!-- Drag & Drop Zone -->
+    <label for="imageInput" 
+       id="dropZone"
+       class="upload-tile group h-48 sm:h-52 cursor-pointer flex flex-col items-center justify-center gap-5 border-2 border-dashed border-gray-300/80 rounded-3xl transition-all duration-500 hover:border-primary-400 hover:shadow-xl bg-white/80 hover:bg-white backdrop-blur-sm p-8">
+    
+    <!-- Icon Container with Gradient -->
+    <div class="flex justify-center w-full">
+        <div class="shrink-0 w-18 h-18 rounded-2xl bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-600 flex items-center justify-center text-gray-600 transition-all duration-500 group-hover:scale-110 group-hover:from-primary-50 group-hover:to-primary-100 group-hover:text-primary-600 shadow-sm group-hover:shadow-md">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-9 w-9" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M3 5a2 2 0 0 1 2-2h3l2 2h6a2 2 0 0 1 2 2v2H3V5Zm0 6h18v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-8Zm9 7a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/>
+            </svg>
+        </div>
+    </div>
+
+    <!-- Content Container -->
+    <div class="flex flex-col items-center justify-center gap-4 text-center">
+        
+        <!-- Browse Files Button -->
+        <span class="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold rounded-full bg-gradient-to-r from-[#E1D5B6] to-[#d4c6a2] text-[#6f5e49] transition-all duration-500 group-hover:scale-105 group-hover:shadow-lg group-hover:from-[#d4c6a2] group-hover:to-[#c8b994] transform hover:-translate-y-0.5">
+            Browse files
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 transition-transform duration-300 group-hover:translate-y-0.5" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 16l-6-6h12l-6 6z"/>
+            </svg>
+        </span>
+
+        <!-- File Info -->
+        <div class="flex flex-col gap-2">
+            <p class="text-sm font-semibold text-gray-700 bg-gray-100/50 px-3 py-1.5 rounded-lg">PNG or JPG up to 5MB each</p>
+            <span class="text-sm text-gray-600 font-medium">Add or Drag & Drop photos</span>
+        </div>
+        
+    </div>
+
+    <!-- Hover Glow Effect -->
+    <div class="absolute inset-0 rounded-3xl bg-gradient-to-r from-primary-100/20 to-blue-100/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-10"></div>
+</label>
+    <input id="imageInput" name="images[]" type="file" accept="image/*" multiple class="hidden">
+
+    <p class="mt-2 text-xs text-gray-500">Upload 2–8 photos.</p>
+
+    <!-- Display validation error -->
+    @error('images')
+        <p id="imageError" class="mt-2 text-sm text-red-600">{{ $message }}</p>
+    @enderror
+    
+    <!-- Reach limit error message -->
+    <p id="reachLimitError" class="mt-2 text-sm text-red-600 hidden">You can only upload up to 8 photos.</p>
+</div>
+
                     <!-- Right Side - Form Container -->
                     <div class="lg:col-span-3 flex lg:justify-end lg:relative lg:left-[250px] w-[640px] ">
                         <div class="bg-[#F4F2ED] dark:bg-gray-800 shadow-lg rounded-lg overflow-visible w-[150px] lg:w-[680px] ml-auto">
@@ -406,6 +443,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const previewsGrid = document.getElementById('previewsGrid');
     const form = document.getElementById('productForm');
     const errorEl = document.getElementById('imageError');
+    const reachLimitError = document.getElementById('reachLimitError');
 
     // Track all images: existing and newly added
     let existingFiles = Array.from(previewsGrid.querySelectorAll('img')).map(img => ({
@@ -413,6 +451,17 @@ document.addEventListener('DOMContentLoaded', function() {
         id: img.dataset.id // existing image ID
     }));
     let newFiles = [];
+
+    function showReachLimitError() {
+        reachLimitError.classList.remove('hidden');
+        setTimeout(() => {
+            reachLimitError.classList.add('hidden');
+        }, 3000);
+    }
+
+    function hideReachLimitError() {
+        reachLimitError.classList.add('hidden');
+    }
 
     function renderPreviews() {
         previewsGrid.innerHTML = '';
@@ -456,6 +505,22 @@ document.addEventListener('DOMContentLoaded', function() {
 
             previewsGrid.appendChild(wrapper);
         });
+
+        // Update drop zone visibility based on total count
+        updateDropZoneVisibility();
+    }
+
+    function updateDropZoneVisibility() {
+        const dropZone = document.getElementById('dropZone');
+        const totalFiles = existingFiles.length + newFiles.length;
+        
+        if (totalFiles >= 8) {
+            dropZone.classList.add('hidden');
+            showReachLimitError();
+        } else {
+            dropZone.classList.remove('hidden');
+            hideReachLimitError();
+        }
     }
 
     function removeExistingImage(index) {
@@ -491,29 +556,93 @@ document.addEventListener('DOMContentLoaded', function() {
         input.files = dt.files;
     }
 
+    function canAddMoreFiles() {
+        return existingFiles.length + newFiles.length < 8;
+    }
+
+    function addFile(file) {
+        if (!canAddMoreFiles()) {
+            showReachLimitError();
+            return false;
+        }
+
+        const key = `${file.name}|${file.size}|${file.lastModified}`;
+        // Avoid duplicates
+        if (!newFiles.some(f => `${f.name}|${f.size}|${f.lastModified}` === key)) {
+            newFiles.push(file);
+            return true;
+        }
+        return false;
+    }
+
     input.addEventListener('change', () => {
         const selected = Array.from(input.files);
+        let filesAdded = false;
+        
         selected.forEach(file => {
-            if (existingFiles.length + newFiles.length < 8) {
-                const key = `${file.name}|${file.size}|${file.lastModified}`;
-                // Avoid duplicates
-                if (!newFiles.some(f => `${f.name}|${f.size}|${f.lastModified}` === key)) {
-                    newFiles.push(file);
-                }
+            if (addFile(file)) {
+                filesAdded = true;
             }
         });
-        updateInputFiles();
-        renderPreviews();
+        
+        if (filesAdded) {
+            updateInputFiles();
+            renderPreviews();
+        }
+    });
+
+    // Drag & Drop support
+    const dropZone = document.getElementById('dropZone');
+
+    dropZone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        if (canAddMoreFiles()) {
+            dropZone.classList.add('ring-2', 'ring-blue-400');
+        } else {
+            dropZone.classList.add('ring-2', 'ring-red-400');
+        }
+    });
+
+    dropZone.addEventListener('dragleave', () => {
+        dropZone.classList.remove('ring-2', 'ring-blue-400', 'ring-red-400');
+    });
+
+    dropZone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        dropZone.classList.remove('ring-2', 'ring-blue-400', 'ring-red-400');
+
+        const files = Array.from(e.dataTransfer.files);
+        let filesAdded = false;
+        
+        files.forEach(file => {
+            if (addFile(file)) {
+                filesAdded = true;
+            }
+        });
+        
+        if (filesAdded) {
+            updateInputFiles();
+            renderPreviews();
+        }
+    });
+
+    dropZone.addEventListener('click', (e) => {
+        if (!canAddMoreFiles()) {
+            e.preventDefault();
+            showReachLimitError();
+        }
     });
 
     form.addEventListener('submit', e => {
         if (existingFiles.length + newFiles.length < 2) {
             e.preventDefault();
+            alert('You must keep at least 2 images.');
             errorEl.textContent = 'You must have at least 2 images.';
             errorEl.classList.remove('hidden');
         }
     });
 
+    // Initialize
     renderPreviews();
 });
 </script>
