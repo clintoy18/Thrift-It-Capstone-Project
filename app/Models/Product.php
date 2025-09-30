@@ -30,6 +30,7 @@ class Product extends Model
         'status',
         'segment_id',
         'barangay_id',
+        'qr_code',
 
     ];
 

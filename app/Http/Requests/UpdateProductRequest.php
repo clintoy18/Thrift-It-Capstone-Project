@@ -26,11 +26,13 @@ class UpdateProductRequest extends FormRequest
         return [
             'category_id' => 'required|exists:categories,id',
             'name' => 'required|string|max:255',
-            'price' => 'required|numeric|min:0',
+            'price' => 'required|numeric|min:0|regex:/^\d+(\.\d{1,2})?$/',
             'status' => 'required|in:available,sold',
             'image' => 'nullable|image|max:2048',
             'segment_id' => 'required|exists:segments,id',
             'barangay_id' => 'required|exists:barangays,id',
+            'qr_code' => 'nullable|image|max:2048',
+
         ];
     }
 }
