@@ -408,9 +408,9 @@
                                         @endif
 
                                         <div class="relative aspect-square overflow-hidden">
-                                            <img src="{{ $product->image ? asset('storage/' . $product->image) : asset('images/default-placeholder.png') }}" 
+                                             <img src="{{ asset('storage/' . $product->first_image) }}" 
                                                 alt="{{ $product->name }}" 
-                                                class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105">
+                                                class="w-full h-full object-cover">
 
                                             <div class="absolute inset-0 bg-gray-800 bg-opacity-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                                             
@@ -438,7 +438,6 @@
                                                 <p class="text-xs sm:text-sm font-bold {{ $product->listingtype === 'for donation' ? 'text-gray-700' : 'text-black-600' }}">
                                                     {{ $product->listingtype === 'for donation' ? 'For Donation' : '₱' . number_format($product->price, 2) }}
                                                 </p>
-
                                                 <button class="favorite-btn text-gray-400 hover:text-red-500 focus:outline-none transition-colors" 
                                                         data-id="{{ $product->id }}" 
                                                         type="button"
