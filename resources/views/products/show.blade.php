@@ -95,7 +95,7 @@
                             @endphp
 
                             <!-- Buy Now Button -->
-                            @if ($product->listingtype !== 'for donation' && Auth::id() !== $product->user_id && !$existingOrder)
+                            @if ($product->listingtype !== 'for donation' && Auth::id() !== $product->user_id && (!$existingOrder || $existingOrder->status === 'cancelled'))
                                 @if ($product->qr_code)
                                     <button type="button" @click="open = true"
                                         class="w-full mt-4 px-6 py-3 bg-[#B59F84] text-white rounded-lg hover:bg-[#a08e77] transition-all duration-300 font-medium">

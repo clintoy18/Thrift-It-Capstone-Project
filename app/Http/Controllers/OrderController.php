@@ -45,6 +45,11 @@ class OrderController extends Controller
             $order->product->update(['status' => 'sold']);
         }
 
+          // Update product status if order is approved
+        if ($status === 'cancelled' && $order->product) {
+            $order->product->update(['status' => 'available']);
+        }
+
         $order->update(['status' => $status]);
 
         return back()->with('success', 'Order status updated to ' . ucfirst($status));

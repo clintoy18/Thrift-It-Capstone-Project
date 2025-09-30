@@ -351,13 +351,15 @@
                                         <th
                                             class="px-4 py-2 text-left text-sm font-semibold text-gray-700 dark:text-gray-200">
                                             Buyer</th>
-
                                         <th
                                             class="px-4 py-2 text-left text-sm font-semibold text-gray-700 dark:text-gray-200">
                                             Status</th>
                                         <th
                                             class="px-4 py-2 text-left text-sm font-semibold text-gray-700 dark:text-gray-200">
                                             Actions</th>
+                                        <th
+                                            class="px-4 py-2 text-left text-sm font-semibold text-gray-700 dark:text-gray-200">
+                                            Proof</th>
                                     </tr>
                                 </thead>
                                 <tbody class="divide-y divide-gray-200 dark:divide-gray-600">
@@ -372,11 +374,11 @@
                                             <td class="px-4 py-2 text-sm">
                                                 <span
                                                     class="px-2 py-1 rounded-full text-xs font-medium
-                                                    @if ($order->status === 'pending') bg-yellow-100 text-yellow-800
-                                                    @elseif($order->status === 'approved') bg-blue-100 text-blue-800
-                                                    @elseif($order->status === 'delivering') bg-purple-100 text-purple-800
-                                                    @elseif($order->status === 'completed') bg-green-100 text-green-800
-                                                    @else bg-red-100 text-red-800 @endif">
+                                    @if ($order->status === 'pending') bg-yellow-100 text-yellow-800
+                                    @elseif($order->status === 'approved') bg-blue-100 text-blue-800
+                                    @elseif($order->status === 'delivering') bg-purple-100 text-purple-800
+                                    @elseif($order->status === 'completed') bg-green-100 text-green-800
+                                    @else bg-red-100 text-red-800 @endif">
                                                     {{ ucfirst($order->status) }}
                                                 </span>
                                             </td>
@@ -420,16 +422,29 @@
                                                     </form>
                                                 @endif
                                             </td>
+                                            <!-- Proof Column -->
+                                            <td class="px-4 py-2 text-sm text-gray-800 dark:text-gray-200">
+                                                @if ($order->proof)
+                                                    <button type="button"
+                                                        onclick="window.open('{{ asset('storage/' . $order->proof) }}', '_blank')"
+                                                        class="px-3 py-1 text-xs bg-indigo-600 text-white rounded hover:bg-indigo-700">
+                                                        View Proof
+                                                    </button>
+                                                @else
+                                                    <span class="text-gray-500 dark:text-gray-400 text-xs">No proof
+                                                        uploaded</span>
+                                                @endif
+                                            </td>
                                         </tr>
                                     @endforeach
                                 </tbody>
-
                             </table>
                         </div>
                     @else
                         <p class="text-gray-500 dark:text-gray-400">No orders yet.</p>
                     @endif
                 </div>
+
 
             </div>
             <style>
