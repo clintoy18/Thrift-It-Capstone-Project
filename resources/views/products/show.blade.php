@@ -96,6 +96,78 @@
                             @endif
                         </div>
                     @endif
+                <!-- Wrap both button + modal inside the same x-data -->
+                <div x-data="{ open: false }">
+                    <!-- Buy Now Button -->
+                    @if($product->listingtype !== 'for donation' && Auth::id() !== $product->user_id)
+                        @if($product->qr_code) 
+                            <button 
+                                type="button" 
+                                @click="open = true"
+                                class="w-full mt-4 px-6 py-3 bg-[#B59F84] text-white rounded-lg hover:bg-[#a08e77] transition-all duration-300 font-medium">
+                                Buy Now
+                            </button>
+                        @else
+                            <button 
+                                type="button" 
+                                disabled
+                                class="w-full mt-4 px-6 py-3 bg-gray-300 text-gray-600 rounded-lg cursor-not-allowed font-medium">
+                                Buy Now (Unavailable - No QR Code)
+                            </button>
+                        @endif
+                    @endif
+
+                    <!-- Modal -->
+                    <div 
+                        x-show="open" 
+                        x-transition
+                        class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50"
+                    >
+                        <div class="bg-white rounded-lg shadow-lg w-full max-w-md p-6 relative">
+                            <button 
+                                type="button" 
+                                @click="open = false" 
+                                class="absolute top-3 right-3 text-gray-400 hover:text-gray-600"
+                            >
+                                ✕
+                            </button>
+
+                            <h2 class="text-xl font-semibold text-gray-800 mb-4">Complete Your Purchase</h2>
+
+                            <!-- Show QR -->
+                            <div class="mb-4">
+                                <p class="text-sm text-gray-600 mb-2">Scan this QR to pay:</p>
+                                <img src="{{ asset('storage/' . $product->qr_code) }}" 
+                                    alt="QR Code" 
+                                    class="w-40 h-40 mx-auto object-contain">
+                            </div>
+
+                            <!-- Upload Proof -->
+                           <form action="{{ route('orders.store', $product->id) }}" method="POST" enctype="multipart/form-data">
+                            @csrf
+
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Upload Proof of Payment</label>
+                            <input type="file" name="proof" accept="image/*" 
+                                class="block w-full text-sm text-gray-900 border rounded-lg cursor-pointer mb-4" required>
+
+                            <div class="flex justify-end space-x-2">
+                                <button type="button" @click="open = false" 
+                                        class="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300">
+                                    Cancel
+                                </button>
+                                <button type="submit" 
+                                        class="px-4 py-2 bg-[#B59F84] text-white rounded-lg hover:bg-[#a08e77]">
+                                    Submit Proof
+                                </button>
+                            </div>
+                        </form>
+
+                        </div>
+                    </div>
+                </div>
+                <!-- End of x-data Modal Wrapper -->
+
+
                </div>
             </div>
             <!-- Right Column: User Info, Comments -->
