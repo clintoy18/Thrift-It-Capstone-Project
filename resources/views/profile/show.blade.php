@@ -139,18 +139,24 @@
                             class="ml-2 px-5 py-2 rounded-full text-gray-800 dark:text-gray-100 transition-all duration-300 transform hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-opacity-50 hover:bg-gray-200 dark:hover:bg-gray-700">
                             Reviews
                         </button>
-                        <button id="tab-orders" type="button"
-                            class="ml-2 px-5 py-2 rounded-full text-gray-800 dark:text-gray-100">
-                            Orders
-                        </button>
+                        @if (Auth::id() === $user->id)
+                            <button id="tab-orders" type="button"
+                                class="ml-2 px-5 py-2 rounded-full text-gray-800 dark:text-gray-100">
+                                Orders
+                            </button>
+                        @endif
                     </div>
                 </div>
-                <!-- Products Grid -->
+
+                <!-- Products Tab -->
                 <div id="products" class="overflow-hidden mb-8">
-                    <div>
-                        @if ($products->count() > 0)
+
+                    <!-- Available Products -->
+                    <div class="mb-6">
+                        <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-3">Available Products</h3>
+                        @if ($availableProducts->count() > 0)
                             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                                @foreach ($products as $product)
+                                @foreach ($availableProducts as $product)
                                     <div
                                         class="group relative bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow hover:shadow-lg transition duration-200 border border-gray-200 dark:border-gray-700">
                                         <a href="{{ route('products.show', $product->id) }}" class="block h-full">
@@ -161,9 +167,8 @@
                                                 </div>
                                             @endif
                                             <div class="relative aspect-square overflow-hidden">
-                                               <img src="{{ asset('storage/' . $product->first_image) }}" 
-                                            alt="{{ $product->name }}" 
-                                            class="w-full h-full object-cover">
+                                                <img src="{{ asset('storage/' . $product->first_image) }}"
+                                                    alt="{{ $product->name }}"
                                                     class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105">
                                                 <div
                                                     class="absolute inset-0 bg-gray-800 bg-opacity-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
@@ -213,6 +218,85 @@
                             <x-empty-message message="No active products found." :link="route('products.create')" />
                         @endif
                     </div>
+
+                    <!-- Sold Products -->
+                    <div class="mb-6">
+                        <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-3">Sold Products</h3>
+                        @if ($soldProducts->count() > 0)
+                            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                                @foreach ($soldProducts as $product)
+                                    <div
+                                        class="group relative bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow hover:shadow-lg transition duration-200 border border-gray-200 dark:border-gray-700">
+                                        <a href="{{ route('products.show', $product->id) }}"
+                                            class="block h-full pointer-events-none opacity-70">
+                                            <!-- Sold Badge -->
+                                            <div
+                                                class="absolute top-2 left-2 z-20 bg-red-500 text-white text-xs px-2 py-1 rounded-full font-semibold shadow">
+                                                Sold
+                                            </div>
+
+                                            <!-- Donation Badge -->
+                                            @if ($product->listingtype === 'for donation')
+                                                <div
+                                                    class="absolute top-2 right-2 z-10 bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded-full font-semibold shadow">
+                                                    Donation
+                                                </div>
+                                            @endif
+
+                                            <div class="relative aspect-square overflow-hidden">
+                                                <img src="{{ asset('storage/' . $product->first_image) }}"
+                                                    alt="{{ $product->name }}"
+                                                    class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105 filter brightness-75">
+                                                <div
+                                                    class="absolute inset-0 bg-gray-800 bg-opacity-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                                                    <span
+                                                        class="bg-white text-gray-800 px-3 py-1 rounded-full text-xs font-medium shadow">
+                                                        Quick view
+                                                    </span>
+                                                </div>
+                                            </div>
+
+                                            <div class="p-4">
+                                                <div class="flex justify-between items-center mb-2">
+                                                    <h3
+                                                        class="text-sm font-bold text-gray-900 dark:text-white group-hover:text-red-600 transition-colors truncate max-w-[70%]">
+                                                        {{ $product->name }}
+                                                    </h3>
+                                                    <span
+                                                        class="text-xs font-medium px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded text-gray-700 dark:text-gray-300">
+                                                        {{ $product->size ?? 'L' }}
+                                                    </span>
+                                                </div>
+                                                <p class="text-gray-500 dark:text-gray-400 text-xs mb-2 truncate">
+                                                    {{ $product->category->name ?? 'No Category' }}
+                                                </p>
+                                                <div class="flex justify-between items-center">
+                                                    <p
+                                                        class="text-sm font-bold {{ $product->listingtype === 'for donation' ? 'text-yellow-700' : 'text-red-600' }}">
+                                                        {{ $product->listingtype === 'for donation' ? 'For Donation' : '₱' . number_format($product->price, 0) }}
+                                                    </p>
+                                                    <button
+                                                        class="favorite-btn text-gray-400 hover:text-red-500 focus:outline-none transition-colors"
+                                                        data-id="{{ $product->id }}" type="button"
+                                                        onclick="event.preventDefault(); event.stopPropagation();">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5"
+                                                            fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                                stroke-width="2"
+                                                                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                                                        </svg>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                @endforeach
+                            </div>
+                        @else
+                            <p class="text-gray-500 dark:text-gray-400">No sold products yet.</p>
+                        @endif
+                    </div>
+
                 </div>
 
                 <!-- Reviews Received -->
@@ -403,16 +487,13 @@
                         reviews.classList.toggle('hidden', !isReviews);
                         orders.classList.toggle('hidden', !isOrders);
 
-                        // Reset tab styles
                         [productsTab, reviewsTab, ordersTab].forEach(btn => {
                             btn.classList.remove('bg-[#E1D5B6]', 'font-semibold', 'shadow-md');
                         });
 
-                        // Activate selected tab
                         const activeTab = tab === 'products' ? productsTab : (tab === 'reviews' ? reviewsTab : ordersTab);
                         activeTab.classList.add('bg-[#E1D5B6]', 'font-semibold', 'shadow-md');
 
-                        // Scroll into view
                         const target = tab === 'products' ? products : (tab === 'reviews' ? reviews : orders);
                         target.scrollIntoView({
                             behavior: 'smooth',
@@ -420,13 +501,11 @@
                         });
                     }
 
-                    // Add click listeners
                     productsTab.addEventListener('click', () => activate('products'));
                     reviewsTab.addEventListener('click', () => activate('reviews'));
-                    ordersTab.addEventListener('click', () => activate('orders'));
+                    if (ordersTab) ordersTab.addEventListener('click', () => activate('orders'));
 
-                    // Default active tab
-                    activate('products');
+                    activate('products'); // default
                 })();
             </script>
 

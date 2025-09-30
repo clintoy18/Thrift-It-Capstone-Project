@@ -8,14 +8,15 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
-use App\Http\Requests\VerificationDocumentRequest;
 use App\Models\User;
+
 
 
 class ProfileController extends Controller
 {
 
-
+    
+ 
     /**
      * Display the user's profile form.
      */
@@ -57,27 +58,23 @@ class ProfileController extends Controller
 
     public function show(User $user)
     {
+        // Available products (status not sold)
+        $availableProducts = $user->products()->where('status', '!=', 'sold')->get();
 
+        // Sold products
+        $soldProducts = $user->products()->where('status', 'sold')->get();
 
-
+        // Orders received for this user's products
         $orders = $user->ordersAsSeller()->with(['product', 'buyer'])->get();
 
         return view('profile.show', [
             'user' => $user,
-            'products' => $user->products,
+            'availableProducts' => $availableProducts,
+            'soldProducts' => $soldProducts,
             'orders' => $orders,
         ]);
-
-
-        //         public function show(User $user)
-        // {
-        //     return view('profile.show', [
-        //         'user' => $user,
-        //         'products' => $user->products,
-        //         'orders' => $user->orders, // as buyer
-        //     ]);
-        // }
     }
+
 
     /**
      * Delete the user's account.
