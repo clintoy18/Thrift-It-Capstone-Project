@@ -23,15 +23,14 @@ use App\Models\Barangay;
 class ProductController extends Controller
 {
 
-    protected $productService,$categoryService;
-    
+    protected $productService, $categoryService;
+
 
     public function __construct(ProductService $productService, CategoriesService $categoryService)
     {
         $this->productService = $productService;
         $this->categoryService = $categoryService;
         $this->middleware('subscribed')->only(['create', 'store']);
-
     }
 
     public function index(): View
@@ -45,27 +44,36 @@ class ProductController extends Controller
     }
     public function create(): View
     {
-        $categories = $this->categoryService->getAllCategories(); 
-        $segments = Segment::all(); 
-        $barangays = Barangay::all(); 
+        $categories = $this->categoryService->getAllCategories();
+        $segments = Segment::all();
+        $barangays = Barangay::all();
         return view('products.create', compact('categories', 'segments', 'barangays'));
     }
 
-    public function store(StoreProductRequest $request)
+     public function store(StoreProductRequest $request)
     {
         $validated = $request->validated();
         $validated['user_id'] = Auth::id();
 
-        $images = $request->file('images');
+        // Handle QR upload if provided
+        if ($request->hasFile('qr_code')) {
+            $validated['qr_code'] = $request->file('qr_code')->store('qr_codes', 'public');
+        }
 
+        // Handle multiple images
+        $images = $request->file('images', []); // defaults to empty array if none
+
+        // Create product with service
         $this->productService->createProduct($validated, $images);
-        return redirect()->route('products.index')->with('success', 'Product created successfully!');
-    }
 
+        return redirect()
+            ->route('products.index')
+            ->with('success', 'Product created successfully!');
+    }
 
     public function edit(Product $product): View
     {
-        $categories = $this->categoryService->getAllCategories(); 
+        $categories = $this->categoryService->getAllCategories();
         $segments = Segment::all();
         $barangays = Barangay::all();
 
@@ -78,73 +86,76 @@ class ProductController extends Controller
     }
 
 
-    public function update(Request $request, Product $product)
+    public function update(UpdateProductRequest $request, Product $product)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'images.*' => 'nullable|image|mimes:jpeg,png,jpg|max:5120',
-            'deleted_images.*' => 'nullable|integer|exists:product_images,id',
-        ]);
-
-        $product->update($request->only('name', 'category_id', 'segment_id', 'barangay_id', 'price', 'status'));
-
-        // Delete marked images
-        if($request->deleted_images) {
-            foreach($request->deleted_images as $id){
-                $img = $product->images()->find($id);
-                if($img) {
-                    Storage::delete($img->image);
-                    $img->delete();
-                }
+        // ✅ Handle image upload
+        if ($request->hasFile('image')) {
+            if ($product->image && Storage::exists($product->image)) {
+                Storage::delete($product->image);
             }
+            $product->image = $request->file('image')->store('products', 'public');
         }
 
-        // Add new images
-        if($request->hasFile('images')) {
-            foreach($request->file('images') as $file){
-                $path = $file->store('products', 'public');
-                $product->images()->create(['image' => $path]);
+        // ✅ Handle QR upload
+        if ($request->hasFile('qr_code')) {
+            if ($product->qr_code && Storage::exists($product->qr_code)) {
+                Storage::delete($product->qr_code);
             }
+            $product->qr_code = $request->file('qr_code')->store('qrcodes', 'public');
         }
 
-        return redirect()->route('products.index', $product)->with('success', 'Product updated successfully.');
+        // ✅ Update other fields
+        $product->fill($request->only([
+            'category_id',
+            'segment_id',
+            'barangay_id',
+            'name',
+            'price',
+            'status',
+        ]));
+
+        $product->save();
+
+        return redirect()
+            ->route('products.show', $product)
+            ->with('success', 'Product updated successfully!');
     }
 
-    
+
     public function show($id)
-{
-    // Clear cache for this product
-    Cache::forget("product_{$id}_comments");
-    Cache::forget("product_{$id}_with_comments");
+    {
+        // Clear cache for this product
+        Cache::forget("product_{$id}_comments");
+        Cache::forget("product_{$id}_with_comments");
 
-    // Load product with relations
-    $product = Product::with(['user', 'category'])->findOrFail($id);
+        // Load product with relations
+        $product = Product::with(['user', 'category'])->findOrFail($id);
 
-    // ✅ Fetch only parent comments with their replies + users
-    $comments = \App\Models\Comment::with(['user', 'replies.user'])
-        ->where('product_id', $id)
-        ->whereNull('parent_id')   // 👈 only top-level comments
-        ->latest()
-        ->get();
+        // ✅ Fetch only parent comments with their replies + users
+        $comments = \App\Models\Comment::with(['user', 'replies.user'])
+            ->where('product_id', $id)
+            ->whereNull('parent_id')   // 👈 only top-level comments
+            ->latest()
+            ->get();
 
-    // Attach comments to product
-    $product->setRelation('comments', $comments);
+        // Attach comments to product
+        $product->setRelation('comments', $comments);
 
-    // "More from this seller"
-    $moreProducts = $this->productService->getMoreProductsByUser(
-        $product->user_id,
-        $product->id
-    );
+        // "More from this seller"
+        $moreProducts = $this->productService->getMoreProductsByUser(
+            $product->user_id,
+            $product->id
+        );
 
-    // Disable browser cache
-    return response()
-        ->view('products.show', compact('product', 'moreProducts'))
-        ->header('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0')
-        ->header('Pragma', 'no-cache')
-        ->header('Expires', '0')
-        ->header('Last-Modified', gmdate('D, d M Y H:i:s') . ' GMT')
-        ->header('ETag', md5(serialize($product->comments)));
-}
+        // Disable browser cache
+        return response()
+            ->view('products.show', compact('product', 'moreProducts'))
+            ->header('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0')
+            ->header('Pragma', 'no-cache')
+            ->header('Expires', '0')
+            ->header('Last-Modified', gmdate('D, d M Y H:i:s') . ' GMT')
+            ->header('ETag', md5(serialize($product->comments)));
+    }
 
 
     public function destroy(Product $product): RedirectResponse

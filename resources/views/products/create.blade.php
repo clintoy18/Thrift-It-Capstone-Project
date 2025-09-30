@@ -44,6 +44,22 @@
                     @error('images')
                         <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                     @enderror
+
+                    <div class="mt-4">
+                        <label for="qr_code" class="block text-sm font-medium text-gray-700">
+                            Upload QR for Direct Buying (Optional)
+                        </label>
+                        <input type="file" name="qr_code" id="qr_code"
+                            class="mt-1 block w-full text-sm text-gray-900 border rounded-lg cursor-pointer focus:outline-none">
+                    </div>
+
+                    {{-- ✅ Show existing QR if editing --}}
+                    @if(isset($product) && $product->qr_code)
+                        <div class="mt-2">
+                            <p class="text-sm text-gray-500">Current QR Code:</p>
+                            <img src="{{ asset('storage/' . $product->qr_code) }}" alt="QR Code" class="w-32 h-32 object-contain">
+                        </div>
+                    @endif
                 </div>
                     <!-- Right Side - Form Container -->
                     <div class="lg:col-span-3 flex lg:justify-end lg:relative lg:left-[250px] w-[640px] ">
@@ -493,15 +509,19 @@ document.addEventListener('DOMContentLoaded', function() {
 
     input.addEventListener('change', () => {
         const selected = Array.from(input.files);
+
+        // Combine current + new
+        if (existingFiles.length + newFiles.length + selected.length > 8) {
+            alert('You can upload a maximum of 8 photos.');
+            return;
+        }
+
         selected.forEach(file => {
-            if (existingFiles.length + newFiles.length < 8) {
-                const key = `${file.name}|${file.size}|${file.lastModified}`;
-                // Avoid duplicates
-                if (!newFiles.some(f => `${f.name}|${f.size}|${f.lastModified}` === key)) {
-                    newFiles.push(file);
-                }
+            if (!newFiles.some(f => f.name === file.name && f.size === file.size)) {
+                newFiles.push(file);
             }
         });
+
         updateInputFiles();
         renderPreviews();
     });

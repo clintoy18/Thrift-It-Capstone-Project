@@ -30,6 +30,7 @@ class Product extends Model
         'status',
         'segment_id',
         'barangay_id',
+        'qr_code',
 
     ];
 
@@ -103,4 +104,10 @@ class Product extends Model
         // Return first image path or default placeholder
         return $this->images->first()?->image ?? 'images/default-placeholder.png';
     }
+
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
+
 }
