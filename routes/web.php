@@ -58,6 +58,7 @@ Route::middleware(['auth', 'verified', 'rolemiddleware:user'])->group(function (
     Route::get('/donation-hub', [DonationController::class, 'getAllDonations'])->name('donations.hub');
     Route::resource('donations',DonationController::class);
     Route::resource('segments', SegmentController::class)->only(['show']);
+    Route::get('segments/{segment}/products', [SegmentController::class, 'products'])->name('segments.products');
     Route::resource(('eco-posts'), EcoPostController::class);
 
     Route::patch('/appointments/{appointment}/cancel', [AppointmentController::class, 'cancel'])->name('appointments.cancel');

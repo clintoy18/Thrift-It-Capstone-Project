@@ -43,13 +43,18 @@ class ProductRepository
         return Product::with(['user','category','comments.user'])->findOrFail($id);
     }
 
-   public function getApproveProducts(Segment $segment)
+   public function getApproveProducts(Segment $segment, ?int $categoryId = null)
     {
-        return $segment->products()
+        $query = $segment->products()
             ->where('approval_status', 'approved')
             ->where('status', 'available')
-            ->with(['category', 'images']) // load images for accessor
-            ->get();
+            ->with(['category', 'images']);
+
+        if ($categoryId) {
+            $query->where('category_id', $categoryId);
+        }
+
+        return $query->get();
     }
 
 

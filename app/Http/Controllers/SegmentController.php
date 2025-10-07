@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Segment;
+use App\Models\Categories;
+use Illuminate\Http\Request;
 use App\Services\ProductService;
 
 class SegmentController extends Controller
@@ -16,9 +18,11 @@ class SegmentController extends Controller
         $this->productService = $productService;
     }
 
-    public function show(Segment $segment)
+    public function show(Request $request, Segment $segment)
     {
-        $products = $this->productService->getApprovedProductsBySegment($segment);
+        $selectedCategoryId = $request->query('category');
+        $products = $this->productService->getApprovedProductsBySegment($segment, $selectedCategoryId ? (int)$selectedCategoryId : null);
+        $categories = Categories::all();
 
         // Use different views based on segment name (more flexible)
         $viewName = match(strtolower($segment->name)) {
@@ -28,6 +32,14 @@ class SegmentController extends Controller
             default => 'segments.show'
         };
 
-        return view($viewName, compact('segment', 'products'));
+        return view($viewName, compact('segment', 'products', 'categories', 'selectedCategoryId'));
+    }
+
+    public function products(Request $request, Segment $segment)
+    {
+        $selectedCategoryId = $request->query('category');
+        $products = $this->productService->getApprovedProductsBySegment($segment, $selectedCategoryId ? (int)$selectedCategoryId : null);
+        $html = view('segments.partials.products-grid', compact('products'))->render();
+        return response()->json(['html' => $html]);
     }
 }
