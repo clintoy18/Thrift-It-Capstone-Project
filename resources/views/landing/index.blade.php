@@ -86,7 +86,7 @@
             <!-- Segment Showcase -->
             <div class="mb-6 text-center sm:text-left">
                 <h2 class="text-xl sm:text-2xl font-bold text-custom-dark-brown">
-                    <i>THRIFT BY FASHION</i>
+                    <i>THRIFT BY FASHIO</i>
                 </h2>
             </div>        
 

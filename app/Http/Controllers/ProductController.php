@@ -17,6 +17,7 @@ use App\Services\ProductService;
 use App\Services\CategoriesService;
 use App\Models\Segment;
 use App\Models\Barangay;
+use App\Models\Image;
 
 
 
@@ -88,37 +89,70 @@ class ProductController extends Controller
 
     public function update(UpdateProductRequest $request, Product $product)
     {
-        // ✅ Handle image upload
-        if ($request->hasFile('image')) {
-            if ($product->image && Storage::exists($product->image)) {
-                Storage::delete($product->image);
+        DB::transaction(function () use ($request, $product) {
+            // ✅ Replace main image (if provided)
+            if ($request->hasFile('image')) {
+                if ($product->image && Storage::disk('public')->exists($product->image)) {
+                    Storage::disk('public')->delete($product->image);
+                }
+                $product->image = $request->file('image')->store('products', 'public');
             }
-            $product->image = $request->file('image')->store('products', 'public');
-        }
 
-        // ✅ Handle QR upload
-        if ($request->hasFile('qr_code')) {
-            if ($product->qr_code && Storage::exists($product->qr_code)) {
-                Storage::delete($product->qr_code);
+            // ✅ Replace QR code (if provided)
+            if ($request->hasFile('qr_code')) {
+                if ($product->qr_code && Storage::disk('public')->exists($product->qr_code)) {
+                    Storage::disk('public')->delete($product->qr_code);
+                }
+                $product->qr_code = $request->file('qr_code')->store('qrcodes', 'public');
             }
-            $product->qr_code = $request->file('qr_code')->store('qrcodes', 'public');
-        }
 
-        // ✅ Update other fields
-        $product->fill($request->only([
-            'category_id',
-            'segment_id',
-            'barangay_id',
-            'name',
-            'price',
-            'status',
-        ]));
+            // ✅ Update other fields
+            $product->fill($request->only([
+                'category_id',
+                'segment_id',
+                'barangay_id',
+                'name',
+                'price',
+                'status',
+            ]));
+            $product->save();
 
-        $product->save();
+            // ✅ Delete selected gallery images
+            $deleteIds = collect($request->input('deleted_images', []))
+                ->map(fn($id) => (int) $id)
+                ->filter()
+                ->unique()
+                ->values()
+                ->all();
 
-        return redirect()
-            ->route('products.show', $product)
-            ->with('success', 'Product updated successfully!');
+            if (!empty($deleteIds)) {
+                $imagesToDelete = $product->images()->whereIn('id', $deleteIds)->get(['id', 'image']);
+
+                // Remove files
+                foreach ($imagesToDelete as $img) {
+                    if ($img->image && Storage::disk('public')->exists($img->image)) {
+                        Storage::disk('public')->delete($img->image);
+                    }
+                }
+
+                // Remove DB rows
+                Image::where('product_id', $product->id)->whereIn('id', $deleteIds)->delete();
+            }
+
+            // ✅ Optionally handle new uploads (keeps within 8 total)
+            if ($request->hasFile('images')) {
+                $currentCount = $product->images()->count();
+                $remainingSlots = max(0, 8 - $currentCount);
+                if ($remainingSlots > 0) {
+                    foreach (array_slice($request->file('images'), 0, $remainingSlots) as $image) {
+                        $path = $image->store('product_images', 'public');
+                        $product->images()->create(['image' => $path]);
+                    }
+                }
+            }
+        });
+
+        return redirect()->route('products.show', $product)->with('success', 'Product updated successfully!');
     }
 
 
@@ -128,8 +162,8 @@ class ProductController extends Controller
         Cache::forget("product_{$id}_comments");
         Cache::forget("product_{$id}_with_comments");
 
-        // Load product with relations
-        $product = Product::with(['user', 'category'])->findOrFail($id);
+        // Load product with relations (including images so Swiper reflects latest)
+        $product = Product::with(['user', 'category', 'images'])->findOrFail($id);
 
         // ✅ Fetch only parent comments with their replies + users
         $comments = \App\Models\Comment::with(['user', 'replies.user'])
