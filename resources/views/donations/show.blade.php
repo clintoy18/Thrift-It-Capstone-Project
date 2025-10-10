@@ -853,11 +853,11 @@ document.querySelectorAll('.comment-item').forEach(item => {
     }
 
     const commentHtml = `
-            <div class="comment-item" data-comment-id="${commentData.id}" id="comment-${commentData.id}">
+            <div class="comment-item bg-white dark:bg-gray-700 rounded-lg p-4 shadow-sm" data-comment-id="${commentData.id}" id="comment-${commentData.id}">
                 <div class="flex gap-3">
                     <!-- User Avatar -->
                     <div class="flex-shrink-0">
-                        <div class="w-10 h-10 bg-white dark:bg-gray-700 rounded-full border-2 border-white dark:border-gray-800 flex items-center justify-center">
+                        <div class="w-10 h-10 bg-[#B59F84] rounded-full border-2 border-white dark:border-gray-800 flex items-center justify-center">
                             <span class="text-sm font-bold text-gray-800 dark:text-gray-200">
                                 ${commentData.user.fname ? (commentData.user.fname.charAt(0) + commentData.user.lname.charAt(0)).toUpperCase() : 'U'}
                             </span>

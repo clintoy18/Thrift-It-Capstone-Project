@@ -227,168 +227,125 @@
                     <div class="bg-[#F4F2ED] dark:bg-gray-800   rounded-xl p-10 shadow-md">
                         <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4">Comments</h3>
 
-                        <!-- Scrollable Comment List -->
-                        <div id="comments-container" class="space-y-4 max-h-80 overflow-y-auto pr-2">
-                            @forelse($product->comments as $comment)
-                                <!-- Comment Item -->
-                                <div class="comment-item bg-white dark:bg-gray-700 rounded-lg p-4 shadow-sm"
-                                    data-comment-id="{{ $comment->id }}" id="comment-{{ $comment->id }}">
-                                    <div class="flex gap-3">
-                                        <!-- User Avatar -->
-                                        <div class="flex-shrink-0">
-                                            <div
-                                                class="w-10 h-10 bg-[#B59F84] rounded-full border-2 border-white dark:border-gray-800 flex items-center justify-center">
-                                                <span class="text-sm font-bold text-white">
-                                                    {{ strtoupper(substr($comment->user->fname, 0, 1) . substr($comment->user->lname, 0, 1)) }}
+                    <!-- Scrollable Comment List -->
+                    <div id="comments-container" class="space-y-4 max-h-80 overflow-y-auto pr-2">
+                        @forelse($product->comments as $comment)
+                            <!-- Comment Item -->
+                            <div class="comment-item bg-white dark:bg-gray-700 rounded-lg p-4 shadow-sm" data-comment-id="{{ $comment->id }}" id="comment-{{ $comment->id }}">
+                                <div class="flex gap-3">
+                                    <!-- User Avatar -->
+                                    <div class="flex-shrink-0">
+                                        <div class="w-10 h-10 bg-[#B59F84] rounded-full border-2 border-white dark:border-gray-800 flex items-center justify-center">
+                                            <span class="text-sm font-bold text-white">
+                                                {{ strtoupper(substr($comment->user->fname, 0, 1) . substr($comment->user->lname, 0, 1)) }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Comment Content -->
+                                    <div class="flex-1">
+                                        <div class="flex justify-between items-start mb-1">
+                                            <div>
+                                                <a href="{{ route('profile.show', $comment->user->id) }}" class="font-semibold text-gray-800 dark:text-gray-200 hover:underline">
+                                                    {{ $comment->user->fname }} {{ $comment->user->lname }}
+                                                </a>
+                                                <span class="text-xs text-gray-500 dark:text-gray-400 ml-2">
+                                                    {{ $comment->created_at->diffForHumans() }}
                                                 </span>
                                             </div>
-                                        </div>
-
-                                        <!-- Comment Content -->
-                                        <div class="flex-1">
-                                            <div class="flex justify-between items-start mb-1">
-                                                <div>
-                                                    <a href="{{ route('profile.show', $comment->user->id) }}"
-                                                        class="font-semibold text-gray-800 dark:text-gray-200 hover:underline">
-                                                        {{ $comment->user->fname }} {{ $comment->user->lname }}
-                                                    </a>
-                                                    <span class="text-xs text-gray-500 dark:text-gray-400 ml-2">
-                                                        {{ $comment->created_at->diffForHumans() }}
-                                                    </span>
-                                                </div>
-
-                                                <!-- Comment Options (for comment owner) -->
-                                                @if (Auth::id() === $comment->user_id)
-                                                    <div class="relative">
-                                                        <button type="button"
-                                                            class="p-1 rounded hover:bg-gray-100 dark:hover:bg-gray-600"
-                                                            onclick="toggleDropdown({{ $comment->id }})">
-                                                            <svg xmlns="http://www.w3.org/2000/svg"
-                                                                class="h-4 w-4 text-gray-600 dark:text-gray-200"
-                                                                viewBox="0 0 20 20" fill="currentColor">
-                                                                <path
-                                                                    d="M6 10a2 2 0 11-4 0 2 2 0 014 0zm6 0a2 2 0 11-4 0 2 2 0 014 0zm6 0a2 2 0 11-4 0 2 2 0 014 0z" />
-                                                            </svg>
+                                            
+                                            <!-- Comment Options (for comment owner) -->
+                                            @if(Auth::id() === $comment->user_id)
+                                                <div class="relative">
+                                                    <button type="button" class="p-1 rounded hover:bg-gray-100 dark:hover:bg-gray-600" onclick="toggleDropdown({{ $comment->id }})">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-600 dark:text-gray-200" viewBox="0 0 20 20" fill="currentColor">
+                                                            <path d="M6 10a2 2 0 11-4 0 2 2 0 014 0zm6 0a2 2 0 11-4 0 2 2 0 014 0zm6 0a2 2 0 11-4 0 2 2 0 014 0z" />
+                                                        </svg>
+                                                    </button>
+                                                    <div id="dropdown-{{ $comment->id }}" class="absolute right-0 mt-1 w-28 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded shadow z-10 hidden">
+                                                        <button type="button" onclick="toggleEditForm({{ $comment->id }})" class="w-full text-left px-3 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700">
+                                                            Edit
                                                         </button>
-                                                        <div id="dropdown-{{ $comment->id }}"
-                                                            class="absolute right-0 mt-1 w-28 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded shadow z-10 hidden">
-                                                            <button type="button"
-                                                                onclick="toggleEditForm({{ $comment->id }})"
-                                                                class="w-full text-left px-3 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700">
-                                                                Edit
-                                                            </button>
-                                                            <button type="button"
-                                                                onclick="deleteComment({{ $comment->id }})"
-                                                                class="w-full text-left px-3 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-gray-50 dark:hover:bg-gray-700">
-                                                                Delete
-                                                            </button>
-                                                        </div>
+                                                        <button type="button" onclick="deleteComment({{ $comment->id }})" class="w-full text-left px-3 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-gray-50 dark:hover:bg-gray-700">
+                                                            Delete
+                                                        </button>
                                                     </div>
-                                                @endif
-                                            </div>
-                                            <div id="comment-content-{{ $comment->id }}"
-                                                class="text-gray-800 dark:text-gray-200 mb-2">
-                                                {{ $comment->content }}
-                                            </div>
-                                            <div
-                                                class="flex items-center gap-4 text-xs text-gray-500 dark:text-gray-400">
-                                                <button onclick="toggleLike({{ $comment->id }})"
-                                                    class="flex items-center gap-1 hover:text-[#B59F84] transition-colors duration-200 {{ $comment->userLikes->count() > 0 ? 'text-[#B59F84]' : 'text-gray-500' }}"
-                                                    id="like-btn-{{ $comment->id }}">
-                                                    <svg class="w-4 h-4"
-                                                        fill="{{ $comment->userLikes->count() > 0 ? 'currentColor' : 'none' }}"
-                                                        stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                            stroke-width="2"
-                                                            d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z">
-                                                        </path>
-                                                    </svg>
-                                                    <span
-                                                        id="like-count-{{ $comment->id }}">{{ $comment->likes_count }}</span>
+                                                </div>
+                                            @endif
+                                        </div>
+                                        <div id="comment-content-{{ $comment->id }}" class="text-gray-800 dark:text-gray-200 mb-2">
+                                            {{ $comment->content }}
+                                        </div>
+                                        <div class="flex items-center gap-4 text-xs text-gray-500 dark:text-gray-400">
+                                            <button onclick="toggleLike({{ $comment->id }})" class="flex items-center gap-1 hover:text-[#B59F84] transition-colors duration-200 {{ $comment->userLikes->count() > 0 ? 'text-[#B59F84]' : 'text-gray-500' }}" id="like-btn-{{ $comment->id }}">
+                                                <svg class="w-4 h-4" fill="{{ $comment->userLikes->count() > 0 ? 'currentColor' : 'none' }}" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                                                </svg>
+                                                <span id="like-count-{{ $comment->id }}">{{ $comment->likes_count }}</span>
+                                            </button>
+                                            <button onclick="toggleReplyForm({{ $comment->id }})" class="flex items-center gap-1 hover:text-[#B59F84] transition-colors duration-200">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                                                </svg>
+                                                Reply
+                                            </button>
+                                            @if($comment->replies_count > 0)
+                                                <button onclick="toggleReplies({{ $comment->id }})" class="text-[#B59F84] hover:underline">
+                                                    {{ $comment->replies_count }} {{ $comment->replies_count == 1 ? 'reply' : 'replies' }}
                                                 </button>
-                                                <button onclick="toggleReplyForm({{ $comment->id }})"
-                                                    class="flex items-center gap-1 hover:text-[#B59F84] transition-colors duration-200">
-                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor"
-                                                        viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                            stroke-width="2"
-                                                            d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z">
-                                                        </path>
-                                                    </svg>
+                                            @endif
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Edit Form (Hidden by Default) -->
+                                @if(Auth::id() === $comment->user_id)
+                                    <form id="inline-edit-form-{{ $comment->id }}" action="{{ route('comments.update', $comment->id) }}" method="POST" class="inline-edit-form hidden mt-2 bg-gray-100 dark:bg-gray-600 p-3 rounded-lg" data-id="{{ $comment->id }}">
+                                        @csrf
+                                        @method('PUT')
+                                        <textarea name="content" rows="2" class="w-full border rounded p-2 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200">{{ old('content', $comment->content) }}</textarea>
+                                        <div class="flex gap-2 mt-2">
+                                            <button type="submit" class="px-3 py-1 bg-[#B59F84] text-white rounded text-sm hover:bg-[#a08e77] transition-all duration-200">Save</button>
+                                            <button type="button" onclick="cancelEdit({{ $comment->id }})" class="px-3 py-1 bg-gray-300 text-gray-800 rounded hover:bg-gray-400 text-sm">Cancel</button>
+                                        </div>
+                                    </form>
+                                @endif
+                                
+                                <!-- Reply Form (Hidden by Default) -->
+                                <div id="reply-form-{{ $comment->id }}" class="hidden mt-3 ml-4">
+                                    <form class="reply-form" data-parent-id="{{ $comment->id }}">
+                                        @csrf
+                                        <div class="flex gap-2">
+                                            <textarea name="content" placeholder="Write a reply..." class="flex-1 p-2 border border-gray-300 dark:border-gray-600 rounded-lg resize-none focus:ring-2 focus:ring-[#B59F84] focus:border-transparent dark:bg-gray-700 dark:text-white" rows="2" required></textarea>
+                                            <div class="flex flex-col gap-2">
+                                                <button type="submit" class="px-3 py-2 bg-[#B59F84] text-white rounded-lg hover:bg-[#a08e77] transition-all duration-200 text-sm">
                                                     Reply
                                                 </button>
-                                                @if ($comment->replies_count > 0)
-                                                    <button onclick="toggleReplies({{ $comment->id }})"
-                                                        class="text-[#B59F84] hover:underline">
-                                                        {{ $comment->replies_count }}
-                                                        {{ $comment->replies_count == 1 ? 'reply' : 'replies' }}
-                                                    </button>
-                                                @endif
+                                                <button type="button" onclick="toggleReplyForm({{ $comment->id }})" class="px-3 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-all duration-200 text-sm">
+                                                    Cancel
+                                                </button>
                                             </div>
                                         </div>
-                                    </div>
-
-                                    <!-- Edit Form (Hidden by Default) -->
-                                    @if (Auth::id() === $comment->user_id)
-                                        <form id="inline-edit-form-{{ $comment->id }}"
-                                            action="{{ route('comments.update', $comment->id) }}" method="POST"
-                                            class="inline-edit-form hidden mt-2 bg-gray-100 dark:bg-gray-600 p-3 rounded-lg"
-                                            data-id="{{ $comment->id }}">
-                                            @csrf
-                                            @method('PUT')
-                                            <textarea name="content" rows="2"
-                                                class="w-full border rounded p-2 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200">{{ old('content', $comment->content) }}</textarea>
-                                            <div class="flex gap-2 mt-2">
-                                                <button type="submit"
-                                                    class="px-3 py-1 bg-[#B59F84] text-white rounded text-sm hover:bg-[#a08e77] transition-all duration-200">Save</button>
-                                                <button type="button" onclick="cancelEdit({{ $comment->id }})"
-                                                    class="px-3 py-1 bg-gray-300 text-gray-800 rounded hover:bg-gray-400 text-sm">Cancel</button>
-                                            </div>
-                                        </form>
-                                    @endif
-
-                                    <!-- Reply Form (Hidden by Default) -->
-                                    <div id="reply-form-{{ $comment->id }}" class="hidden mt-3 ml-4">
-                                        <form class="reply-form" data-parent-id="{{ $comment->id }}">
-                                            @csrf
-                                            <div class="flex gap-2">
-                                                <textarea name="content" placeholder="Write a reply..."
-                                                    class="flex-1 p-2 border border-gray-300 dark:border-gray-600 rounded-lg resize-none focus:ring-2 focus:ring-[#B59F84] focus:border-transparent dark:bg-gray-700 dark:text-white"
-                                                    rows="2" required></textarea>
-                                                <div class="flex flex-col gap-2">
-                                                    <button type="submit"
-                                                        class="px-3 py-2 bg-[#B59F84] text-white rounded-lg hover:bg-[#a08e77] transition-all duration-200 text-sm">
-                                                        Reply
-                                                    </button>
-                                                    <button type="button"
-                                                        onclick="toggleReplyForm({{ $comment->id }})"
-                                                        class="px-3 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-all duration-200 text-sm">
-                                                        Cancel
-                                                    </button>
-                                                </div>
-                                            </div>
-                                            <input type="hidden" name="parent_id" value="{{ $comment->id }}">
-                                            <input type="hidden" name="product_id" value="{{ $product->id }}">
-                                        </form>
-                                    </div>
-
-                                    <!-- Replies Container (Hidden by Default) -->
-                                    <!-- Replies Container -->
-                                    <div id="replies-{{ $comment->id }}"
-                                        class="hidden ml-4 mt-3 space-y-3 border-l-2 border-gray-200 dark:border-gray-600 pl-4">
-                                        @foreach ($comment->replies as $reply)
-                                            <div class="reply-item flex gap-3" data-comment-id="{{ $reply->id }}"
-                                                id="reply-{{ $reply->id }}">
-
-                                                <!-- Avatar -->
-                                                <div class="flex-shrink-0">
-                                                    <div
-                                                        class="w-8 h-8 bg-[#B59F84] rounded-full border-2 border-white dark:border-gray-800 flex items-center justify-center">
-                                                        <span class="text-xs font-bold text-white">
-                                                            {{ strtoupper(substr($reply->user->fname, 0, 1) . substr($reply->user->lname, 0, 1)) }}
-                                                        </span>
-                                                    </div>
-                                                </div>
+                                        <input type="hidden" name="parent_id" value="{{ $comment->id }}">
+                                        <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                    </form>
+                                </div>
+                                
+                                <!-- Replies Container (Hidden by Default) -->
+                                <!-- Replies Container -->
+                                <div id="replies-{{ $comment->id }}" 
+     class="hidden ml-4 mt-3 space-y-3 border-l-2 border-gray-200 dark:border-gray-600 pl-4">
+    @foreach($comment->replies as $reply)
+        <div class="reply-item flex gap-3" data-comment-id="{{ $reply->id }}" id="reply-{{ $reply->id }}">
+            
+            <!-- Avatar -->
+            <div class="flex-shrink-0">
+                <div class="w-8 h-8 bg-[#B59F84] rounded-full border-2 border-white dark:border-gray-800 flex items-center justify-center">
+                    <span class="text-xs font-bold text-white">
+                        {{ strtoupper(substr($reply->user->fname, 0, 1) . substr($reply->user->lname, 0, 1)) }}
+                    </span>
+                </div>
+            </div>
 
                                                 <!-- Reply Content -->
                                                 <div class="flex-1">
@@ -423,37 +380,33 @@
                                                                 id="like-count-{{ $reply->id }}">{{ $reply->likes_count }}</span>
                                                         </button>
 
-                                                        <!-- Reply button -->
-                                                        <button onclick="toggleReplyForm({{ $reply->id }})"
-                                                            class="hover:text-[#B59F84] transition-colors duration-200">
-                                                            Reply
-                                                        </button>
-                                                    </div>
+                    <!-- Reply button -->
+                    <button onclick="toggleReplyForm({{ $reply->id }})" 
+                            class="hover:text-[#B59F84] transition-colors duration-200">
+                        Reply
+                    </button>
+                </div>
 
-                                                    <!-- Reply Form -->
-                                                    <div id="reply-form-{{ $reply->id }}"
-                                                        class="hidden mt-2 ml-8">
-                                                        <form class="reply-form"
-                                                            data-parent-id="{{ $reply->id }}">
-                                                            @csrf
-                                                            <div class="flex gap-2">
-                                                                <textarea name="content" placeholder="Write a reply..."
-                                                                    class="flex-1 p-2 border border-gray-300 dark:border-gray-600 rounded-lg resize-none 
+                <!-- Reply Form -->
+                <div id="reply-form-{{ $reply->id }}" class="hidden mt-2 ml-8">
+                    <form class="reply-form" data-parent-id="{{ $reply->id }}">
+                        @csrf
+                        <div class="flex gap-2">
+                            <textarea name="content" placeholder="Write a reply..."
+                                      class="flex-1 p-2 border border-gray-300 dark:border-gray-600 rounded-lg resize-none 
                                              focus:ring-2 focus:ring-[#B59F84] focus:border-transparent 
                                              dark:bg-gray-700 dark:text-white"
-                                                                    rows="2" required></textarea>
-                                                                <button type="submit"
-                                                                    class="px-3 py-2 bg-[#B59F84] text-white rounded-lg hover:bg-[#a08e77] 
+                                      rows="2" required></textarea>
+                            <button type="submit" 
+                                    class="px-3 py-2 bg-[#B59F84] text-white rounded-lg hover:bg-[#a08e77] 
                                            transition-all duration-200 text-sm">
-                                                                    Reply
-                                                                </button>
-                                                            </div>
-                                                            <input type="hidden" name="parent_id"
-                                                                value="{{ $reply->id }}">
-                                                            <input type="hidden" name="product_id"
-                                                                value="{{ $product->id }}">
-                                                        </form>
-                                                    </div>
+                                Reply
+                            </button>
+                        </div>
+                        <input type="hidden" name="parent_id" value="{{ $reply->id }}">
+                        <input type="hidden" name="product_id" value="{{ $product->id }}">
+                    </form>
+                </div>
 
                                                     <!-- Nested Replies Container for this reply -->
                                                     <div id="replies-{{ $reply->id }}"
@@ -776,53 +729,51 @@
             }
         });
 
-        // Force refresh on back/forward navigation
-        window.addEventListener("popstate", function(event) {
-            const url = new URL(window.location);
-            url.searchParams.set('_t', Date.now());
-            window.location.href = url.toString();
-        });
-        document.addEventListener("DOMContentLoaded", function() {
-            document.querySelectorAll(".inline-edit-form").forEach(form => {
-                form.addEventListener("submit", function(e) {
-                    e.preventDefault();
+// Force refresh on back/forward navigation
+window.addEventListener("popstate", function (event) {
+    const url = new URL(window.location);
+    url.searchParams.set('_t', Date.now());
+    window.location.href = url.toString();
+});
+document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll(".inline-edit-form").forEach(form => {
+        form.addEventListener("submit", function (e) {
+            e.preventDefault();
 
-                    let formData = new FormData(this);
-                    formData.append('_method', 'PUT'); // Important!
+            let formData = new FormData(this);
+            formData.append('_method', 'PUT'); // Important!
 
-                    let commentId = this.dataset.id;
-                    let url = this.action;
+            let commentId = this.dataset.id;
+            let url = this.action;
 
-                    fetch(url, {
-                            method: "POST", // Still POST, Laravel sees _method=PUT
-                            headers: {
-                                "X-CSRF-TOKEN": document.querySelector(
-                                    'meta[name="csrf-token"]').content,
-                                "Accept": "application/json"
-                            },
-                            body: formData
-                        })
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.success) {
-                                // ✅ Update the DOM immediately
-                                const contentDiv = document.getElementById("comment-content-" +
-                                    commentId);
-                                contentDiv.innerText = data.comment.content;
+            fetch(url, {
+                method: "POST", // Still POST, Laravel sees _method=PUT
+                headers: {
+                    "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content,
+                    "Accept": "application/json"
+                },
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // ✅ Update the DOM immediately
+                    const contentDiv = document.getElementById("comment-content-" + commentId);
+                    contentDiv.innerText = data.comment.content;
 
-                                this.classList.add("hidden");
-                                contentDiv.classList.remove("hidden");
-                            } else {
-                                alert(data.error || "Failed to update comment.");
-                            }
-                        })
-                        .catch(error => {
-                            console.error("Error updating comment:", error);
-                            alert("Something went wrong while updating the comment.");
-                        });
-                });
+                    this.classList.add("hidden");
+                    contentDiv.classList.remove("hidden");
+                } else {
+                    alert(data.error || "Failed to update comment.");
+                }
+            })
+            .catch(error => {
+                console.error("Error updating comment:", error);
+                alert("Something went wrong while updating the comment.");
             });
         });
+    });
+});
 
         // Optional: Add JavaScript to expand comments on hover/click
         document.querySelectorAll('.comment-item').forEach(item => {
@@ -941,13 +892,20 @@
                 <p class="font-medium">${commentData.user.fname} ${commentData.user.lname}</p>
                 <p>${commentData.content}</p>
                 <button onclick="toggleReplyForm(${commentData.id})" class="text-xs text-gray-500 hover:text-[#B59F84]">Reply</button>
-                <div id="reply-form-${commentData.id}" class="hidden mt-2 ml-6">
+                <div id="reply-form-${commentData.id}" class="hidden mt-3 ml-4">
                     <form class="reply-form" data-parent-id="${commentData.id}">
-                        <textarea name="content" class="w-full border rounded p-2" rows="2" required></textarea>
-                        <input type="hidden" name="parent_id" value="${commentData.id}">
-                        <input type="hidden" name="product_id" value="${commentData.product_id}">
+                    <div class="flex gap-2">
+                        <textarea name="content" class="w-full border rounded p-2"  class="flex-1 p-2 border border-gray-300 dark:border-gray-600 rounded-lg resize-none focus:ring-2 focus:ring-[#B59F84] focus:border-transparent dark:bg-gray-700 dark:text-white" rows="2" required></textarea>
+                       <div class="flex flex-col gap-2">
+                      
                         <button type="submit" class="px-3 py-1 bg-[#B59F84] text-white rounded text-sm mt-1">Reply</button>
-                    </form>
+                        <button type="button" onclick="toggleReplyForm(${commentData.id})" class="px-3 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors duration-200 text-sm">Cancel</button>
+                        
+                      </div>
+                    </div>
+                      <input type="hidden" name="parent_id" value="${commentData.id}">
+                      <input type="hidden" name="product_id" value="${commentData.product_id}">
+                        </form>
                 </div>
             </div>
         </div>
@@ -964,13 +922,13 @@
                 return;
             }
 
-            const commentHtml = `
+    const commentHtml = `
             <div class="comment-item" data-comment-id="${commentData.id}" id="comment-${commentData.id}">
                 <div class="flex gap-3">
                     <!-- User Avatar -->
                     <div class="flex-shrink-0">
-                        <div class="w-10 h-10 bg-white dark:bg-gray-700 rounded-full border-2 border-white dark:border-gray-800 flex items-center justify-center">
-                            <span class="text-sm font-bold text-gray-800 dark:text-gray-200">
+                        <div class="w-10 h-10 bg-[#B59F84] rounded-full border-2 border-white dark:border-gray-800 flex items-center justify-center">
+                            <span class="text-sm font-bold text-white">
                                 ${commentData.user.fname ? (commentData.user.fname.charAt(0) + commentData.user.lname.charAt(0)).toUpperCase() : 'U'}
                             </span>
                         </div>
@@ -978,7 +936,7 @@
                    
                     <!-- Comment Content -->
                     <div class="flex-1">
-    <div class=" p-3">
+    <div class="flex-1">
         <!-- Comment Header -->
         <div class="flex justify-between items-start mb-1">
             <div>
@@ -1000,7 +958,7 @@
                 
                 <!-- Dropdown -->
                 <div id="dropdown-${commentData.id}" class="absolute right-0 mt-1 w-28 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded shadow z-10 hidden">
-                    <button type="button" onclick="editComment(${commentData.id})" class="w-full text-left px-3 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700">
+                    <button type="button" onclick="toggleEditForm(${commentData.id})" class="w-full text-left px-3 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700">
                         Edit
                     </button>
                     <button type="button" onclick="deleteComment(${commentData.id})" class="w-full text-left px-3 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-gray-50 dark:hover:bg-gray-700">
@@ -1019,7 +977,7 @@
         <div class="flex items-center gap-4 text-xs text-gray-500 dark:text-gray-400">
             <!-- Like -->
             <button onclick="toggleLike(${commentData.id})" 
-                    class="flex items-center gap-1 hover:text-blue-500 transition-colors duration-200 text-gray-500"
+                    class="flex items-center gap-1 hover:text-[#B59F84] transition-colors duration-200 "
                     id="like-btn-${commentData.id}">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
@@ -1029,7 +987,7 @@
 
             <!-- Reply -->
             <button onclick="toggleReplyForm(${commentData.id})" 
-                    class="flex items-center gap-1 hover:text-blue-500 transition-colors duration-200">
+                    class="flex items-center gap-1 hover:text-[#B59F84] transition-colors duration-200">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
                 </svg>
@@ -1039,10 +997,10 @@
     </div>
 
     <!-- Inline Edit Form -->
-    <form id="inline-edit-form-${commentData.id}" class="hidden mt-2 bg-gray-100 dark:bg-gray-600 p-3 rounded-lg" data-id="${commentData.id}">
+    <form id="inline-edit-form-${commentData.id}" action="/comments/${commentData.id}" method="POST" class="inline-edit-form hidden mt-2 bg-gray-100 dark:bg-gray-600 p-3 rounded-lg" data-id="${commentData.id}">
         <textarea name="content" rows="2" class="w-full border rounded p-2 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200">${commentData.content}</textarea>
         <div class="flex gap-2 mt-2">
-            <button type="submit" class="px-3 py-1 bg-blue-500 text-white rounded text-sm">Save</button>
+            <button type="submit" class="px-3 py-1 bg-[#B59F84] text-white rounded text-sm hover:bg-[#a08e77] transition-all duration-200">Save</button>
             <button type="button" onclick="cancelEdit(${commentData.id})" class="px-3 py-1 bg-gray-300 text-gray-800 rounded hover:bg-gray-400 text-sm">Cancel</button>
         </div>
     </form>
@@ -1051,9 +1009,9 @@
     <div id="reply-form-${commentData.id}" class="hidden mt-3 ml-4">
         <form class="reply-form" data-parent-id="${commentData.id}">
             <div class="flex gap-2">
-                <textarea name="content" placeholder="Write a reply..." class="flex-1 p-2 border border-gray-300 dark:border-gray-600 rounded-lg resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white" rows="2" required></textarea>
+                <textarea name="content" placeholder="Write a reply..." class="flex-1 p-2 border border-gray-300 dark:border-gray-600 rounded-lg resize-none focus:ring-2 focus:ring-[#B59F84] focus:border-transparent dark:bg-gray-700 dark:text-white" rows="2" required></textarea>
                 <div class="flex flex-col gap-2">
-                    <button type="submit" class="px-3 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors duration-200 text-sm">Reply</button>
+                    <button type="submit" class="px-3 py-2 bg-[#B59F84] text-white rounded-lg hover:bg-[#a08e77] transition-all duration-200 text-sm">Reply</button>
                     <button type="button" onclick="toggleReplyForm(${commentData.id})" class="px-3 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors duration-200 text-sm">Cancel</button>
                 </div>
             </div>
@@ -1249,8 +1207,8 @@
             const replyHtml = `
         <div class=\"reply-item flex gap-3\" id=\"reply-${commentData.id}\" data-comment-id=\"${commentData.id}\">
             <div class=\"flex-shrink-0\">
-                <div class=\"w-8 h-8 bg-white dark:bg-gray-700 rounded-full border-2 border-white dark:border-gray-800 flex items-center justify-center\">
-                    <span class=\"text-xs font-bold text-gray-800 dark:text-gray-200\">
+                <div class=\"w-8 h-8 bg-[#B59F84] rounded-full border-2 border-white dark:border-gray-800 flex items-center justify-center\">
+                    <span class=\"text-sm font-bold text-white\">
                         ${(commentData.user?.fname?.charAt(0).toUpperCase() ?? '')}${(commentData.user?.lname?.charAt(0).toUpperCase() ?? '')}
                     </span>
                 </div>
@@ -1268,15 +1226,20 @@
                     <button onclick=\"toggleReplyForm(${commentData.id})\" class=\"hover:text-[#B59F84] transition-colors duration-200\">Reply</button>
                 </div>
 
-                <div id=\"reply-form-${commentData.id}\" class=\"hidden mt-2 ml-8\">
+                <div id=\"reply-form-${commentData.id}\" class=\"hidden mt-3 ml-4\">
                     <form class=\"reply-form\" data-parent-id=\"${commentData.id}\">
-                        <textarea name=\"content\" class=\"w-full border rounded p-2\" rows=\"2\" required></textarea>
-                        <input type=\"hidden\" name=\"parent_id\" value=\"${commentData.id}\">
-                        <input type=\"hidden\" name=\"product_id\" value=\"${commentData.product_id}\">
-                        <button type=\"submit\" class=\"px-3 py-1 bg-[#B59F84] text-white rounded text-sm mt-1\">Reply</button>
-                    </form>
+                    <div class="flex gap-2">
+                        <textarea name=\"content\" placeholder="Write a reply..." class=\"flex-1 p-2 border border-gray-300 dark:border-gray-600 rounded-lg resize-none focus:ring-2 focus:ring-[#B59F84] focus:border-transparent dark:bg-gray-700 dark:text-white\" rows=\"2\" required></textarea>
+                          <div class="flex flex-col gap-2">
+                     
+                        <button type=\"submit\" class=\"px-3 py-2 bg-[#B59F84] text-white rounded-lg hover:bg-[#a08e77] transition-all duration-200 text-sm\">Reply</button>
+                        <button type=\"button\" onclick=\"toggleReplyForm(${commentData.id})\" class=\"px-3 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors duration-200 text-sm\">Cancel</button>
+                           </div>
+                     </div>
+                  </form>
                 </div>
-
+               <input type=\"hidden\" name=\"parent_id\" value=\"${commentData.id}\">
+               <input type=\"hidden\" name=\"product_id\" value=\"${commentData.product_id}\">
                 <div id=\"replies-${commentData.id}\" class=\"hidden ml-8 mt-3 space-y-3 border-l-2 border-gray-200 dark:border-gray-600 pl-4\"></div>
             </div>
         </div>

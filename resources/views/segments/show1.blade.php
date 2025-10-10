@@ -96,68 +96,49 @@
     </div>
 <div class="py-6 bg-white dark:bg-gray-900">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center mb-6">
+            <div class="flex justify-between items-center mb-6 relative">
                 <h2 class="text-xl font-bold text-red-600 dark:text-red-400">{{ $segment->name }} Products</h2>
+                <div x-data="{ open: false }" class="relative">
+                    <button @click="open = !open" class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 text-sm shadow-sm">
+                        <span>Category</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-700 dark:text-gray-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                    </button>
+                    <div x-cloak x-show="open" @click.outside="open = false" class="absolute right-0 mt-2 w-44 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg z-20 py-1">
+                        <a data-category-link href="{{ route('segments.show', ['segment' => $segment->id]) }}" class="block px-3 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg">All</a>
+                        @foreach($categories as $cat)
+                            <a data-category-link href="{{ route('segments.show', ['segment' => $segment->id, 'category' => $cat->id]) }}" class="block px-3 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg {{ (isset($selectedCategoryId) && (int)$selectedCategoryId === $cat->id) ? 'font-semibold' : '' }}">
+                                {{ $cat->name }}
+                            </a>
+                        @endforeach
+                    </div>
+                </div>
             </div>
 
           <div class="rounded-xl shadow-sm overflow-hidden">
-    <div class="p-4 sm:p-6">
-        @if($products->count() > 0)
-            <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-4 md:gap-6">
-                @foreach ($products as $product)
-                    <div class="group relative bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition duration-200 border border-[#D9D9D9] dark:border-gray-700">
-                        <a href="{{ route('products.show', $product->id) }}" class="block h-full">
-                            {{-- Listing Type Badge --}}
-                            @if($product->listingtype === 'for donation')
-                                <div class="absolute top-2 left-2 z-10 bg-[#D9D9D9] text-gray-700 text-[10px] sm:text-xs px-1.5 py-0.5 sm:px-2 sm:py-1 rounded-full">
-                                    Donation
-                                </div>
-                            @endif
-
-                            {{-- Product Image --}}
-                            <div class="relative aspect-square overflow-hidden">
-                         <img 
-                                src="{{ asset('storage/' . ($product->first_image ?? 'images/default-placeholder.png')) }}" 
-                                alt="{{ $product->name }}" 
-                                class="w-full h-full object-cover"
-                            />
-                                <div class="absolute inset-0 bg-gray-800 bg-opacity-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                                    <span class="bg-white text-gray-800 px-2 py-0.5 rounded-full text-[10px] sm:text-xs font-medium">
-                                        Quick view
-                                    </span>
-                                </div>
-                            </div>
-
-                            {{-- Product Details --}}
-                            <div class="p-2 sm:p-3">
-                                <div class="flex justify-between items-start">
-                                    <h3 class="text-xs sm:text-sm font-bold text-gray-900 dark:text-white group-hover:text-red-600 transition-colors truncate max-w-[70%]">
-                                        {{ $product->name }}
-                                    </h3>
-                                    <span class="text-[10px] sm:text-xs font-medium px-1 py-0.5 bg-[#D9D9D9] dark:bg-gray-700 rounded text-gray-700 dark:text-gray-300">
-                                        {{ $product->size ?? 'L' }}
-                                    </span>
-                                </div>
-
-                                <p class="text-gray-500 dark:text-gray-400 text-[10px] sm:text-xs mt-0.5 truncate">
-                                    {{ $product->category->name ?? 'No Category' }}
-                                </p>
-
-                                <div class="flex justify-between items-center mt-1">
-                                    <p class="text-xs sm:text-sm font-bold {{ $product->listingtype === 'for donation' ? 'text-gray-700' : 'text-red-600' }}">
-                                        {{ $product->listingtype === 'for donation' ? 'For Donation' : '₱' . number_format($product->price, 2) }}
-                                    </p>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                @endforeach
-            </div>
-        @else
-            <x-empty-message message="No products found in this segment." link="{{ route('products.create') }}" />
-        @endif
+    <div id="productsGrid" class="p-4 sm:p-6">
+        @include('segments.partials.products-grid', ['products' => $products])
     </div>
 </div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const container = document.getElementById('productsGrid');
+  document.querySelectorAll('[data-category-link]').forEach(link => {
+    link.addEventListener('click', async (e) => {
+      e.preventDefault();
+      const apiUrl = `{{ url('segments/'.$segment->id.'/products') }}` + (e.currentTarget.search || '');
+      const res = await fetch(apiUrl, { headers: { 'X-Requested-With': 'XMLHttpRequest' }});
+      const json = await res.json();
+      container.innerHTML = json.html;
+      const newUrl = new URL(window.location);
+      const params = new URLSearchParams(e.currentTarget.search);
+      if (params.get('category')) newUrl.searchParams.set('category', params.get('category')); else newUrl.searchParams.delete('category');
+      window.history.replaceState({}, '', newUrl);
+    });
+  });
+});
+</script>
 
         </div>
     </div>
