@@ -1,25 +1,50 @@
 <section x-data="{ showUpload: false }" class="space-y-4">
     <!-- Trigger Button -->
-    <div>
-        <button type="button"
-            @click="showUpload = !showUpload"
-            class="inline-flex items-center gap-2 px-5 py-2.5 
-                @if($user->verification_status === 'pending') bg-green-400 cursor-not-allowed 
-                @elseif($user->verification_status === 'approved') bg-green-700 hover:bg-green-800 
-                @else bg-green-600 hover:bg-green-700 @endif
-                border border-transparent rounded-xl font-semibold text-sm text-white uppercase tracking-wide shadow-md 
-                focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition"
-            @if($user->verification_status === 'pending' || $user->verification_status === 'approved') disabled @endif>
+    <div class="relative">
+    <button type="button"
+        @click="showUpload = !showUpload"
+        class="inline-flex items-center gap-3 px-6 py-3 
+            @if($user->verification_status === 'pending') bg-amber-500/90 cursor-not-allowed 
+            @elseif($user->verification_status === 'approved') bg-emerald-600 hover:bg-emerald-700 
+            @else bg-green-600 hover:bg-green-700 @endif
+            border-0 rounded-2xl font-semibold text-sm text-white uppercase tracking-wider shadow-lg 
+            hover:shadow-xl transform transition-all duration-300 ease-out
+            focus:outline-none focus:ring-3 focus:ring-green-400 focus:ring-offset-2 focus:ring-offset-white
+            disabled:opacity-80 disabled:cursor-not-allowed disabled:transform-none disabled:hover:shadow-lg"
+        @if($user->verification_status === 'pending' || $user->verification_status === 'approved') disabled @endif>
+        
+        <!-- Icons for each state -->
+        @if($user->verification_status === 'pending')
+            <svg class="w-5 h-5 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+            <span>Under Review</span>
             
-            @if($user->verification_status === 'pending')
-                Under Review
-            @elseif($user->verification_status === 'approved')
-                Verified
-            @else
-                Get Verified
-            @endif
-        </button>
+        @elseif($user->verification_status === 'approved')
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+            <span>Verified</span>
+            
+        @else
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+            </svg>
+            <span>Get Verified</span>
+        @endif
+    </button>
+
+    <!-- Status Description -->
+    <div class="mt-2 text-xs text-gray-500 dark:text-gray-400 font-medium transition-opacity duration-300">
+        @if($user->verification_status === 'pending')
+            ⏳ Your verification is being reviewed
+        @elseif($user->verification_status === 'approved')
+            ✅ Identity verified successfully
+        @else
+            🔒 Verify your account to unlock features
+        @endif
     </div>
+</div>
 
     <!-- Approved -->
     @if($user->verification_status === 'approved')

@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Http\Request;
 use App\Services\CommentService;
-use App\Notifications\ProductCommentNotification;
 use Exception;
 
 class CommentController extends Controller
@@ -55,11 +54,11 @@ class CommentController extends Controller
                 Cache::forget("product_{$request->product_id}_comments");
                 Cache::forget("product_{$request->product_id}_with_comments");
                 
-                // Send notification to product owner if it's not the commenter
-                $product = Product::find($request->product_id);
-                if ($product && $product->user_id !== Auth::id()) {
-                    $product->user->notify(new ProductCommentNotification($comment, $product));
-                }
+                // Optionally notify product owner (notification class removed)
+                // $product = Product::find($request->product_id);
+                // if ($product && $product->user_id !== Auth::id()) {
+                //     // Implement notification here if/when available
+                // }
             }
             
             // Clear cache for this donation's comments
