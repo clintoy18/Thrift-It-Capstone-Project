@@ -8,6 +8,9 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Http\Request;
 use App\Services\CommentService;
+use App\Events\CommentNotification;
+use App\Models\Donation;
+use App\Models\Notification;
 use Exception;
 
 class CommentController extends Controller
@@ -54,17 +57,47 @@ class CommentController extends Controller
                 Cache::forget("product_{$request->product_id}_comments");
                 Cache::forget("product_{$request->product_id}_with_comments");
                 
-                // Optionally notify product owner (notification class removed)
-                // $product = Product::find($request->product_id);
-                // if ($product && $product->user_id !== Auth::id()) {
-                //     // Implement notification here if/when available
-                // }
+                $product = Product::find($request->product_id);
+
+            if ($product && $product->user_id !== Auth::id()) {
+                // Save notification to DB
+               Notification::create([
+                    'user_id' => $product->user_id,
+                    'type'    => 'comment',
+                    'data'    => [
+                    'from_user'  => Auth::user()->fname . ' ' . Auth::user()->lname,
+                    'content'    => $comment->content,
+                    'product_id' => $product->id,
+                    ],
+                ]);
+
+                // Fire real-time event
+                broadcast(new CommentNotification($comment, $product->user_id))->toOthers();
+            }
             }
             
             // Clear cache for this donation's comments
             if ($request->donation_id) {
                 Cache::forget("donation_{$request->donation_id}_comments");
                 Cache::forget("donation_{$request->donation_id}_with_comments");
+
+                $donation = Donation::find($request->donation_id);
+
+                if ($donation && $donation->user_id !== Auth::id()) {
+                    // Save notification to DB
+                    Notification::create([
+                        'user_id' => $donation->user_id,
+                        'type'    => 'comment',
+                        'data'    => [
+                            'from_user'   => Auth::user()->fname . ' ' . Auth::user()->lname,
+                            'content'     => $comment->content,
+                            'donation_id' => $donation->id,
+                        ],
+                    ]);
+    
+                    // Fire real-time event
+                    broadcast(new CommentNotification($comment, $donation->user_id))->toOthers();
+                }
             }
 
             if ($request->expectsJson()) {
