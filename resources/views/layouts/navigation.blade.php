@@ -21,7 +21,7 @@
                             class="text-gray-700 hidden font-bold lg:block">Upcycle</a>
                     @elseif($role === 1)
                         <a href="{{ route('upcycler.index') }}"
-                            class="bg-black text-white px-3 py-1.5 text-sm rounded hover:bg-gray-800 transition">Manage
+                            class="text-gray-700 hidden font-bold lg:block">Manage
                             Appointments</a>
                     @endif
                 </div>
