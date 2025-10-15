@@ -43,7 +43,7 @@ class RoleMiddleware
 
         switch($authUserRole){
             case 2:
-                return redirect()->route('admin');
+                return redirect()->route('admin.dashboard');
             case 1:
                 return redirect()->route('upcycler');
                

@@ -39,6 +39,9 @@ Route::get('/dashboard', [UserDashboardController::class, 'index'])
 Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])
     ->middleware(['auth', 'verified', 'rolemiddleware:admin'])
     ->name('admin.dashboard');
+Route::get('/admin/export', [AdminReportController::class, 'exportAllPdf'])
+    ->middleware(['auth', 'verified', 'rolemiddleware:admin'])
+    ->name('admin.export.pdf');
     
 Route::get('upcycler/dashboard', function () {
     return view('upcycler');})
