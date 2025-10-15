@@ -15,31 +15,31 @@
 
     <div class="py-8">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-           <!-- Welcome Banner -->
-<div class="mb-8 bg-[#F4F2ED] rounded-xl shadow-lg overflow-hidden border border-gray-200 dark:border-gray-700">
-    <div class="p-6 text-gray-800 dark:text-gray-200">
-        <div class="flex flex-col md:flex-row justify-between items-center">
-            <div class="mb-4 md:mb-0">
-                <h3 class="text-2xl font-bold mb-2 flex items-center">
-                    <i class="fas fa-gem text-indigo-600 dark:text-indigo-400 mr-3"></i>
-                    Welcome back, Administrator!
-                </h3>
-                <p class="text-gray-600 dark:text-gray-300">Here's what's happening with your platform today.</p>
-            </div>
-            <div class="flex items-center space-x-6">
-                <div class="text-center">
-                    <div class="text-3xl font-bold text-indigo-600 dark:text-indigo-400">{{ $stats['new_users_today'] }}</div>
-                    <div class="text-sm text-gray-600 dark:text-gray-300">New Users Today</div>
+            <!-- Welcome Banner -->
+            <div class="mb-8 bg-[#F4F2ED] rounded-xl shadow-lg overflow-hidden border border-gray-200 dark:border-gray-700">
+                <div class="p-6 text-gray-800 dark:text-gray-200">
+                    <div class="flex flex-col md:flex-row justify-between items-center">
+                        <div class="mb-4 md:mb-0">
+                            <h3 class="text-2xl font-bold mb-2 flex items-center">
+                                <i class="fas fa-gem text-indigo-600 dark:text-indigo-400 mr-3"></i>
+                                Welcome back, Administrator!
+                            </h3>
+                            <p class="text-gray-600 dark:text-gray-300">Here's what's happening with your platform today.</p>
+                        </div>
+                        <div class="flex items-center space-x-6">
+                            <div class="text-center">
+                                <div class="text-3xl font-bold text-indigo-600 dark:text-indigo-400">{{ $stats['new_users_today'] }}</div>
+                                <div class="text-sm text-gray-600 dark:text-gray-300">New Users Today</div>
+                            </div>
+                            <div class="h-12 w-px bg-gray-300 dark:bg-gray-600 opacity-50"></div>
+                            <div class="text-center">
+                                <div class="text-3xl font-bold text-green-600 dark:text-green-400">{{ $stats['new_products_today'] }}</div>
+                                <div class="text-sm text-gray-600 dark:text-gray-300">New Products Today</div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="h-12 w-px bg-gray-300 dark:bg-gray-600 opacity-50"></div>
-                <div class="text-center">
-                    <div class="text-3xl font-bold text-green-600 dark:text-green-400">{{ $stats['new_products_today'] }}</div>
-                    <div class="text-sm text-gray-600 dark:text-gray-300">New Products Today</div>
-                </div>
             </div>
-        </div>
-    </div>
-</div>
 
             <!-- Statistics Cards -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
@@ -161,65 +161,53 @@
                     </div>
                 </div>
 
-                <!-- Quick Stats Panel -->
-                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden">
-                    <div class="p-6 border-b border-gray-200 dark:border-gray-700">
-                        <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-100 flex items-center">
-                            <i class="fas fa-chart-pie text-purple-500 mr-2"></i> Platform Overview
-                        </h3>
-                        <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Key metrics at a glance</p>
+                <!-- Quick Stats Sidebar -->
+                <div class="space-y-6">
+                    <!-- Revenue Summary -->
+                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden">
+                        <div class="p-6 border-b border-gray-200 dark:border-gray-700">
+                            <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-100 flex items-center">
+                                <i class="fas fa-chart-pie text-purple-500 mr-2"></i> Revenue Summary
+                            </h3>
+                        </div>
+                        <div class="p-6 space-y-4">
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm text-gray-600 dark:text-gray-400">This Month</span>
+                                <span class="text-lg font-bold text-green-600 dark:text-green-400">
+                                    ₱{{ number_format($currentMonthRevenue, 2) }}
+                                </span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm text-gray-600 dark:text-gray-400">Last Month</span>
+                                <span class="text-lg font-bold text-blue-600 dark:text-blue-400">
+                                    ₱{{ number_format($lastMonthRevenue, 2) }}
+                                </span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm text-gray-600 dark:text-gray-400">Growth</span>
+                                <span class="text-sm font-bold {{ $revenueGrowth >= 0 ? 'text-green-600' : 'text-red-600' }}">
+                                    {{ $revenueGrowth >= 0 ? '+' : '' }}{{ number_format($revenueGrowth, 1) }}%
+                                </span>
+                            </div>
+                        </div>
                     </div>
-                    <div class="p-6 space-y-4">
-                        <div class="flex justify-between items-center p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
-                            <div class="flex items-center">
-                                <div class="p-2 rounded-full bg-blue-100 dark:bg-blue-800 text-blue-600 dark:text-blue-300 mr-3">
-                                    <i class="fas fa-user-check"></i>
-                                </div>
-                                <div>
-                                    <p class="text-sm font-medium text-gray-700 dark:text-gray-300">Active Users</p>
-                                    <p class="text-xs text-gray-500 dark:text-gray-400">Currently online</p>
-                                </div>
-                            </div>
-                            <span class="text-lg font-bold text-blue-600 dark:text-blue-400">1,243</span>
+
+                    <!-- Top Categories -->
+                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden">
+                        <div class="p-6 border-b border-gray-200 dark:border-gray-700">
+                            <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-100 flex items-center">
+                                <i class="fas fa-tags text-green-500 mr-2"></i> Top Categories
+                            </h3>
                         </div>
-                        
-                        <div class="flex justify-between items-center p-3 bg-green-50 dark:bg-green-900/20 rounded-lg">
-                            <div class="flex items-center">
-                                <div class="p-2 rounded-full bg-green-100 dark:bg-green-800 text-green-600 dark:text-green-300 mr-3">
-                                    <i class="fas fa-check-circle"></i>
+                        <div class="p-6 space-y-3">
+                            @foreach($topCategories as $category)
+                                <div class="flex justify-between items-center">
+                                    <span class="text-sm text-gray-600 dark:text-gray-400">{{ $category->name }}</span>
+                                    <span class="text-sm font-bold text-gray-800 dark:text-gray-200">
+                                        {{ $category->products_count }} products
+                                    </span>
                                 </div>
-                                <div>
-                                    <p class="text-sm font-medium text-gray-700 dark:text-gray-300">Completed Orders</p>
-                                    <p class="text-xs text-gray-500 dark:text-gray-400">This month</p>
-                                </div>
-                            </div>
-                            <span class="text-lg font-bold text-green-600 dark:text-green-400">892</span>
-                        </div>
-                        
-                        <div class="flex justify-between items-center p-3 bg-amber-50 dark:bg-amber-900/20 rounded-lg">
-                            <div class="flex items-center">
-                                <div class="p-2 rounded-full bg-amber-100 dark:bg-amber-800 text-amber-600 dark:text-amber-300 mr-3">
-                                    <i class="fas fa-exclamation-circle"></i>
-                                </div>
-                                <div>
-                                    <p class="text-sm font-medium text-gray-700 dark:text-gray-300">Pending Reviews</p>
-                                    <p class="text-xs text-gray-500 dark:text-gray-400">Require attention</p>
-                                </div>
-                            </div>
-                            <span class="text-lg font-bold text-amber-600 dark:text-amber-400">47</span>
-                        </div>
-                        
-                        <div class="flex justify-between items-center p-3 bg-indigo-50 dark:bg-indigo-900/20 rounded-lg">
-                            <div class="flex items-center">
-                                <div class="p-2 rounded-full bg-indigo-100 dark:bg-indigo-800 text-indigo-600 dark:text-indigo-300 mr-3">
-                                    <i class="fas fa-percentage"></i>
-                                </div>
-                                <div>
-                                    <p class="text-sm font-medium text-gray-700 dark:text-gray-300">Conversion Rate</p>
-                                    <p class="text-xs text-gray-500 dark:text-gray-400">Site-wide average</p>
-                                </div>
-                            </div>
-                            <span class="text-lg font-bold text-indigo-600 dark:text-indigo-400">3.2%</span>
+                            @endforeach
                         </div>
                     </div>
                 </div>
