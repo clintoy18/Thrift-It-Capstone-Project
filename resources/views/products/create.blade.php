@@ -1,8 +1,8 @@
 <x-app-layout>
-    <div class="pt-0 sm:pt-10 pb-0 ">
+    <div class="pt-8 sm:pt-12 pb-8">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <!-- Mobile Header -->
-            <div class="block md:hidden mb-6">
+            <div class="block md:hidden mb-8">
                 <h2 class="text-xl font-bold text-custom-dark text-center">
                     <i>Sell
                     <img src="{{ asset('images/image 165.png') }}" alt="emoji" class="inline-block h-5 w-4 align-middle ml-1">
@@ -13,11 +13,10 @@
             
         
             <!-- Desktop Header -->
-          @section('content')
         <x-step-progress :currentStep="$currentStep" />
 
             <!-- Main Layout with Form Container -->
-            <form id="productForm" action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
+            <form id="productForm" action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data" class="space-y-8">
                 @csrf
                 <div class="grid grid-cols-1 lg:grid-cols-5 gap-6 lg:gap-10 items-start lg:relative lg:left-[-150px]">
                     <!-- Left Side - Image Upload Section (multiple with previews) -->

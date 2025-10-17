@@ -1,4 +1,4 @@
-<nav class="w-full bg-[#F4F2ED] px-4 sm:px-6 md:px-8 py-6">
+<nav class="w-full bg-[#F4F2ED] px-4 sm:px-6 md:px-8 py-6 relative z-50">
     <div class="max-w-7xl mx-auto" x-data="{ mobileMenuOpen: false }">
         <!-- Desktop Navigation -->
         <div class="flex justify-between items-center">
@@ -122,7 +122,7 @@
                     </button>
 
                     <div x-show="open" @click.away="open = false"
-                        class="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-md z-10">
+                        class="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-md z-50">
 
                         {{-- Hide Profile and Settings for Admin (role = 2) --}}
                         @if (Auth::user()->role != 2)

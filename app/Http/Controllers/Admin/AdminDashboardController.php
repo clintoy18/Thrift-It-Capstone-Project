@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Models\Report;
 use App\Models\User;
+use App\Models\Categories;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\DB;
 
@@ -76,6 +77,22 @@ class AdminDashboardController extends Controller
             ->orderBy('month')
             ->get();
 
+        // Revenue summary (this month vs last month)
+        $currentMonthRevenue = Product::where('status', 'sold')
+            ->whereYear('created_at', now()->year)
+            ->whereMonth('created_at', now()->month)
+            ->sum('price');
+
+        $lastMonthDate = now()->subMonth();
+        $lastMonthRevenue = Product::where('status', 'sold')
+            ->whereYear('created_at', $lastMonthDate->year)
+            ->whereMonth('created_at', $lastMonthDate->month)
+            ->sum('price');
+
+        $revenueGrowth = $lastMonthRevenue > 0
+            ? (($currentMonthRevenue - $lastMonthRevenue) / $lastMonthRevenue) * 100
+            : ($currentMonthRevenue > 0 ? 100 : 0);
+
         // Report categories breakdown
         $reportCategories = ['Spam', 'Inappropriate Content', 'Scam', 'Harassment', 'Other'];
         $reportCounts = [
@@ -93,6 +110,12 @@ class AdminDashboardController extends Controller
             'rejected' => Report::where('status', 'rejected')->count(),
         ];
 
+        // Top categories by number of products
+        $topCategories = Categories::withCount('products')
+            ->orderBy('products_count', 'desc')
+            ->take(5)
+            ->get();
+
         return view('admin.dashboard', compact(
             'stats',
             'recentReports',
@@ -102,8 +125,12 @@ class AdminDashboardController extends Controller
             'reportCategories',
             'reportCounts',
             'statusCounts',
+            'topCategories',
             'monthlySalesDetails',
-            'yearlySalesSummary'
+            'yearlySalesSummary',
+            'currentMonthRevenue',
+            'lastMonthRevenue',
+            'revenueGrowth'
         ));
     }
 }

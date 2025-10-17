@@ -109,47 +109,234 @@
                                 @endif
                             @endif
 
-                            <!-- Modal -->
-                            <div x-show="open" x-transition
-                                class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
-                                <div class="bg-white rounded-lg shadow-lg w-full max-w-md p-6 relative">
-                                    <button type="button" @click="open = false"
-                                        class="absolute top-3 right-3 text-gray-400 hover:text-gray-600">
-                                        ✕
-                                    </button>
+                          <!-- Enhanced Payment Modal -->
+<div x-show="open" x-transition
+    class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md mx-4 overflow-hidden relative">
+        <!-- Header with Gradient Background -->
+        <div class="bg-gradient-to-r from-[#B59F84] to-[#8A7B66] p-6 text-white">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                  d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <h2 class="text-xl font-bold">Complete Your Purchase</h2>
+                        <p class="text-white/80 text-sm">Secure payment process</p>
+                    </div>
+                </div>
+                <button type="button" @click="open = false; clearFileInput()"
+                    class="w-8 h-8 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center transition-all duration-200">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
 
-                                    <h2 class="text-xl font-semibold text-gray-800 mb-4">Complete Your Purchase</h2>
+        <!-- Progress Steps - UPDATED -->
+        <div class="px-6 pt-6">
+            <div class="flex items-center justify-between mb-8">
+                <div class="flex flex-col items-center">
+                    <div class="w-8 h-8 bg-[#B59F84] rounded-full flex items-center justify-center text-white text-sm font-bold">
+                        1
+                    </div>
+                    <span class="text-xs text-gray-600 mt-1">Scan QR</span>
+                </div>
+                <div class="flex-1 h-1 bg-gray-200 mx-2">
+                    <div class="h-1 bg-[#B59F84] transition-all duration-300" id="progress-line"></div>
+                </div>
+                <div class="flex flex-col items-center">
+                    <div class="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center text-gray-500 text-sm font-bold transition-all duration-300" id="step-2-circle">
+                        2
+                    </div>
+                    <span class="text-xs text-gray-600 mt-1">Upload Proof</span>
+                </div>
+            </div>
+        </div>
 
-                                    <!-- Show QR -->
-                                    <div class="mb-4">
-                                        <p class="text-sm text-gray-600 mb-2">Scan this QR to pay:</p>
-                                        <img src="{{ asset('storage/' . $product->qr_code) }}" alt="QR Code"
-                                            class="w-40 h-40 mx-auto object-contain">
-                                    </div>
+        <!-- Content - Scrollable -->
+        <div class="p-6 max-h-96 overflow-y-auto">
+            <!-- QR Code Section -->
+            <div class="mb-8">
+                <div class="flex items-center space-x-2 mb-4">
+                    <div class="w-6 h-6 bg-[#F8EED6] rounded-full flex items-center justify-center">
+                        <svg class="w-3 h-3 text-[#634600]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                  d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-semibold text-gray-800">Scan to Pay</h3>
+                </div>
+                
+                <div class="bg-gradient-to-br from-[#F8EED6] to-[#F4F2ED] rounded-xl p-4 mb-4">
+                    <p class="text-sm text-[#603E14] mb-3 text-center">
+                        Use your mobile banking app to scan this QR code
+                    </p>
+                    <div class="flex justify-center">
+                        <div class="relative">
+                            <img src="{{ asset('storage/' . $product->qr_code) }}" alt="QR Code"
+                                class="w-48 h-48 object-contain border-4 border-white rounded-lg shadow-md">
+                            <div class="absolute inset-0 border-2 border-dashed border-[#B59F84] rounded-lg animate-pulse"></div>
+                        </div>
+                    </div>
+                </div>
 
-                                    <!-- Upload Proof -->
-                                    <form action="{{ route('orders.store', $product->id) }}" method="POST"
-                                        enctype="multipart/form-data">
-                                        @csrf
-                                        <label class="block text-sm font-medium text-gray-700 mb-2">Upload Proof of
-                                            Payment</label>
-                                        <input type="file" name="proof" accept="image/*"
-                                            class="block w-full text-sm text-gray-900 border rounded-lg cursor-pointer mb-4"
-                                            required>
+                <!-- Payment Instructions -->
+                <div class="bg-gray-50 rounded-lg p-4">
+                    <h4 class="font-medium text-gray-700 mb-2 flex items-center">
+                        <svg class="w-4 h-4 mr-2 text-[#634600]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                  d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        How to Pay:
+                    </h4>
+                    <ul class="text-sm text-gray-600 space-y-1">
+                        <li class="flex items-center">
+                            <svg class="w-3 h-3 mr-2 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                            Open your banking/mobile wallet app
+                        </li>
+                        <li class="flex items-center">
+                            <svg class="w-3 h-3 mr-2 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                            Tap "Scan QR" or "Pay with QR"
+                        </li>
+                        <li class="flex items-center">
+                            <svg class="w-3 h-3 mr-2 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                            Point camera at this QR code
+                        </li>
+                        <li class="flex items-center">
+                            <svg class="w-3 h-3 mr-2 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                            Confirm the payment amount
+                        </li>
+                    </ul>
+                </div>
+            </div>
 
-                                        <div class="flex justify-end space-x-2">
-                                            <button type="button" @click="open = false"
-                                                class="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300">
-                                                Cancel
-                                            </button>
-                                            <button type="submit"
-                                                class="px-4 py-2 bg-[#B59F84] text-white rounded-lg hover:bg-[#a08e77]">
-                                                Submit Proof
-                                            </button>
-                                        </div>
-                                    </form>
+            <!-- Upload Proof Section -->
+            <form id="payment-form" action="{{ route('orders.store', $product->id) }}" method="POST"
+                enctype="multipart/form-data" class="space-y-4">
+                @csrf
+                
+                <div class="border-t pt-6">
+                    <div class="flex items-center space-x-2 mb-4">
+                        <div class="w-6 h-6 bg-[#F8EED6] rounded-full flex items-center justify-center">
+                            <svg class="w-3 h-3 text-[#634600]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                      d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-semibold text-gray-800">Upload Payment Proof</h3>
+                    </div>
+
+                    <!-- File Upload Area -->
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-3">
+                            Upload screenshot or photo of your payment confirmation
+                        </label>
+                        
+                        <div class="relative border-2 border-dashed border-gray-300 rounded-xl p-6 text-center hover:border-[#B59F84] transition-colors duration-200"
+                             id="dropZone">
+                            <input type="file" name="proof" accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" 
+                                   id="fileInput" required>
+                            
+                            <div class="space-y-2">
+                                <div class="w-12 h-12 bg-[#F8EED6] rounded-full flex items-center justify-center mx-auto">
+                                    <svg class="w-6 h-6 text-[#634600]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                              d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-gray-600">
+                                        <span class="text-[#634600] font-medium">Click to upload</span> or drag and drop
+                                    </p>
+                                    <p class="text-xs text-gray-500">PNG, JPG, JPEG up to 5MB</p>
                                 </div>
                             </div>
+                        </div>
+                        
+                        <!-- File Preview -->
+                        <div id="filePreview" class="hidden mt-3">
+                            <div class="flex items-center space-x-3 bg-green-50 rounded-lg p-3">
+                                <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                          d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                <span class="text-sm text-green-700" id="fileName">File selected</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Security Features -->
+                    <div class="bg-blue-50 rounded-lg p-4 mb-4">
+                        <div class="flex items-start space-x-3">
+                            <svg class="w-5 h-5 text-blue-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                      d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                            </svg>
+                            <div>
+                                <h4 class="text-sm font-medium text-blue-800 mb-1">Secure & Protected</h4>
+                                <p class="text-xs text-blue-600">
+                                    Your payment information is encrypted and secure. We use industry-standard security measures to protect your data.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <!-- Action Buttons - Fixed at Bottom -->
+        <div class="bg-white border-t border-gray-200 p-6">
+            <div class="flex justify-end space-x-3">
+                <!-- Update your cancel button in the modal -->
+                <button type="button" @click="open = false; clearFileInput()"
+                    class="px-6 py-3 border border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50 transition-all duration-200 font-medium">
+                    Cancel
+                </button>
+                <button type="submit" form="payment-form"
+                    class="px-6 py-3 bg-gradient-to-r from-[#B59F84] to-[#8A7B66] text-white rounded-xl hover:from-[#a08e77] hover:to-[#78695a] transform hover:scale-105 transition-all duration-200 font-medium shadow-md flex items-center space-x-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                              d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    <span>Submit Proof</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="bg-gray-50 px-6 py-4 border-t">
+            <div class="flex items-center justify-center space-x-6 text-xs text-gray-500">
+                <div class="flex items-center space-x-1">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                              d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                    </svg>
+                    <span>Secure Payment</span>
+                </div>
+                <div class="flex items-center space-x-1">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                              d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                    </svg>
+                    <span>Trusted Seller</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
                         </div>
                         <!-- End of x-data Modal Wrapper -->
 
@@ -555,6 +742,138 @@
 
 
     <script>
+        // Add this function to update the progress bar
+        function updateProgressBar() {
+            const fileInput = document.getElementById('fileInput');
+            const step2Circle = document.getElementById('step-2-circle');
+            const progressLine = document.getElementById('progress-line');
+            
+            if (fileInput && fileInput.files.length > 0) {
+                // File is uploaded - complete step 2
+                step2Circle.classList.remove('bg-gray-200', 'text-gray-500');
+                step2Circle.classList.add('bg-[#B59F84]', 'text-white');
+                progressLine.classList.add('w-full');
+            } else {
+                // No file - reset step 2
+                step2Circle.classList.remove('bg-[#B59F84]', 'text-white');
+                step2Circle.classList.add('bg-gray-200', 'text-gray-500');
+                progressLine.classList.remove('w-full');
+            }
+        }
+
+        function clearFileInput() {
+            const fileInput = document.getElementById('fileInput');
+            const filePreview = document.getElementById('filePreview');
+            const dropZone = document.getElementById('dropZone');
+            
+            // Clear the file input
+            if (fileInput) fileInput.value = '';
+            
+            // Hide the file preview
+            if (filePreview) filePreview.classList.add('hidden');
+            
+            // Reset drop zone styling
+            if (dropZone) {
+                dropZone.classList.remove('border-green-500', 'bg-green-50');
+                dropZone.classList.remove('border-[#B59F84]', 'bg-[#F8EED6]');
+            }
+            
+            // Update progress bar
+            updateProgressBar();
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const fileInput = document.getElementById('fileInput');
+            const dropZone = document.getElementById('dropZone');
+            const filePreview = document.getElementById('filePreview');
+            const fileName = document.getElementById('fileName');
+
+            // Handle file selection
+            if (fileInput) {
+                fileInput.addEventListener('change', function(e) {
+                    if (e.target.files.length > 0) {
+                        const file = e.target.files[0];
+                        if (fileName) fileName.textContent = file.name;
+                        if (filePreview) filePreview.classList.remove('hidden');
+                        if (dropZone) dropZone.classList.add('border-green-500', 'bg-green-50');
+                        
+                        // Update progress bar when file is selected
+                        updateProgressBar();
+                    }
+                });
+            }
+
+            // Drag and drop functionality
+            if (dropZone) {
+                ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                    dropZone.addEventListener(eventName, preventDefaults, false);
+                });
+
+                function preventDefaults(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                }
+
+                ['dragenter', 'dragover'].forEach(eventName => {
+                    dropZone.addEventListener(eventName, highlight, false);
+                });
+
+                ['dragleave', 'drop'].forEach(eventName => {
+                    dropZone.addEventListener(eventName, unhighlight, false);
+                });
+
+                function highlight() {
+                    dropZone.classList.add('border-[#B59F84]', 'bg-[#F8EED6]');
+                }
+
+                function unhighlight() {
+                    dropZone.classList.remove('border-[#B59F84]', 'bg-[#F8EED6]');
+                }
+
+                dropZone.addEventListener('drop', handleDrop, false);
+
+                function handleDrop(e) {
+                    const dt = e.dataTransfer;
+                    const files = dt.files;
+                    if (fileInput) fileInput.files = files;
+                    
+                    if (files.length > 0) {
+                        const file = files[0];
+                        if (fileName) fileName.textContent = file.name;
+                        if (filePreview) filePreview.classList.remove('hidden');
+                        if (dropZone) dropZone.classList.add('border-green-500', 'bg-green-50');
+                        
+                        // Update progress bar when file is dropped
+                        updateProgressBar();
+                    }
+                }
+            }
+
+            // Add event listeners to clear file input when modal is closed
+            const modal = document.querySelector('[x-show="open"]');
+            const cancelButtons = document.querySelectorAll('button[type="button"][@click*="open = false"]');
+            
+            cancelButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Small delay to ensure modal is closed before clearing
+                    setTimeout(clearFileInput, 300);
+                });
+            });
+
+            // Also clear when clicking outside the modal (backdrop)
+            if (modal) {
+                modal.addEventListener('click', function(e) {
+                    if (e.target === modal) {
+                        setTimeout(clearFileInput, 300);
+                    }
+                });
+            }
+            
+            // Initialize progress bar
+            updateProgressBar();
+        });
+
+        // Rest of your existing JavaScript functions remain the same...
         function toggleDropdown(commentId) {
             const dropdown = document.getElementById('dropdown-' + commentId);
             if (dropdown.classList.contains('hidden')) {
@@ -1284,6 +1603,36 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     </script>
     <style>
+        @keyframes pulse-glow {
+    0%, 100% { box-shadow: 0 0 5px rgba(181, 159, 132, 0.3); }
+    50% { box-shadow: 0 0 15px rgba(181, 159, 132, 0.6); }
+}
+
+.animate-pulse-glow {
+    animation: pulse-glow 2s ease-in-out infinite;
+}
+
+/* Smooth transitions for modal */
+.modal-enter {
+    opacity: 0;
+    transform: scale(0.95);
+}
+
+.modal-enter-active {
+    opacity: 1;
+    transform: scale(1);
+    transition: opacity 300ms, transform 300ms;
+}
+
+.modal-exit {
+    opacity: 1;
+}
+
+.modal-exit-active {
+    opacity: 0;
+    transform: scale(0.95);
+    transition: opacity 300ms, transform 300ms;
+}
         .line-clamp-3 {
             display: -webkit-box;
             -webkit-line-clamp: 3;
