@@ -41,7 +41,13 @@ class ProductController extends Controller
         $categories = $this->categoryService->getAllCategories();
         $segments = Segment::all();
         $barangays = Barangay::all();
-        return view('products.create', compact('categories', 'segments', 'barangays'));
+        
+        return view('products.create', [
+        'categories' => $categories,
+        'segments' => $segments,
+        'barangays' => $barangays,
+        'currentStep' => 1, // <-- pass current step
+    ]);
     }
 
     public function store(StoreProductRequest $request)
@@ -159,9 +165,12 @@ class ProductController extends Controller
     }
 
     // ✅ Step 2: Show optional QR upload page
-    public function qrStep(Product $product): View
+   public function qrStep(Product $product): View
     {
-        return view('products.qr.qr-step', compact('product'));
+        return view('products.qr.qr-step', [
+            'product' => $product,
+            'currentStep' => 2, // <-- pass current step
+        ]);
     }
 
     // ✅ Step 2: Store QR if uploaded
@@ -186,12 +195,14 @@ class ProductController extends Controller
             ->with('info', 'You chose to skip the QR code. Review and finalize your product.');
     }
 
-    // ✅ Step 3: Show final review/final step
+   // Step 3: Finalize
     public function finalStep(Product $product): View
     {
-        return view('products.qr.qr-final-step', compact('product'));
+        return view('products.qr.qr-final-step', [
+            'product' => $product,
+            'currentStep' => 3, // <-- pass current step
+        ]);
     }
-
     // ✅ Step 3: Finalize product
     public function finalize(Product $product): RedirectResponse
     {

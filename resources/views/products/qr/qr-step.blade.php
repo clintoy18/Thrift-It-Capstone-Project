@@ -8,8 +8,9 @@
     <div class="py-8">
         <div class="max-w-3xl mx-auto sm:px-6 lg:px-8">
 
-            <!-- ✅ Reusable Step Progress -->
-            <x-step-progress :current-step="2" />
+        
+                   <x-step-progress :currentStep="$currentStep" />
+
 
 
             <div class="bg-white dark:bg-gray-800 shadow-md sm:rounded-lg p-8">

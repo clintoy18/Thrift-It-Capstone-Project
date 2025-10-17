@@ -13,9 +13,9 @@
             
         
             <!-- Desktop Header -->
-          
-                <!--Reusable Step Progress -->
-            <x-step-progress :current-step="1" />
+          @section('content')
+        <x-step-progress :currentStep="$currentStep" />
+
             <!-- Main Layout with Form Container -->
             <form id="productForm" action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
                 @csrf
