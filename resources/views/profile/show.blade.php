@@ -10,7 +10,7 @@
                 <div class="flex items-center gap-3">
                     <!-- Dynamic Title based on User Context -->
                     <h2 class="text-2xl font-extrabold text-gray-900 dark:text-gray-100 flex items-center">
-                        {{ Auth::id() === $user->id ? 'My Products' : $user->fname . "'s Products" }}
+                        {{ Auth::id() === $user->id ? '' : $user->fname . "'s Profile" }}
                         
                         <!-- Verified User Badge -->
                         @if ($user->is_verified)
@@ -30,21 +30,20 @@
             </div>
 
             <!-- ===== PROFILE INFORMATION SECTION ===== -->
-            <div class="p-6 mb-8">
-                <div class="max-w-6x1">
+            <div class="pb-6 mb-8">
+              <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
                   <!-- Enhanced Section Title -->
-<h3 class="text-xl font-bold text-gray-900 dark:text-gray-100 mb-6 flex items-center gap-3">
-    <div class="p-2 bg-gradient-to-r from-amber-100 to-amber-50 dark:from-amber-900/30 dark:to-amber-800/20 rounded-lg">
-        <svg class="w-5 h-5 text-amber-600 dark:text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
-        </svg>
-    </div>
-    Profile Information
-</h3>
-
-   <!-- User Profile Card Container -->
-   <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden">
-                        
+                <h3 class="text-xl font-bold text-gray-900 dark:text-gray-100 mb-6 flex items-center gap-3">
+                    <div class="p-2 bg-gradient-to-r from-amber-100 to-amber-50 dark:from-amber-900/30 dark:to-amber-800/20 rounded-lg">
+                        <svg class="w-5 h-5 text-amber-600 dark:text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                        </svg>
+                    </div>
+                    Profile Information
+                </h3>
+                <!-- User Profile Card Container -->
+                <div class="bg-white dark:bg-gray-800 rounded-lg  overflow-hidden">
+                                        
                         <!-- Background Image Section -->
                         <!-- Hero-style background with gradient overlay -->
                         <div class="relative h-32 bg-center bg-cover"
@@ -85,63 +84,41 @@
                                 </div>
                             </div>
 
-                            <!-- Report User Section (Visible to other users only) -->
-                            @if (Auth::id() !== $user->id)
-                                <div class="mt-3 pt-3 border-t border-gray-200 dark:border-gray-600">
-                                    <!-- Report User Link -->
-                                    <a href="{{ route('reports.create', $user->id) }}"
-                                        class="inline-flex items-center gap-2 px-3 py-1.5 text-sm text-red-600 
-                                               dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 transition">
-                                        <!-- Warning/Report Icon -->
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
-                                            viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                                d="M12 9v2m0 4h.01M5.455 4.455a2.836 2.836 0 012-1.455h9.09a2.836 2.836 0 012 1.455l3.182 5.455a2.836 2.836 0 010 2.182L18.545 17.09a2.836 2.836 0 01-2 1.455H7.455a2.836 2.836 0 01-2-1.455L2.273 12.09a2.836 2.836 0 010-2.182L5.455 4.455z" />
-                                        </svg>
-                                        Report User
-                                    </a>
-                                </div>
-                            @endif
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Action Buttons for Other Users -->
+                        <!-- Report User Section (Visible to other users only) -->
                 @if (Auth::id() !== $user->id)
-                    <div class="mt-6 flex flex-col sm:flex-row gap-4">
-                        <!-- Report User Button -->
-                        <a href="{{ route('reports.create', $user) }}"
-                            class="inline-flex items-center justify-center px-5 py-2 text-sm font-semibold 
-                                   text-white bg-red-600 rounded-lg shadow hover:bg-red-700 focus:outline-none 
-                                   focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-colors duration-200">
-                            <!-- Warning Triangle Icon -->
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none"
+                    <div class="mt-3 pt-3 border-t border-gray-200 dark:border-gray-600 flex items-center gap-4">
+                        <!-- Report User Link -->
+                        <a href="{{ route('reports.create', $user->id) }}"
+                            class="inline-flex items-center gap-2 px-3 py-1.5 text-sm text-red-600 
+                                dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 transition">
+                            <!-- Warning Icon -->
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
                                 viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                    d="M12 9v2m0 4h.01M5.455 4.455a2.836 2.836 0 012-1.455h9.09a2.836 2.836 0 012 1.455l3.182 5.455a2.836 2.836 0 010 2.182L18.545 17.09a2.836 2.836 0 01-2 1.455H7.455a2.836 2.836 0 01-2-1.455L2.273 12.09a2.836 2.836 0 010-2.182L5.455 4.455z" />
                             </svg>
                             Report User
                         </a>
-                        
-                        <!-- Review User Button -->
-                        <a href="{{ route('reviews.create', $user) }}"
-                            class="inline-flex items-center justify-center px-5 py-2 text-sm font-semibold 
-                                   text-white bg-blue-600 rounded-lg shadow hover:bg-blue-700 focus:outline-none 
-                                   focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200">
-                            <!-- Review/Star Icon -->
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none"
+
+                        <!-- Review User Link -->
+                        <a href="{{ route('reviews.create', $user->id) }}"
+                            class="inline-flex items-center gap-2 px-3 py-1.5 text-sm text-yellow-600 
+                                dark:text-yellow-400 hover:text-yellow-700 dark:hover:text-yellow-300 transition">
+                            <!-- Star Icon -->
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
                                 viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                    d="M12 17.27l5.18 3.05-1.64-5.81L20 9.24l-6-.51L12 3 10 8.73l-6 .51 4.46 5.27-1.64 5.81L12 17.27z" />
                             </svg>
                             Review User
                         </a>
                     </div>
                 @endif
-            </div>
+
+            </div> 
 
             <!-- ===== TAB NAVIGATION SECTION ===== -->
-            <div class="flex flex-col">
+            <div class="flex flex-col p-4">
                 <!-- Tab Container -->
                 <div class="mb-6">
                     <div class="inline-flex rounded-full bg-gray-100 dark:bg-gray-800 p-1">
