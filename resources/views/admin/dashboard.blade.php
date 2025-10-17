@@ -338,10 +338,16 @@
                                                 <i class="fas fa-list-ul text-gray-400 mr-2"></i>
                                                 Product Sales Details
                                             </h5>
+                                            <div class="flex items-center gap-2">
                                             <a href="{{ route('admin.sales.monthly-report', $month) }}" 
                                                class="inline-flex items-center px-3 py-1 bg-red-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-700 focus:bg-red-700 active:bg-red-900 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition ease-in-out duration-150 shadow-sm">
                                                 <i class="fas fa-file-pdf mr-1"></i> Monthly Report
                                             </a>
+                                                <a href="{{ route('admin.sales.monthly-export', $month) }}" 
+                                                   class="inline-flex items-center px-3 py-1 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 focus:bg-blue-700 active:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition ease-in-out duration-150 shadow-sm">
+                                                    <i class="fas fa-download mr-1"></i> Export Data
+                                                </a>
+                                            </div>
                                         </div>
                                         <div class="overflow-x-auto rounded-lg border border-gray-200 dark:border-gray-700">
                                             <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
