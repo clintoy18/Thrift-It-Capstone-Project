@@ -159,5 +159,13 @@ Route::middleware('auth')->group(function () {
 });
 
 
+Route::get('/sell-item/qr/{product}', [ProductController::class, 'qrStep'])->name('sell-item.qr');
+Route::post('/sell-item/qr/{product}', [ProductController::class, 'storeQr'])->name('sell-item.qr.store');
+Route::get('/sell-item/qr/{product}/skip', [ProductController::class, 'skipQr'])->name('sell-item.qr.skip');
+
+// Step 3: Final review / finalize product
+Route::get('/sell-item/final/{product}', [ProductController::class, 'finalStep'])->name('sell-item.final');
+Route::post('/sell-item/final/{product}', [ProductController::class, 'finalize'])->name('sell-item.finalize');
+
 
 require __DIR__.'/auth.php';
