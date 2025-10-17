@@ -113,51 +113,37 @@
 
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
                 <!-- Women Segment -->
-                <div class="group overflow-hidden rounded-md shadow-md h-auto w-full animate-stagger-1 relative z-10">
-                    <a href="{{ route('segments.show', ['segment' => '1']) }}" class="block relative overflow-hidden">
-                        <div class="relative overflow-hidden">
-                            <img src="{{ asset('storage/segments/women.png') }}"
-                                alt="Shop by Women"
-                                class="w-full h-[400px] object-cover transition-all duration-700 group-hover:scale-110">
-                            <div class="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-500"></div>
-                            <div class="absolute bottom-4 left-4 transform translate-y-8 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 delay-200">
-                                <span class="bg-white/90 text-[#634600] px-3 py-1 rounded-full text-sm font-semibold backdrop-blur-sm">
-                                    Explore Collection
-                                </span>
-                            </div>
-                        </div>
+                <div class="group overflow-hidden rounded-md shadow-md h-auto w-full">
+                    <a href="{{ route('segments.show', ['segment' => '1']) }}" class="block relative">
+                        <img src="{{ asset('storage/segments/women.png') }}"
+                            alt="Shop by Women"
+                            class="w-full h-[400px] object-cover transition-transform duration-300 group-hover:scale-105">
                     </a>
-                    <div class="p-4 bg-white dark:bg-gray-800 transform transition-transform duration-300 group-hover:-translate-y-1">
+                    <div class="p-4 bg-white dark:bg-gray-800">
                         <h3 class="text-lg font-semibold text-[#634600] dark:text-white mb-2">Women's Fashion</h3>
                         <p class="text-sm text-[#603E14] dark:text-gray-300">
-                            Discover a curated collection of stylish, pre-loved women's clothing. 
-                            From everyday essentials to statement pieces, find unique items that 
-                            express your personal style while supporting sustainable fashion.
+                            Explore our selection of quality men's apparel. From casual wear to 
+                            professional attire, find timeless pieces that combine style, comfort, 
+                            and sustainability in every thread.
+
                         </p>
                     </div>
                 </div>
 
                 <!-- Men Segment -->
-                <div class="group overflow-hidden rounded-md shadow-md h-auto w-full animate-stagger-2 relative z-10">
-                    <a href="{{ route('segments.show', ['segment' => '2']) }}" class="block relative overflow-hidden">
-                        <div class="relative overflow-hidden">
-                            <img src="{{ asset('storage/segments/men.png') }}"
-                                alt="Shop by Men"
-                                class="w-full h-[400px] object-cover transition-all duration-700 group-hover:scale-110">
-                            <div class="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-500"></div>
-                            <div class="absolute bottom-4 left-4 transform translate-y-8 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 delay-200">
-                                <span class="bg-white/90 text-[#634600] px-3 py-1 rounded-full text-sm font-semibold backdrop-blur-sm">
-                                    Explore Collection
-                                </span>
-                            </div>
-                        </div>
+                <div class="group overflow-hidden rounded-md shadow-md h-auto w-full">
+                    <a href="{{ route('segments.show', ['segment' => '2']) }}" class="block relative">
+                        <img src="{{ asset('storage/segments/men.png') }}"
+                            alt="Shop by Men"
+                            class="w-full h-[400px] object-cover transition-transform duration-300 group-hover:scale-105">
                     </a>
-                    <div class="p-4 bg-white dark:bg-gray-800 transform transition-transform duration-300 group-hover:-translate-y-1">
+                    <div class="p-4 bg-white dark:bg-gray-800">
                         <h3 class="text-lg font-semibold text-[#634600] dark:text-white mb-2">Men's Collection</h3>
                         <p class="text-sm text-[#603E14] dark:text-gray-300">
-                            Explore our selection of quality men's apparel. From casual wear to 
-                            professional attire, find timeless pieces that combine style, comfort, 
-                            and sustainability in every thread.
+                       
+                               Discover a curated collection of stylish, pre-loved women's clothing. 
+                            From everyday essentials to statement pieces, find unique items that 
+                            express your personal style while supporting sustainable fashion.
                         </p>
                     </div>
                 </div>
