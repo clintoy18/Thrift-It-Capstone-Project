@@ -1,3 +1,5 @@
+ 
+
 <x-app-layout>
     <div class="py-12 bg-gray-100 dark:bg-gray-900">
         <div class="max-w-7xl mx-auto p-6">
@@ -472,15 +474,15 @@
                                                 </svg>
                                                 <span id="like-count-{{ $comment->id }}">{{ $comment->likes_count }}</span>
                                             </button>
-                                            <button onclick="toggleReplyForm({{ $comment->id }})" class="flex items-center gap-1 hover:text-[#B59F84] transition-colors duration-200">
+                                            <button onclick="startReply({{ $comment->id }}, '{{ addslashes($comment->user->fname . ' ' . $comment->user->lname) }}')" class="flex items-center gap-1 hover:text-[#B59F84] transition-colors duration-200">
                                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
                                                 </svg>
                                                 Reply
                                             </button>
-                                            @if($comment->replies_count > 0)
+                                            @if($comment->replies && $comment->replies->count() > 0)
                                                 <button onclick="toggleReplies({{ $comment->id }})" class="text-[#B59F84] hover:underline">
-                                                    {{ $comment->replies_count }} {{ $comment->replies_count == 1 ? 'reply' : 'replies' }}
+                                                    {{ $comment->replies->count() }} {{ $comment->replies->count() == 1 ? 'reply' : 'replies' }}
                                                 </button>
                                             @endif
                                         </div>
@@ -500,32 +502,13 @@
                                     </form>
                                 @endif
                                 
-                                <!-- Reply Form (Hidden by Default) -->
-                                <div id="reply-form-{{ $comment->id }}" class="hidden mt-3 ml-4">
-                                    <form class="reply-form" data-parent-id="{{ $comment->id }}">
-                                        @csrf
-                                        <div class="flex gap-2">
-                                            <textarea name="content" placeholder="Write a reply..." class="flex-1 p-2 border border-gray-300 dark:border-gray-600 rounded-lg resize-none focus:ring-2 focus:ring-[#B59F84] focus:border-transparent dark:bg-gray-700 dark:text-white" rows="2" required></textarea>
-                                            <div class="flex flex-col gap-2">
-                                                <button type="submit" class="px-3 py-2 bg-[#B59F84] text-white rounded-lg hover:bg-[#a08e77] transition-all duration-200 text-sm">
-                                                    Reply
-                                                </button>
-                                                <button type="button" onclick="toggleReplyForm({{ $comment->id }})" class="px-3 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-all duration-200 text-sm">
-                                                    Cancel
-                                                </button>
-                                            </div>
-                                        </div>
-                                        <input type="hidden" name="parent_id" value="{{ $comment->id }}">
-                                        <input type="hidden" name="product_id" value="{{ $product->id }}">
-                                    </form>
-                                </div>
-                                
-                                <!-- Replies Container (Hidden by Default) -->
-                                <!-- Replies Container -->
-                                <div id="replies-{{ $comment->id }}" 
-     class="hidden ml-4 mt-3 space-y-3 border-l-2 border-gray-200 dark:border-gray-600 pl-4">
+                                <!-- Replies Container - MODIFIED for flat structure -->
+                               <!-- In your Blade template, update the replies container structure -->
+<!-- Replies Container - All replies in one vertical thread -->
+<div id="replies-{{ $comment->id }}" 
+    class="hidden ml-4 mt-3 space-y-3 border-l-2 border-gray-200 dark:border-gray-600 pl-4">
     @foreach($comment->replies as $reply)
-        <div class="reply-item flex gap-3" data-comment-id="{{ $reply->id }}" id="reply-{{ $reply->id }}">
+        <div class="reply-item flex gap-3" data-comment-id="{{ $reply->id }}" id="reply-{{ $reply->id }}" data-parent-id="{{ $reply->parent_id }}">
             
             <!-- Avatar -->
             <div class="flex-shrink-0">
@@ -536,94 +519,62 @@
                 </div>
             </div>
 
-                                                <!-- Reply Content -->
-                                                <div class="flex-1">
-                                                    <div>
-                                                        <a href="{{ route('profile.show', $reply->user->id) }}"
-                                                            class="text-sm font-semibold text-gray-800 dark:text-gray-200 hover:underline">
-                                                            {{ $reply->user->fname }} {{ $reply->user->lname }}
-                                                        </a>
-                                                        <span class="text-xs text-gray-500 dark:text-gray-400 ml-2">
-                                                            {{ $reply->created_at->diffForHumans() }}
-                                                        </span>
-                                                    </div>
+            <!-- Reply Content -->
+            <div class="flex-1">
+                <div>
+                    <a href="{{ route('profile.show', $reply->user->id) }}"
+                        class="text-sm font-semibold text-gray-800 dark:text-gray-200 hover:underline">
+                        {{ $reply->user->fname }} {{ $reply->user->lname }}
+                    </a>
+                    <span class="text-xs text-gray-500 dark:text-gray-400 ml-2">
+                        {{ $reply->created_at->diffForHumans() }}
+                    </span>
+                </div>
 
-                                                    <p class="text-sm text-gray-800 dark:text-gray-200">
-                                                        {{ $reply->content }}</p>
+                <p class="text-sm text-gray-800 dark:text-gray-200">{{ $reply->content }}</p>
 
-                                                    <!-- Actions -->
-                                                    <div
-                                                        class="mt-2 flex items-center gap-3 text-xs text-gray-500 dark:text-gray-400">
-                                                        <button onclick="toggleLike({{ $reply->id }})"
-                                                            class="flex items-center gap-1 hover:text-[#B59F84] transition-colors duration-200 {{ $reply->userLikes->count() > 0 ? 'text-[#B59F84]' : 'text-gray-500' }}"
-                                                            id="like-btn-{{ $reply->id }}">
-                                                            <svg class="w-3 h-3"
-                                                                fill="{{ $reply->userLikes->count() > 0 ? 'currentColor' : 'none' }}"
-                                                                stroke="currentColor" viewBox="0 0 24 24">
-                                                                <path stroke-linecap="round" stroke-linejoin="round"
-                                                                    stroke-width="2"
-                                                                    d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z">
-                                                                </path>
-                                                            </svg>
-                                                            <span
-                                                                id="like-count-{{ $reply->id }}">{{ $reply->likes_count }}</span>
-                                                        </button>
+                <!-- Actions -->
+                <div class="mt-2 flex items-center gap-3 text-xs text-gray-500 dark:text-gray-400">
+                    <button onclick="toggleLike({{ $reply->id }})"
+                        class="flex items-center gap-1 hover:text-[#B59F84] transition-colors duration-200 {{ $reply->userLikes->count() > 0 ? 'text-[#B59F84]' : 'text-gray-500' }}"
+                        id="like-btn-{{ $reply->id }}">
+                        <svg class="w-3 h-3"
+                            fill="{{ $reply->userLikes->count() > 0 ? 'currentColor' : 'none' }}"
+                            stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z">
+                            </path>
+                        </svg>
+                        <span id="like-count-{{ $reply->id }}">{{ $reply->likes_count }}</span>
+                    </button>
 
                     <!-- Reply button -->
-                    <button onclick="toggleReplyForm({{ $reply->id }})" 
+                    <button onclick="startReply({{ $reply->id }}, '{{ addslashes($reply->user->fname . ' ' . $reply->user->lname) }}')" 
                             class="hover:text-[#B59F84] transition-colors duration-200">
                         Reply
                     </button>
                 </div>
-
-                <!-- Reply Form -->
-                <div id="reply-form-{{ $reply->id }}" class="hidden mt-2 ml-8">
-                    <form class="reply-form" data-parent-id="{{ $reply->id }}">
-                        @csrf
-                        <div class="flex gap-2">
-                            <textarea name="content" placeholder="Write a reply..."
-                                      class="flex-1 p-2 border border-gray-300 dark:border-gray-600 rounded-lg resize-none 
-                                             focus:ring-2 focus:ring-[#B59F84] focus:border-transparent 
-                                             dark:bg-gray-700 dark:text-white"
-                                      rows="2" required></textarea>
-                            <button type="submit" 
-                                    class="px-3 py-2 bg-[#B59F84] text-white rounded-lg hover:bg-[#a08e77] 
-                                           transition-all duration-200 text-sm">
-                                Reply
-                            </button>
-                        </div>
-                        <input type="hidden" name="parent_id" value="{{ $reply->id }}">
-                        <input type="hidden" name="product_id" value="{{ $product->id }}">
-                    </form>
-                </div>
-
-                                                    <!-- Nested Replies Container for this reply -->
-                                                    <div id="replies-{{ $reply->id }}"
-                                                        class="hidden ml-8 mt-3 space-y-3 border-l-2 border-gray-200 dark:border-gray-600 pl-4">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        @endforeach
-                                    </div>
-
-
-                                </div>
-                            @empty
-                                <p class="text-gray-600 dark:text-gray-400 text-sm py-4 text-center">No comments yet.
-                                    Be the first to comment!</p>
-                            @endforelse
-                        </div>
+            </div>
+        </div>
+    @endforeach
+</div>
+                            </div>
+                        @empty
+                            <p class="text-gray-600 dark:text-gray-400 text-sm py-4 text-center">No comments yet.
+                                Be the first to comment!</p>
+                        @endforelse
+                    </div>
 
                         <!-- Comment Form -->
                         @auth
-                            <form id="comment-form" action="{{ route('comments.store') }}" method="POST"
-                                class="mt-6">
+                            <form id="comment-form" action="{{ route('comments.store') }}" method="POST" class="mt-6">
                                 @csrf
-                                <div
-                                    class="flex flex-col md:flex-row items-stretch md:items-center gap-3 w-full max-w-xl bg-white dark:bg-gray-800 p-3 rounded-2xl border border-gray-200 dark:border-gray-600 shadow-md">
-                                    <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                <input type="hidden" name="parent_id" id="parent_id" value="">
+                                <div class="relative flex flex-col md:flex-row items-stretch md:items-center gap-3 w-full max-w-xl bg-white dark:bg-gray-800 p-3 rounded-2xl border border-gray-200 dark:border-gray-600 shadow-md">
                                     <textarea name="content" id="comment-content" placeholder="Write a comment..."
-                                        class="flex-1 w-full resize-none overflow-hidden rounded-lg px-4 py-2 text-sm text-gray-800 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#B59F84] border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700"
+                                        class="mentionable flex-1 w-full resize-none overflow-hidden rounded-lg px-4 py-2 text-sm text-gray-800 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#B59F84] border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700"
                                         rows="2" oninput="this.style.height='auto';this.style.height=this.scrollHeight+'px';" required></textarea>
                                     <button type="submit"
                                         class="mt-2 md:mt-0 md:self-center bg-[#B59F84] text-white font-semibold px-4 py-2 rounded-lg shadow hover:bg-[#a08e77] transition-all duration-300 ease-in-out w-full md:w-auto">
@@ -631,6 +582,12 @@
                                     </button>
                                 </div>
                                 <div id="comment-error" class="text-red-500 mt-2 text-sm hidden"></div>
+                                
+                                <!-- Reply indicator (hidden by default) -->
+                                <div id="reply-indicator" class="hidden mt-2 text-sm text-gray-600 dark:text-gray-400 bg-gray-50 dark:bg-gray-700 rounded-lg p-3">
+                                    <span id="replying-to" class="font-medium"></span>
+                                    <button type="button" onclick="cancelReply()" class="ml-2 text-[#B59F84] hover:underline">Cancel</button>
+                                </div>
                             </form>
                         @else
                             <p class="mt-3 text-gray-600 dark:text-gray-400">
@@ -742,6 +699,70 @@
 
 
     <script>
+        // Global variables to track reply state
+        let currentReplyParentId = null;
+        let currentReplyUsername = null;
+
+        // Function to start a reply (Instagram-style)
+        // Function to start a reply (Instagram-style)
+function startReply(commentId, displayName) {
+    // Set the current reply state
+    currentReplyParentId = commentId;
+    currentReplyUsername = displayName;
+    
+    // Update the main comment form
+    const commentTextarea = document.getElementById('comment-content');
+    const parentIdField = document.getElementById('parent_id');
+    const replyIndicator = document.getElementById('reply-indicator');
+    const replyingToSpan = document.getElementById('replying-to');
+    
+    // Set the parent_id
+    parentIdField.value = commentId;
+    
+    // Update textarea with @username
+    if (displayName) {
+        const prefix = `@${displayName} `;
+        commentTextarea.value = prefix;
+        commentTextarea.setSelectionRange(prefix.length, prefix.length);
+    }
+    
+    // Show reply indicator
+    replyingToSpan.textContent = `Replying to ${displayName}`;
+    replyIndicator.classList.remove('hidden');
+    
+    // Focus on the textarea
+    commentTextarea.focus();
+    
+    // Scroll to the comment form
+    commentTextarea.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    
+    // Ensure the parent's replies container is visible
+    const parentRepliesContainer = document.getElementById(`replies-${commentId}`);
+    if (parentRepliesContainer) {
+        parentRepliesContainer.classList.remove('hidden');
+    }
+}
+
+        // Function to cancel reply
+        function cancelReply() {
+            currentReplyParentId = null;
+            currentReplyUsername = null;
+            
+            const commentTextarea = document.getElementById('comment-content');
+            const parentIdField = document.getElementById('parent_id');
+            const replyIndicator = document.getElementById('reply-indicator');
+            
+            // Clear values
+            commentTextarea.value = '';
+            parentIdField.value = '';
+            
+            // Hide reply indicator
+            replyIndicator.classList.add('hidden');
+            
+            // Focus on textarea
+            commentTextarea.focus();
+        }
+
         // Add this function to update the progress bar
         function updateProgressBar() {
             const fileInput = document.getElementById('fileInput');
@@ -1056,44 +1077,42 @@ window.addEventListener("popstate", function (event) {
     url.searchParams.set('_t', Date.now());
     window.location.href = url.toString();
 });
-document.addEventListener("DOMContentLoaded", function () {
-    document.querySelectorAll(".inline-edit-form").forEach(form => {
-        form.addEventListener("submit", function (e) {
-            e.preventDefault();
+// Delegate inline edit form submissions so dynamically-added comments work without refresh
+document.addEventListener('submit', function (e) {
+    if (e.target && e.target.classList.contains('inline-edit-form')) {
+        e.preventDefault();
 
-            let formData = new FormData(this);
-            formData.append('_method', 'PUT'); // Important!
+        const form = e.target;
+        const formData = new FormData(form);
+        formData.append('_method', 'PUT');
 
-            let commentId = this.dataset.id;
-            let url = this.action;
+        const commentId = form.dataset.id;
+        const url = form.action;
 
-            fetch(url, {
-                method: "POST", // Still POST, Laravel sees _method=PUT
-                headers: {
-                    "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content,
-                    "Accept": "application/json"
-                },
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    // ✅ Update the DOM immediately
-                    const contentDiv = document.getElementById("comment-content-" + commentId);
-                    contentDiv.innerText = data.comment.content;
-
-                    this.classList.add("hidden");
-                    contentDiv.classList.remove("hidden");
-                } else {
-                    alert(data.error || "Failed to update comment.");
-                }
-            })
-            .catch(error => {
-                console.error("Error updating comment:", error);
-                alert("Something went wrong while updating the comment.");
-            });
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                'Accept': 'application/json'
+            },
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                const contentDiv = document.getElementById('comment-content-' + commentId);
+                if (contentDiv) contentDiv.innerText = data.comment.content;
+                form.classList.add('hidden');
+                if (contentDiv) contentDiv.classList.remove('hidden');
+            } else {
+                alert(data.error || 'Failed to update comment.');
+            }
+        })
+        .catch(error => {
+            console.error('Error updating comment:', error);
+            alert('Something went wrong while updating the comment.');
         });
-    });
+    }
 });
 
         // Optional: Add JavaScript to expand comments on hover/click
@@ -1150,16 +1169,32 @@ document.addEventListener("DOMContentLoaded", function () {
                         })
                         .then(data => {
                             if (data.success) {
-                                // Clear the textarea
+                                // Clear the textarea and reset form
                                 document.getElementById('comment-content').value = '';
+                                cancelReply(); // Reset reply state
 
-                                // Add the new comment to the list
-                                addCommentToDOM(data.comment);
+                                // Add the new comment/reply to the list
+                                if (data.comment.parent_id) {
+                                    // This is a reply - add it to the appropriate container
+                                    addReplyToDOM(data.comment);
+                                    
+                                    // Show the replies container if it's hidden
+                                    const repliesContainer = document.getElementById(`replies-${data.comment.parent_id}`);
+                                    if (repliesContainer && repliesContainer.classList.contains('hidden')) {
+                                        repliesContainer.classList.remove('hidden');
+                                    }
+                                    
+                                    // Update replies count
+                                    updateRepliesCount(data.comment.parent_id);
+                                } else {
+                                    // This is a top-level comment
+                                    addCommentToDOM(data.comment);
 
-                                // If there was a "no comments" message, remove it
-                                const noCommentsMsg = document.querySelector('#comments-container > p');
-                                if (noCommentsMsg) {
-                                    noCommentsMsg.remove();
+                                    // If there was a "no comments" message, remove it
+                                    const noCommentsMsg = document.querySelector('#comments-container > p');
+                                    if (noCommentsMsg) {
+                                        noCommentsMsg.remove();
+                                    }
                                 }
                             } else {
                                 throw new Error(data.message || 'An error occurred');
@@ -1192,7 +1227,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         repliesContainer = document.createElement('div');
                         repliesContainer.id = `replies-${commentData.parent_id}`;
                         repliesContainer.className =
-                            "ml-8 mt-3 space-y-3 border-l-2 border-gray-200 dark:border-gray-600 pl-4";
+                            "ml-4 mt-3 space-y-3 border-l-2 border-gray-200 dark:border-gray-600 pl-4";
                         parentComment.appendChild(repliesContainer);
                     }
                 }
@@ -1212,22 +1247,7 @@ document.addEventListener("DOMContentLoaded", function () {
             <div class="flex-1">
                 <p class="font-medium">${commentData.user.fname} ${commentData.user.lname}</p>
                 <p>${commentData.content}</p>
-                <button onclick="toggleReplyForm(${commentData.id})" class="text-xs text-gray-500 hover:text-[#B59F84]">Reply</button>
-                <div id="reply-form-${commentData.id}" class="hidden mt-3 ml-4">
-                    <form class="reply-form" data-parent-id="${commentData.id}">
-                    <div class="flex gap-2">
-                        <textarea name="content" class="w-full border rounded p-2"  class="flex-1 p-2 border border-gray-300 dark:border-gray-600 rounded-lg resize-none focus:ring-2 focus:ring-[#B59F84] focus:border-transparent dark:bg-gray-700 dark:text-white" rows="2" required></textarea>
-                       <div class="flex flex-col gap-2">
-                      
-                        <button type="submit" class="px-3 py-1 bg-[#B59F84] text-white rounded text-sm mt-1">Reply</button>
-                        <button type="button" onclick="toggleReplyForm(${commentData.id})" class="px-3 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors duration-200 text-sm">Cancel</button>
-                        
-                      </div>
-                    </div>
-                      <input type="hidden" name="parent_id" value="${commentData.id}">
-                      <input type="hidden" name="product_id" value="${commentData.product_id}">
-                        </form>
-                </div>
+                <button onclick="startReply(${commentData.id}, '${commentData.user.fname} ${commentData.user.lname}')" class="text-xs text-gray-500 hover:text-[#B59F84]">Reply</button>
             </div>
         </div>
     `;
@@ -1244,7 +1264,7 @@ document.addEventListener("DOMContentLoaded", function () {
             }
 
     const commentHtml = `
-            <div class="comment-item" data-comment-id="${commentData.id}" id="comment-${commentData.id}">
+            <div class="comment-item bg-white dark:bg-gray-700 rounded-lg p-4 shadow-sm" data-comment-id="${commentData.id}" id="comment-${commentData.id}">
                 <div class="flex gap-3">
                     <!-- User Avatar -->
                     <div class="flex-shrink-0">
@@ -1307,7 +1327,7 @@ document.addEventListener("DOMContentLoaded", function () {
             </button>
 
             <!-- Reply -->
-            <button onclick="toggleReplyForm(${commentData.id})" 
+            <button onclick="startReply(${commentData.id}, '${commentData.user.fname} ${commentData.user.lname}')" 
                     class="flex items-center gap-1 hover:text-[#B59F84] transition-colors duration-200">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
@@ -1325,21 +1345,6 @@ document.addEventListener("DOMContentLoaded", function () {
             <button type="button" onclick="cancelEdit(${commentData.id})" class="px-3 py-1 bg-gray-300 text-gray-800 rounded hover:bg-gray-400 text-sm">Cancel</button>
         </div>
     </form>
-
-    <!-- Reply Form -->
-    <div id="reply-form-${commentData.id}" class="hidden mt-3 ml-4">
-        <form class="reply-form" data-parent-id="${commentData.id}">
-            <div class="flex gap-2">
-                <textarea name="content" placeholder="Write a reply..." class="flex-1 p-2 border border-gray-300 dark:border-gray-600 rounded-lg resize-none focus:ring-2 focus:ring-[#B59F84] focus:border-transparent dark:bg-gray-700 dark:text-white" rows="2" required></textarea>
-                <div class="flex flex-col gap-2">
-                    <button type="submit" class="px-3 py-2 bg-[#B59F84] text-white rounded-lg hover:bg-[#a08e77] transition-all duration-200 text-sm">Reply</button>
-                    <button type="button" onclick="toggleReplyForm(${commentData.id})" class="px-3 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors duration-200 text-sm">Cancel</button>
-                </div>
-            </div>
-            <input type="hidden" name="parent_id" value="${commentData.id}">
-            <input type="hidden" name="product_id" value="{{ $product->id }}">
-        </form>
-    </div>
 
     <!-- Replies -->
     <div id="replies-${commentData.id}" class="hidden ml-4 mt-3 space-y-3 border-l-2 border-gray-200 dark:border-gray-600 pl-4">
@@ -1403,17 +1408,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 });
         }
 
-        // Toggle reply form
-        function toggleReplyForm(commentId) {
-            const replyForm = document.getElementById(`reply-form-${commentId}`);
-            if (replyForm) {
-                replyForm.classList.toggle('hidden');
-                if (!replyForm.classList.contains('hidden')) {
-                    replyForm.querySelector('textarea').focus();
-                }
-            }
-        }
-
         // Toggle replies display
         function toggleReplies(commentId) {
             const repliesContainer = document.getElementById(`replies-${commentId}`);
@@ -1422,152 +1416,122 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         }
 
-        // Handle reply form submission
-        document.addEventListener('DOMContentLoaded', function() {
-            document.addEventListener('submit', function(e) {
-                if (e.target.classList.contains('reply-form')) {
-                    e.preventDefault();
-
-                    const formData = new FormData(e.target);
-                    const parentId = e.target.dataset.parentId;
-                    const submitButton = e.target.querySelector('button[type="submit"]');
-                    const originalButtonText = submitButton.innerHTML;
-
-                    // Show loading state
-                    submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
-                    submitButton.disabled = true;
-
-                    fetch("{{ route('comments.store') }}", {
-                            method: 'POST',
-                            headers: {
-                                'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                                'Accept': 'application/json'
-                            },
-                            body: formData
-                        })
-                        .then(async (response) => {
-                            const contentType = response.headers.get('content-type') || '';
-                            if (!response.ok) {
-                                if (contentType.includes('application/json')) {
-                                    const errorData = await response.json();
-                                    const msg = errorData.message || errorData.errors?.content?.[
-                                        0] || 'Error';
-                                    throw new Error(msg);
-                                } else {
-                                    throw new Error('Request failed (maybe login required).');
-                                }
-                            }
-                            if (!contentType.includes('application/json')) {
-                                throw new Error('Unexpected response from server.');
-                            }
-                            return response.json();
-                        })
-                        .then(data => {
-                            if (data.success) {
-                                // Clear the textarea
-                                e.target.querySelector('textarea').value = '';
-
-                                // Hide the reply form
-                                toggleReplyForm(parentId);
-
-                                // Show the replies container if it's hidden
-                                const repliesContainer = document.getElementById(`replies-${parentId}`);
-                                if (repliesContainer && repliesContainer.classList.contains('hidden')) {
-                                    repliesContainer.classList.remove('hidden');
-                                }
-
-                                // Add the new reply to the replies container
-                                addReplyToDOM(data.comment, parentId);
-
-                                // Update replies count
-                                updateRepliesCount(parentId);
-                            } else {
-                                throw new Error(data.message || 'An error occurred');
-                            }
-                        })
-                        .catch(error => {
-                            alert(error.message || 'Failed to post reply. Please try again.');
-                        })
-                        .finally(() => {
-                            submitButton.innerHTML = originalButtonText;
-                            submitButton.disabled = false;
-                        });
-                }
-            });
-        });
-
         function addReplyToDOM(commentData) {
-            // ✅ Ensure this is a reply
-            if (!commentData.parent_id) {
-                console.warn("Tried to add a reply without parent_id:", commentData);
-                return;
-            }
+    // ✅ Ensure this is a reply
+    if (!commentData.parent_id) {
+        console.warn("Tried to add a reply without parent_id:", commentData);
+        return;
+    }
 
-            // ✅ Get or create replies container for the parent (comment or reply)
-            let repliesContainer = document.getElementById(`replies-${commentData.parent_id}`);
-            if (!repliesContainer) {
-                const parentEl = document.getElementById(`comment-${commentData.parent_id}`) || document.getElementById(
-                    `reply-${commentData.parent_id}`);
-                if (parentEl) {
-                    repliesContainer = document.createElement('div');
-                    repliesContainer.id = `replies-${commentData.parent_id}`;
-                    repliesContainer.className = 'ml-8 mt-3 space-y-3 border-l-2 border-gray-200 dark:border-gray-600 pl-4';
-                    parentEl.appendChild(repliesContainer);
-                } else {
-                    console.warn('Parent element not found for reply:', commentData.parent_id);
-                    return;
-                }
+    // ✅ Find the top-level comment that this reply belongs to
+    let topLevelCommentId = commentData.parent_id;
+    let currentParentId = commentData.parent_id;
+    
+    // Traverse up the reply chain to find the top-level comment
+    while (true) {
+        const parentElement = document.getElementById(`comment-${currentParentId}`) || 
+                             document.getElementById(`reply-${currentParentId}`);
+        
+        if (!parentElement) break;
+        
+        // Check if this parent is itself a reply
+        const parentDataId = parentElement.getAttribute('data-comment-id');
+        if (parentElement.classList.contains('reply-item')) {
+            // This parent is a reply, so we need to go further up
+            const replyParentId = getParentIdFromReply(parentElement);
+            if (replyParentId) {
+                currentParentId = replyParentId;
+                topLevelCommentId = currentParentId;
+            } else {
+                break;
             }
+        } else {
+            // This is a top-level comment
+            topLevelCommentId = currentParentId;
+            break;
+        }
+    }
 
-            // ✅ Prevent duplicate reply rendering
-            if (document.getElementById(`reply-${commentData.id}`)) {
-                return;
-            }
+    // ✅ Get the replies container for the top-level comment
+    let repliesContainer = document.getElementById(`replies-${topLevelCommentId}`);
+    
+    // If no replies container yet, create one under the top-level comment
+    if (!repliesContainer) {
+        const topLevelComment = document.getElementById(`comment-${topLevelCommentId}`);
+        if (topLevelComment) {
+            repliesContainer = document.createElement('div');
+            repliesContainer.id = `replies-${topLevelCommentId}`;
+            repliesContainer.className = 'ml-4 mt-3 space-y-3 border-l-2 border-gray-200 dark:border-gray-600 pl-4';
+            topLevelComment.appendChild(repliesContainer);
+        } else {
+            console.warn('Top-level comment not found for reply:', topLevelCommentId);
+            return;
+        }
+    }
 
-            // ✅ Build reply HTML with its own reply form and nested container
-            const replyHtml = `
-        <div class=\"reply-item flex gap-3\" id=\"reply-${commentData.id}\" data-comment-id=\"${commentData.id}\">
-            <div class=\"flex-shrink-0\">
-                <div class=\"w-8 h-8 bg-[#B59F84] rounded-full border-2 border-white dark:border-gray-800 flex items-center justify-center\">
-                    <span class=\"text-sm font-bold text-white\">
+    // ✅ Prevent duplicate reply rendering
+    if (document.getElementById(`reply-${commentData.id}`)) {
+        return;
+    }
+
+    // ✅ Build reply HTML with proper structure (all replies at same level)
+    const replyHtml = `
+        <div class="reply-item flex gap-3" id="reply-${commentData.id}" data-comment-id="${commentData.id}" data-parent-id="${commentData.parent_id}">
+            <div class="flex-shrink-0">
+                <div class="w-8 h-8 bg-[#B59F84] rounded-full border-2 border-white dark:border-gray-800 flex items-center justify-center">
+                    <span class="text-xs font-bold text-white">
                         ${(commentData.user?.fname?.charAt(0).toUpperCase() ?? '')}${(commentData.user?.lname?.charAt(0).toUpperCase() ?? '')}
                     </span>
                 </div>
             </div>
-            <div class=\"flex-1\">
+            <div class="flex-1">
                 <div>
-                    <a href=\"/profile/${commentData.user?.id}\" class=\"text-sm font-semibold text-gray-800 dark:text-gray-200 hover:underline\">
+                    <a href="/profile/${commentData.user?.id}" class="text-sm font-semibold text-gray-800 dark:text-gray-200 hover:underline">
                         ${commentData.user?.fname ?? ''} ${commentData.user?.lname ?? ''}
                     </a>
-                    <span class=\"text-xs text-gray-500 dark:text-gray-400 ml-2\">just now</span>
+                    <span class="text-xs text-gray-500 dark:text-gray-400 ml-2">just now</span>
                 </div>
-                <p class=\"text-sm text-gray-800 dark:text-gray-200\">${commentData.content}</p>
+                <p class="text-sm text-gray-800 dark:text-gray-200">${commentData.content}</p>
 
-                <div class=\"mt-2 flex items-center gap-3 text-xs text-gray-500 dark:text-gray-400\">
-                    <button onclick=\"toggleReplyForm(${commentData.id})\" class=\"hover:text-[#B59F84] transition-colors duration-200\">Reply</button>
+                <div class="mt-2 flex items-center gap-3 text-xs text-gray-500 dark:text-gray-400">
+                    <button onclick="toggleLike(${commentData.id})" 
+                            class="flex items-center gap-1 hover:text-[#B59F84] transition-colors duration-200"
+                            id="like-btn-${commentData.id}">
+                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                  d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                        </svg>
+                        <span id="like-count-${commentData.id}">0</span>
+                    </button>
+                    <button onclick="startReply(${commentData.id}, '${commentData.user?.fname ?? ''} ${commentData.user?.lname ?? ''}')" class="hover:text-[#B59F84] transition-colors duration-200">Reply</button>
                 </div>
-
-                <div id=\"reply-form-${commentData.id}\" class=\"hidden mt-3 ml-4\">
-                    <form class=\"reply-form\" data-parent-id=\"${commentData.id}\">
-                    <div class="flex gap-2">
-                        <textarea name=\"content\" placeholder="Write a reply..." class=\"flex-1 p-2 border border-gray-300 dark:border-gray-600 rounded-lg resize-none focus:ring-2 focus:ring-[#B59F84] focus:border-transparent dark:bg-gray-700 dark:text-white\" rows=\"2\" required></textarea>
-                          <div class="flex flex-col gap-2">
-                     
-                        <button type=\"submit\" class=\"px-3 py-2 bg-[#B59F84] text-white rounded-lg hover:bg-[#a08e77] transition-all duration-200 text-sm\">Reply</button>
-                        <button type=\"button\" onclick=\"toggleReplyForm(${commentData.id})\" class=\"px-3 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors duration-200 text-sm\">Cancel</button>
-                           </div>
-                     </div>
-                  </form>
-                </div>
-               <input type=\"hidden\" name=\"parent_id\" value=\"${commentData.id}\">
-               <input type=\"hidden\" name=\"product_id\" value=\"${commentData.product_id}\">
-                <div id=\"replies-${commentData.id}\" class=\"hidden ml-8 mt-3 space-y-3 border-l-2 border-gray-200 dark:border-gray-600 pl-4\"></div>
             </div>
         </div>
     `;
 
-            repliesContainer.insertAdjacentHTML('beforeend', replyHtml);
-        }
+    repliesContainer.insertAdjacentHTML('beforeend', replyHtml);
+    
+    // Ensure the replies container is visible
+    repliesContainer.classList.remove('hidden');
+    
+    // Update replies count for the top-level comment
+    updateRepliesCount(topLevelCommentId);
+}
+
+// Helper function to get parent ID from a reply element
+function getParentIdFromReply(replyElement) {
+    const parentId = replyElement.getAttribute('data-parent-id');
+    if (parentId) return parseInt(parentId);
+    
+    // Fallback: try to find parent ID from the closest parent structure
+    const parentContainer = replyElement.closest('[id^="replies-"]');
+    if (parentContainer) {
+        const match = parentContainer.id.match(/replies-(\d+)/);
+        if (match) return parseInt(match[1]);
+    }
+    
+    return null;
+}
 
         // Helper function to format time ago
         function getTimeAgo(date) {
@@ -1591,16 +1555,109 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         // Update replies count
-        function updateRepliesCount(commentId) {
-            const repliesContainer = document.getElementById(`replies-${commentId}`);
-            if (repliesContainer) {
-                const repliesCount = repliesContainer.querySelectorAll('.reply-item').length;
-                const repliesButton = document.querySelector(`button[onclick="toggleReplies(${commentId})"]`);
-                if (repliesButton) {
-                    repliesButton.textContent = `${repliesCount} ${repliesCount === 1 ? 'reply' : 'replies'}`;
-                }
-            }
+        // Update replies count
+function updateRepliesCount(commentId) {
+    const repliesContainer = document.getElementById(`replies-${commentId}`);
+    if (repliesContainer) {
+        const repliesCount = repliesContainer.querySelectorAll('.reply-item').length;
+        const repliesButton = document.querySelector(`button[onclick="toggleReplies(${commentId})"]`);
+        if (repliesButton) {
+            repliesButton.textContent = `${repliesCount} ${repliesCount === 1 ? 'reply' : 'replies'}`;
         }
+    }
+}
+    </script>
+    <script>
+        // Participants list for @mentions
+        window.commentParticipants = [
+            { id: {{ $product->user->id }}, name: '{{ addslashes($product->user->fname . ' ' . $product->user->lname) }}' },
+            @php $added = collect([$product->user->id]); @endphp
+            @foreach($product->comments as $c)
+                @if(!$added->contains($c->user->id))
+                    { id: {{ $c->user->id }}, name: '{{ addslashes($c->user->fname . ' ' . $c->user->lname) }}' },
+                    @php $added->push($c->user->id); @endphp
+                @endif
+                @foreach($c->replies as $r)
+                    @if(!$added->contains($r->user->id))
+                        { id: {{ $r->user->id }}, name: '{{ addslashes($r->user->fname . ' ' . $r->user->lname) }}' },
+                        @php $added->push($r->user->id); @endphp
+                    @endif
+                @endforeach
+            @endforeach
+        ];
+
+        (function setupMentions(){
+            const suggestions = document.createElement('div');
+            suggestions.id = 'mention-suggestions';
+            suggestions.className = 'hidden z-40 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg shadow max-h-48 overflow-auto w-64';
+            suggestions.style.position = 'absolute';
+            document.body.appendChild(suggestions);
+
+            let activeTextarea = null;
+
+            function filterParticipants(query){
+                const q = query.toLowerCase();
+                return window.commentParticipants.filter(p => p.name.toLowerCase().includes(q)).slice(0, 8);
+            }
+
+            function positionSuggestions() {
+                if (!activeTextarea) return;
+                const rect = activeTextarea.getBoundingClientRect();
+                const scrollY = window.scrollY || document.documentElement.scrollTop;
+                const scrollX = window.scrollX || document.documentElement.scrollLeft;
+                suggestions.style.left = (scrollX + rect.left + 8) + 'px';
+                suggestions.style.top = (scrollY + rect.top - 6) + 'px';
+            }
+
+            function renderSuggestions(list){
+                if (!list.length) { hideSuggestions(); return; }
+                suggestions.innerHTML = list.map(p => `<button type="button" data-name="${p.name}" class="w-full text-left px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-sm">@${p.name}</button>`).join('');
+                suggestions.classList.remove('hidden');
+                positionSuggestions();
+            }
+
+            function hideSuggestions(){ suggestions.classList.add('hidden'); suggestions.innerHTML = ''; }
+
+            document.addEventListener('focusin', (e)=>{
+                if (e.target && e.target.matches('textarea.mentionable')) {
+                    activeTextarea = e.target;
+                }
+            });
+
+            document.addEventListener('input', (e)=>{
+                if (!(e.target && e.target.matches('textarea.mentionable'))) return;
+                activeTextarea = e.target;
+                const caretPos = activeTextarea.selectionStart;
+                const val = activeTextarea.value.substring(0, caretPos);
+                const match = val.match(/(^|\s)@([\w\s]{0,30})$/);
+                if (match) {
+                    const query = match[2].trim();
+                    renderSuggestions(query ? filterParticipants(query) : window.commentParticipants.slice(0,6));
+                } else {
+                    hideSuggestions();
+                }
+                positionSuggestions();
+            });
+
+            suggestions.addEventListener('click', (e)=>{
+                const btn = e.target.closest('button[data-name]');
+                if (!btn || !activeTextarea) return;
+                const name = btn.getAttribute('data-name');
+                const caret = activeTextarea.selectionStart;
+                const before = activeTextarea.value.substring(0, caret);
+                const after = activeTextarea.value.substring(caret);
+                const replaced = before.replace(/(^|\s)@([\w\s]{0,30})$/, `$1@${name} `);
+                activeTextarea.value = replaced + after;
+                const newCaret = replaced.length;
+                activeTextarea.setSelectionRange(newCaret, newCaret);
+                activeTextarea.focus();
+                hideSuggestions();
+            });
+
+            document.addEventListener('click', (e)=>{
+                if (!e.target.closest('#mention-suggestions') && !e.target.closest('textarea.mentionable')) hideSuggestions();
+            });
+        })();
     </script>
     <style>
         @keyframes pulse-glow {
@@ -1651,6 +1708,21 @@ document.addEventListener("DOMContentLoaded", function () {
         .comment-bubble {
             max-width: 40%;
             width: fit-content;
+        }
+
+        #reply-indicator {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 8px 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        #replying-to {
+            font-weight: 500;
+            color: #6c757d;
         }
     </style>
 

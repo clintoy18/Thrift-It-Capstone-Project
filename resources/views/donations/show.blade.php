@@ -131,10 +131,7 @@
                             
                             <!-- Action Buttons -->
                             <div class="flex flex-col gap-3 ml-4">
-                                <a href="{{ route('private.chat', $donation->user->id) }}"
-                                   class="px-5 py-2.5 bg-white dark:bg-gray-700 text-[#B59F84] dark:text-[#E1D5B6] rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-all duration-300 text-sm font-medium">
-                                    Message
-                                </a>
+                                
                                 <a href="{{ route('profile.show', $donation->user->id) }}"
                                    class="px-5 py-2.5 bg-white dark:bg-gray-700 text-[#B59F84] dark:text-[#E1D5B6] rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-all duration-300 text-sm font-medium">
                                     Visit Profile
