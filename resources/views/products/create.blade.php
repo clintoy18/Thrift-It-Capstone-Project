@@ -10,18 +10,10 @@
                 </h2>
                 <hr class="w-full mt-4 h-px bg-gray-800 border-0 dark:bg-gray-700">
             </div>
+            
         
             <!-- Desktop Header -->
-            <div class="hidden md:block flex flex-col relative left-[-150px] top-[-20px] mb-8">
-                <h2 class="text-xl sm:text-2xl font-bold text-custom-dark">
-                    <div  class="flex flex-col relative left-[-90px]">
-                        <i>Sell
-                        <img src="{{ asset('images/image 165.png') }}" alt="emoji" class="inline-block flex flex-col relative top-[-33px] left-[50px] h-4 w-3 align-middle h-[25px] w-[20px]">
-                        </i>
-                    </div>
-                    <hr class="w-[1270px] mb-9 flex flex-col relative right-[90px] h-px bg-gray-800 border-0 dark:bg-gray-700">
-                </h2>
-            </div>
+        <x-step-progress :currentStep="$currentStep" />
 
             <!-- Main Layout with Form Container -->
             <form id="productForm" action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data" class="space-y-8">
@@ -127,21 +119,6 @@
 
 
 
-                            <div class="mt-4">
-                                <label for="qr_code" class="block text-sm font-medium text-gray-700">
-                                    Upload QR for Direct Buying (Optional)
-                                </label>
-                                <input type="file" name="qr_code" id="qr_code"
-                                    class="mt-1 block w-full text-sm text-gray-900 border rounded-lg cursor-pointer focus:outline-none">
-                            </div>
-
-                            {{-- ✅ Show existing QR if editing --}}
-                            @if(isset($product) && $product->qr_code)
-                                <div class="mt-2">
-                                    <p class="text-sm text-gray-500">Current QR Code:</p>
-                                    <img src="{{ asset('storage/' . $product->qr_code) }}" alt="QR Code" class="w-32 h-32 object-contain">
-                                </div>
-                            @endif
                         </div>
                     </div>
 
