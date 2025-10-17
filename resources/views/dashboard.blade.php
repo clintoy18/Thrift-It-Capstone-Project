@@ -94,16 +94,17 @@
                 <!-- Women Segment -->
                 <div class="group overflow-hidden rounded-md shadow-md h-auto w-full">
                     <a href="{{ route('segments.show', ['segment' => '1']) }}" class="block relative">
-                        <img src="{{ asset('storage/segments/women.png') }}"
-                            alt="Shop by Women"
+                        <img src="{{ asset('storage/segments/men.png') }}"
+                            alt="Shop by Men"
                             class="w-full h-[400px] object-cover transition-transform duration-300 group-hover:scale-105">
                     </a>
                     <div class="p-4 bg-white dark:bg-gray-800">
-                        <h3 class="text-lg font-semibold text-[#634600] dark:text-white mb-2">Women's Fashion</h3>
+                        <h3 class="text-lg font-semibold text-[#634600] dark:text-white mb-2">Men's Fashion</h3>
                         <p class="text-sm text-[#603E14] dark:text-gray-300">
-                            Discover a curated collection of stylish, pre-loved women's clothing. 
-                            From everyday essentials to statement pieces, find unique items that 
-                            express your personal style while supporting sustainable fashion.
+                            Explore our selection of quality men's apparel. From casual wear to 
+                            professional attire, find timeless pieces that combine style, comfort, 
+                            and sustainability in every thread.
+
                         </p>
                     </div>
                 </div>
@@ -111,16 +112,17 @@
                 <!-- Men Segment -->
                 <div class="group overflow-hidden rounded-md shadow-md h-auto w-full">
                     <a href="{{ route('segments.show', ['segment' => '2']) }}" class="block relative">
-                        <img src="{{ asset('storage/segments/men.png') }}"
+                        <img src="{{ asset('storage/segments/women.png') }}"
                             alt="Shop by Men"
                             class="w-full h-[400px] object-cover transition-transform duration-300 group-hover:scale-105">
                     </a>
                     <div class="p-4 bg-white dark:bg-gray-800">
-                        <h3 class="text-lg font-semibold text-[#634600] dark:text-white mb-2">Men's Collection</h3>
+                        <h3 class="text-lg font-semibold text-[#634600] dark:text-white mb-2">Women's Collection</h3>
                         <p class="text-sm text-[#603E14] dark:text-gray-300">
-                            Explore our selection of quality men's apparel. From casual wear to 
-                            professional attire, find timeless pieces that combine style, comfort, 
-                            and sustainability in every thread.
+                       
+                               Discover a curated collection of stylish, pre-loved women's clothing. 
+                            From everyday essentials to statement pieces, find unique items that 
+                            express your personal style while supporting sustainable fashion.
                         </p>
                     </div>
                 </div>
