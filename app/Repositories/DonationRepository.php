@@ -41,7 +41,14 @@ class DonationRepository
         return Donation::with(['user','category','comments.user'])->findOrFail($id);
     }
 
-
-    
+    //get more donations of the user excluding the current donation
+    public function getMoreByUser($userId, $excludeDonationId, $limit = 6)
+    {
+        return Donation::where('user_id', $userId)
+            ->where('id', '!=', $excludeDonationId)
+            ->latest()
+            ->take($limit)
+            ->get();
+    }
 
 }

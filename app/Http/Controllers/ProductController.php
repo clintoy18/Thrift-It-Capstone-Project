@@ -135,12 +135,34 @@ class ProductController extends Controller
         Cache::forget("product_{$id}_with_comments");
 
         $product = Product::with(['user', 'category', 'images'])->findOrFail($id);
-        $comments = \App\Models\Comment::with(['user', 'replies.user'])
+        // Load ALL comments for this product and build an unlimited-depth flattened replies list per top-level
+        $allComments = \App\Models\Comment::with(['user'])
             ->where('product_id', $id)
-            ->whereNull('parent_id')
-            ->latest()
+            ->orderBy('created_at', 'asc')
             ->get();
-        $product->setRelation('comments', $comments);
+
+        $byParent = $allComments->groupBy('parent_id');
+        $topLevel = $byParent->get(null, collect())->sortByDesc('created_at')->values();
+
+        $topLevel->each(function ($root) use ($byParent) {
+            $flatReplies = collect();
+            $stack = [];
+            foreach ($byParent->get($root->id, collect()) as $child) {
+                $flatReplies->push($child);
+                $stack[] = $child;
+            }
+            while (!empty($stack)) {
+                /** @var \App\Models\Comment $node */
+                $node = array_pop($stack);
+                foreach ($byParent->get($node->id, collect()) as $child) {
+                    $flatReplies->push($child);
+                    $stack[] = $child;
+                }
+            }
+            $root->setRelation('replies', $flatReplies);
+        });
+
+        $product->setRelation('comments', $topLevel);
 
         $moreProducts = $this->productService->getMoreProductsByUser($product->user_id, $product->id);
 
