@@ -70,9 +70,12 @@ class DonationController extends Controller
         // Attach comments to donation
         $donation->setRelation('comments', $comments);
 
+        // Get more donations from the same user
+        $moreDonations = $this->donationService->getMoreDonationsByUser($donation->user_id, $donation->id);
+
         // Disable browser cache for this page
         return response()
-            ->view('donations.show', compact('donation'))
+            ->view('donations.show', compact('donation', 'moreDonations'))
             ->header('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0')
             ->header('Pragma', 'no-cache')
             ->header('Expires', '0')

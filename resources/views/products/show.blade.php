@@ -1,5 +1,3 @@
- 
-
 <x-app-layout>
     <div class="py-12 bg-gray-100 dark:bg-gray-900">
         <div class="max-w-7xl mx-auto p-6">
@@ -704,44 +702,43 @@
         let currentReplyUsername = null;
 
         // Function to start a reply (Instagram-style)
-        // Function to start a reply (Instagram-style)
-function startReply(commentId, displayName) {
-    // Set the current reply state
-    currentReplyParentId = commentId;
-    currentReplyUsername = displayName;
-    
-    // Update the main comment form
-    const commentTextarea = document.getElementById('comment-content');
-    const parentIdField = document.getElementById('parent_id');
-    const replyIndicator = document.getElementById('reply-indicator');
-    const replyingToSpan = document.getElementById('replying-to');
-    
-    // Set the parent_id
-    parentIdField.value = commentId;
-    
-    // Update textarea with @username
-    if (displayName) {
-        const prefix = `@${displayName} `;
-        commentTextarea.value = prefix;
-        commentTextarea.setSelectionRange(prefix.length, prefix.length);
-    }
-    
-    // Show reply indicator
-    replyingToSpan.textContent = `Replying to ${displayName}`;
-    replyIndicator.classList.remove('hidden');
-    
-    // Focus on the textarea
-    commentTextarea.focus();
-    
-    // Scroll to the comment form
-    commentTextarea.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    
-    // Ensure the parent's replies container is visible
-    const parentRepliesContainer = document.getElementById(`replies-${commentId}`);
-    if (parentRepliesContainer) {
-        parentRepliesContainer.classList.remove('hidden');
-    }
-}
+        function startReply(commentId, displayName) {
+            // Set the current reply state
+            currentReplyParentId = commentId;
+            currentReplyUsername = displayName;
+            
+            // Update the main comment form
+            const commentTextarea = document.getElementById('comment-content');
+            const parentIdField = document.getElementById('parent_id');
+            const replyIndicator = document.getElementById('reply-indicator');
+            const replyingToSpan = document.getElementById('replying-to');
+            
+            // Set the parent_id
+            parentIdField.value = commentId;
+            
+            // Update textarea with @username
+            if (displayName) {
+                const prefix = `@${displayName} `;
+                commentTextarea.value = prefix;
+                commentTextarea.setSelectionRange(prefix.length, prefix.length);
+            }
+            
+            // Show reply indicator
+            replyingToSpan.textContent = `Replying to ${displayName}`;
+            replyIndicator.classList.remove('hidden');
+            
+            // Focus on the textarea
+            commentTextarea.focus();
+            
+            // Scroll to the comment form
+            commentTextarea.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            
+            // Ensure the parent's replies container is visible
+            const parentRepliesContainer = document.getElementById(`replies-${commentId}`);
+            if (parentRepliesContainer) {
+                parentRepliesContainer.classList.remove('hidden');
+            }
+        }
 
         // Function to cancel reply
         function cancelReply() {

@@ -5,440 +5,361 @@
         </h2>
     </x-slot>
     <div class="py-12 bg-gray-100 dark:bg-gray-900">
-    <div class="max-w-7xl mx-auto p-6">
-        <!-- Two-Column Layout -->
-    <div class="flex flex-col lg:flex-row gap-8 items-stretch">
-            <!-- Left Column: Image Slider & Product Info -->
-        <div class="lg:w-1/3 flex flex-col gap-6 h-full">
-             <!-- Swiper Slider -->
-            <div class="relative swiper mySwiper rounded-xl overflow-hidden shadow-lg">
-                <div class="swiper-wrapper">
-                    <!-- Slide 1 -->
-                    <div class="swiper-slide flex items-center justify-center bg-white">
-                        <div class="relative">
-                            <img 
-                                src="{{ $donation->image ? asset('storage/' . $donation->image) : asset('images/default-placeholder.png') }}" 
-                                alt="{{ $donation->name }}"
-                                class="w-full h-[22rem] sm:h-[28rem] object-contain transition-transform duration-500 ease-out hover:scale-105">
-                            <div class="absolute inset-0 bg-gray-800/20 opacity-0 hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                                <span class="bg-white text-gray-800 px-3 py-1 rounded-full text-xs sm:text-sm font-medium shadow-sm">
-                                    Quick view
-                                </span>
+        <div class="max-w-7xl mx-auto p-6">
+            <!-- Two-Column Layout -->
+            <div class="flex flex-col lg:flex-row gap-8 items-stretch">
+                <!-- Left Column: Image Slider & Product Info -->
+                <div class="lg:w-1/3 flex flex-col gap-6 h-full">
+                    <!-- Swiper Slider -->
+                    <div class="relative swiper mySwiper rounded-xl overflow-hidden shadow-lg">
+                        <div class="swiper-wrapper">
+                            <!-- Slide 1 -->
+                            <div class="swiper-slide flex items-center justify-center bg-white">
+                                <div class="relative">
+                                    <img 
+                                        src="{{ $donation->image ? asset('storage/' . $donation->image) : asset('images/default-placeholder.png') }}" 
+                                        alt="{{ $donation->name }}"
+                                        class="w-full h-[22rem] sm:h-[28rem] object-contain transition-transform duration-500 ease-out hover:scale-105">
+                                    <div class="absolute inset-0 bg-gray-800/20 opacity-0 hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                                        <span class="bg-white text-gray-800 px-3 py-1 rounded-full text-xs sm:text-sm font-medium shadow-sm">
+                                            Quick view
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Slide 2 -->
+                            <div class="swiper-slide flex items-center justify-center bg-white">
+                                <img 
+                                    src="{{ $donation->image2 ?? asset('images/default-placeholder.png') }}" 
+                                    alt="Additional 1" 
+                                    class="w-full h-[22rem] sm:h-[28rem] object-contain">
+                            </div>
+
+                            <!-- Slide 3 -->
+                            <div class="swiper-slide flex items-center justify-center bg-white">
+                                <div class="relative">
+                                    <img 
+                                        src="{{ $donation->image3 ?? asset('images/default-placeholder.png') }}" 
+                                        alt="Additional 2"
+                                        class="w-full h-[22rem] sm:h-[28rem] object-contain transition-transform duration-500 ease-out hover:scale-105">
+                                    <div class="absolute inset-0 bg-gray-800/20 opacity-0 hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                                        <span class="bg-white text-gray-800 px-3 py-1 rounded-full text-xs sm:text-sm font-medium shadow-sm">
+                                            Quick view
+                                        </span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
+
+                        <!-- Pagination -->
+                        <div class="swiper-pagination !bottom-3"></div>
+
+                        <!-- Navigation -->
+                        <div class="swiper-button-next"></div>
+                        <div class="swiper-button-prev"></div>
                     </div>
 
-                    <!-- Slide 2 -->
-                    <div class="swiper-slide flex items-center justify-center bg-white">
-                        <img 
-                            src="{{ $donation->image2 ?? asset('images/default-placeholder.png') }}" 
-                            alt="Additional 1" 
-                            class="w-full h-[22rem] sm:h-[28rem] object-contain">
-                    </div>
-
-                    <!-- Slide 3 -->
-                    <div class="swiper-slide flex items-center justify-center bg-white">
-                        <div class="relative">
-                            <img 
-                                src="{{ $donation->image3 ?? asset('images/default-placeholder.png') }}" 
-                                alt="Additional 2"
-                                class="w-full h-[22rem] sm:h-[28rem] object-contain transition-transform duration-500 ease-out hover:scale-105">
-                            <div class="absolute inset-0 bg-gray-800/20 opacity-0 hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                                <span class="bg-white text-gray-800 px-3 py-1 rounded-full text-xs sm:text-sm font-medium shadow-sm">
-                                    Quick view
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Pagination -->
-                <div class="swiper-pagination !bottom-3"></div>
-
-                <!-- Navigation -->
-                <div class="swiper-button-next"></div>
-                <div class="swiper-button-prev"></div>
-            </div>
-
-                <!-- Product Info Card -->
-                <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-md">
-                    <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-                        {{ $donation->name }}
-                    </h1>
-                    <p class="text-sm text-gray-500 dark:text-gray-400">
-                    Size: {{ $donation->size }} · 
+                    <!-- Product Info Card -->
+                    <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-md">
+                        <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+                            {{ $donation->name }}
+                        </h1>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">
+                            Size: {{ $donation->size }} · 
                             {{ ucfirst($donation->condition) }} condition · 
                             {{ $donation->category->name ?? 'No Category' }}
-                    </p>
-                    <div class="space-y-4 mt-4">
-                        <h2 class="text-xl font-semibold text-gray-800 dark:text-gray-200">Details</h2>
-                        <p class="text-gray-600 dark:text-gray-400">{{ $donation->status }}</p>
-                        <p class="text-gray-600 dark:text-gray-400">{{ $donation->description }}</p>
-                       
-                    </div>
-               
+                        </p>
+                        <div class="space-y-4 mt-4">
+                            <h2 class="text-xl font-semibold text-gray-800 dark:text-gray-200">Details</h2>
+                            <p class="text-gray-600 dark:text-gray-400">{{ $donation->status }}</p>
+                            <p class="text-gray-600 dark:text-gray-400">{{ $donation->description }}</p>
+                        </div>
 
-                    <div class="mt-4 flex flex-col gap-3">
-                        <p class="text-lg font-bold text-[#B59F84]">Free</p>
-                        <p class="text-sm text-gray-500">Quantity: {{ $donation->qty }}</p>
-                        <p class="text-sm text-gray-500">Status: {{ ucfirst($donation->status) }}</p>
+                        <div class="mt-4 flex flex-col gap-3">
+                            <p class="text-lg font-bold text-[#B59F84]">Free</p>
+                            <p class="text-sm text-gray-500">Quantity: {{ $donation->qty }}</p>
+                            <p class="text-sm text-gray-500">Status: {{ ucfirst($donation->status) }}</p>
 
-                        @if(Auth::id() === $donation->user_id)
-                            <a href="{{ route('donations.edit', $donation->id) }}" 
-                               class="px-6 py-3 bg-[#B59F84] text-white rounded-lg hover:bg-[#a08e77] transition-all duration-300 text-center font-medium">
-                                Update donation
-                            </a>
-                        @endif
+                            @if(Auth::id() === $donation->user_id)
+                                <a href="{{ route('donations.edit', $donation->id) }}" 
+                                   class="px-6 py-3 bg-[#B59F84] text-white rounded-lg hover:bg-[#a08e77] transition-all duration-300 text-center font-medium">
+                                    Update donation
+                                </a>
+                            @endif
+                        </div>
                     </div>
                 </div>
-                </div>
-
-   
 
                 <!-- Right Column -->
                 <div class="lg:w-2/3 flex flex-col gap-8">
-
-                      <!-- User Profile Card -->
-                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden">
-                    <!-- Background Image Section -->
-                    <div class="relative h-36 bg-center bg-cover" style="background-image: url('{{ asset('images/Rectangle 99.png') }}');">
-                        <div class="absolute inset-0 bg-gradient-to-b from-transparent to-black/30"></div>
-                    </div>
-                    
-                    <!-- User Info Section -->
-                    <div class="relative bg-[#E1D5B6] dark:bg-gray-800 p-6">
-                        <!-- Avatar -->
-                        <div class="absolute -top-10 left-6 w-20 h-20 bg-[#B59F84] rounded-full border-4 border-white dark:border-gray-800 flex items-center justify-center shadow-md">
-                            <span class="text-2xl font-bold text-white">
-                                {{ strtoupper(substr($donation->user->fname, 0, 1) . substr($donation->user->lname, 0, 1)) }}
-                            </span>
+                    <!-- User Profile Card -->
+                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden">
+                        <!-- Background Image Section -->
+                        <div class="relative h-36 bg-center bg-cover" style="background-image: url('{{ asset('images/Rectangle 99.png') }}');">
+                            <div class="absolute inset-0 bg-gradient-to-b from-transparent to-black/30"></div>
                         </div>
                         
-                        <!-- User Details -->
-                        <div class="flex items-start justify-between pt-10">
-                            <div class="flex-1">
-                                <h3 class="font-semibold text-gray-900 dark:text-white text-xl">
-                                    {{ $donation->user->fname }} {{ $donation->user->lname }}
-                                </h3>
-                                <!-- Rating -->
-                                <div class="flex items-center mt-2">
-                                    <div class="flex text-yellow-400">
-                                        <span>★★★★★</span>
+                        <!-- User Info Section -->
+                        <div class="relative bg-[#E1D5B6] dark:bg-gray-800 p-6">
+                            <!-- Avatar -->
+                            <div class="absolute -top-10 left-6 w-20 h-20 bg-[#B59F84] rounded-full border-4 border-white dark:border-gray-800 flex items-center justify-center shadow-md">
+                                <span class="text-2xl font-bold text-white">
+                                    {{ strtoupper(substr($donation->user->fname, 0, 1) . substr($donation->user->lname, 0, 1)) }}
+                                </span>
+                            </div>
+                            
+                            <!-- User Details -->
+                            <div class="flex items-start justify-between pt-10">
+                                <div class="flex-1">
+                                    <h3 class="font-semibold text-gray-900 dark:text-white text-xl">
+                                        {{ $donation->user->fname }} {{ $donation->user->lname }}
+                                    </h3>
+                                    <!-- Rating -->
+                                    <div class="flex items-center mt-2">
+                                        <div class="flex text-yellow-400">
+                                            <span>★★★★★</span>
+                                        </div>
+                                        <span class="ml-2 text-sm text-gray-500 dark:text-gray-400">(5)</span>
                                     </div>
-                                    <span class="ml-2 text-sm text-gray-500 dark:text-gray-400">(5)</span>
+                                </div>
+                                
+                                <!-- Action Buttons -->
+                                <div class="flex flex-col gap-3 ml-4">
+                                    @if (Auth::check() && Auth::id() !== $donation->user->id)
+                                        <a href="{{ route('private.chat', $donation->user->id) }}"
+                                           class="px-5 py-2.5 bg-white dark:bg-gray-700 text-[#B59F84] dark:text-[#E1D5B6] rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-all duration-300 text-sm font-medium">
+                                            Message
+                                        </a>
+                                    @endif
+                                    <a href="{{ route('profile.show', $donation->user->id) }}"
+                                       class="px-5 py-2.5 bg-white dark:bg-gray-700 text-[#B59F84] dark:text-[#E1D5B6] rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-all duration-300 text-sm font-medium">
+                                        Visit Profile
+                                    </a>
                                 </div>
                             </div>
                             
-                            <!-- Action Buttons -->
-                            <div class="flex flex-col gap-3 ml-4">
-                                
-                                <a href="{{ route('profile.show', $donation->user->id) }}"
-                                   class="px-5 py-2.5 bg-white dark:bg-gray-700 text-[#B59F84] dark:text-[#E1D5B6] rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-all duration-300 text-sm font-medium">
-                                    Visit Profile
-                                </a>
-                            </div>
+                            <!-- Report Button (if not the owner) -->
+                            @if(Auth::id() !== $donation->user_id)
+                                <div class="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+                                    <a href="{{ route('reports.create', $donation->user->id) }}"
+                                       class="inline-flex items-center gap-2 px-3 py-2 text-sm text-red-500 dark:text-red-400 hover:text-red-600 dark:hover:text-red-300 transition">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                                  d="M12 9v2m0 4h.01M5.455 4.455a2.836 2.836 0 012-1.455h9.09a2.836 2.836 0 012 1.455l3.182 5.455a2.836 2.836 0 010 2.182L18.545 17.09a2.836 2.836 0 01-2 1.455H7.455a2.836 2.836 0 01-2-1.455L2.273 12.09a2.836 2.836 0 010-2.182L5.455 4.455z"/>
+                                        </svg>
+                                        Report User
+                                    </a>
+                                </div>
+                            @endif
                         </div>
-                    <!-- Donation Info -->
-                    <!-- Report Button (if not the owner) -->
-                    @if(Auth::id() !== $donation->user_id)
-                            <div class="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
-                                <a href="{{ route('reports.create', $donation->user->id) }}"
-                                   class="inline-flex items-center gap-2 px-3 py-2 text-sm text-red-500 dark:text-red-400 hover:text-red-600 dark:hover:text-red-300 transition">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                              d="M12 9v2m0 4h.01M5.455 4.455a2.836 2.836 0 012-1.455h9.09a2.836 2.836 0 012 1.455l3.182 5.455a2.836 2.836 0 010 2.182L18.545 17.09a2.836 2.836 0 01-2 1.455H7.455a2.836 2.836 0 01-2-1.455L2.273 12.09a2.836 2.836 0 010-2.182L5.455 4.455z"/>
-                                    </svg>
-                                    Report User
-                                </a>
-                            </div>
-                        @endif
                     </div>
-                </div>
 
+                    <!-- Comments Section -->
+                    <div class="bg-[#F4F2ED] dark:bg-gray-800 rounded-xl p-10 shadow-md">
+                        <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4">Comments</h3>
 
-                   
-               
- <!-- Comments Section -->
- <div class="bg-[#F4F2ED] dark:bg-gray-800   rounded-xl p-10 shadow-md">
-                    <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4">Comments</h3>
-
-                    <!-- Scrollable Comment List -->
-                    <div id="comments-container" class="space-y-4 max-h-80 overflow-y-auto pr-2">
-                        @forelse($donation->comments as $comment)
-                            <!-- Comment Item -->
-                            <div class="comment-item bg-white dark:bg-gray-700 rounded-lg p-4 shadow-sm" data-comment-id="{{ $comment->id }}" id="comment-{{ $comment->id }}">
-                                <div class="flex gap-3">
-                                    <!-- User Avatar -->
-                                    <div class="flex-shrink-0">
-                                        <div class="w-10 h-10 bg-[#B59F84] rounded-full border-2 border-white dark:border-gray-800 flex items-center justify-center">
-                                            <span class="text-sm font-bold text-white">
-                                                {{ strtoupper(substr($comment->user->fname, 0, 1) . substr($comment->user->lname, 0, 1)) }}
-                                            </span>
+                        <!-- Scrollable Comment List -->
+                        <div id="comments-container" class="space-y-4 max-h-80 overflow-y-auto pr-2">
+                            @forelse($donation->comments as $comment)
+                                <!-- Comment Item -->
+                                <div class="comment-item bg-white dark:bg-gray-700 rounded-lg p-4 shadow-sm" data-comment-id="{{ $comment->id }}" id="comment-{{ $comment->id }}">
+                                    <div class="flex gap-3">
+                                        <!-- User Avatar -->
+                                        <div class="flex-shrink-0">
+                                            <div class="w-10 h-10 bg-[#B59F84] rounded-full border-2 border-white dark:border-gray-800 flex items-center justify-center">
+                                                <span class="text-sm font-bold text-white">
+                                                    {{ strtoupper(substr($comment->user->fname, 0, 1) . substr($comment->user->lname, 0, 1)) }}
+                                                </span>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Comment Content -->
+                                        <div class="flex-1">
+                                            <div class="flex justify-between items-start mb-1">
+                                                <div>
+                                                    <a href="{{ route('profile.show', $comment->user->id) }}" class="font-semibold text-gray-800 dark:text-gray-200 hover:underline">
+                                                        {{ $comment->user->fname }} {{ $comment->user->lname }}
+                                                    </a>
+                                                    <span class="text-xs text-gray-500 dark:text-gray-400 ml-2">
+                                                        {{ $comment->created_at->diffForHumans() }}
+                                                    </span>
+                                                </div>
+                                                
+                                                <!-- Comment Options (for comment owner) -->
+                                                @if(Auth::id() === $comment->user_id)
+                                                    <div class="relative">
+                                                        <button type="button" class="p-1 rounded hover:bg-gray-100 dark:hover:bg-gray-600" onclick="toggleDropdown({{ $comment->id }})">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-600 dark:text-gray-200" viewBox="0 0 20 20" fill="currentColor">
+                                                                <path d="M6 10a2 2 0 11-4 0 2 2 0 014 0zm6 0a2 2 0 11-4 0 2 2 0 014 0zm6 0a2 2 0 11-4 0 2 2 0 014 0z" />
+                                                            </svg>
+                                                        </button>
+                                                        <div id="dropdown-{{ $comment->id }}" class="absolute right-0 mt-1 w-28 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded shadow z-10 hidden">
+                                                            <button type="button" onclick="toggleEditForm({{ $comment->id }})" class="w-full text-left px-3 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700">
+                                                                Edit
+                                                            </button>
+                                                            <button type="button" onclick="deleteComment({{ $comment->id }})" class="w-full text-left px-3 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-gray-50 dark:hover:bg-gray-700">
+                                                                Delete
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                @endif
+                                            </div>
+                                            <div id="comment-content-{{ $comment->id }}" class="text-gray-800 dark:text-gray-200 mb-2">
+                                                {{ $comment->content }}
+                                            </div>
+                                            <div class="flex items-center gap-4 text-xs text-gray-500 dark:text-gray-400">
+                                                <button onclick="toggleLike({{ $comment->id }})" class="flex items-center gap-1 hover:text-[#B59F84] transition-colors duration-200 {{ $comment->userLikes->count() > 0 ? 'text-[#B59F84]' : 'text-gray-500' }}" id="like-btn-{{ $comment->id }}">
+                                                    <svg class="w-4 h-4" fill="{{ $comment->userLikes->count() > 0 ? 'currentColor' : 'none' }}" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                                                    </svg>
+                                                    <span id="like-count-{{ $comment->id }}">{{ $comment->likes_count }}</span>
+                                                </button>
+                                                <button onclick="startReply({{ $comment->id }}, '{{ addslashes($comment->user->fname . ' ' . $comment->user->lname) }}')" class="flex items-center gap-1 hover:text-[#B59F84] transition-colors duration-200">
+                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                                                    </svg>
+                                                    Reply
+                                                </button>
+                                                @if($comment->replies && $comment->replies->count() > 0)
+                                                    <button onclick="toggleReplies({{ $comment->id }})" class="text-[#B59F84] hover:underline">
+                                                        {{ $comment->replies->count() }} {{ $comment->replies->count() == 1 ? 'reply' : 'replies' }}
+                                                    </button>
+                                                @endif
+                                            </div>
                                         </div>
                                     </div>
                                     
-                                    <!-- Comment Content -->
-                                    <div class="flex-1">
-                                        <div class="flex justify-between items-start mb-1">
-                                            <div>
-                                                <a href="{{ route('profile.show', $comment->user->id) }}" class="font-semibold text-gray-800 dark:text-gray-200 hover:underline">
-                                                    {{ $comment->user->fname }} {{ $comment->user->lname }}
-                                                </a>
-                                                <span class="text-xs text-gray-500 dark:text-gray-400 ml-2">
-                                                    {{ $comment->created_at->diffForHumans() }}
-                                                </span>
+                                    <!-- Edit Form (Hidden by Default) -->
+                                    @if(Auth::id() === $comment->user_id)
+                                        <form id="inline-edit-form-{{ $comment->id }}" action="{{ route('comments.update', $comment->id) }}" method="POST" class="inline-edit-form hidden mt-2 bg-gray-100 dark:bg-gray-600 p-3 rounded-lg" data-id="{{ $comment->id }}">
+                                            @csrf
+                                            @method('PUT')
+                                            <textarea name="content" rows="2" class="w-full border rounded p-2 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200">{{ old('content', $comment->content) }}</textarea>
+                                            <div class="flex gap-2 mt-2">
+                                                <button type="submit" class="px-3 py-1 bg-[#B59F84] text-white rounded text-sm hover:bg-[#a08e77] transition-all duration-200">Save</button>
+                                                <button type="button" onclick="cancelEdit({{ $comment->id }})" class="px-3 py-1 bg-gray-300 text-gray-800 rounded hover:bg-gray-400 text-sm">Cancel</button>
                                             </div>
-                                            
-                                            <!-- Comment Options (for comment owner) -->
-                                            @if(Auth::id() === $comment->user_id)
-                                                <div class="relative">
-                                                    <button type="button" class="p-1 rounded hover:bg-gray-100 dark:hover:bg-gray-600" onclick="toggleDropdown({{ $comment->id }})">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-600 dark:text-gray-200" viewBox="0 0 20 20" fill="currentColor">
-                                                            <path d="M6 10a2 2 0 11-4 0 2 2 0 014 0zm6 0a2 2 0 11-4 0 2 2 0 014 0zm6 0a2 2 0 11-4 0 2 2 0 014 0z" />
-                                                        </svg>
-                                                    </button>
-                                                    <div id="dropdown-{{ $comment->id }}" class="absolute right-0 mt-1 w-28 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded shadow z-10 hidden">
-                                                        <button type="button" onclick="toggleEditForm({{ $comment->id }})" class="w-full text-left px-3 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700">
-                                                            Edit
+                                        </form>
+                                    @endif
+                                    
+                                    <!-- Replies Container - All replies in one vertical thread -->
+                                    <div id="replies-{{ $comment->id }}" 
+                                        class="hidden ml-4 mt-3 space-y-3 border-l-2 border-gray-200 dark:border-gray-600 pl-4">
+                                        @foreach($comment->replies as $reply)
+                                            <div class="reply-item flex gap-3" data-comment-id="{{ $reply->id }}" id="reply-{{ $reply->id }}" data-parent-id="{{ $reply->parent_id }}">
+                                                
+                                                <!-- Avatar -->
+                                                <div class="flex-shrink-0">
+                                                    <div class="w-8 h-8 bg-[#B59F84] rounded-full border-2 border-white dark:border-gray-800 flex items-center justify-center">
+                                                        <span class="text-xs font-bold text-white">
+                                                            {{ strtoupper(substr($reply->user->fname, 0, 1) . substr($reply->user->lname, 0, 1)) }}
+                                                        </span>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Reply Content -->
+                                                <div class="flex-1">
+                                                    <div>
+                                                        <a href="{{ route('profile.show', $reply->user->id) }}"
+                                                            class="text-sm font-semibold text-gray-800 dark:text-gray-200 hover:underline">
+                                                            {{ $reply->user->fname }} {{ $reply->user->lname }}
+                                                        </a>
+                                                        <span class="text-xs text-gray-500 dark:text-gray-400 ml-2">
+                                                            {{ $reply->created_at->diffForHumans() }}
+                                                        </span>
+                                                    </div>
+
+                                                    <p class="text-sm text-gray-800 dark:text-gray-200">{{ $reply->content }}</p>
+
+                                                    <!-- Actions -->
+                                                    <div class="mt-2 flex items-center gap-3 text-xs text-gray-500 dark:text-gray-400">
+                                                        <button onclick="toggleLike({{ $reply->id }})"
+                                                            class="flex items-center gap-1 hover:text-[#B59F84] transition-colors duration-200 {{ $reply->userLikes->count() > 0 ? 'text-[#B59F84]' : 'text-gray-500' }}"
+                                                            id="like-btn-{{ $reply->id }}">
+                                                            <svg class="w-3 h-3"
+                                                                fill="{{ $reply->userLikes->count() > 0 ? 'currentColor' : 'none' }}"
+                                                                stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                                    stroke-width="2"
+                                                                    d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z">
+                                                                </path>
+                                                            </svg>
+                                                            <span id="like-count-{{ $reply->id }}">{{ $reply->likes_count }}</span>
                                                         </button>
-                                                        <button type="button" onclick="deleteComment({{ $comment->id }})" class="w-full text-left px-3 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-gray-50 dark:hover:bg-gray-700">
-                                                            Delete
+
+                                                        <!-- Reply button -->
+                                                        <button onclick="startReply({{ $reply->id }}, '{{ addslashes($reply->user->fname . ' ' . $reply->user->lname) }}')" 
+                                                                class="hover:text-[#B59F84] transition-colors duration-200">
+                                                            Reply
                                                         </button>
                                                     </div>
                                                 </div>
-                                            @endif
-                                        </div>
-                                        <div id="comment-content-{{ $comment->id }}" class="text-gray-800 dark:text-gray-200 mb-2">
-                                            {{ $comment->content }}
-                                        </div>
-                                        <div class="flex items-center gap-4 text-xs text-gray-500 dark:text-gray-400">
-                                            <button onclick="toggleLike({{ $comment->id }})" class="flex items-center gap-1 hover:text-[#B59F84] transition-colors duration-200 {{ $comment->userLikes->count() > 0 ? 'text-[#B59F84]' : 'text-gray-500' }}" id="like-btn-{{ $comment->id }}">
-                                                <svg class="w-4 h-4" fill="{{ $comment->userLikes->count() > 0 ? 'currentColor' : 'none' }}" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
-                                                </svg>
-                                                <span id="like-count-{{ $comment->id }}">{{ $comment->likes_count }}</span>
-                                            </button>
-                                            <button onclick="toggleReplyForm({{ $comment->id }})" class="flex items-center gap-1 hover:text-[#B59F84] transition-colors duration-200">
-                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
-                                                </svg>
-                                                Reply
-                                            </button>
-                                            @if($comment->replies_count > 0)
-                                                <button onclick="toggleReplies({{ $comment->id }})" class="text-[#B59F84] hover:underline">
-                                                    {{ $comment->replies_count }} {{ $comment->replies_count == 1 ? 'reply' : 'replies' }}
-                                                </button>
-                                            @endif
-                                        </div>
+                                            </div>
+                                        @endforeach
                                     </div>
                                 </div>
-                                
-                                <!-- Edit Form (Hidden by Default) -->
-                                @if(Auth::id() === $comment->user_id)
-                                    <form id="inline-edit-form-{{ $comment->id }}" action="{{ route('comments.update', $comment->id) }}" method="POST" class="inline-edit-form hidden mt-2 bg-gray-100 dark:bg-gray-600 p-3 rounded-lg" data-id="{{ $comment->id }}">
-                                        @csrf
-                                        @method('PUT')
-                                        <textarea name="content" rows="2" class="w-full border rounded p-2 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200">{{ old('content', $comment->content) }}</textarea>
-                                        <div class="flex gap-2 mt-2">
-                                            <button type="submit" class="px-3 py-1 bg-[#B59F84] text-white rounded text-sm hover:bg-[#a08e77] transition-all duration-200">Save</button>
-                                            <button type="button" onclick="cancelEdit({{ $comment->id }})" class="px-3 py-1 bg-gray-300 text-gray-800 rounded hover:bg-gray-400 text-sm">Cancel</button>
-                                        </div>
-                                    </form>
-                                @endif
-                                
-                                <!-- Reply Form (Hidden by Default) -->
-                                <div id="reply-form-{{ $comment->id }}" class="hidden mt-3 ml-4">
-                                    <form class="reply-form" data-parent-id="{{ $comment->id }}">
-                                        @csrf
-                                        <div class="flex gap-2">
-                                            <textarea name="content" placeholder="Write a reply..." class="flex-1 p-2 border border-gray-300 dark:border-gray-600 rounded-lg resize-none focus:ring-2 focus:ring-[#B59F84] focus:border-transparent dark:bg-gray-700 dark:text-white" rows="2" required></textarea>
-                                            <div class="flex flex-col gap-2">
-                                                <button type="submit" class="px-3 py-2 bg-[#B59F84] text-white rounded-lg hover:bg-[#a08e77] transition-all duration-200 text-sm">
-                                                    Reply
-                                                </button>
-                                                <button type="button" onclick="toggleReplyForm({{ $comment->id }})" class="px-3 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-all duration-200 text-sm">
-                                                    Cancel
-                                                </button>
-                                            </div>
-                                        </div>
-                                        <input type="hidden" name="parent_id" value="{{ $comment->id }}">
-                                        <input type="hidden" name="product_id" value="{{ $donation->id }}">
-                                    </form>
-                                </div>
-                                
-                                <!-- Replies Container (Hidden by Default) -->
-                                <!-- Replies Container -->
-                                <div id="replies-{{ $comment->id }}" 
-     class="hidden ml-4 mt-3 space-y-3 border-l-2 border-gray-200 dark:border-gray-600 pl-4">
-    @foreach($comment->replies as $reply)
-        <div class="reply-item flex gap-3" data-comment-id="{{ $reply->id }}" id="reply-{{ $reply->id }}">
-            
-            <!-- Avatar -->
-            <div class="flex-shrink-0">
-                <div class="w-8 h-8 bg-[#B59F84] rounded-full border-2 border-white dark:border-gray-800 flex items-center justify-center">
-                    <span class="text-xs font-bold text-white">
-                        {{ strtoupper(substr($reply->user->fname, 0, 1) . substr($reply->user->lname, 0, 1)) }}
-                    </span>
-                </div>
-            </div>
-
-            <!-- Reply Content -->
-            <div class="flex-1">
-                <div class="flex justify-between items-start">
-                    <div>
-                        <a href="{{ route('profile.show', $reply->user->id) }}" 
-                           class="text-sm font-semibold text-gray-800 dark:text-gray-200 hover:underline">
-                            {{ $reply->user->fname }} {{ $reply->user->lname }}
-                        </a>
-                        <span class="text-xs text-gray-500 dark:text-gray-400 ml-2">
-                            {{ $reply->created_at->diffForHumans() }}
-                        </span>
-                    </div>
-                    @if(Auth::id() === $reply->user_id)
-                        <div class="relative">
-                            <button type="button" class="p-1 rounded hover:bg-gray-100 dark:hover:bg-gray-600" onclick="toggleDropdown({{ $reply->id }})">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-600 dark:text-gray-200" viewBox="0 0 20 20" fill="currentColor">
-                                    <path d="M6 10a2 2 0 11-4 0 2 2 0 014 0zm6 0a2 2 0 11-4 0 2 2 0 014 0zm6 0a2 2 0 11-4 0 2 2 0 014 0z" />
-                                </svg>
-                            </button>
-                            <div id="dropdown-{{ $reply->id }}" class="absolute right-0 mt-1 w-28 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded shadow z-10 hidden">
-                                <button type="button" onclick="toggleEditForm({{ $reply->id }})" class="w-full text-left px-3 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700">
-                                    Edit
-                                </button>
-                                <button type="button" onclick="deleteComment({{ $reply->id }})" class="w-full text-left px-3 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-gray-50 dark:hover:bg-gray-700">
-                                    Delete
-                                </button>
-                            </div>
+                            @empty
+                                <p class="text-gray-600 dark:text-gray-400 text-sm py-4 text-center">No comments yet. Be the first to comment!</p>
+                            @endforelse
                         </div>
-                    @endif
-                </div>
 
-                <div id="comment-content-{{ $reply->id }}" class="text-sm text-gray-800 dark:text-gray-200">{{ $reply->content }}</div>
-
-                <!-- Actions -->
-                <div class="mt-2 flex items-center gap-3 text-xs text-gray-500 dark:text-gray-400">
-                    <button onclick="toggleLike({{ $reply->id }})"
-                            class="flex items-center gap-1 hover:text-[#B59F84] transition-colors duration-200 {{ $reply->userLikes->count() > 0 ? 'text-[#B59F84]' : 'text-gray-500' }}"
-                            id="like-btn-{{ $reply->id }}">
-                        <svg class="w-3 h-3" fill="{{ $reply->userLikes->count() > 0 ? 'currentColor' : 'none' }}" 
-                             stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                                  d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
-                        </svg>
-                        <span id="like-count-{{ $reply->id }}">{{ $reply->likes_count }}</span>
-                    </button>
-
-                    <!-- Reply button -->
-                    <button onclick="toggleReplyForm({{ $reply->id }})" 
-                            class="hover:text-[#B59F84] transition-colors duration-200">
-                        Reply
-                    </button>
-                </div>
-
-                <!-- Inline Edit Form for reply -->
-                @if(Auth::id() === $reply->user_id)
-                <form id="inline-edit-form-{{ $reply->id }}" action="{{ route('comments.update', $reply->id) }}" method="POST" class="inline-edit-form hidden mt-2 bg-gray-100 dark:bg-gray-600 p-3 rounded-lg" data-id="{{ $reply->id }}">
-                    @csrf
-                    @method('PUT')
-                    <textarea name="content" rows="2" class="w-full border rounded p-2 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200">{{ old('content', $reply->content) }}</textarea>
-                    <div class="flex gap-2 mt-2">
-                        <button type="submit" class="px-3 py-1 bg-[#B59F84] text-white rounded text-sm hover:bg-[#a08e77] transition-all duration-200">Save</button>
-                        <button type="button" onclick="cancelEdit({{ $reply->id }})" class="px-3 py-1 bg-gray-300 text-gray-800 rounded hover:bg-gray-400 text-sm">Cancel</button>
-                    </div>
-                </form>
-                @endif
-
-                <!-- Reply Form -->
-                <div id="reply-form-{{ $reply->id }}" class="hidden mt-2 ml-8">
-                    <form class="reply-form" data-parent-id="{{ $reply->id }}">
-                        @csrf
-                        <div class="flex gap-2">
-                            <textarea name="content" placeholder="Write a reply..."
-                                      class="flex-1 p-2 border border-gray-300 dark:border-gray-600 rounded-lg resize-none 
-                                             focus:ring-2 focus:ring-[#B59F84] focus:border-transparent 
-                                             dark:bg-gray-700 dark:text-white"
-                                      rows="2" required></textarea>
-                            <button type="submit" 
-                                    class="px-3 py-2 bg-[#B59F84] text-white rounded-lg hover:bg-[#a08e77] 
-                                           transition-all duration-200 text-sm">
-                                Reply
-                            </button>
-                        </div>
-                        <input type="hidden" name="parent_id" value="{{ $reply->id }}">
-                        <input type="hidden" name="donation_id" value="{{ $donation->id }}">
-                    </form>
-                </div>
-
-                <!-- Nested Replies Container for this reply -->
-                <div id="replies-{{ $reply->id }}" class="hidden ml-8 mt-3 space-y-3 border-l-2 border-gray-200 dark:border-gray-600 pl-4"></div>
-            </div>
-        </div>
-    @endforeach
-</div>
-
-
-                            </div>
-                        @empty
-                            <p class="text-gray-600 dark:text-gray-400 text-sm py-4 text-center">No comments yet. Be the first to comment!</p>
-                        @endforelse
-                    </div>
-
-                    <!-- Comment Form -->
-                    @auth
-                        <form id="comment-form" action="{{ route('comments.store') }}" method="POST" class="mt-6">
-                            @csrf
-                            <div class="flex flex-col md:flex-row items-stretch md:items-center gap-3 w-full max-w-xl bg-white dark:bg-gray-800 p-3 rounded-2xl border border-gray-200 dark:border-gray-600 shadow-md">
+                        <!-- Comment Form -->
+                        @auth
+                            <form id="comment-form" action="{{ route('comments.store') }}" method="POST" class="mt-6">
+                                @csrf
                                 <input type="hidden" name="product_id" value="{{ $donation->id }}">
-                                <textarea
-                                    name="content"
-                                    id="comment-content"
-                                    placeholder="Write a comment..."
-                                    class="flex-1 w-full resize-none overflow-hidden rounded-lg px-4 py-2 text-sm text-gray-800 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#B59F84] border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700"
-                                    rows="2"
-                                    oninput="this.style.height='auto';this.style.height=this.scrollHeight+'px';"
-                                    required></textarea>
-                                <button type="submit"
+                                <input type="hidden" name="parent_id" id="parent_id" value="">
+                                <div class="relative flex flex-col md:flex-row items-stretch md:items-center gap-3 w-full max-w-xl bg-white dark:bg-gray-800 p-3 rounded-2xl border border-gray-200 dark:border-gray-600 shadow-md">
+                                    <textarea name="content" id="comment-content" placeholder="Write a comment..."
+                                        class="mentionable flex-1 w-full resize-none overflow-hidden rounded-lg px-4 py-2 text-sm text-gray-800 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#B59F84] border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700"
+                                        rows="2" oninput="this.style.height='auto';this.style.height=this.scrollHeight+'px';" required></textarea>
+                                    <button type="submit"
                                         class="mt-2 md:mt-0 md:self-center bg-[#B59F84] text-white font-semibold px-4 py-2 rounded-lg shadow hover:bg-[#a08e77] transition-all duration-300 ease-in-out w-full md:w-auto">
-                                    <i class="fas fa-paper-plane"></i>
-                                </button>
-                            </div>
-                            <div id="comment-error" class="text-red-500 mt-2 text-sm hidden"></div>
-                        </form>
-                    @else
-                        <p class="mt-3 text-gray-600 dark:text-gray-400">
-                            <a href="{{ route('login') }}" class="text-[#B59F84] hover:underline">Login</a> to comment.
-                        </p>
-                    @endauth
+                                        <i class="fas fa-paper-plane"></i>
+                                    </button>
+                                </div>
+                                <div id="comment-error" class="text-red-500 mt-2 text-sm hidden"></div>
+                                
+                                <!-- Reply indicator (hidden by default) -->
+                                <div id="reply-indicator" class="hidden mt-2 text-sm text-gray-600 dark:text-gray-400 bg-gray-50 dark:bg-gray-700 rounded-lg p-3">
+                                    <span id="replying-to" class="font-medium"></span>
+                                    <button type="button" onclick="cancelReply()" class="ml-2 text-[#B59F84] hover:underline">Cancel</button>
+                                </div>
+                            </form>
+                        @else
+                            <p class="mt-3 text-gray-600 dark:text-gray-400">
+                                <a href="{{ route('login') }}" class="text-[#B59F84] hover:underline">Login</a> to comment.
+                            </p>
+                        @endauth
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-<!-- Back Link -->
-                    <!-- More Products from the Same User -->
-   
+
+    <!-- More Donations from the Same User -->
+    @if ($moreDonations->count())
         <div class="py-6 bg-white dark:bg-gray-900 mt-10">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex items-center justify-between mb-6">
                     <h2 class="text-2xl font-extrabold tracking-tight text-gray-900 dark:text-gray-100">
-                       
+                        More from {{ $donation->user->fname }}
                     </h2>
                 </div>
                 <div class="rounded-xl shadow-sm overflow-hidden">
                     <div class="p-4 sm:p-6">
                         <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-4 md:gap-6">
-                          
+                            @foreach ($moreDonations as $donationItem)
                                 <div class="group relative bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition duration-200 border border-[#D9D9D9] dark:border-gray-700">
-                                    <a href="" class="block h-full">
-                                     
-                                            <div class="absolute top-1 left-1 z-10 bg-[#D9D9D9] text-gray-700 text-[10px] sm:text-xs px-1.5 py-0.5 sm:px-2 sm:py-1 rounded-full">
-                                                Donation
-                                            </div>
-                                            
+                                    <a href="{{ route('donations.show', $donationItem->id) }}" class="block h-full">
+                                        <div class="absolute top-1 left-1 z-10 bg-[#D9D9D9] text-gray-700 text-[10px] sm:text-xs px-1.5 py-0.5 sm:px-2 sm:py-1 rounded-full">
+                                            Donation
+                                        </div>
 
                                         <div class="relative aspect-square overflow-hidden">
-                                            <img src="" 
-                                                alt="" 
+                                            <img src="{{ $donationItem->image ? asset('storage/' . $donationItem->image) : asset('images/default-placeholder.png') }}" 
+                                                alt="{{ $donationItem->name }}" 
                                                 class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105">
 
                                             <div class="absolute inset-0 bg-gray-800 bg-opacity-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
@@ -451,29 +372,29 @@
                                         <div class="p-2 sm:p-3">
                                             <div class="flex justify-between items-start">
                                                 <h3 class="text-xs sm:text-sm font-bold text-gray-900 dark:text-white transition-colors truncate max-w-[70%]">
-                                                    
+                                                    {{ $donationItem->name }}
                                                 </h3>
                                                 <span class="text-[10px] sm:text-xs font-medium px-1 py-0.5 bg-[#D9D9D9] dark:bg-gray-700 rounded text-gray-700 dark:text-gray-300">
-                                                    
+                                                    {{ $donationItem->size ?? 'L' }}
                                                 </span>
                                             </div>
 
                                             <p class="text-gray-500 dark:text-gray-400 text-[10px] sm:text-xs mt-0.5 truncate">
-                                               
+                                                {{ $donationItem->category->name ?? 'No Category' }}
                                             </p>
                                             <p class="text-gray-500 dark:text-gray-400 text-[10px] sm:text-xs mt-0.5 truncate">
-                                                <i>  Cebu City</i>
+                                                <i>{{ $donationItem->barangay->name ?? 'N/A' }}, Cebu City</i>
                                             </p>
 
                                             <div class="flex justify-between items-center mt-1">
-                                                <p class="text-xs sm:text-sm font-bold ">
-                                                 
+                                                <p class="text-xs sm:text-sm font-bold text-gray-700">
+                                                    For Donation
                                                 </p>
 
                                                 <button class="favorite-btn text-gray-400 hover:text-red-500 focus:outline-none transition-colors" 
-                                                        data-id="" 
+                                                        data-id="{{ $donationItem->id }}" 
                                                         type="button"
-                                                        onclick="">
+                                                        onclick="event.preventDefault(); event.stopPropagation();">
                                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:h-5 sm:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                                                     </svg>
@@ -482,741 +403,860 @@
                                         </div>
                                     </a>
                                 </div>
-                     
+                            @endforeach
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
+    @else
         <div class="py-6 bg-white dark:bg-gray-900 mt-10">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center p-6 border border-dashed border-gray-300 dark:border-gray-700 rounded-xl">
                     <p class="text-gray-600 dark:text-gray-400 text-sm">
-                        No other donation from  yet.
+                        No other donations from <strong>{{ $donation->user->fname }}</strong> yet.
                     </p>
                 </div>
             </div>
         </div>
-  
-                <div class="flex flex-col overflow-hidden ml-[60px]">
-            <a 
-                href="{{ route('donations.index') }}" 
-                class="flex items-center gap-2 text-[#B59F84] hover:underline"
-            >
-                <svg xmlns="http://www.w3.org/2000/svg" 
-                    class="w-4 h-4" 
-                    fill="none" viewBox="0 0 24 24" 
-                    stroke="currentColor" stroke-width="2">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7 7-7M3 12h18" />
-                            </svg>
-                            <span>Back to donations</span>
-                        </a>
-                    </div>
+    @endif
 
-          
-        </div>
-        
+    <!-- Back Link -->
+    <div class="flex flex-col overflow-hidden ml-[60px]">
+        <a href="{{ route('donations.index') }}" class="flex items-center gap-2 text-[#B59F84] hover:underline">
+            <svg xmlns="http://www.w3.org/2000/svg" 
+                class="w-4 h-4" 
+                fill="none" viewBox="0 0 24 24" 
+                stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7 7-7M3 12h18" />
+            </svg>
+            <span>Back to donations</span>
+        </a>
     </div>
+
     <script>
-document.addEventListener("DOMContentLoaded", function () {
-    const DONATION_ID = {{ $donation->id }};
-    new Swiper(".mySwiper", {
-        loop: true,
-        pagination: {
-            el: ".swiper-pagination",
-            clickable: true,
-        },
-        navigation: {
-            nextEl: ".swiper-button-next",
-            prevEl: ".swiper-button-prev",
-        },
-    });
-});// JavaScript to expand comments on hover
-document.addEventListener('DOMContentLoaded', function() {
-    document.querySelectorAll('.comment-item').forEach(item => {
-        item.addEventListener('mouseenter', function() {
-            const lineClamp = this.querySelector('.line-clamp-3');
-            if (lineClamp) {
-                lineClamp.style['-webkit-line-clamp'] = 'unset';
-                lineClamp.style.display = 'block';
+        // Global variables to track reply state
+        let currentReplyParentId = null;
+        let currentReplyUsername = null;
+
+        // Function to start a reply (Instagram-style)
+        function startReply(commentId, displayName) {
+            // Set the current reply state
+            currentReplyParentId = commentId;
+            currentReplyUsername = displayName;
+            
+            // Update the main comment form
+            const commentTextarea = document.getElementById('comment-content');
+            const parentIdField = document.getElementById('parent_id');
+            const replyIndicator = document.getElementById('reply-indicator');
+            const replyingToSpan = document.getElementById('replying-to');
+            
+            // Set the parent_id
+            parentIdField.value = commentId;
+            
+            // Update textarea with @username
+            if (displayName) {
+                const prefix = `@${displayName} `;
+                commentTextarea.value = prefix;
+                commentTextarea.setSelectionRange(prefix.length, prefix.length);
             }
-        });
-        
-        item.addEventListener('mouseleave', function() {
-            const lineClamp = this.querySelector('.line-clamp-3');
-            if (lineClamp) {
-                lineClamp.style['-webkit-line-clamp'] = '3';
-                lineClamp.style.display = '-webkit-box';
+            
+            // Show reply indicator
+            replyingToSpan.textContent = `Replying to ${displayName}`;
+            replyIndicator.classList.remove('hidden');
+            
+            // Focus on the textarea
+            commentTextarea.focus();
+            
+            // Scroll to the comment form
+            commentTextarea.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            
+            // Ensure the parent's replies container is visible
+            const parentRepliesContainer = document.getElementById(`replies-${commentId}`);
+            if (parentRepliesContainer) {
+                parentRepliesContainer.classList.remove('hidden');
             }
-        });
-    });
-});
-
-// Your other JavaScript functions remain the same
-function toggleDropdown(commentId) {
-    const dropdown = document.getElementById('dropdown-' + commentId);
-    if (dropdown.classList.contains('hidden')) {
-        // Close all other dropdowns first
-        document.querySelectorAll('[id^="dropdown-"]').forEach(el => {
-            el.classList.add('hidden');
-        });
-        // Open this dropdown
-        dropdown.classList.remove('hidden');
-    } else {
-        dropdown.classList.add('hidden');
-    }
-}
-
-// Close dropdowns when clicking outside
-document.addEventListener('click', function(event) {
-    if (!event.target.closest('[onclick^="toggleDropdown"]') && !event.target.closest('[id^="dropdown-"]')) {
-        document.querySelectorAll('[id^="dropdown-"]').forEach(el => {
-            el.classList.add('hidden');
-        });
-    }
-});
-
-function toggleEditForm(commentId) {
-    const contentDiv = document.getElementById(`comment-content-${commentId}`);
-    const form = document.getElementById(`inline-edit-form-${commentId}`);
-    const dropdown = document.getElementById(`dropdown-${commentId}`);
-
-    if (dropdown) dropdown.classList.add('hidden'); // hide dropdown when editing
-    contentDiv.classList.toggle('hidden');
-    form.classList.toggle('hidden');
-}
-
-function cancelEdit(commentId) {
-    const contentDiv = document.getElementById(`comment-content-${commentId}`);
-    const form = document.getElementById(`inline-edit-form-${commentId}`);
-
-    contentDiv.classList.remove('hidden');
-    form.classList.add('hidden');
-}
-
-function deleteComment(commentId) {
-    // Confirm deletion
-  
-
-    console.log('Attempting to delete comment with ID:', commentId);
-    
-    // Debug: List all comments and their IDs
-    const allComments = document.querySelectorAll('.comment-item');
-    console.log('All comments in DOM:');
-    allComments.forEach((comment, index) => {
-        console.log(`Comment ${index}:`, {
-            id: comment.id,
-            dataId: comment.getAttribute('data-comment-id'),
-            text: comment.textContent.substring(0, 50) + '...'
-        });
-    });
-
-    fetch(`/comments/${commentId}`, {
-        method: 'DELETE',
-        headers: {
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-            'Accept': 'application/json'
         }
-    })
-    .then(response => response.json())
-    .then(data => {
-        console.log('Delete response:', data);
-        if (data.success) {
-            // Find the specific comment element - be more specific to avoid conflicts
-            const commentElement = document.getElementById(`comment-${commentId}`) || document.querySelector(`.comment-item[data-comment-id="${commentId}"]`);
-            const replyElement = document.querySelector(`.reply-item[data-comment-id="${commentId}"]`);
+
+        // Function to cancel reply
+        function cancelReply() {
+            currentReplyParentId = null;
+            currentReplyUsername = null;
             
-            console.log('Found comment element:', commentElement);
-            console.log('Found reply element:', replyElement);
+            const commentTextarea = document.getElementById('comment-content');
+            const parentIdField = document.getElementById('parent_id');
+            const replyIndicator = document.getElementById('reply-indicator');
             
-            const elementToRemove = commentElement || replyElement;
+            // Clear values
+            commentTextarea.value = '';
+            parentIdField.value = '';
             
-            if (elementToRemove) {
-                console.log('Removing element:', elementToRemove);
-                // Remove the entire comment/reply element
-                elementToRemove.remove();
-                
-                // Check if there are any remaining comments
-                const remainingComments = document.querySelectorAll('.comment-item');
-                console.log('Remaining comments:', remainingComments.length);
-                if (remainingComments.length === 0) {
-                    // Show "no comments" message if no comments left
-                    const container = document.getElementById('comments-container');
-                    container.innerHTML = '<p class="text-gray-500 text-center py-4">No comments yet. Be the first to comment!</p>';
-                }
-            } else {
-                console.error('Comment element not found for ID:', commentId);
-                alert('Comment not found. Please refresh the page.');
-            }
-        } else {
-            alert('Failed to delete comment: ' + (data.message || 'Unknown error'));
+            // Hide reply indicator
+            replyIndicator.classList.add('hidden');
+            
+            // Focus on textarea
+            commentTextarea.focus();
         }
-    })
-    .catch(error => {
-        console.error('Error deleting comment:', error);
-        alert('Something went wrong while deleting the comment.');
-    });
-}
 
-window.addEventListener("pageshow", function (event) {
-    if (event.persisted) {
-        // Add cache-busting parameter and reload
-        const url = new URL(window.location);
-        url.searchParams.set('_t', Date.now());
-        window.location.href = url.toString();
-    }
-});
-
-// Force refresh on back/forward navigation
-window.addEventListener("popstate", function (event) {
-    const url = new URL(window.location);
-    url.searchParams.set('_t', Date.now());
-    window.location.href = url.toString();
-});
-document.addEventListener("DOMContentLoaded", function () {
-    document.querySelectorAll(".inline-edit-form").forEach(form => {
-        form.addEventListener("submit", function (e) {
-            e.preventDefault();
-
-            let formData = new FormData(this);
-            formData.append('_method', 'PUT'); // Important!
-
-            let commentId = this.dataset.id;
-            let url = this.action;
-
-            fetch(url, {
-                method: "POST", // Still POST, Laravel sees _method=PUT
-                headers: {
-                    "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content,
-                    "Accept": "application/json"
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize Swiper
+            new Swiper(".mySwiper", {
+                loop: true,
+                pagination: {
+                    el: ".swiper-pagination",
+                    clickable: true,
                 },
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    // ✅ Update the DOM immediately
-                    const contentDiv = document.getElementById("comment-content-" + commentId);
-                    contentDiv.innerText = data.comment.content;
+                navigation: {
+                    nextEl: ".swiper-button-next",
+                    prevEl: ".swiper-button-prev",
+                },
+            });
 
-                    this.classList.add("hidden");
-                    contentDiv.classList.remove("hidden");
-                } else {
-                    alert(data.error || "Failed to update comment.");
-                }
-            })
-            .catch(error => {
-                console.error("Error updating comment:", error);
-                alert("Something went wrong while updating the comment.");
+            // JavaScript to expand comments on hover
+            document.querySelectorAll('.comment-item').forEach(item => {
+                item.addEventListener('mouseenter', function() {
+                    const lineClamp = this.querySelector('.line-clamp-3');
+                    if (lineClamp) {
+                        lineClamp.style['-webkit-line-clamp'] = 'unset';
+                        lineClamp.style.display = 'block';
+                    }
+                });
+
+                item.addEventListener('mouseleave', function() {
+                    const lineClamp = this.querySelector('.line-clamp-3');
+                    if (lineClamp) {
+                        lineClamp.style['-webkit-line-clamp'] = '3';
+                        lineClamp.style.display = '-webkit-box';
+                    }
+                });
             });
         });
-    });
-});
 
-     // Optional: Add JavaScript to expand comments on hover/click
-document.querySelectorAll('.comment-item').forEach(item => {
-    item.addEventListener('mouseenter', function() {
-        this.querySelector('.line-clamp-3').style['-webkit-line-clamp'] = 'unset';
-    });
-    
-    item.addEventListener('mouseleave', function() {
-        this.querySelector('.line-clamp-3').style['-webkit-line-clamp'] = '3';
-    });
-});
-    // AJAX comment submission
-    document.addEventListener('DOMContentLoaded', function() {
-        const commentForm = document.getElementById('comment-form');
-        if (commentForm) {
-            commentForm.addEventListener('submit', function(e) {
+        // Rest of your existing JavaScript functions remain the same...
+        function toggleDropdown(commentId) {
+            const dropdown = document.getElementById('dropdown-' + commentId);
+            if (dropdown.classList.contains('hidden')) {
+                // Close all other dropdowns first
+                document.querySelectorAll('[id^="dropdown-"]').forEach(el => {
+                    el.classList.add('hidden');
+                });
+                // Open this dropdown
+                dropdown.classList.remove('hidden');
+            } else {
+                dropdown.classList.add('hidden');
+            }
+        }
+
+        // Close dropdowns when clicking outside
+        document.addEventListener('click', function(event) {
+            if (!event.target.closest('[onclick^="toggleDropdown"]') && !event.target.closest(
+                '[id^="dropdown-"]')) {
+                document.querySelectorAll('[id^="dropdown-"]').forEach(el => {
+                    el.classList.add('hidden');
+                });
+            }
+        });
+
+        function toggleEditForm(commentId) {
+            const contentDiv = document.getElementById(`comment-content-${commentId}`);
+            const form = document.getElementById(`inline-edit-form-${commentId}`);
+            const dropdown = document.getElementById(`dropdown-${commentId}`);
+
+            if (dropdown) dropdown.classList.add('hidden'); // hide dropdown when editing
+            contentDiv.classList.toggle('hidden');
+            form.classList.toggle('hidden');
+        }
+
+        function cancelEdit(commentId) {
+            const contentDiv = document.getElementById(`comment-content-${commentId}`);
+            const form = document.getElementById(`inline-edit-form-${commentId}`);
+
+            contentDiv.classList.remove('hidden');
+            form.classList.add('hidden');
+        }
+
+        function deleteComment(commentId) {
+            console.log('Attempting to delete comment with ID:', commentId);
+
+            // Debug: List all comments and their IDs
+            const allComments = document.querySelectorAll('.comment-item');
+            console.log('All comments in DOM:');
+            allComments.forEach((comment, index) => {
+                console.log(`Comment ${index}:`, {
+                    id: comment.id,
+                    dataId: comment.getAttribute('data-comment-id'),
+                    text: comment.textContent.substring(0, 50) + '...'
+                });
+            });
+
+            fetch(`/comments/${commentId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                        'Accept': 'application/json'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Delete response:', data);
+                    if (data.success) {
+                        // Find the specific comment element - be more specific to avoid conflicts
+                        const commentElement = document.getElementById(`comment-${commentId}`) || document
+                            .querySelector(`.comment-item[data-comment-id="${commentId}"]`);
+                        const replyElement = document.querySelector(`.reply-item[data-comment-id="${commentId}"]`);
+
+                        console.log('Found comment element:', commentElement);
+                        console.log('Found reply element:', replyElement);
+
+                        const elementToRemove = commentElement || replyElement;
+
+                        if (elementToRemove) {
+                            console.log('Removing element:', elementToRemove);
+                            // Remove the entire comment/reply element
+                            elementToRemove.remove();
+
+                            // Check if there are any remaining comments
+                            const remainingComments = document.querySelectorAll('.comment-item');
+                            console.log('Remaining comments:', remainingComments.length);
+                            if (remainingComments.length === 0) {
+                                // Show "no comments" message if no comments left
+                                const container = document.getElementById('comments-container');
+                                container.innerHTML =
+                                    '<p class="text-gray-500 text-center py-4">No comments yet. Be the first to comment!</p>';
+                            }
+                        } else {
+                            console.error('Comment element not found for ID:', commentId);
+                            alert('Comment not found. Please refresh the page.');
+                        }
+                    } else {
+                        alert('Failed to delete comment: ' + (data.message || 'Unknown error'));
+                    }
+                })
+                .catch(error => {
+                    console.error('Error deleting comment:', error);
+                    alert('Something went wrong while deleting the comment.');
+                });
+        }
+
+        window.addEventListener("pageshow", function(event) {
+            if (event.persisted) {
+                // Add cache-busting parameter and reload
+                const url = new URL(window.location);
+                url.searchParams.set('_t', Date.now());
+                window.location.href = url.toString();
+            }
+        });
+
+        // Force refresh on back/forward navigation
+        window.addEventListener("popstate", function (event) {
+            const url = new URL(window.location);
+            url.searchParams.set('_t', Date.now());
+            window.location.href = url.toString();
+        });
+
+        // Delegate inline edit form submissions so dynamically-added comments work without refresh
+        document.addEventListener('submit', function (e) {
+            if (e.target && e.target.classList.contains('inline-edit-form')) {
                 e.preventDefault();
-                
-                const formData = new FormData(this);
-                const errorDiv = document.getElementById('comment-error');
-                const submitButton = this.querySelector('button[type="submit"]');
-                const originalButtonText = submitButton.innerHTML;
-                
-                // Show loading state
-                submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
-                submitButton.disabled = true;
-                errorDiv.classList.add('hidden');
-                
-                fetch("{{ route('comments.store') }}", {
+
+                const form = e.target;
+                const formData = new FormData(form);
+                formData.append('_method', 'PUT');
+
+                const commentId = form.dataset.id;
+                const url = form.action;
+
+                fetch(url, {
                     method: 'POST',
                     headers: {
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
                         'Accept': 'application/json'
                     },
                     body: formData
                 })
-                .then(async (response) => {
-                    const contentType = response.headers.get('content-type') || '';
-                    if (!response.ok) {
-                        if (contentType.includes('application/json')) {
-                            const errorData = await response.json();
-                            const msg = errorData.message || errorData.errors?.content?.[0] || 'Error';
-                            throw new Error(msg);
-                        } else {
-                            throw new Error('Request failed (maybe login required).');
-                        }
-                    }
-                    if (!contentType.includes('application/json')) {
-                        throw new Error('Unexpected response from server.');
-                    }
-                    return response.json();
-                })
+                .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        // Clear the textarea
-                        document.getElementById('comment-content').value = '';
-                        
-                        // Add the new comment to the list
-                        addCommentToDOM(data.comment);
-                        
-                        // If there was a "no comments" message, remove it
-                        const noCommentsMsg = document.querySelector('#comments-container > p');
-                        if (noCommentsMsg) {
-                            noCommentsMsg.remove();
-                        }
+                        const contentDiv = document.getElementById('comment-content-' + commentId);
+                        if (contentDiv) contentDiv.innerText = data.comment.content;
+                        form.classList.add('hidden');
+                        if (contentDiv) contentDiv.classList.remove('hidden');
                     } else {
-                        throw new Error(data.message || 'An error occurred');
+                        alert(data.error || 'Failed to update comment.');
                     }
                 })
                 .catch(error => {
-                    errorDiv.textContent = error.message || 'Failed to post comment. Please try again.';
-                    errorDiv.classList.remove('hidden');
-                })
-                .finally(() => {
-                    submitButton.innerHTML = originalButtonText;
-                    submitButton.disabled = false;
+                    console.error('Error updating comment:', error);
+                    alert('Something went wrong while updating the comment.');
                 });
-            });
-        }
-    });
+            }
+        });
 
-    function addCommentToDOM(commentData) {
-    // ✅ If this is a reply
-    if (commentData.parent_id) {
-    let repliesContainer = document.getElementById(`replies-${commentData.parent_id}`);
+        // AJAX comment submission
+        document.addEventListener('DOMContentLoaded', function() {
+            const commentForm = document.getElementById('comment-form');
+            if (commentForm) {
+                commentForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
 
-    // If no replies container yet, create one
-    if (!repliesContainer) {
-        const parentComment = document.getElementById(`comment-${commentData.parent_id}`) || document.getElementById(`reply-${commentData.parent_id}`);
-        if (parentComment) {
-            repliesContainer = document.createElement('div');
-            repliesContainer.id = `replies-${commentData.parent_id}`;
-            repliesContainer.className = "ml-8 mt-3 space-y-3 border-l-2 border-gray-200 dark:border-gray-600 pl-4";
-            parentComment.appendChild(repliesContainer);
-        }
-    }
+                    const formData = new FormData(this);
+                    const errorDiv = document.getElementById('comment-error');
+                    const submitButton = this.querySelector('button[type="submit"]');
+                    const originalButtonText = submitButton.innerHTML;
 
-    // prevent duplicate
-    if (document.getElementById(`reply-${commentData.id}`)) {
-        return;
-    }
+                    // Show loading state
+                    submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+                    submitButton.disabled = true;
+                    errorDiv.classList.add('hidden');
 
-    const replyHtml = `
-        <div class="reply-item flex gap-3" id="reply-${commentData.id}">
-            <div class="w-8 h-8 bg-[#B59F84] rounded-full flex items-center justify-center">
-                <span class="text-xs font-bold text-white">
-                    ${(commentData.user.fname.charAt(0) + commentData.user.lname.charAt(0)).toUpperCase()}
-                </span>
-            </div>
-            <div class="flex-1">
-                <p class="font-medium">${commentData.user.fname} ${commentData.user.lname}</p>
-                <p>${commentData.content}</p>
-                <button onclick="toggleReplyForm(${commentData.id})" class="text-xs text-gray-500 hover:text-[#B59F84]">Reply</button>
-                <div id="reply-form-${commentData.id}" class="hidden mt-2 ml-6">
-                    <form class="reply-form" data-parent-id="${commentData.id}">
-                        <textarea name="content" class="w-full border rounded p-2" rows="2" required></textarea>
-                        <input type="hidden" name="parent_id" value="${commentData.id}">
-                        <input type="hidden" name="donation_id" value="${DONATION_ID}">
-                        <button type="submit" class="px-3 py-1 bg-[#B59F84] text-white rounded text-sm mt-1">Reply</button>
-                    </form>
+                    fetch("{{ route('comments.store') }}", {
+                            method: 'POST',
+                            headers: {
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                'Accept': 'application/json'
+                            },
+                            body: formData
+                        })
+                        .then(async (response) => {
+                            const contentType = response.headers.get('content-type') || '';
+                            if (!response.ok) {
+                                if (contentType.includes('application/json')) {
+                                    const errorData = await response.json();
+                                    const msg = errorData.message || errorData.errors?.content?.[
+                                        0] || 'Error';
+                                    throw new Error(msg);
+                                } else {
+                                    throw new Error('Request failed (maybe login required).');
+                                }
+                            }
+                            if (!contentType.includes('application/json')) {
+                                throw new Error('Unexpected response from server.');
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            if (data.success) {
+                                // Clear the textarea and reset form
+                                document.getElementById('comment-content').value = '';
+                                cancelReply(); // Reset reply state
+
+                                // Add the new comment/reply to the list
+                                if (data.comment.parent_id) {
+                                    // This is a reply - add it to the appropriate container
+                                    addReplyToDOM(data.comment);
+                                    
+                                    // Show the replies container if it's hidden
+                                    const repliesContainer = document.getElementById(`replies-${data.comment.parent_id}`);
+                                    if (repliesContainer && repliesContainer.classList.contains('hidden')) {
+                                        repliesContainer.classList.remove('hidden');
+                                    }
+                                    
+                                    // Update replies count
+                                    updateRepliesCount(data.comment.parent_id);
+                                } else {
+                                    // This is a top-level comment
+                                    addCommentToDOM(data.comment);
+
+                                    // If there was a "no comments" message, remove it
+                                    const noCommentsMsg = document.querySelector('#comments-container > p');
+                                    if (noCommentsMsg) {
+                                        noCommentsMsg.remove();
+                                    }
+                                }
+                            } else {
+                                throw new Error(data.message || 'An error occurred');
+                            }
+                        })
+                        .catch(error => {
+                            errorDiv.textContent = error.message ||
+                                'Failed to post comment. Please try again.';
+                            errorDiv.classList.remove('hidden');
+                        })
+                        .finally(() => {
+                            submitButton.innerHTML = originalButtonText;
+                            submitButton.disabled = false;
+                        });
+                });
+            }
+        });
+
+        function addCommentToDOM(commentData) {
+            // ✅ If this is a reply
+            if (commentData.parent_id) {
+                let repliesContainer = document.getElementById(`replies-${commentData.parent_id}`);
+
+                // If no replies container yet, create one
+                if (!repliesContainer) {
+                    const parentComment = document.getElementById(`comment-${commentData.parent_id}`) || document
+                        .getElementById(`reply-${commentData.parent_id}`);
+                    if (parentComment) {
+                        repliesContainer = document.createElement('div');
+                        repliesContainer.id = `replies-${commentData.parent_id}`;
+                        repliesContainer.className =
+                            "ml-4 mt-3 space-y-3 border-l-2 border-gray-200 dark:border-gray-600 pl-4";
+                        parentComment.appendChild(repliesContainer);
+                    }
+                }
+
+                // prevent duplicate
+                if (document.getElementById(`reply-${commentData.id}`)) {
+                    return;
+                }
+
+                const replyHtml = `
+                    <div class="reply-item flex gap-3" id="reply-${commentData.id}">
+                        <div class="w-8 h-8 bg-[#B59F84] rounded-full flex items-center justify-center">
+                            <span class="text-xs font-bold text-white">
+                                ${(commentData.user.fname.charAt(0) + commentData.user.lname.charAt(0)).toUpperCase()}
+                            </span>
+                        </div>
+                        <div class="flex-1">
+                            <p class="font-medium">${commentData.user.fname} ${commentData.user.lname}</p>
+                            <p>${commentData.content}</p>
+                            <button onclick="startReply(${commentData.id}, '${commentData.user.fname} ${commentData.user.lname}')" class="text-xs text-gray-500 hover:text-[#B59F84]">Reply</button>
+                        </div>
+                    </div>
+                `;
+                repliesContainer.insertAdjacentHTML('beforeend', replyHtml);
+                return;
+            }
+
+            // ✅ Otherwise, this is a top-level comment
+            const commentsContainer = document.getElementById('comments-container');
+
+            if (document.getElementById(`comment-${commentData.id}`)) {
+                return;
+            }
+
+            const commentHtml = `
+                <div class="comment-item bg-white dark:bg-gray-700 rounded-lg p-4 shadow-sm" data-comment-id="${commentData.id}" id="comment-${commentData.id}">
+                    <div class="flex gap-3">
+                        <!-- User Avatar -->
+                        <div class="flex-shrink-0">
+                            <div class="w-10 h-10 bg-[#B59F84] rounded-full border-2 border-white dark:border-gray-800 flex items-center justify-center">
+                                <span class="text-sm font-bold text-white">
+                                    ${commentData.user.fname ? (commentData.user.fname.charAt(0) + commentData.user.lname.charAt(0)).toUpperCase() : 'U'}
+                                </span>
+                            </div>
+                        </div>
+                       
+                        <!-- Comment Content -->
+                        <div class="flex-1">
+                            <div class="flex-1">
+                                <!-- Comment Header -->
+                                <div class="flex justify-between items-start mb-1">
+                                    <div>
+                                        <a href="/profile/${commentData.user.id}" class="font-semibold text-gray-800 dark:text-gray-200 hover:underline">
+                                            ${commentData.user.fname} ${commentData.user.lname}
+                                        </a>
+                                        <span class="text-xs text-gray-500 dark:text-gray-400 ml-2">
+                                            ${commentData.created_at ? getTimeAgo(new Date(commentData.created_at)) : 'just now'}
+                                        </span>
+                                    </div>
+                                    
+                                    <!-- Comment Options -->
+                                    <div class="relative">
+                                        <button type="button" class="p-1 rounded hover:bg-gray-100 dark:hover:bg-gray-600" onclick="toggleDropdown(${commentData.id})">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-600 dark:text-gray-200" viewBox="0 0 20 20" fill="currentColor">
+                                                <path d="M6 10a2 2 0 11-4 0 2 2 0 014 0zm6 0a2 2 0 11-4 0 2 2 0 014 0zm6 0a2 2 0 11-4 0 2 2 0 014 0z" />
+                                            </svg>
+                                        </button>
+                                        
+                                        <!-- Dropdown -->
+                                        <div id="dropdown-${commentData.id}" class="absolute right-0 mt-1 w-28 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded shadow z-10 hidden">
+                                            <button type="button" onclick="toggleEditForm(${commentData.id})" class="w-full text-left px-3 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700">
+                                                Edit
+                                            </button>
+                                            <button type="button" onclick="deleteComment(${commentData.id})" class="w-full text-left px-3 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-gray-50 dark:hover:bg-gray-700">
+                                                Delete
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Comment Content -->
+                                <div id="comment-content-${commentData.id}" class="text-gray-800 dark:text-gray-200 mb-2">
+                                    ${commentData.content}
+                                </div>
+
+                                <!-- Engagement Buttons -->
+                                <div class="flex items-center gap-4 text-xs text-gray-500 dark:text-gray-400">
+                                    <!-- Like -->
+                                    <button onclick="toggleLike(${commentData.id})" 
+                                            class="flex items-center gap-1 hover:text-[#B59F84] transition-colors duration-200 "
+                                            id="like-btn-${commentData.id}">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                                        </svg>
+                                        <span id="like-count-${commentData.id}">0</span>
+                                    </button>
+
+                                    <!-- Reply -->
+                                    <button onclick="startReply(${commentData.id}, '${commentData.user.fname} ${commentData.user.lname}')" 
+                                            class="flex items-center gap-1 hover:text-[#B59F84] transition-colors duration-200">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                                        </svg>
+                                        Reply
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Inline Edit Form -->
+                            <form id="inline-edit-form-${commentData.id}" action="/comments/${commentData.id}" method="POST" class="inline-edit-form hidden mt-2 bg-gray-100 dark:bg-gray-600 p-3 rounded-lg" data-id="${commentData.id}">
+                                <textarea name="content" rows="2" class="w-full border rounded p-2 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200">${commentData.content}</textarea>
+                                <div class="flex gap-2 mt-2">
+                                    <button type="submit" class="px-3 py-1 bg-[#B59F84] text-white rounded text-sm hover:bg-[#a08e77] transition-all duration-200">Save</button>
+                                    <button type="button" onclick="cancelEdit(${commentData.id})" class="px-3 py-1 bg-gray-300 text-gray-800 rounded hover:bg-gray-400 text-sm">Cancel</button>
+                                </div>
+                            </form>
+
+                            <!-- Replies -->
+                            <div id="replies-${commentData.id}" class="hidden ml-4 mt-3 space-y-3 border-l-2 border-gray-200 dark:border-gray-600 pl-4">
+                                <!-- Replies will be appended here dynamically -->
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
-    `;
-    repliesContainer.insertAdjacentHTML('beforeend', replyHtml);
-    return;
-}
+            `;
 
+            commentsContainer.insertAdjacentHTML('afterbegin', commentHtml);
 
-    // ✅ Otherwise, this is a top-level comment
-    const commentsContainer = document.getElementById('comments-container');
+            // Scroll to the new comment
+            const newComment = document.getElementById(`comment-${commentData.id}`);
+            if (newComment) {
+                newComment.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'nearest'
+                });
+            }
+        }
 
-    if (document.getElementById(`comment-${commentData.id}`)) {
-        return;
-    }
+        // Toggle like functionality
+        function toggleLike(commentId) {
+            fetch(`/comments/${commentId}/like`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        reaction_type: 'like'
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        const likeBtn = document.getElementById(`like-btn-${commentId}`);
+                        const likeCount = document.getElementById(`like-count-${commentId}`);
 
-    const commentHtml = `
-            <div class="comment-item bg-white dark:bg-gray-700 rounded-lg p-4 shadow-sm" data-comment-id="${commentData.id}" id="comment-${commentData.id}">
-                <div class="flex gap-3">
-                    <!-- User Avatar -->
+                        // Update button appearance
+                        if (data.is_liked) {
+                            likeBtn.classList.remove('text-gray-500');
+                            likeBtn.classList.add('text-[#B59F84]');
+                            likeBtn.querySelector('svg').setAttribute('fill', 'currentColor');
+                        } else {
+                            likeBtn.classList.remove('text-[#B59F84]');
+                            likeBtn.classList.add('text-gray-500');
+                            likeBtn.querySelector('svg').setAttribute('fill', 'none');
+                        }
+
+                        // Update count
+                        likeCount.textContent = data.likes_count;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error toggling like:', error);
+                });
+        }
+
+        // Toggle replies display
+        function toggleReplies(commentId) {
+            const repliesContainer = document.getElementById(`replies-${commentId}`);
+            if (repliesContainer) {
+                repliesContainer.classList.toggle('hidden');
+            }
+        }
+
+        function addReplyToDOM(commentData) {
+            // ✅ Ensure this is a reply
+            if (!commentData.parent_id) {
+                console.warn("Tried to add a reply without parent_id:", commentData);
+                return;
+            }
+
+            // ✅ Find the top-level comment that this reply belongs to
+            let topLevelCommentId = commentData.parent_id;
+            let currentParentId = commentData.parent_id;
+            
+            // Traverse up the reply chain to find the top-level comment
+            while (true) {
+                const parentElement = document.getElementById(`comment-${currentParentId}`) || 
+                                    document.getElementById(`reply-${currentParentId}`);
+                
+                if (!parentElement) break;
+                
+                // Check if this parent is itself a reply
+                const parentDataId = parentElement.getAttribute('data-comment-id');
+                if (parentElement.classList.contains('reply-item')) {
+                    // This parent is a reply, so we need to go further up
+                    const replyParentId = getParentIdFromReply(parentElement);
+                    if (replyParentId) {
+                        currentParentId = replyParentId;
+                        topLevelCommentId = currentParentId;
+                    } else {
+                        break;
+                    }
+                } else {
+                    // This is a top-level comment
+                    topLevelCommentId = currentParentId;
+                    break;
+                }
+            }
+
+            // ✅ Get the replies container for the top-level comment
+            let repliesContainer = document.getElementById(`replies-${topLevelCommentId}`);
+            
+            // If no replies container yet, create one under the top-level comment
+            if (!repliesContainer) {
+                const topLevelComment = document.getElementById(`comment-${topLevelCommentId}`);
+                if (topLevelComment) {
+                    repliesContainer = document.createElement('div');
+                    repliesContainer.id = `replies-${topLevelCommentId}`;
+                    repliesContainer.className = 'ml-4 mt-3 space-y-3 border-l-2 border-gray-200 dark:border-gray-600 pl-4';
+                    topLevelComment.appendChild(repliesContainer);
+                } else {
+                    console.warn('Top-level comment not found for reply:', topLevelCommentId);
+                    return;
+                }
+            }
+
+            // ✅ Prevent duplicate reply rendering
+            if (document.getElementById(`reply-${commentData.id}`)) {
+                return;
+            }
+
+            // ✅ Build reply HTML with proper structure (all replies at same level)
+            const replyHtml = `
+                <div class="reply-item flex gap-3" id="reply-${commentData.id}" data-comment-id="${commentData.id}" data-parent-id="${commentData.parent_id}">
                     <div class="flex-shrink-0">
-                        <div class="w-10 h-10 bg-[#B59F84] rounded-full border-2 border-white dark:border-gray-800 flex items-center justify-center">
-                            <span class="text-sm font-bold text-gray-800 dark:text-gray-200">
-                                ${commentData.user.fname ? (commentData.user.fname.charAt(0) + commentData.user.lname.charAt(0)).toUpperCase() : 'U'}
+                        <div class="w-8 h-8 bg-[#B59F84] rounded-full border-2 border-white dark:border-gray-800 flex items-center justify-center">
+                            <span class="text-xs font-bold text-white">
+                                ${(commentData.user?.fname?.charAt(0).toUpperCase() ?? '')}${(commentData.user?.lname?.charAt(0).toUpperCase() ?? '')}
                             </span>
                         </div>
                     </div>
-                   
-                    <!-- Comment Content -->
                     <div class="flex-1">
-    <div class=" p-3">
-        <!-- Comment Header -->
-        <div class="flex justify-between items-start mb-1">
-            <div>
-                <a href="/profile/${commentData.user.id}" class="font-semibold text-gray-800 dark:text-gray-200 hover:underline">
-                    ${commentData.user.fname} ${commentData.user.lname}
-                </a>
-                <span class="text-xs text-gray-500 dark:text-gray-400 ml-2">
-                    ${commentData.created_at ? getTimeAgo(new Date(commentData.created_at)) : 'just now'}
-                </span>
-            </div>
-            
-            <!-- Comment Options -->
-            <div class="relative">
-                <button type="button" class="p-1 rounded hover:bg-gray-100 dark:hover:bg-gray-600" onclick="toggleDropdown(${commentData.id})">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-600 dark:text-gray-200" viewBox="0 0 20 20" fill="currentColor">
-                        <path d="M6 10a2 2 0 11-4 0 2 2 0 014 0zm6 0a2 2 0 11-4 0 2 2 0 014 0zm6 0a2 2 0 11-4 0 2 2 0 014 0z" />
-                    </svg>
-                </button>
-                
-                <!-- Dropdown -->
-                <div id="dropdown-${commentData.id}" class="absolute right-0 mt-1 w-28 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded shadow z-10 hidden">
-                    <button type="button" onclick="editComment(${commentData.id})" class="w-full text-left px-3 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700">
-                        Edit
-                    </button>
-                    <button type="button" onclick="deleteComment(${commentData.id})" class="w-full text-left px-3 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-gray-50 dark:hover:bg-gray-700">
-                        Delete
-                    </button>
-                </div>
-            </div>
-        </div>
+                        <div>
+                            <a href="/profile/${commentData.user?.id}" class="text-sm font-semibold text-gray-800 dark:text-gray-200 hover:underline">
+                                ${commentData.user?.fname ?? ''} ${commentData.user?.lname ?? ''}
+                            </a>
+                            <span class="text-xs text-gray-500 dark:text-gray-400 ml-2">just now</span>
+                        </div>
+                        <p class="text-sm text-gray-800 dark:text-gray-200">${commentData.content}</p>
 
-        <!-- Comment Content -->
-        <div id="comment-content-${commentData.id}" class="text-gray-800 dark:text-gray-200 mb-2">
-            ${commentData.content}
-        </div>
-
-        <!-- Engagement Buttons -->
-        <div class="flex items-center gap-4 text-xs text-gray-500 dark:text-gray-400">
-            <!-- Like -->
-            <button onclick="toggleLike(${commentData.id})" 
-                    class="flex items-center gap-1 hover:text-blue-500 transition-colors duration-200 text-gray-500"
-                    id="like-btn-${commentData.id}">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
-                </svg>
-                <span id="like-count-${commentData.id}">0</span>
-            </button>
-
-            <!-- Reply -->
-            <button onclick="toggleReplyForm(${commentData.id})" 
-                    class="flex items-center gap-1 hover:text-blue-500 transition-colors duration-200">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
-                </svg>
-                Reply
-            </button>
-        </div>
-    </div>
-
-    <!-- Inline Edit Form -->
-    <form id="inline-edit-form-${commentData.id}" class="hidden mt-2 bg-gray-100 dark:bg-gray-600 p-3 rounded-lg" data-id="${commentData.id}">
-        <textarea name="content" rows="2" class="w-full border rounded p-2 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200">${commentData.content}</textarea>
-        <div class="flex gap-2 mt-2">
-            <button type="submit" class="px-3 py-1 bg-blue-500 text-white rounded text-sm">Save</button>
-            <button type="button" onclick="cancelEdit(${commentData.id})" class="px-3 py-1 bg-gray-300 text-gray-800 rounded hover:bg-gray-400 text-sm">Cancel</button>
-        </div>
-    </form>
-
-    <!-- Reply Form -->
-    <div id="reply-form-${commentData.id}" class="hidden mt-3 ml-4">
-        <form class="reply-form" data-parent-id="${commentData.id}">
-            <div class="flex gap-2">
-                <textarea name="content" placeholder="Write a reply..." class="flex-1 p-2 border border-gray-300 dark:border-gray-600 rounded-lg resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white" rows="2" required></textarea>
-                <div class="flex flex-col gap-2">
-                    <button type="submit" class="px-3 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors duration-200 text-sm">Reply</button>
-                    <button type="button" onclick="toggleReplyForm(${commentData.id})" class="px-3 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors duration-200 text-sm">Cancel</button>
-                </div>
-            </div>
-            <input type="hidden" name="parent_id" value="${commentData.id}">
-            <input type="hidden" name="donation_id" value="${DONATION_ID}">
-        </form>
-    </div>
-
-    <!-- Replies -->
-    <div id="replies-${commentData.id}" class="hidden ml-4 mt-3 space-y-3 border-l-2 border-gray-200 dark:border-gray-600 pl-4">
-        <!-- Replies will be appended here dynamically -->
-    </div>
+                        <div class="mt-2 flex items-center gap-3 text-xs text-gray-500 dark:text-gray-400">
+                            <button onclick="toggleLike(${commentData.id})" 
+                                    class="flex items-center gap-1 hover:text-[#B59F84] transition-colors duration-200"
+                                    id="like-btn-${commentData.id}">
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                          d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                                </svg>
+                                <span id="like-count-${commentData.id}">0</span>
+                            </button>
+                            <button onclick="startReply(${commentData.id}, '${commentData.user?.fname ?? ''} ${commentData.user?.lname ?? ''}')" class="hover:text-[#B59F84] transition-colors duration-200">Reply</button>
+                        </div>
                     </div>
                 </div>
-            </div>
+            `;
 
-        `;
+            repliesContainer.insertAdjacentHTML('beforeend', replyHtml);
+            
+            // Ensure the replies container is visible
+            repliesContainer.classList.remove('hidden');
+            
+            // Update replies count for the top-level comment
+            updateRepliesCount(topLevelCommentId);
+        }
 
-    commentsContainer.insertAdjacentHTML('afterbegin', commentHtml);
+        // Helper function to get parent ID from a reply element
+        function getParentIdFromReply(replyElement) {
+            const parentId = replyElement.getAttribute('data-parent-id');
+            if (parentId) return parseInt(parentId);
+            
+            // Fallback: try to find parent ID from the closest parent structure
+            const parentContainer = replyElement.closest('[id^="replies-"]');
+            if (parentContainer) {
+                const match = parentContainer.id.match(/replies-(\d+)/);
+                if (match) return parseInt(match[1]);
+            }
+            
+            return null;
+        }
 
-    // Scroll to the new comment
-    const newComment = document.getElementById(`comment-${commentData.id}`);
-    if (newComment) {
-        newComment.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    }
-}
+        // Helper function to format time ago
+        function getTimeAgo(date) {
+            const now = new Date();
+            const diffInSeconds = Math.floor((now - date) / 1000);
 
+            if (diffInSeconds < 60) {
+                return 'just now';
+            } else if (diffInSeconds < 3600) {
+                const minutes = Math.floor(diffInSeconds / 60);
+                return `${minutes} minute${minutes > 1 ? 's' : ''} ago`;
+            } else if (diffInSeconds < 86400) {
+                const hours = Math.floor(diffInSeconds / 3600);
+                return `${hours} hour${hours > 1 ? 's' : ''} ago`;
+            } else if (diffInSeconds < 2592000) {
+                const days = Math.floor(diffInSeconds / 86400);
+                return `${days} day${days > 1 ? 's' : ''} ago`;
+            } else {
+                return date.toLocaleDateString();
+            }
+        }
 
-    // Toggle like functionality
-    function toggleLike(commentId) {
-        fetch(`/comments/${commentId}/like`, {
-            method: 'POST',
-            headers: {
-                'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                reaction_type: 'like'
-            })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                const likeBtn = document.getElementById(`like-btn-${commentId}`);
-                const likeCount = document.getElementById(`like-count-${commentId}`);
-                
-                // Update button appearance
-                if (data.is_liked) {
-                    likeBtn.classList.remove('text-gray-500');
-                    likeBtn.classList.add('text-blue-500');
-                    likeBtn.querySelector('svg').setAttribute('fill', 'currentColor');
-                } else {
-                    likeBtn.classList.remove('text-blue-500');
-                    likeBtn.classList.add('text-gray-500');
-                    likeBtn.querySelector('svg').setAttribute('fill', 'none');
+        // Update replies count
+        function updateRepliesCount(commentId) {
+            const repliesContainer = document.getElementById(`replies-${commentId}`);
+            if (repliesContainer) {
+                const repliesCount = repliesContainer.querySelectorAll('.reply-item').length;
+                const repliesButton = document.querySelector(`button[onclick="toggleReplies(${commentId})"]`);
+                if (repliesButton) {
+                    repliesButton.textContent = `${repliesCount} ${repliesCount === 1 ? 'reply' : 'replies'}`;
                 }
-                
-                // Update count
-                likeCount.textContent = data.likes_count;
-            }
-        })
-        .catch(error => {
-            console.error('Error toggling like:', error);
-        });
-    }
-
-    // Toggle reply form
-    function toggleReplyForm(commentId) {
-        const replyForm = document.getElementById(`reply-form-${commentId}`);
-        if (replyForm) {
-            replyForm.classList.toggle('hidden');
-            if (!replyForm.classList.contains('hidden')) {
-                replyForm.querySelector('textarea').focus();
             }
         }
-    }
-
-    // Toggle replies display
-    function toggleReplies(commentId) {
-        const repliesContainer = document.getElementById(`replies-${commentId}`);
-        if (repliesContainer) {
-            repliesContainer.classList.toggle('hidden');
-        }
-    }
-
-    // Handle reply form submission
-    document.addEventListener('DOMContentLoaded', function() {
-        document.addEventListener('submit', function(e) {
-            if (e.target.classList.contains('reply-form')) {
-                e.preventDefault();
-                
-                const formData = new FormData(e.target);
-                const parentId = e.target.dataset.parentId;
-                const submitButton = e.target.querySelector('button[type="submit"]');
-                const originalButtonText = submitButton.innerHTML;
-                
-                // Show loading state
-                submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
-                submitButton.disabled = true;
-                
-                fetch("{{ route('comments.store') }}", {
-                    method: 'POST',
-                    headers: {
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                        'Accept': 'application/json'
-                    },
-                    body: formData
-                })
-                .then(async (response) => {
-                    const contentType = response.headers.get('content-type') || '';
-                    if (!response.ok) {
-                        if (contentType.includes('application/json')) {
-                            const errorData = await response.json();
-                            const msg = errorData.message || errorData.errors?.content?.[0] || 'Error';
-                            throw new Error(msg);
-                        } else {
-                            throw new Error('Request failed (maybe login required).');
-                        }
-                    }
-                    if (!contentType.includes('application/json')) {
-                        throw new Error('Unexpected response from server.');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    if (data.success) {
-                        // Clear the textarea
-                        e.target.querySelector('textarea').value = '';
-                        
-                        // Hide the reply form
-                        toggleReplyForm(parentId);
-                        
-                        // Show the replies container if it's hidden
-                        const repliesContainer = document.getElementById(`replies-${parentId}`);
-                        if (repliesContainer && repliesContainer.classList.contains('hidden')) {
-                            repliesContainer.classList.remove('hidden');
-                        }
-                        
-                        // Add the new reply to the replies container
-                        addReplyToDOM(data.comment, parentId);
-                        
-                        // Update replies count
-                        updateRepliesCount(parentId);
-                    } else {
-                        throw new Error(data.message || 'An error occurred');
-                    }
-                })
-                .catch(error => {
-                    alert(error.message || 'Failed to post reply. Please try again.');
-                })
-                .finally(() => {
-                    submitButton.innerHTML = originalButtonText;
-                    submitButton.disabled = false;
-                });
-            }
-        });
-    });
-
-    function addReplyToDOM(commentData) {
-    // ✅ Ensure this is a reply
-    if (!commentData.parent_id) {
-        console.warn("Tried to add a reply without parent_id:", commentData);
-        return;
-    }
-
-    // ✅ Get or create replies container for the parent (comment or reply)
-    let repliesContainer = document.getElementById(`replies-${commentData.parent_id}`);
-    if (!repliesContainer) {
-        const parentEl = document.getElementById(`comment-${commentData.parent_id}`) || document.getElementById(`reply-${commentData.parent_id}`);
-        if (parentEl) {
-            repliesContainer = document.createElement('div');
-            repliesContainer.id = `replies-${commentData.parent_id}`;
-            repliesContainer.className = 'ml-8 mt-3 space-y-3 border-l-2 border-gray-200 dark:border-gray-600 pl-4';
-            parentEl.appendChild(repliesContainer);
-        } else {
-            console.warn('Parent element not found for reply:', commentData.parent_id);
-            return;
-        }
-    }
-
-    // ✅ Prevent duplicate reply rendering
-    if (document.getElementById(`reply-${commentData.id}`)) {
-        return;
-    }
-
-    // ✅ Build reply HTML with its own reply form and nested container
-    const replyHtml = `
-        <div class=\"reply-item flex gap-3\" id=\"reply-${commentData.id}\" data-comment-id=\"${commentData.id}\">
-            <div class=\"flex-shrink-0\">
-                <div class=\"w-8 h-8 bg-white dark:bg-gray-700 rounded-full border-2 border-white dark:border-gray-800 flex items-center justify-center\">
-                    <span class=\"text-xs font-bold text-gray-800 dark:text-gray-200\">
-                        ${(commentData.user?.fname?.charAt(0).toUpperCase() ?? '')}${(commentData.user?.lname?.charAt(0).toUpperCase() ?? '')}
-                    </span>
-                </div>
-            </div>
-            <div class=\"flex-1\">
-                <div>
-                    <a href=\"/profile/${commentData.user?.id}\" class=\"text-sm font-semibold text-gray-800 dark:text-gray-200 hover:underline\">
-                        ${commentData.user?.fname ?? ''} ${commentData.user?.lname ?? ''}
-                    </a>
-                    <span class=\"text-xs text-gray-500 dark:text-gray-400 ml-2\">just now</span>
-                </div>
-                <p class=\"text-sm text-gray-800 dark:text-gray-200\">${commentData.content}</p>
-
-                <div class=\"mt-2 flex items-center gap-3 text-xs text-gray-500 dark:text-gray-400\">
-                    <button onclick=\"toggleReplyForm(${commentData.id})\" class=\"hover:text-[#B59F84] transition-colors duration-200\">Reply</button>
-                </div>
-
-                <div id=\"reply-form-${commentData.id}\" class=\"hidden mt-2 ml-8\">
-                    <form class=\"reply-form\" data-parent-id=\"${commentData.id}\">
-                        <textarea name=\"content\" class=\"w-full border rounded p-2\" rows=\"2\" required></textarea>
-                        <input type=\"hidden\" name=\"parent_id\" value=\"${commentData.id}\">
-                        <input type=\"hidden\" name=\"product_id\" value=\"${commentData.product_id}\">
-                        <button type=\"submit\" class=\"px-3 py-1 bg-[#B59F84] text-white rounded text-sm mt-1\">Reply</button>
-                    </form>
-                </div>
-
-                <div id=\"replies-${commentData.id}\" class=\"hidden ml-8 mt-3 space-y-3 border-l-2 border-gray-200 dark:border-gray-600 pl-4\"></div>
-            </div>
-        </div>
-    `;
-
-    repliesContainer.insertAdjacentHTML('beforeend', replyHtml);
-}
-     // Helper function to format time ago
-     function getTimeAgo(date) {
-        const now = new Date();
-        const diffInSeconds = Math.floor((now - date) / 1000);
-        
-        if (diffInSeconds < 60) {
-            return 'just now';
-        } else if (diffInSeconds < 3600) {
-            const minutes = Math.floor(diffInSeconds / 60);
-            return `${minutes} minute${minutes > 1 ? 's' : ''} ago`;
-        } else if (diffInSeconds < 86400) {
-            const hours = Math.floor(diffInSeconds / 3600);
-            return `${hours} hour${hours > 1 ? 's' : ''} ago`;
-        } else if (diffInSeconds < 2592000) {
-            const days = Math.floor(diffInSeconds / 86400);
-            return `${days} day${days > 1 ? 's' : ''} ago`;
-        } else {
-            return date.toLocaleDateString();
-        }
-    }
-
-    // Update replies count
-    function updateRepliesCount(commentId) {
-        const repliesContainer = document.getElementById(`replies-${commentId}`);
-        if (repliesContainer) {
-            const repliesCount = repliesContainer.querySelectorAll('.reply-item').length;
-            const repliesButton = document.querySelector(`button[onclick="toggleReplies(${commentId})"]`);
-            if (repliesButton) {
-                repliesButton.textContent = `${repliesCount} ${repliesCount === 1 ? 'reply' : 'replies'}`;
-            }
-        }
-    }
     </script>
 
-<style>
-.line-clamp-3 {
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 100%;
-}
+    <script>
+        // Participants list for @mentions
+        window.commentParticipants = [
+            { id: {{ $donation->user->id }}, name: '{{ addslashes($donation->user->fname . ' ' . $donation->user->lname) }}' },
+            @php $added = collect([$donation->user->id]); @endphp
+            @foreach($donation->comments as $c)
+                @if(!$added->contains($c->user->id))
+                    { id: {{ $c->user->id }}, name: '{{ addslashes($c->user->fname . ' ' . $c->user->lname) }}' },
+                    @php $added->push($c->user->id); @endphp
+                @endif
+                @foreach($c->replies as $r)
+                    @if(!$added->contains($r->user->id))
+                        { id: {{ $r->user->id }}, name: '{{ addslashes($r->user->fname . ' ' . $r->user->lname) }}' },
+                        @php $added->push($r->user->id); @endphp
+                    @endif
+                @endforeach
+            @endforeach
+        ];
 
-.comment-item:hover .line-clamp-3 {
-    -webkit-line-clamp: unset;
-    display: block;
-}
+        (function setupMentions(){
+            const suggestions = document.createElement('div');
+            suggestions.id = 'mention-suggestions';
+            suggestions.className = 'hidden z-40 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg shadow max-h-48 overflow-auto w-64';
+            suggestions.style.position = 'absolute';
+            document.body.appendChild(suggestions);
 
-/* Dynamic width for comments */
-.comment-bubble {
-    max-width: 40%;
-    width: fit-content;
-}
-</style>
+            let activeTextarea = null;
+
+            function filterParticipants(query){
+                const q = query.toLowerCase();
+                return window.commentParticipants.filter(p => p.name.toLowerCase().includes(q)).slice(0, 8);
+            }
+
+            function positionSuggestions() {
+                if (!activeTextarea) return;
+                const rect = activeTextarea.getBoundingClientRect();
+                const scrollY = window.scrollY || document.documentElement.scrollTop;
+                const scrollX = window.scrollX || document.documentElement.scrollLeft;
+                suggestions.style.left = (scrollX + rect.left + 8) + 'px';
+                suggestions.style.top = (scrollY + rect.top - 6) + 'px';
+            }
+
+            function renderSuggestions(list){
+                if (!list.length) { hideSuggestions(); return; }
+                suggestions.innerHTML = list.map(p => `<button type="button" data-name="${p.name}" class="w-full text-left px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-sm">@${p.name}</button>`).join('');
+                suggestions.classList.remove('hidden');
+                positionSuggestions();
+            }
+
+            function hideSuggestions(){ suggestions.classList.add('hidden'); suggestions.innerHTML = ''; }
+
+            document.addEventListener('focusin', (e)=>{
+                if (e.target && e.target.matches('textarea.mentionable')) {
+                    activeTextarea = e.target;
+                }
+            });
+
+            document.addEventListener('input', (e)=>{
+                if (!(e.target && e.target.matches('textarea.mentionable'))) return;
+                activeTextarea = e.target;
+                const caretPos = activeTextarea.selectionStart;
+                const val = activeTextarea.value.substring(0, caretPos);
+                const match = val.match(/(^|\s)@([\w\s]{0,30})$/);
+                if (match) {
+                    const query = match[2].trim();
+                    renderSuggestions(query ? filterParticipants(query) : window.commentParticipants.slice(0,6));
+                } else {
+                    hideSuggestions();
+                }
+                positionSuggestions();
+            });
+
+            suggestions.addEventListener('click', (e)=>{
+                const btn = e.target.closest('button[data-name]');
+                if (!btn || !activeTextarea) return;
+                const name = btn.getAttribute('data-name');
+                const caret = activeTextarea.selectionStart;
+                const before = activeTextarea.value.substring(0, caret);
+                const after = activeTextarea.value.substring(caret);
+                const replaced = before.replace(/(^|\s)@([\w\s]{0,30})$/, `$1@${name} `);
+                activeTextarea.value = replaced + after;
+                const newCaret = replaced.length;
+                activeTextarea.setSelectionRange(newCaret, newCaret);
+                activeTextarea.focus();
+                hideSuggestions();
+            });
+
+            document.addEventListener('click', (e)=>{
+                if (!e.target.closest('#mention-suggestions') && !e.target.closest('textarea.mentionable')) hideSuggestions();
+            });
+        })();
+    </script>
+
+    <style>
+        .line-clamp-3 {
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 100%;
+        }
+
+        .comment-item:hover .line-clamp-3 {
+            -webkit-line-clamp: unset;
+            display: block;
+        }
+
+        /* Dynamic width for comments */
+        .comment-bubble {
+            max-width: 40%;
+            width: fit-content;
+        }
+
+        #reply-indicator {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 8px 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        #replying-to {
+            font-weight: 500;
+            color: #6c757d;
+        }
+    </style>
 </x-app-layout>
