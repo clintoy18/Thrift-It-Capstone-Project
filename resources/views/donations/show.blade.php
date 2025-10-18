@@ -308,7 +308,7 @@
                         @auth
                             <form id="comment-form" action="{{ route('comments.store') }}" method="POST" class="mt-6">
                                 @csrf
-                                <input type="hidden" name="product_id" value="{{ $donation->id }}">
+                                <input type="hidden" name="donation_id" value="{{ $donation->id }}">
                                 <input type="hidden" name="parent_id" id="parent_id" value="">
                                 <div class="relative flex flex-col md:flex-row items-stretch md:items-center gap-3 w-full max-w-xl bg-white dark:bg-gray-800 p-3 rounded-2xl border border-gray-200 dark:border-gray-600 shadow-md">
                                     <textarea name="content" id="comment-content" placeholder="Write a comment..."
@@ -988,30 +988,24 @@
 
             // ✅ Find the top-level comment that this reply belongs to
             let topLevelCommentId = commentData.parent_id;
-            let currentParentId = commentData.parent_id;
             
-            // Traverse up the reply chain to find the top-level comment
-            while (true) {
-                const parentElement = document.getElementById(`comment-${currentParentId}`) || 
-                                    document.getElementById(`reply-${currentParentId}`);
-                
-                if (!parentElement) break;
-                
-                // Check if this parent is itself a reply
-                const parentDataId = parentElement.getAttribute('data-comment-id');
-                if (parentElement.classList.contains('reply-item')) {
-                    // This parent is a reply, so we need to go further up
-                    const replyParentId = getParentIdFromReply(parentElement);
-                    if (replyParentId) {
-                        currentParentId = replyParentId;
-                        topLevelCommentId = currentParentId;
-                    } else {
-                        break;
+            // Check if the parent is a top-level comment or a reply
+            const parentElement = document.getElementById(`comment-${commentData.parent_id}`);
+            if (parentElement && parentElement.classList.contains('comment-item')) {
+                // Parent is a top-level comment
+                topLevelCommentId = commentData.parent_id;
+            } else {
+                // Parent is a reply, find the top-level comment
+                const replyElement = document.getElementById(`reply-${commentData.parent_id}`);
+                if (replyElement) {
+                    // Get the replies container this reply belongs to
+                    const repliesContainer = replyElement.closest('[id^="replies-"]');
+                    if (repliesContainer) {
+                        const match = repliesContainer.id.match(/replies-(\d+)/);
+                        if (match) {
+                            topLevelCommentId = parseInt(match[1]);
+                        }
                     }
-                } else {
-                    // This is a top-level comment
-                    topLevelCommentId = currentParentId;
-                    break;
                 }
             }
 
@@ -1081,20 +1075,6 @@
             updateRepliesCount(topLevelCommentId);
         }
 
-        // Helper function to get parent ID from a reply element
-        function getParentIdFromReply(replyElement) {
-            const parentId = replyElement.getAttribute('data-parent-id');
-            if (parentId) return parseInt(parentId);
-            
-            // Fallback: try to find parent ID from the closest parent structure
-            const parentContainer = replyElement.closest('[id^="replies-"]');
-            if (parentContainer) {
-                const match = parentContainer.id.match(/replies-(\d+)/);
-                if (match) return parseInt(match[1]);
-            }
-            
-            return null;
-        }
 
         // Helper function to format time ago
         function getTimeAgo(date) {
