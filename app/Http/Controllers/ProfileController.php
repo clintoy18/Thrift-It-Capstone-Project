@@ -41,6 +41,24 @@ class ProfileController extends Controller
     }
 
     /**
+     * Display the user's password update form.
+     */
+    public function edit1(Request $request): View
+    {
+        $user = $request->user();
+        return view('profile.edit1', compact('user'));
+    }
+
+    /**
+     * Display the user's data & privacy settings.
+     */
+    public function edit2(Request $request): View
+    {
+        $user = $request->user();
+        return view('profile.edit2', compact('user'));
+    }
+
+    /**
      * Update the user's profile information.
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse

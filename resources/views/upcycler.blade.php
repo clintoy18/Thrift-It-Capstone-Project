@@ -2,6 +2,7 @@
    
 
    <!-- Cinematic Hero Section -->
+  
 <div class="relative bg-[#F4F2ED] overflow-hidden">
     <!-- Animated Gradient Background -->
     <div class="absolute inset-0 bg-gradient-to-br from-[#F4F2ED] via-[#F8F6F0] to-[#ECE8DF] animate-gradient-x"></div>
@@ -43,17 +44,17 @@
             
             <!-- Enhanced Stats Grid -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16 max-w-3xl mx-auto">
-                <div class="group bg-white/90 backdrop-blur-md rounded-2xl p-8 border-2 border-[#B59F84]/30 shadow-2xl transform hover:scale-105 hover:-translate-y-2 transition-all duration-500 animate-fade-in-up delay-300 hover:shadow-2xl hover:border-[#B59F84]/60">
+                <div class="group bg-[#F4F2ED]/90 backdrop-blur-md rounded-2xl p-8 border-2 border-[#B59F84]/30 shadow-2xl transform hover:scale-105 hover:-translate-y-2 transition-all duration-500 animate-fade-in-up delay-300 hover:shadow-2xl hover:border-[#B59F84]/60">
                     <div class="text-3xl font-bold text-[#634600] mb-4 group-hover:scale-110 transition-transform duration-300">∞</div>
                     <div class="text-[#603E14] font-semibold text-lg">Unlimited Creativity</div>
                     <div class="mt-2 text-sm text-[#8A7B66] opacity-0 group-hover:opacity-100 transition-opacity duration-300">Endless possibilities await</div>
                 </div>
-                <div class="group bg-white/90 backdrop-blur-md rounded-2xl p-8 border-2 border-[#B59F84]/30 shadow-2xl transform hover:scale-105 hover:-translate-y-2 transition-all duration-500 animate-fade-in-up delay-400 hover:shadow-2xl hover:border-[#B59F84]/60">
+                <div class="group bg-[#F4F2ED]/90 backdrop-blur-md rounded-2xl p-8 border-2 border-[#B59F84]/30 shadow-2xl transform hover:scale-105 hover:-translate-y-2 transition-all duration-500 animate-fade-in-up delay-400 hover:shadow-2xl hover:border-[#B59F84]/60">
                     <div class="text-3xl font-bold text-[#634600] mb-4 group-hover:scale-110 transition-transform duration-300">♻️</div>
                     <div class="text-[#603E14] font-semibold text-lg">Eco-Friendly</div>
                     <div class="mt-2 text-sm text-[#8A7B66] opacity-0 group-hover:opacity-100 transition-opacity duration-300">Sustainable by design</div>
                 </div>
-                <div class="group bg-white/90 backdrop-blur-md rounded-2xl p-8 border-2 border-[#B59F84]/30 shadow-2xl transform hover:scale-105 hover:-translate-y-2 transition-all duration-500 animate-fade-in-up delay-500 hover:shadow-2xl hover:border-[#B59F84]/60">
+                <div class="group bg-[#F4F2ED]/90 backdrop-blur-md rounded-2xl p-8 border-2 border-[#B59F84]/30 shadow-2xl transform hover:scale-105 hover:-translate-y-2 transition-all duration-500 animate-fade-in-up delay-500 hover:shadow-2xl hover:border-[#B59F84]/60">
                     <div class="text-3xl font-bold text-[#634600] mb-4 group-hover:scale-110 transition-transform duration-300">⚡</div>
                     <div class="text-[#603E14] font-semibold text-lg">Fast Results</div>
                     <div class="mt-2 text-sm text-[#8A7B66] opacity-0 group-hover:opacity-100 transition-opacity duration-300">Quick turnaround time</div>
@@ -82,7 +83,7 @@
     </div>
 </div>
     <!-- Animated background elements -->
-    <div class="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
+    <div class="absolute  top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
         <div class="absolute -top-4 -left-4 w-8 h-8 bg-[#B59F84] rounded-full opacity-30 animate-pulse"></div>
         <div class="absolute top-1/4 right-10 w-6 h-6 bg-[#8A7B66] rounded-full opacity-40 animate-bounce"></div>
         <div class="absolute bottom-20 left-20 w-4 h-4 bg-[#634600] rounded-full opacity-30 animate-ping"></div>
@@ -102,162 +103,165 @@
     </div>
 
     <!-- Gradient Orbs -->
-    <div class="absolute -top-20 -right-20 w-80 h-80 bg-gradient-to-r from-green-400 to-blue-400 rounded-full opacity-10 blur-3xl animate-pulse-slow"></div>
-    <div class="absolute -bottom-20 -left-20 w-80 h-80 bg-gradient-to-r from-purple-400 to-pink-400 rounded-full opacity-10 blur-3xl animate-pulse-slow delay-1000"></div>
-
-    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 relative z-10">
+    <!-- Gradient Orbs -->
+<div class="absolute -top-20 -right-20 w-80 h-80 bg-gradient-to-r from-[#B59F84] to-[#9C8770] rounded-full opacity-10 blur-3xl animate-pulse-slow"></div>
+<div class="absolute -bottom-20 -left-20 w-80 h-80 bg-gradient-to-r from-[#E1D5B6] to-[#D5C39A] rounded-full opacity-10 blur-3xl animate-pulse-slow delay-1000"></div>
+    <div class="max-w-7xl  mx-auto sm:px-6 lg:px-8 relative z-10">
         <!-- Enhanced Description Section with Icons -->
         <div class="mb-16">
-            <div class="text-center mb-12 animate-fade-in-up">
-                <div class="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-green-400 to-teal-500 rounded-full shadow-2xl mb-6 animate-float">
-                    <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <div class="text-center mb-12 animate-fade-in-up">
+        <div class="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-[#B59F84] to-[#9C8770] rounded-full shadow-2xl mb-6 animate-float">
+            <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+            </svg>
+        </div>
+        <h2 class="text-4xl md:text-5xl font-bold text-gray-800 dark:text-white mb-6 bg-gradient-to-r from-[#8A7560] to-[#B59F84] dark:from-white dark:to-[#B59F84] bg-clip-text text-transparent">
+            Your Upcycling Journey Starts Here
+        </h2>
+        <p class="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed">
+            Discover powerful tools and resources to transform ordinary materials into extraordinary creations. 
+            Join a community of eco-innovators making a difference.
+        </p>
+    </div>
+
+    <!-- Enhanced Feature Grid with Cinematic Animations -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
+        <!-- Feature 1 -->
+        <div class="text-center group animate-fade-in-up delay-100">
+            <div class="relative">
+                <div class="absolute inset-0 bg-gradient-to-r from-[#B59F84] to-[#9C8770] rounded-full blur-lg opacity-75 group-hover:opacity-100 transition-opacity duration-500 animate-pulse"></div>
+                <div class="relative w-20 h-20 bg-[#F8F4EC] dark:bg-[#8A7560] rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 group-hover:rotate-12 transition-all duration-500 shadow-2xl">
+                    <svg class="w-10 h-10 text-[#B59F84] dark:text-[#F1E9D2]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                    </svg>
+                </div>
+            </div>
+            <h3 class="text-2xl font-bold text-gray-800 dark:text-white mb-4 group-hover:text-[#B59F84] dark:group-hover:text-[#D5C39A] transition-colors duration-300">Sustainable Impact</h3>
+            <p class="text-gray-600 dark:text-gray-400 leading-relaxed group-hover:text-gray-700 dark:group-hover:text-gray-300 transition-colors duration-300">
+                Track your environmental contribution and see how your creations reduce waste.
+            </p>
+            <div class="mt-4 opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all duration-500">
+                <span class="text-sm text-[#B59F84] font-semibold">♻️ Reduce • Reuse • Revolutionize</span>
+            </div>
+        </div>
+
+        <!-- Feature 2 -->
+        <div class="text-center group animate-fade-in-up delay-200">
+            <div class="relative">
+                <div class="absolute inset-0 bg-gradient-to-r from-[#9C8770] to-[#8A7560] rounded-full blur-lg opacity-75 group-hover:opacity-100 transition-opacity duration-500 animate-pulse"></div>
+                <div class="relative w-20 h-20 bg-[#F8F4EC] dark:bg-[#8A7560] rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 group-hover:-rotate-12 transition-all duration-500 shadow-2xl">
+                    <svg class="w-10 h-10 text-[#9C8770] dark:text-[#F1E9D2]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                    </svg>
+                </div>
+            </div>
+            <h3 class="text-2xl font-bold text-gray-800 dark:text-white mb-4 group-hover:text-[#9C8770] dark:group-hover:text-[#D5C39A] transition-colors duration-300">Creative Community</h3>
+            <p class="text-gray-600 dark:text-gray-400 leading-relaxed group-hover:text-gray-700 dark:group-hover:text-gray-300 transition-colors duration-300">
+                Connect with fellow upcyclers, share ideas, and get inspired by innovative projects.
+            </p>
+            <div class="mt-4 opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all duration-500">
+                <span class="text-sm text-[#9C8770] font-semibold">👥 Connect • Share • Grow Together</span>
+            </div>
+        </div>
+
+        <!-- Feature 3 -->
+        <div class="text-center group animate-fade-in-up delay-300">
+            <div class="relative">
+                <div class="absolute inset-0 bg-gradient-to-r from-[#8A7560] to-[#6B5B48] rounded-full blur-lg opacity-75 group-hover:opacity-100 transition-opacity duration-500 animate-pulse"></div>
+                <div class="relative w-20 h-20 bg-[#F8F4EC] dark:bg-[#6B5B48] rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 group-hover:rotate-12 transition-all duration-500 shadow-2xl">
+                    <svg class="w-10 h-10 text-[#8A7560] dark:text-[#F1E9D2]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
                     </svg>
                 </div>
-                <h2 class="text-4xl md:text-5xl font-bold text-gray-800 dark:text-white mb-6 bg-gradient-to-r from-gray-800 to-green-600 dark:from-white dark:to-green-400 bg-clip-text text-transparent">
-                    Your Upcycling Journey Starts Here
-                </h2>
-                <p class="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed">
-                    Discover powerful tools and resources to transform ordinary materials into extraordinary creations. 
-                    Join a community of eco-innovators making a difference.
-                </p>
             </div>
-
-            <!-- Enhanced Feature Grid with Cinematic Animations -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
-                <!-- Feature 1 -->
-                <div class="text-center group animate-fade-in-up delay-100">
-                    <div class="relative">
-                        <div class="absolute inset-0 bg-gradient-to-r from-green-400 to-emerald-400 rounded-full blur-lg opacity-75 group-hover:opacity-100 transition-opacity duration-500 animate-pulse"></div>
-                        <div class="relative w-20 h-20 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 group-hover:rotate-12 transition-all duration-500 shadow-2xl">
-                            <svg class="w-10 h-10 text-green-600 dark:text-green-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
-                            </svg>
-                        </div>
-                    </div>
-                    <h3 class="text-2xl font-bold text-gray-800 dark:text-white mb-4 group-hover:text-green-600 dark:group-hover:text-green-400 transition-colors duration-300">Sustainable Impact</h3>
-                    <p class="text-gray-600 dark:text-gray-400 leading-relaxed group-hover:text-gray-700 dark:group-hover:text-gray-300 transition-colors duration-300">
-                        Track your environmental contribution and see how your creations reduce waste.
-                    </p>
-                    <div class="mt-4 opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all duration-500">
-                        <span class="text-sm text-green-500 font-semibold">♻️ Reduce • Reuse • Revolutionize</span>
-                    </div>
-                </div>
-
-                <!-- Feature 2 -->
-                <div class="text-center group animate-fade-in-up delay-200">
-                    <div class="relative">
-                        <div class="absolute inset-0 bg-gradient-to-r from-blue-400 to-cyan-400 rounded-full blur-lg opacity-75 group-hover:opacity-100 transition-opacity duration-500 animate-pulse"></div>
-                        <div class="relative w-20 h-20 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 group-hover:-rotate-12 transition-all duration-500 shadow-2xl">
-                            <svg class="w-10 h-10 text-blue-600 dark:text-blue-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
-                            </svg>
-                        </div>
-                    </div>
-                    <h3 class="text-2xl font-bold text-gray-800 dark:text-white mb-4 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300">Creative Community</h3>
-                    <p class="text-gray-600 dark:text-gray-400 leading-relaxed group-hover:text-gray-700 dark:group-hover:text-gray-300 transition-colors duration-300">
-                        Connect with fellow upcyclers, share ideas, and get inspired by innovative projects.
-                    </p>
-                    <div class="mt-4 opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all duration-500">
-                        <span class="text-sm text-blue-500 font-semibold">👥 Connect • Share • Grow Together</span>
-                    </div>
-                </div>
-
-                <!-- Feature 3 -->
-                <div class="text-center group animate-fade-in-up delay-300">
-                    <div class="relative">
-                        <div class="absolute inset-0 bg-gradient-to-r from-purple-400 to-pink-400 rounded-full blur-lg opacity-75 group-hover:opacity-100 transition-opacity duration-500 animate-pulse"></div>
-                        <div class="relative w-20 h-20 bg-purple-100 dark:bg-purple-900 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 group-hover:rotate-12 transition-all duration-500 shadow-2xl">
-                            <svg class="w-10 h-10 text-purple-600 dark:text-purple-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-                            </svg>
-                        </div>
-                    </div>
-                    <h3 class="text-2xl font-bold text-gray-800 dark:text-white mb-4 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors duration-300">Smart Tools</h3>
-                    <p class="text-gray-600 dark:text-gray-400 leading-relaxed group-hover:text-gray-700 dark:group-hover:text-gray-300 transition-colors duration-300">
-                        Access advanced tools for material matching, project planning, and design optimization.
-                    </p>
-                    <div class="mt-4 opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all duration-500">
-                        <span class="text-sm text-purple-500 font-semibold">⚡ Smart • Efficient • Innovative</span>
-                    </div>
-                </div>
-
-                <!-- Feature 4 -->
-                <div class="text-center group animate-fade-in-up delay-400">
-                    <div class="relative">
-                        <div class="absolute inset-0 bg-gradient-to-r from-orange-400 to-red-400 rounded-full blur-lg opacity-75 group-hover:opacity-100 transition-opacity duration-500 animate-pulse"></div>
-                        <div class="relative w-20 h-20 bg-orange-100 dark:bg-orange-900 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 group-hover:-rotate-12 transition-all duration-500 shadow-2xl">
-                            <svg class="w-10 h-10 text-orange-600 dark:text-orange-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 8v8m-4-5v5m-4-2v2m-2 4h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                            </svg>
-                        </div>
-                    </div>
-                    <h3 class="text-2xl font-bold text-gray-800 dark:text-white mb-4 group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors duration-300">Progress Tracking</h3>
-                    <p class="text-gray-600 dark:text-gray-400 leading-relaxed group-hover:text-gray-700 dark:group-hover:text-gray-300 transition-colors duration-300">
-                        Monitor your projects, set milestones, and celebrate your upcycling achievements.
-                    </p>
-                    <div class="mt-4 opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all duration-500">
-                        <span class="text-sm text-orange-500 font-semibold">📈 Track • Achieve • Celebrate</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Enhanced Cinematic Call to Action Section -->
-            <div class="relative bg-gradient-to-br from-green-500 via-emerald-500 to-teal-600 rounded-3xl p-12 text-center text-white shadow-2xl transform hover:scale-[1.02] transition-all duration-700 animate-fade-in-up delay-500 overflow-hidden">
-                <!-- Animated Background Pattern -->
-                <div class="absolute inset-0 opacity-10">
-                    <div class="absolute top-0 left-0 w-32 h-32 bg-white rounded-full animate-float-1"></div>
-                    <div class="absolute bottom-0 right-0 w-24 h-24 bg-white rounded-full animate-float-2"></div>
-                    <div class="absolute top-1/2 left-1/4 w-16 h-16 bg-white rounded-full animate-float-3"></div>
-                </div>
-                
-                <!-- Shine Effect -->
-                <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -skew-x-12 animate-shine"></div>
-
-                <div class="max-w-2xl mx-auto relative z-10">
-                    <div class="w-24 h-24 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-8 shadow-2xl animate-pulse-slow">
-                        <svg class="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                        </svg>
-                    </div>
-                    <h3 class="text-3xl md:text-4xl font-bold mb-6 text-shadow-lg">Ready to Create Something Amazing?</h3>
-                    <p class="text-green-100 text-xl mb-8 leading-relaxed">
-                        Join thousands of upcyclers turning waste into wonder. Start your first project today and make a positive impact on our planet.
-                    </p>
-                   
-                </div>
+            <h3 class="text-2xl font-bold text-gray-800 dark:text-white mb-4 group-hover:text-[#8A7560] dark:group-hover:text-[#D5C39A] transition-colors duration-300">Smart Tools</h3>
+            <p class="text-gray-600 dark:text-gray-400 leading-relaxed group-hover:text-gray-700 dark:group-hover:text-gray-300 transition-colors duration-300">
+                Access advanced tools for material matching, project planning, and design optimization.
+            </p>
+            <div class="mt-4 opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all duration-500">
+                <span class="text-sm text-[#8A7560] font-semibold">⚡ Smart • Efficient • Innovative</span>
             </div>
         </div>
 
-        <!-- Enhanced Main Dashboard Content -->
-        <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-2xl sm:rounded-2xl transform hover:shadow-3xl transition-all duration-500 animate-fade-in-up delay-600">
-            <div class="p-8 text-gray-900 dark:text-gray-100">
-                <div class="flex items-center justify-between mb-8">
-                    <div class="flex items-center space-x-4">
-                        <div class="p-3 bg-gradient-to-r from-green-400 to-teal-500 rounded-xl shadow-lg">
-                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
-                            </svg>
-                        </div>
-                        <h3 class="text-3xl font-bold text-gray-800 dark:text-white">Dashboard Overview</h3>
-                    </div>
-                    <span class="px-4 py-2 bg-gradient-to-r from-green-400 to-teal-500 text-white rounded-full text-sm font-bold shadow-lg animate-pulse">
-                        🌟 Active Upcycler
-                    </span>
+        <!-- Feature 4 -->
+        <div class="text-center group animate-fade-in-up delay-400">
+            <div class="relative">
+                <div class="absolute inset-0 bg-gradient-to-r from-[#E1D5B6] to-[#D5C39A] rounded-full blur-lg opacity-75 group-hover:opacity-100 transition-opacity duration-500 animate-pulse"></div>
+                <div class="relative w-20 h-20 bg-[#F8F4EC] dark:bg-[#D5C39A] rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 group-hover:-rotate-12 transition-all duration-500 shadow-2xl">
+                    <svg class="w-10 h-10 text-[#B59F84] dark:text-[#8A7560]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 8v8m-4-5v5m-4-2v2m-2 4h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                    </svg>
                 </div>
-                
-                <div class="bg-gradient-to-r from-green-50 to-teal-50 dark:from-gray-700 dark:to-gray-600 rounded-xl p-6 mb-6">
-                    <p class="text-2xl font-semibold text-gray-800 dark:text-white mb-4">
-                        {{ __("You're logged in!") }}
-                    </p>
-                    <p class="text-lg text-gray-600 dark:text-gray-400">
-                        Ready to transform ordinary materials into extraordinary creations? Start your next upcycling project today!
-                    </p>
-                </div>
+            </div>
+            <h3 class="text-2xl font-bold text-gray-800 dark:text-white mb-4 group-hover:text-[#B59F84] dark:group-hover:text-[#8A7560] transition-colors duration-300">Progress Tracking</h3>
+            <p class="text-gray-600 dark:text-gray-400 leading-relaxed group-hover:text-gray-700 dark:group-hover:text-gray-300 transition-colors duration-300">
+                Monitor your projects, set milestones, and celebrate your upcycling achievements.
+            </p>
+            <div class="mt-4 opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all duration-500">
+                <span class="text-sm text-[#B59F84] font-semibold">📈 Track • Achieve • Celebrate</span>
             </div>
         </div>
     </div>
+
+            <!-- Enhanced Cinematic Call to Action Section -->
+<div class="relative bg-gradient-to-r from-[#F8F4EC] via-[#F1E9D2] to-[#E9DFC7] rounded-3xl p-12 text-center shadow-2xl transform hover:scale-[1.02] transition-all duration-700 animate-fade-in-up delay-500 overflow-hidden">
+    <!-- Animated Background Pattern -->
+    <div class="absolute inset-0 opacity-10">
+        <div class="absolute top-0 left-0 w-32 h-32 bg-[#8A7560] rounded-full animate-float-1"></div>
+        <div class="absolute bottom-0 right-0 w-24 h-24 bg-[#8A7560] rounded-full animate-float-2"></div>
+        <div class="absolute top-1/2 left-1/4 w-16 h-16 bg-[#8A7560] rounded-full animate-float-3"></div>
+    </div>
+    
+    <!-- Shine Effect -->
+    <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -skew-x-12 animate-shine"></div>
+
+    <div class="max-w-2xl mx-auto relative z-10">
+        <div class="w-24 h-24 bg-gradient-to-r from-[#B59F84] to-[#9C8770] rounded-full flex items-center justify-center mx-auto mb-8 shadow-2xl animate-pulse-slow">
+            <svg class="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+            </svg>
+        </div>
+        <h3 class="text-3xl md:text-4xl font-bold mb-6 text-gray-800">Ready to Create Something Amazing?</h3>
+        <p class="text-gray-700 text-xl mb-8 leading-relaxed">
+            Join thousands of upcyclers turning waste into wonder. Start your first project today and make a positive impact on our planet.
+        </p>
+    </div>
 </div>
+</div>
+
+
+
+        <!-- Enhanced Main Dashboard Content -->
+<div class="bg-[#F4F2ED] dark:bg-[#F4F2ED] overflow-hidden shadow-2xl sm:rounded-2xl transform hover:shadow-3xl transition-all duration-500 animate-fade-in-up delay-600">
+    <div class="p-8 text-gray-900 dark:text-gray-100">
+        <div class="flex items-center justify-between mb-8">
+            <div class="flex items-center space-x-4">
+                <div class="p-3 bg-gradient-to-r from-[#B59F84] to-[#9C8770] rounded-xl shadow-lg">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                    </svg>
+                </div>
+                <h3 class="text-3xl font-bold text-gray-800 dark:text-white">Dashboard Overview</h3>
+            </div>
+            <span class="px-4 py-2 bg-gradient-to-r from-[#B59F84] to-[#9C8770] text-white rounded-full text-sm font-bold shadow-lg animate-pulse">
+                🌟 Active Upcycler
+            </span>
+        </div>
+        
+        <div class="bg-white/80 dark:bg-white/80 rounded-xl p-6 mb-6 border border-[#E9DFC7]">
+            <p class="text-2xl font-semibold text-gray-800 dark:text-gray-800 mb-4">
+                {{ __("You're logged in!") }}
+            </p>
+            <p class="text-lg text-gray-700 dark:text-gray-700">
+                Ready to transform ordinary materials into extraordinary creations? Start your next upcycling project today!
+            </p>
+        </div>
+    </div>
+</div>
+    </div>
+</div>
+
+
     <style>
     /* Custom Animations */
     @keyframes gradient-x {

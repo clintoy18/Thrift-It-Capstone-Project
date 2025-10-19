@@ -53,26 +53,46 @@ class DonationController extends Controller
      */
     public function show($id)
     {
-        // Clear cache keys for this donation
         Cache::forget("donation_{$id}_comments");
         Cache::forget("donation_{$id}_with_comments");
 
-        // Load donation base relations
         $donation = Donation::with(['user', 'category'])->findOrFail($id);
-
-        // Fetch only parent comments with their replies + users (mirror ProductController)
-        $comments = \App\Models\Comment::with(['user', 'replies.user'])
+        
+        // Load ALL comments for this donation and build an unlimited-depth flattened replies list per top-level
+        $allComments = \App\Models\Comment::with(['user'])
             ->where('donation_id', $id)
-            ->whereNull('parent_id')
-            ->latest()
+            ->orderBy('created_at', 'asc')
             ->get();
 
-        // Attach comments to donation
-        $donation->setRelation('comments', $comments);
+        $byParent = $allComments->groupBy('parent_id');
+        $topLevel = $byParent->get(null, collect())->sortByDesc('created_at')->values();
+
+        $topLevel->each(function ($root) use ($byParent) {
+            $flatReplies = collect();
+            $stack = [];
+            foreach ($byParent->get($root->id, collect()) as $child) {
+                $flatReplies->push($child);
+                $stack[] = $child;
+            }
+            while (!empty($stack)) {
+                /** @var \App\Models\Comment $node */
+                $node = array_pop($stack);
+                foreach ($byParent->get($node->id, collect()) as $child) {
+                    $flatReplies->push($child);
+                    $stack[] = $child;
+                }
+            }
+            $root->setRelation('replies', $flatReplies);
+        });
+
+        $donation->setRelation('comments', $topLevel);
+
+        // Get more donations from the same user
+        $moreDonations = $this->donationService->getMoreDonationsByUser($donation->user_id, $donation->id);
 
         // Disable browser cache for this page
         return response()
-            ->view('donations.show', compact('donation'))
+            ->view('donations.show', compact('donation', 'moreDonations'))
             ->header('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0')
             ->header('Pragma', 'no-cache')
             ->header('Expires', '0')

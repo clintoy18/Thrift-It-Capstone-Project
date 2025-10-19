@@ -85,6 +85,11 @@ class DonationService
     {
         return $this->donationRepository->delete($donation);
     }
+
+    public function getMoreDonationsByUser($userId, $excludeDonationId, $limit = 6)
+    {
+        return $this->donationRepository->getMoreByUser($userId, $excludeDonationId, $limit);
+    }
    
 }
 
