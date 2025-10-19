@@ -227,6 +227,9 @@
                     </form>
                 </div>
             </div>
+            
+            <!-- Add spacing at the bottom -->
+            <div class="pb-8"></div>
         
 
             <script>
