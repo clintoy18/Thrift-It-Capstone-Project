@@ -94,7 +94,7 @@
     <div class="py-4 bg-white dark:bg-gray-900">
         <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center mb-4 relative">
-                <h2 class="text-lg font-bold text-red-600 dark:text-red-400">{{ $segment->name }} Products</h2>
+                <h2 class="text-lg font-bold text-gray-800 dark:text-gray-200">{{ $segment->name }} Products</h2>
                 <div x-data="{ open: false }" class="relative">
                     <button @click="open = !open" class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 text-sm shadow-sm">
                         <span>Category</span>

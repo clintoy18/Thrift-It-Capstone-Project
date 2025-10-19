@@ -124,8 +124,11 @@ Route::middleware(['auth', 'verified', 'rolemiddleware:admin'])->prefix('admin')
 
 //Global Routes
 Route::middleware('auth')->group(function () {
-    Route::get(('/profile/{user}'), [ProfileController::class, 'show'])->name('profile.show');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::get('/profile/password', [ProfileController::class, 'edit1'])->name('profile.edit1');
+    Route::get('/profile/data-privacy', [ProfileController::class, 'edit2'])->name('profile.edit2');
+    Route::get('/profile/{user}', [ProfileController::class, 'show'])->name('profile.show');
+
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 

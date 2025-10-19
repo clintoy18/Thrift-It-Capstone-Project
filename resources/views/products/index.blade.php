@@ -151,7 +151,7 @@
                                                     {{ $product->listingtype === 'for donation' ? 'For Donation' : '₱' . number_format($product->price, 2) }}
                                                 </p>
 
-                                                <button class="favorite-btn text-gray-400 hover:text-red-500 focus:outline-none transition-colors" 
+                                                <button class="favorite-btn text-gray-400 hover:text-gray-600 focus:outline-none transition-colors" 
                                                         data-id="{{ $product->id }}" 
                                                         type="button"
                                                         onclick="event.preventDefault(); event.stopPropagation();">
@@ -180,11 +180,11 @@
                 if (svg.getAttribute('fill') === 'none') {
                     svg.setAttribute('fill', 'currentColor');
                     svg.setAttribute('stroke', 'none');
-                    this.classList.add('text-red-500');
+                    this.classList.add('text-gray-600');
                 } else {
                     svg.setAttribute('fill', 'none');
                     svg.setAttribute('stroke', 'currentColor');
-                    this.classList.remove('text-red-500');
+                    this.classList.remove('text-gray-600');
                 }
             });
         });

@@ -153,203 +153,218 @@
                     </div>
                 </div>
 
-                <!-- ===== PRODUCTS TAB CONTENT ===== -->
-                <div id="products" class="overflow-hidden mb-8">
+              <!-- ===== PRODUCTS TAB CONTENT ===== -->
+<div id="products" class="overflow-hidden mb-8">
+    <!-- Products Header with Stats -->
+    <div class="flex items-center justify-between mb-6">
+        <div>
+            <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-2 flex items-center gap-2">
+                <svg class="w-6 h-6 text-[#B59F84]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+                </svg>
+                Product Inventory
+            </h3>
+            <p class="text-gray-600 dark:text-gray-400 text-sm max-w-2xl">
+                Manage your sustainable products, track sales performance, and showcase your eco-friendly creations to potential buyers.
+            </p>
+        </div>
+        <div class="flex gap-4 text-right">
+            <div>
+                <div class="text-lg font-bold text-[#B59F84]">{{ $availableProducts->count() }}</div>
+                <div class="text-sm text-gray-500 dark:text-gray-400">Available</div>
+            </div>
+            <div>
+                <div class="text-lg font-bold text-[#8A7560]">{{ $soldProducts->count() }}</div>
+                <div class="text-sm text-gray-500 dark:text-gray-400">Sold</div>
+            </div>
+        </div>
+    </div>
 
-                    <!-- Available Products Section -->
-                    <div class="mb-6">
-                        <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-3">Available Products</h3>
-                        
-                        @if ($availableProducts->count() > 0)
-                            <!-- Products Grid Layout -->
-                            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                                @foreach ($availableProducts as $product)
-                                    <!-- Individual Product Card -->
-                                    <div class="group relative bg-white dark:bg-gray-800 rounded-xl overflow-hidden 
-                                                shadow hover:shadow-lg transition duration-200 border 
-                                                border-gray-200 dark:border-gray-700">
-                                        
-                                        <!-- Product Link -->
-                                        <a href="{{ route('products.show', $product->id) }}" class="block h-full">
-                                            
-                                            <!-- Donation Badge -->
-                                            @if ($product->listingtype === 'for donation')
-                                                <div class="absolute top-2 left-2 z-10 bg-yellow-100 
-                                                            text-yellow-800 text-xs px-2 py-1 rounded-full 
-                                                            font-semibold shadow">
-                                                    Donation
-                                                </div>
-                                            @endif
-                                            
-                                            <!-- Product Image Container -->
-                                            <div class="relative aspect-square overflow-hidden">
-                                                <img src="{{ asset('storage/' . $product->first_image) }}"
-                                                    alt="{{ $product->name }}"
-                                                    class="w-full h-full object-cover transition-transform 
-                                                           duration-300 group-hover:scale-105">
-                                                
-                                                <!-- Hover Overlay Effect -->
-                                                <div class="absolute inset-0 bg-gray-800 bg-opacity-20 
-                                                            opacity-0 group-hover:opacity-100 transition-opacity 
-                                                            duration-300 flex items-center justify-center">
-                                                    <span class="bg-white text-gray-800 px-3 py-1 rounded-full 
-                                                                 text-xs font-medium shadow">
-                                                        Quick view
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            
-                                            <!-- Product Information -->
-                                            <div class="p-4">
-                                                <div class="flex justify-between items-center mb-2">
-                                                    <!-- Product Name -->
-                                                    <h3 class="text-sm font-bold text-gray-900 dark:text-white 
-                                                               group-hover:text-red-600 transition-colors 
-                                                               truncate max-w-[70%]">
-                                                        {{ $product->name }}
-                                                    </h3>
-                                                    <!-- Product Size -->
-                                                    <span class="text-xs font-medium px-2 py-1 
-                                                                bg-gray-100 dark:bg-gray-700 rounded 
-                                                                text-gray-700 dark:text-gray-300">
-                                                        {{ $product->size ?? 'L' }}
-                                                    </span>
-                                                </div>
-                                                
-                                                <!-- Product Category -->
-                                                <p class="text-gray-500 dark:text-gray-400 text-xs mb-2 truncate">
-                                                    {{ $product->category->name ?? 'No Category' }}
-                                                </p>
-                                                
-                                                <!-- Price and Favorite Button -->
-                                                <div class="flex justify-between items-center">
-                                                    <!-- Price Display -->
-                                                    <p class="text-sm font-bold 
-                                                              {{ $product->listingtype === 'for donation' ? 'text-yellow-700' : 'text-red-600' }}">
-                                                        {{ $product->listingtype === 'for donation' ? 'For Donation' : '₱' . number_format($product->price, 0) }}
-                                                    </p>
-                                                    
-                                                    <!-- Favorite Button -->
-                                                    <button class="favorite-btn text-gray-400 hover:text-red-500 
-                                                                   focus:outline-none transition-colors"
-                                                            data-id="{{ $product->id }}" type="button"
-                                                            onclick="event.preventDefault(); event.stopPropagation();">
-                                                        <!-- Heart Icon -->
-                                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5"
-                                                            fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                                stroke-width="2"
-                                                                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                                                        </svg>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </div>
-                                @endforeach
+    <!-- Available Products Section -->
+    <div class="mb-8">
+        <div class="flex items-center gap-3 mb-4">
+            <div class="p-2 bg-[#F1E9D2] dark:bg-[#9C8770] rounded-lg">
+                <svg class="w-5 h-5 text-[#B59F84] dark:text-[#F1E9D2]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"></path>
+                </svg>
+            </div>
+            <div>
+                <h3 class="text-lg font-bold text-gray-900 dark:text-white">Available Products</h3>
+                <p class="text-sm text-gray-600 dark:text-gray-400">Active listings ready for purchase or donation</p>
+            </div>
+        </div>
+        
+        @if ($availableProducts->count() > 0)
+            <!-- Products Grid Layout -->
+            <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-4 md:gap-6">
+                @foreach ($availableProducts as $product)
+                    <!-- Individual Product Card -->
+                    <div class="group relative bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition duration-200 border border-[#D9D9D9] dark:border-gray-700">
+                        <a href="{{ route('products.show', $product->id) }}" class="block h-full">
+                            @if($product->listingtype === 'for donation')
+                                <div class="absolute top-1 left-1 z-10 bg-[#D9D9D9] text-gray-700 text-[10px] sm:text-xs px-1.5 py-0.5 sm:px-2 sm:py-1 rounded-full">
+                                    Donation
+                                </div>
+                            @endif
+                           <div class="relative aspect-square overflow-hidden">
+                           <img src="{{ asset('storage/' . $product->first_image) }}" 
+                                alt="{{ $product->name }}" 
+                                class="w-full h-full object-cover">
+                                <div class="absolute inset-0 bg-gray-800 bg-opacity-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                                    <span class="bg-white text-gray-800 px-2 py-0.5 rounded-full text-[10px] sm:text-xs font-medium">
+                                        Quick view
+                                    </span>
+                                </div>
                             </div>
-                        @else
-                            <!-- Empty State for Available Products -->
-                            <x-empty-message message="No active products found." :link="route('products.create')" />
-                        @endif
-                    </div>
+                            <div class="p-2 sm:p-3">
+                                <div class="flex justify-between items-start">
+                                    <h3 class="text-xs sm:text-sm font-bold text-gray-900 dark:text-white  transition-colors truncate max-w-[70%]">
+                                        {{ $product->name }}
+                                    </h3>
+                                    <span class="text-[10px] sm:text-xs font-medium px-1 py-0.5 bg-[#D9D9D9] dark:bg-gray-700 rounded text-gray-700 dark:text-gray-300">
+                                        {{ $product->size ?? 'L' }}
+                                    </span>
+                                </div>
 
-                    <!-- Sold Products Section -->
-                    <div class="mb-6">
-                        <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-3">Sold Products</h3>
-                        
-                        @if ($soldProducts->count() > 0)
-                            <!-- Sold Products Grid -->
-                            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                                @foreach ($soldProducts as $product)
-                                    <!-- Sold Product Card (Disabled State) -->
-                                    <div class="group relative bg-white dark:bg-gray-800 rounded-xl overflow-hidden 
-                                                shadow hover:shadow-lg transition duration-200 border 
-                                                border-gray-200 dark:border-gray-700">
-                                        
-                                        <!-- Disabled Link for Sold Items -->
-                                        <a href="{{ route('products.show', $product->id) }}" 
-                                           class="block h-full pointer-events-none opacity-70">
-                                            
-                                            <!-- Sold Badge -->
-                                            <div class="absolute top-2 left-2 z-20 bg-red-500 text-white 
-                                                        text-xs px-2 py-1 rounded-full font-semibold shadow">
-                                                Sold
-                                            </div>
+                                <p class="text-gray-500 dark:text-gray-400 text-[10px] sm:text-xs mt-0.5 truncate">
+                                    {{ $product->category->name ?? 'No Category' }}
+                                </p>
+                                <p class="text-gray-500 dark:text-gray-400 text-[10px] sm:text-xs mt-0.5 truncate">
+                                  <i>  {{ $product->barangay->name ?? 'N/A' }}, Cebu City</i>
+                                </p>
 
-                                            <!-- Donation Badge for Sold Items -->
-                                            @if ($product->listingtype === 'for donation')
-                                                <div class="absolute top-2 right-2 z-10 bg-yellow-100 
-                                                            text-yellow-800 text-xs px-2 py-1 rounded-full 
-                                                            font-semibold shadow">
-                                                    Donation
-                                                </div>
-                                            @endif
+                                <div class="flex justify-between items-center mt-1">
+                                    <p class="text-xs sm:text-sm font-bold {{ $product->listingtype === 'for donation' ? 'text-gray-700' : 'text-black-600' }}">
+                                        {{ $product->listingtype === 'for donation' ? 'For Donation' : '₱' . number_format($product->price, 2) }}
+                                    </p>
 
-                                            <!-- Product Image with Dimmed Effect -->
-                                            <div class="relative aspect-square overflow-hidden">
-                                                <img src="{{ asset('storage/' . $product->first_image) }}"
-                                                    alt="{{ $product->name }}"
-                                                    class="w-full h-full object-cover transition-transform 
-                                                           duration-300 group-hover:scale-105 filter brightness-75">
-                                                
-                                                <!-- Hover Overlay -->
-                                                <div class="absolute inset-0 bg-gray-800 bg-opacity-20 
-                                                            opacity-0 group-hover:opacity-100 transition-opacity 
-                                                            duration-300 flex items-center justify-center">
-                                                    <span class="bg-white text-gray-800 px-3 py-1 rounded-full 
-                                                                 text-xs font-medium shadow">
-                                                        Quick view
-                                                    </span>
-                                                </div>
-                                            </div>
-
-                                            <!-- Product Information -->
-                                            <div class="p-4">
-                                                <div class="flex justify-between items-center mb-2">
-                                                    <h3 class="text-sm font-bold text-gray-900 dark:text-white 
-                                                               group-hover:text-red-600 transition-colors 
-                                                               truncate max-w-[70%]">
-                                                        {{ $product->name }}
-                                                    </h3>
-                                                    <span class="text-xs font-medium px-2 py-1 
-                                                                bg-gray-100 dark:bg-gray-700 rounded 
-                                                                text-gray-700 dark:text-gray-300">
-                                                        {{ $product->size ?? 'L' }}
-                                                    </span>
-                                                </div>
-                                                <p class="text-gray-500 dark:text-gray-400 text-xs mb-2 truncate">
-                                                    {{ $product->category->name ?? 'No Category' }}
-                                                </p>
-                                                <div class="flex justify-between items-center">
-                                                    <p class="text-sm font-bold 
-                                                              {{ $product->listingtype === 'for donation' ? 'text-yellow-700' : 'text-red-600' }}">
-                                                        {{ $product->listingtype === 'for donation' ? 'For Donation' : '₱' . number_format($product->price, 0) }}
-                                                    </p>
-                                                    <!-- Favorite Button -->
-                                                    <button class="favorite-btn text-gray-400 hover:text-red-500 
-                                                                   focus:outline-none transition-colors"
-                                                            data-id="{{ $product->id }}" type="button"
-                                                            onclick="event.preventDefault(); event.stopPropagation();">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5"
-                                                            fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                                stroke-width="2"
-                                                                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                                                        </svg>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </div>
-                                @endforeach
+                                    <button class="favorite-btn text-gray-400 hover:text-red-500 focus:outline-none transition-colors" 
+                                            data-id="{{ $product->id }}" 
+                                            type="button"
+                                            onclick="event.preventDefault(); event.stopPropagation();">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:h-5 sm:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                                        </svg>
+                                    </button>
+                                </div>
                             </div>
-                        @else
-                            <!-- Empty State for Sold Products -->
-                            <p class="text-gray-500 dark:text-gray-400">No sold products yet.</p>
-                        @endif
+                        </a>
                     </div>
+                @endforeach
+            </div>
+        @else
+            <!-- Empty State for Available Products -->
+            <div class="text-center py-12 bg-[#F8F4EC] dark:bg-gray-700 rounded-2xl border border-[#E9DFC7] dark:border-gray-600">
+                <div class="w-16 h-16 bg-white dark:bg-gray-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
+                    <svg class="w-8 h-8 text-[#B59F84]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+                    </svg>
                 </div>
+                <h4 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-2">No Active Products</h4>
+                <p class="text-gray-600 dark:text-gray-400 text-sm mb-4 max-w-md mx-auto">
+                    Start your sustainable journey by listing your first upcycled product!
+                </p>
+                <a href="{{ route('products.create') }}" class="inline-flex items-center bg-[#B59F84] hover:bg-[#9C8770] text-white px-6 py-2 rounded-lg transition-colors gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                    </svg>
+                    Create First Product
+                </a>
+            </div>
+        @endif
+    </div>
+
+    <!-- Sold Products Section -->
+    <div class="mb-6">
+        <div class="flex items-center gap-3 mb-4">
+            <div class="p-2 bg-[#F1E9D2] dark:bg-[#8A7560] rounded-lg">
+                <svg class="w-5 h-5 text-[#8A7560] dark:text-[#F1E9D2]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+            </div>
+            <div>
+                <h3 class="text-lg font-bold text-gray-900 dark:text-white">Sold Products</h3>
+                <p class="text-sm text-gray-600 dark:text-gray-400">Your successful sales and donations history</p>
+            </div>
+        </div>
+        
+        @if ($soldProducts->count() > 0)
+            <!-- Sold Products Grid -->
+            <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-4 md:gap-6">
+                @foreach ($soldProducts as $product)
+                    <!-- Sold Product Card (Disabled State) -->
+                    <div class="group relative bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition duration-200 border border-[#D9D9D9] dark:border-gray-700 opacity-70">
+                        <a href="{{ route('products.show', $product->id) }}" class="block h-full">
+                            <!-- Sold Badge -->
+                            <div class="absolute top-1 left-1 z-20 bg-[#8A7560] text-white text-[10px] sm:text-xs px-1.5 py-0.5 sm:px-2 sm:py-1 rounded-full font-semibold">
+                                Sold
+                            </div>
+                            
+                            @if($product->listingtype === 'for donation')
+                                <div class="absolute top-1 right-1 z-10 bg-[#D9D9D9] text-gray-700 text-[10px] sm:text-xs px-1.5 py-0.5 sm:px-2 sm:py-1 rounded-full">
+                                    Donation
+                                </div>
+                            @endif
+                           <div class="relative aspect-square overflow-hidden">
+                           <img src="{{ asset('storage/' . $product->first_image) }}" 
+                                alt="{{ $product->name }}" 
+                                class="w-full h-full object-cover filter brightness-75">
+                                <div class="absolute inset-0 bg-gray-800 bg-opacity-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                                    <span class="bg-white text-gray-800 px-2 py-0.5 rounded-full text-[10px] sm:text-xs font-medium">
+                                        View Archive
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="p-2 sm:p-3">
+                                <div class="flex justify-between items-start">
+                                    <h3 class="text-xs sm:text-sm font-bold text-gray-900 dark:text-white  transition-colors truncate max-w-[70%]">
+                                        {{ $product->name }}
+                                    </h3>
+                                    <span class="text-[10px] sm:text-xs font-medium px-1 py-0.5 bg-[#D9D9D9] dark:bg-gray-700 rounded text-gray-700 dark:text-gray-300">
+                                        {{ $product->size ?? 'L' }}
+                                    </span>
+                                </div>
+
+                                <p class="text-gray-500 dark:text-gray-400 text-[10px] sm:text-xs mt-0.5 truncate">
+                                    {{ $product->category->name ?? 'No Category' }}
+                                </p>
+                                <p class="text-gray-500 dark:text-gray-400 text-[10px] sm:text-xs mt-0.5 truncate">
+                                  <i>  {{ $product->barangay->name ?? 'N/A' }}, Cebu City</i>
+                                </p>
+
+                                <div class="flex justify-between items-center mt-1">
+                                    <p class="text-xs sm:text-sm font-bold {{ $product->listingtype === 'for donation' ? 'text-gray-700' : 'text-black-600' }}">
+                                        {{ $product->listingtype === 'for donation' ? 'Donated' : '₱' . number_format($product->price, 2) }}
+                                    </p>
+
+                                    <button class="favorite-btn text-gray-400 hover:text-red-500 focus:outline-none transition-colors" 
+                                            data-id="{{ $product->id }}" 
+                                            type="button"
+                                            onclick="event.preventDefault(); event.stopPropagation();">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:h-5 sm:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                @endforeach
+            </div>
+        @else
+            <!-- Empty State for Sold Products -->
+            <div class="text-center py-8 bg-[#F8F4EC] dark:bg-gray-700 rounded-xl border border-[#E9DFC7] dark:border-gray-600">
+                <div class="w-12 h-12 bg-white dark:bg-gray-600 rounded-full flex items-center justify-center mx-auto mb-3">
+                    <svg class="w-6 h-6 text-[#B59F84]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                </div>
+                <h4 class="text-md font-semibold text-gray-800 dark:text-gray-200 mb-1">No Sales Yet</h4>
+                <p class="text-gray-600 dark:text-gray-400 text-xs">Your sold products will appear here</p>
+            </div>
+        @endif
+    </div>
+</div>
 
                 <!-- ===== REVIEWS TAB CONTENT ===== -->
                 <div id="reviews" class="hidden overflow-hidden mb-8">
@@ -396,151 +411,265 @@
                     @endforelse
                 </div>
 
-                <!-- ===== ORDERS TAB CONTENT ===== -->
-                <div id="orders" class="hidden overflow-hidden mb-8">
-                    <h3 class="text-xl font-bold text-gray-900 dark:text-gray-100 mb-4">Orders</h3>
+              <!-- ===== ORDERS TAB CONTENT ===== -->
+<div id="orders" class="hidden overflow-hidden mb-8">
+    <!-- Header with Description -->
+    <div class="flex items-center justify-between mb-6">
+        <div>
+            <h3 class="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2 flex items-center gap-2">
+                <svg class="w-6 h-6 text-[#B59F84]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+                </svg>
+                Order Management
+            </h3>
+            <p class="text-gray-600 dark:text-gray-400 text-sm max-w-2xl">
+                Manage your customer orders, track order status, and update delivery progress. 
+                Review payment proofs and ensure smooth order fulfillment.
+            </p>
+        </div>
+        <div class="text-right">
+            <div class="text-lg font-bold text-[#B59F84]">{{ $orders->count() }}</div>
+            <div class="text-sm text-gray-500 dark:text-gray-400">Total Orders</div>
+        </div>
+    </div>
 
-                    @if ($orders->count() > 0)
-                        <!-- Orders Table Container -->
-                        <div class="overflow-x-auto">
-                            <table class="min-w-full border border-gray-200 dark:border-gray-700 rounded-lg">
-                                <!-- Table Header -->
-                                <thead class="bg-gray-100 dark:bg-gray-700">
-                                    <tr>
-                                        <th class="px-4 py-2 text-left text-sm font-semibold text-gray-700 dark:text-gray-200">
-                                            Order ID
-                                        </th>
-                                        <th class="px-4 py-2 text-left text-sm font-semibold text-gray-700 dark:text-gray-200">
-                                            Product
-                                        </th>
-                                        <th class="px-4 py-2 text-left text-sm font-semibold text-gray-700 dark:text-gray-200">
-                                            Buyer
-                                        </th>
-                                        <th class="px-4 py-2 text-left text-sm font-semibold text-gray-700 dark:text-gray-200">
-                                            Status
-                                        </th>
-                                        <th class="px-4 py-2 text-left text-sm font-semibold text-gray-700 dark:text-gray-200">
-                                            Actions
-                                        </th>
-                                        <th class="px-4 py-2 text-left text-sm font-semibold text-gray-700 dark:text-gray-200">
-                                            Proof
-                                        </th>
-                                    </tr>
-                                </thead>
-                                
-                                <!-- Table Body -->
-                                <tbody class="divide-y divide-gray-200 dark:divide-gray-600">
-                                    @foreach ($orders as $order)
-                                        <tr>
-                                            <!-- Order ID -->
-                                            <td class="px-4 py-2 text-sm text-gray-800 dark:text-gray-200">
-                                                #{{ $order->id }}
-                                            </td>
-                                            
-                                            <!-- Product Name -->
-                                            <td class="px-4 py-2 text-sm text-gray-800 dark:text-gray-200">
-                                                {{ $order->product->name }}
-                                            </td>
-                                            
-                                            <!-- Buyer Name -->
-                                            <td class="px-4 py-2 text-sm text-gray-800 dark:text-gray-200">
-                                                {{ $order->buyer->fname }}
-                                            </td>
-                                            
-                                            <!-- Order Status Badge -->
-                                            <td class="px-4 py-2 text-sm">
-                                                <span class="px-2 py-1 rounded-full text-xs font-medium
-                                                    @if ($order->status === 'pending') bg-yellow-100 text-yellow-800
-                                                    @elseif($order->status === 'approved') bg-blue-100 text-blue-800
-                                                    @elseif($order->status === 'delivering') bg-purple-100 text-purple-800
-                                                    @elseif($order->status === 'completed') bg-green-100 text-green-800
-                                                    @else bg-red-100 text-red-800 @endif">
-                                                    {{ ucfirst($order->status) }}
-                                                </span>
-                                            </td>
-                                            
-                                            <!-- Action Buttons -->
-                                            <td class="px-4 py-2 text-sm text-gray-800 dark:text-gray-200 space-x-1">
-                                                @if ($order->status === 'pending')
-                                                    <!-- Approve Order Form -->
-                                                    <form action="{{ route('orders.updateStatus', [$order->id, 'approved']) }}" 
-                                                          method="POST" class="inline">
-                                                        @csrf
-                                                        @method('PATCH')
-                                                        <button type="submit"
-                                                            class="px-3 py-1 text-xs bg-green-600 text-white rounded 
-                                                                   hover:bg-green-700 transition-colors">
-                                                            Approve
-                                                        </button>
-                                                    </form>
-                                                    
-                                                    <!-- Cancel Order Form -->
-                                                    <form action="{{ route('orders.updateStatus', [$order->id, 'cancelled']) }}" 
-                                                          method="POST" class="inline">
-                                                        @csrf
-                                                        @method('PATCH')
-                                                        <button type="submit"
-                                                            class="px-3 py-1 text-xs bg-red-600 text-white rounded 
-                                                                   hover:bg-red-700 transition-colors">
-                                                            Cancel
-                                                        </button>
-                                                    </form>
-                                                    
-                                                @elseif($order->status === 'approved')
-                                                    <!-- Mark as Delivering Form -->
-                                                    <form action="{{ route('orders.updateStatus', [$order->id, 'delivering']) }}" 
-                                                          method="POST" class="inline">
-                                                        @csrf
-                                                        @method('PATCH')
-                                                        <button type="submit"
-                                                            class="px-3 py-1 text-xs bg-blue-600 text-white rounded 
-                                                                   hover:bg-blue-700 transition-colors">
-                                                            Mark as Delivering
-                                                        </button>
-                                                    </form>
-                                                    
-                                                @elseif($order->status === 'delivering')
-                                                    <!-- Mark as Completed Form -->
-                                                    <form action="{{ route('orders.updateStatus', [$order->id, 'completed']) }}" 
-                                                          method="POST" class="inline">
-                                                        @csrf
-                                                        @method('PATCH')
-                                                        <button type="submit"
-                                                            class="px-3 py-1 text-xs bg-purple-600 text-white rounded 
-                                                                   hover:bg-purple-700 transition-colors">
-                                                            Mark as Completed
-                                                        </button>
-                                                    </form>
-                                                @endif
-                                            </td>
-                                            
-                                            <!-- Proof of Payment Column -->
-                                            <td class="px-4 py-2 text-sm text-gray-800 dark:text-gray-200">
-                                                @if ($order->proof)
-                                                    <!-- View Proof Button -->
-                                                    <button type="button"
-                                                        onclick="window.open('{{ asset('storage/' . $order->proof) }}', '_blank')"
-                                                        class="px-3 py-1 text-xs bg-indigo-600 text-white rounded 
-                                                               hover:bg-indigo-700 transition-colors">
-                                                        View Proof
-                                                    </button>
-                                                @else
-                                                    <!-- No Proof Available -->
-                                                    <span class="text-gray-500 dark:text-gray-400 text-xs">
-                                                        No proof uploaded
-                                                    </span>
-                                                @endif
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                    @else
-                        <!-- Empty State for Orders -->
-                        <p class="text-gray-500 dark:text-gray-400">No orders yet.</p>
-                    @endif
-                </div>
+    @if ($orders->count() > 0)
+        <!-- Orders Table Container -->
+        <div class="overflow-x-auto border border-[#E9DFC7] dark:border-gray-700 rounded-lg">
+            <table class="min-w-full">
+                <!-- Table Header -->
+                <thead class="bg-[#F8F4EC] dark:bg-gray-700">
+                    <tr>
+                        <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700 dark:text-gray-200">
+                            <div class="flex items-center gap-2">
+                                <svg class="w-4 h-4 text-[#B59F84]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+                                </svg>
+                                Order ID
+                            </div>
+                        </th>
+                        <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700 dark:text-gray-200">
+                            <div class="flex items-center gap-2">
+                                <svg class="w-4 h-4 text-[#B59F84]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+                                </svg>
+                                Product
+                            </div>
+                        </th>
+                        <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700 dark:text-gray-200">
+                            <div class="flex items-center gap-2">
+                                <svg class="w-4 h-4 text-[#B59F84]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                                </svg>
+                                Buyer
+                            </div>
+                        </th>
+                        <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700 dark:text-gray-200">
+                            <div class="flex items-center gap-2">
+                                <svg class="w-4 h-4 text-[#B59F84]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                Status
+                            </div>
+                        </th>
+                        <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700 dark:text-gray-200">
+                            <div class="flex items-center gap-2">
+                                <svg class="w-4 h-4 text-[#B59F84]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                </svg>
+                                Actions
+                            </div>
+                        </th>
+                        <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700 dark:text-gray-200">
+                            <div class="flex items-center gap-2">
+                                <svg class="w-4 h-4 text-[#B59F84]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                </svg>
+                                Payment Proof
+                            </div>
+                        </th>
+                    </tr>
+                </thead>
+                
+                <!-- Table Body -->
+                <tbody class="divide-y divide-[#E9DFC7] dark:divide-gray-600">
+                    @foreach ($orders as $order)
+                        <tr class="hover:bg-[#F8F4EC] dark:hover:bg-gray-700 transition-colors">
+                            <!-- Order ID -->
+                            <td class="px-4 py-3 text-sm text-gray-800 dark:text-gray-200">
+                                <div class="flex items-center gap-2">
+                                    <svg class="w-4 h-4 text-[#B59F84]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+                                    </svg>
+                                    #{{ $order->id }}
+                                </div>
+                            </td>
+                            
+                            <!-- Product Name -->
+                            <td class="px-4 py-3 text-sm text-gray-800 dark:text-gray-200">
+                                <div class="flex items-center gap-2">
+                                    <svg class="w-4 h-4 text-[#B59F84]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+                                    </svg>
+                                    {{ $order->product->name }}
+                                </div>
+                            </td>
+                            
+                            <!-- Buyer Name -->
+                            <td class="px-4 py-3 text-sm text-gray-800 dark:text-gray-200">
+                                <div class="flex items-center gap-2">
+                                    <svg class="w-4 h-4 text-[#B59F84]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                                    </svg>
+                                    {{ $order->buyer->fname }}
+                                </div>
+                            </td>
+                            
+                            <!-- Order Status Badge -->
+                            <td class="px-4 py-3 text-sm">
+                                <div class="flex items-center gap-2">
+                                    @if ($order->status === 'pending')
+                                        <svg class="w-4 h-4 text-[#8A7560]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                        </svg>
+                                    @elseif($order->status === 'approved')
+                                        <svg class="w-4 h-4 text-[#B59F84]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                        </svg>
+                                    @elseif($order->status === 'delivering')
+                                        <svg class="w-4 h-4 text-[#6B5B48]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+                                        </svg>
+                                    @elseif($order->status === 'completed')
+                                        <svg class="w-4 h-4 text-[#B59F84]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                        </svg>
+                                    @endif
+                                    <span class="px-2 py-1 rounded-full text-xs font-medium
+                                        @if ($order->status === 'pending') bg-[#F1E9D2] text-[#8A7560]
+                                        @elseif($order->status === 'approved') bg-[#F8F4EC] text-[#B59F84]
+                                        @elseif($order->status === 'delivering') bg-[#E1D5B6] text-[#6B5B48]
+                                        @elseif($order->status === 'completed') bg-[#F8F4EC] text-[#B59F84]
+                                        @else bg-[#F4F2ED] text-[#8A7560] @endif">
+                                        {{ ucfirst($order->status) }}
+                                    </span>
+                                </div>
+                            </td>
+                            
+                            <!-- Action Buttons -->
+                            <td class="px-4 py-3 text-sm text-gray-800 dark:text-gray-200">
+                                <div class="flex flex-wrap gap-1">
+                                    @if ($order->status === 'pending')
+                                        <!-- Approve Order Form -->
+                                        <form action="{{ route('orders.updateStatus', [$order->id, 'approved']) }}" 
+                                              method="POST" class="inline">
+                                            @csrf
+                                            @method('PATCH')
+                                            <button type="submit"
+                                                class="inline-flex items-center px-3 py-1 text-xs bg-[#B59F84] text-white rounded 
+                                                       hover:bg-[#9C8770] transition-colors gap-1">
+                                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                                </svg>
+                                                Approve
+                                            </button>
+                                        </form>
+                                        
+                                        <!-- Cancel Order Form -->
+                                        <form action="{{ route('orders.updateStatus', [$order->id, 'cancelled']) }}" 
+                                              method="POST" class="inline">
+                                            @csrf
+                                            @method('PATCH')
+                                            <button type="submit"
+                                                class="inline-flex items-center px-3 py-1 text-xs bg-[#8A7560] text-white rounded 
+                                                       hover:bg-[#6B5B48] transition-colors gap-1">
+                                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                                </svg>
+                                                Cancel
+                                            </button>
+                                        </form>
+                                        
+                                    @elseif($order->status === 'approved')
+                                        <!-- Mark as Delivering Form -->
+                                        <form action="{{ route('orders.updateStatus', [$order->id, 'delivering']) }}" 
+                                              method="POST" class="inline">
+                                            @csrf
+                                            @method('PATCH')
+                                            <button type="submit"
+                                                class="inline-flex items-center px-3 py-1 text-xs bg-[#B59F84] text-white rounded 
+                                                       hover:bg-[#9C8770] transition-colors gap-1">
+                                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+                                                </svg>
+                                                Shipping
+                                            </button>
+                                        </form>
+                                        
+                                    @elseif($order->status === 'delivering')
+                                        <!-- Mark as Completed Form -->
+                                        <form action="{{ route('orders.updateStatus', [$order->id, 'completed']) }}" 
+                                              method="POST" class="inline">
+                                            @csrf
+                                            @method('PATCH')
+                                            <button type="submit"
+                                                class="inline-flex items-center px-3 py-1 text-xs bg-[#9C8770] text-white rounded 
+                                                       hover:bg-[#8A7560] transition-colors gap-1">
+                                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                                </svg>
+                                                Complete
+                                            </button>
+                                        </form>
+                                    @endif
+                                </div>
+                            </td>
+                            
+                            <!-- Proof of Payment Column -->
+                            <td class="px-4 py-3 text-sm text-gray-800 dark:text-gray-200">
+                                @if ($order->proof)
+                                    <!-- View Proof Button -->
+                                    <button type="button"
+                                        onclick="window.open('{{ asset('storage/' . $order->proof) }}', '_blank')"
+                                        class="inline-flex items-center px-3 py-1 text-xs bg-[#B59F84] text-white rounded 
+                                               hover:bg-[#9C8770] transition-colors gap-1">
+                                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                        </svg>
+                                        View Proof
+                                    </button>
+                                @else
+                                    <!-- No Proof Available -->
+                                    <div class="flex items-center gap-1 text-gray-500 dark:text-gray-400 text-xs">
+                                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                                        </svg>
+                                        No proof uploaded
+                                    </div>
+                                @endif
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    @else
+        <!-- Empty State for Orders -->
+        <div class="text-center py-12">
+            <div class="w-16 h-16 bg-[#F8F4EC] dark:bg-gray-700 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg class="w-8 h-8 text-[#B59F84]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+                </svg>
+            </div>
+            <h4 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-2">No Orders Yet</h4>
+            <p class="text-gray-600 dark:text-gray-400 text-sm max-w-md mx-auto">
+                Your order dashboard is ready! When customers place orders, they will appear here for you to manage.
+            </p>
+        </div>
+    @endif
+</div>
             </div>
 
             <!-- ===== STYLES SECTION ===== -->

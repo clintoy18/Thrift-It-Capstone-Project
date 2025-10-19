@@ -397,7 +397,7 @@
                             @if (Auth::id() !== $product->user_id)
                                 <div class="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
                                     <a href="{{ route('reports.create', $product->user->id) }}"
-                                        class="inline-flex items-center gap-2 px-3 py-2 text-sm text-red-500 dark:text-red-400 hover:text-red-600 dark:hover:text-red-300 transition">
+                                        class="inline-flex items-center gap-2 px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 transition">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
                                             viewBox="0 0 24 24" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
@@ -455,7 +455,7 @@
                                                         <button type="button" onclick="toggleEditForm({{ $comment->id }})" class="w-full text-left px-3 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700">
                                                             Edit
                                                         </button>
-                                                        <button type="button" onclick="deleteComment({{ $comment->id }})" class="w-full text-left px-3 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-gray-50 dark:hover:bg-gray-700">
+                                                        <button type="button" onclick="deleteComment({{ $comment->id }})" class="w-full text-left px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700">
                                                             Delete
                                                         </button>
                                                     </div>
@@ -579,7 +579,7 @@
                                         <i class="fas fa-paper-plane"></i>
                                     </button>
                                 </div>
-                                <div id="comment-error" class="text-red-500 mt-2 text-sm hidden"></div>
+                                <div id="comment-error" class="text-gray-600 mt-2 text-sm hidden"></div>
                                 
                                 <!-- Reply indicator (hidden by default) -->
                                 <div id="reply-indicator" class="hidden mt-2 text-sm text-gray-600 dark:text-gray-400 bg-gray-50 dark:bg-gray-700 rounded-lg p-3">
@@ -659,7 +659,7 @@
                                                     {{ $product->listingtype === 'for donation' ? 'For Donation' : '₱' . number_format($product->price, 2) }}
                                                 </p>
                                                 <button
-                                                    class="favorite-btn text-gray-400 hover:text-red-500 focus:outline-none transition-colors"
+                                                    class="favorite-btn text-gray-400 hover:text-gray-600 focus:outline-none transition-colors"
                                                     data-id="{{ $product->id }}" type="button"
                                                     onclick="event.preventDefault(); event.stopPropagation();">
                                                     <svg xmlns="http://www.w3.org/2000/svg"
@@ -1299,7 +1299,7 @@ document.addEventListener('submit', function (e) {
                     <button type="button" onclick="toggleEditForm(${commentData.id})" class="w-full text-left px-3 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700">
                         Edit
                     </button>
-                    <button type="button" onclick="deleteComment(${commentData.id})" class="w-full text-left px-3 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-gray-50 dark:hover:bg-gray-700">
+                    <button type="button" onclick="deleteComment(${commentData.id})" class="w-full text-left px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700">
                         Delete
                     </button>
                 </div>

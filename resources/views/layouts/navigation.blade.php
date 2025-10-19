@@ -122,14 +122,111 @@
                     </button>
 
                     <div x-show="open" @click.away="open = false"
-                        class="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-md z-50">
+                        class="absolute right-0 mt-2 w-56 bg-white shadow-lg rounded-md z-50">
 
                         {{-- Hide Profile and Settings for Admin (role = 2) --}}
                         @if (Auth::user()->role != 2)
                             <a href="{{ route('profile.show', ['user' => Auth::id()]) }}"
                                 class="block px-4 py-2 text-gray-700 hover:bg-gray-200">Profile</a>
-                            <a href="{{ route('profile.edit') }}"
-                                class="block px-4 py-2 text-gray-700 hover:bg-gray-200">Settings</a>
+                            
+                            <!-- Settings Dropdown -->
+                            <div x-data="{ settingsOpen: false }" class="relative">
+                                <button @click="settingsOpen = !settingsOpen" 
+                                    class="w-full text-left flex items-center justify-between px-4 py-2 text-gray-700 hover:bg-gray-200 transition-colors duration-200">
+                                    <span class="flex items-center gap-2">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                        </svg>
+                                        Settings
+                                    </span>
+                                    <svg class="w-4 h-4 transition-transform duration-200" :class="{ 'rotate-180': settingsOpen }" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                    </svg>
+                                </button>
+                                
+                                <!-- Settings Submenu -->
+                                <div x-show="settingsOpen" @click.away="settingsOpen = false" x-transition
+                                    class="absolute right-0 top-0 w-56 bg-white shadow-lg rounded-md border border-gray-200 z-50">
+                                    
+                                    <!-- Personal Information -->
+                                    <div class="px-4 py-2 bg-gradient-to-r from-gray-50 to-gray-100 border-b border-gray-200">
+                                        <span class="text-xs font-semibold text-gray-600 uppercase tracking-wide flex items-center gap-2">
+                                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                                            </svg>
+                                            Personal Information
+                                        </span>
+                                    </div>
+                                    <a href="{{ route('profile.edit') }}#profile-information" 
+                                        class="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-100 transition-colors duration-200 flex items-center gap-3">
+                                        <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                                        </svg>
+                                        Update Profile Information
+                                    </a>
+                                    
+                                    <!-- Security & Sign-in -->
+                                    <div class="px-4 py-2 bg-gradient-to-r from-gray-50 to-gray-100 border-b border-gray-200">
+                                        <span class="text-xs font-semibold text-gray-600 uppercase tracking-wide flex items-center gap-2">
+                                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                                            </svg>
+                                            Security & Sign-in
+                                        </span>
+                                    </div>
+                                    <a href="{{ route('profile.edit1') }}#update-password" 
+                                        class="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-100 transition-colors duration-200 flex items-center gap-3">
+                                        <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/>
+                                        </svg>
+                                        Update Password
+                                    </a>
+                                    
+                                    <!-- Data & Privacy -->
+                                    <div class="px-4 py-2 bg-gradient-to-r from-gray-50 to-gray-100 border-b border-gray-200">
+                                        <span class="text-xs font-semibold text-gray-600 uppercase tracking-wide flex items-center gap-2">
+                                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                                            </svg>
+                                            Data & Privacy
+                                        </span>
+                                    </div>
+                                    <a href="{{ route('profile.edit2') }}" 
+                                        class="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-100 transition-colors duration-200 flex items-center gap-3">
+                                        <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                                        </svg>
+                                        Data & Privacy
+                                    </a>
+                                    @if (!Auth::user()->is_verified)
+                                        <a href="{{ route('admin.users.verify', Auth::id()) }}" 
+                                            class="block px-4 py-3 text-sm text-blue-600 hover:bg-blue-50 transition-colors duration-200 flex items-center gap-3">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                            </svg>
+                                            Get Verified
+                                        </a>
+                                    @endif
+                                    
+                                    <!-- Payment & Subscription -->
+                                    <div class="px-4 py-2 bg-gradient-to-r from-gray-50 to-gray-100 border-b border-gray-200">
+                                        <span class="text-xs font-semibold text-gray-600 uppercase tracking-wide flex items-center gap-2">
+                                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>
+                                            </svg>
+                                            Payment & Subscription
+                                        </span>
+                                    </div>
+                                    <a href="{{ route('pricing.index') }}" 
+                                        class="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-100 transition-colors duration-200 flex items-center gap-3">
+                                        <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"/>
+                                        </svg>
+                                        Pricing Plans
+                                    </a>
+                                </div>
+                            </div>
                         @endif
 
                         <form method="POST" action="{{ route('logout') }}">
@@ -262,7 +359,64 @@
                         <a href="{{ route('upcycler.index') }}" class="flex items-center text-gray-700 py-2 hover:text-red-600">Manage Appointments</a>
                     @endif
 
-                    <a href="{{ route('profile.edit') }}" class="flex items-center text-gray-700 py-2 hover:text-red-600">Profile</a>
+                    <a href="{{ route('profile.show', ['user' => Auth::id()]) }}" class="flex items-center text-gray-700 py-2 hover:text-red-600">Profile</a>
+                    
+                    <!-- Mobile Settings Dropdown -->
+                    <div x-data="{ mobileSettingsOpen: false }" class="relative">
+                        <button @click="mobileSettingsOpen = !mobileSettingsOpen" 
+                            class="w-full text-left flex items-center justify-between text-gray-700 py-2 hover:text-red-600">
+                            <span>Settings</span>
+                            <svg class="w-4 h-4 transition-transform" :class="{ 'rotate-180': mobileSettingsOpen }" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                            </svg>
+                        </button>
+                        
+                        <!-- Mobile Settings Submenu -->
+                        <div x-show="mobileSettingsOpen" x-transition class="ml-4 mt-2 space-y-1">
+                            <!-- Personal Information -->
+                            <div class="px-2 py-1">
+                                <span class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Personal Information</span>
+                            </div>
+                <a href="{{ route('profile.edit') }}#profile-information" 
+                    class="block px-2 py-1 text-sm text-gray-600 hover:text-red-600">
+                    Update Profile Information
+                </a>
+                            
+                            <!-- Security & Sign-in -->
+                            <div class="px-2 py-1">
+                                <span class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Security & Sign-in</span>
+                            </div>
+                <a href="{{ route('profile.edit1') }}#update-password" 
+                    class="block px-2 py-1 text-sm text-gray-600 hover:text-red-600">
+                    Update Password
+                </a>
+                            
+                            <!-- Data & Privacy -->
+                            <div class="px-2 py-1">
+                                <span class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Data & Privacy</span>
+                            </div>
+                <a href="{{ route('profile.edit2') }}" 
+                    class="block px-2 py-1 text-sm text-gray-600 hover:text-red-600">
+                    Data & Privacy
+                </a>
+                            @if (!Auth::user()->is_verified)
+                                <a href="{{ route('admin.users.verify', Auth::id()) }}" 
+                                    class="block px-2 py-1 text-sm text-blue-600 hover:text-blue-800">
+                                    Get Verified
+                                </a>
+                            @endif
+                            
+                            <!-- Payment & Subscription -->
+                            <div class="px-2 py-1">
+                                <span class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Payment & Subscription</span>
+                            </div>
+                            <a href="{{ route('pricing.index') }}" 
+                                class="block px-2 py-1 text-sm text-gray-600 hover:text-red-600">
+                                Pricing Plans
+                            </a>
+                        </div>
+                    </div>
+                    
                     <form method="POST" action="{{ route('logout') }}" class="block">
                         @csrf
                         <button type="submit" class="w-full text-left flex items-center text-gray-700 py-2 hover:text-red-600">
