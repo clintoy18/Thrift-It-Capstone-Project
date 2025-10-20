@@ -114,7 +114,7 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
                 <!-- Women Segment -->
                 <div class="group overflow-hidden rounded-md shadow-md h-auto w-full animate-stagger-1 relative z-10">
-                    <a href="{{ route('segments.show', ['segment' => '1']) }}" class="block relative overflow-hidden">
+                    <a href="{{ route('segments.show', ['segment' => '2']) }}" class="block relative overflow-hidden">
                         <div class="relative overflow-hidden">
                             <img src="{{ asset('storage/segments/women.png') }}"
                                 alt="Shop by Women"
@@ -140,7 +140,7 @@
 
                 <!-- Men Segment -->
                 <div class="group overflow-hidden rounded-md shadow-md h-auto w-full animate-stagger-2 relative z-10">
-                    <a href="{{ route('segments.show', ['segment' => '2']) }}" class="block relative overflow-hidden">
+                    <a href="{{ route('segments.show', ['segment' => '1']) }}" class="block relative overflow-hidden">
                         <div class="relative overflow-hidden">
                             <img src="{{ asset('storage/segments/men.png') }}"
                                 alt="Shop by Men"
