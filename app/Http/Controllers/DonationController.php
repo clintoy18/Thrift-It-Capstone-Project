@@ -12,6 +12,8 @@ use Illuminate\View\View;
 use App\Http\Requests\StoreDonationRequest;
 use App\Http\Requests\UpdateDonationRequest;
 use App\Models\Donation;
+use App\Models\Comment;
+
 use Illuminate\Http\RedirectResponse;
 
 class DonationController extends Controller
@@ -22,11 +24,9 @@ class DonationController extends Controller
     {
         $this->donationService = $donationService;
     }
-   
-    public function index() : View
+    public function index(): View
     {
-        $userId = Auth::id();
-        $donations = $this->donationService->getDonationsByUser($userId);
+        $donations = $this->donationService->getDonationsByUser(Auth::id());
         return view('donations.index', compact('donations'));
     }
   
@@ -39,13 +39,17 @@ class DonationController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-     public function store(StoreDonationRequest $request): RedirectResponse
+   
+    public function store(StoreDonationRequest $request)
     {
-         $validated = $request->validated();
-         $validated['user_id'] = Auth::id();
-         $this->donationService->createDonation($validated,$request->file('image')?? null);
-           
-         return redirect()->route('donations.index')->with('success', 'Donation created successfully!');
+        $validated = $request->validated();
+        $validated['user_id'] = Auth::id();
+
+        $images = $request->file('images', []);
+        $donations = $this->donationService->createDonation($validated, $images);
+
+       return redirect()->route('donations.index')->with('success', 'Donation created successfully!');
+    //    return dd($donation, $images);
     }
 
     /**
@@ -56,10 +60,10 @@ class DonationController extends Controller
         Cache::forget("donation_{$id}_comments");
         Cache::forget("donation_{$id}_with_comments");
 
-        $donation = Donation::with(['user', 'category'])->findOrFail($id);
-        
-        // Load ALL comments for this donation and build an unlimited-depth flattened replies list per top-level
-        $allComments = \App\Models\Comment::with(['user'])
+        $donation = Donation::with(['user', 'category', 'images'])->findOrFail($id);
+  
+
+        $allComments = Comment::with(['user'])
             ->where('donation_id', $id)
             ->orderBy('created_at', 'asc')
             ->get();
@@ -75,7 +79,6 @@ class DonationController extends Controller
                 $stack[] = $child;
             }
             while (!empty($stack)) {
-                /** @var \App\Models\Comment $node */
                 $node = array_pop($stack);
                 foreach ($byParent->get($node->id, collect()) as $child) {
                     $flatReplies->push($child);
@@ -87,10 +90,8 @@ class DonationController extends Controller
 
         $donation->setRelation('comments', $topLevel);
 
-        // Get more donations from the same user
         $moreDonations = $this->donationService->getMoreDonationsByUser($donation->user_id, $donation->id);
 
-        // Disable browser cache for this page
         return response()
             ->view('donations.show', compact('donation', 'moreDonations'))
             ->header('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0')

@@ -29,10 +29,22 @@ class StoreDonationRequest extends FormRequest
             'description' => 'required|string',
             'approval_status' => 'in:approved,pending,rejected',
             'size' => 'required|string',
-            // Multi-image input from the form: images[]
-            'images'   => 'required|array|min:1|max:8',
+             // Multi-image input from the form: images[]
+            'images'   => 'required|array|min:2|max:8',
             'images.*' => 'image|mimes:jpg,jpeg,png,webp,gif|max:5120',
-            'status' => 'in:available,sold',
+        ];
+    }
+
+    
+    public function messages(): array
+    {
+        return [
+            'images.required' => 'You must upload at least 2 images.',
+            'images.array' => 'Images must be uploaded as an array.',
+            'images.min' => 'You must upload at least 2 images.',
+            'images.*.image' => 'Each file must be an image.',
+            'images.*.mimes' => 'Images must be JPG or PNG.',
+            'images.*.max' => 'Each image cannot exceed 5MB.',
         ];
     }
 }

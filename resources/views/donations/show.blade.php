@@ -6,61 +6,41 @@
     </x-slot>
     <div class="py-12 bg-gray-100 dark:bg-gray-900">
     <div class="max-w-7xl mx-auto p-6">
-        <!-- Two-Column Layout -->
-    <div class="flex flex-col lg:flex-row gap-8 items-stretch">
-            <!-- Left Column: Image Slider & Product Info -->
-        <div class="lg:w-1/3 flex flex-col gap-6 h-full">
-             <!-- Swiper Slider -->
-            <div class="relative swiper mySwiper rounded-xl overflow-hidden shadow-lg">
-                <div class="swiper-wrapper">
-                    <!-- Slide 1 -->
-                    <div class="swiper-slide flex items-center justify-center bg-white">
-                        <div class="relative">
-                            <img 
-                                src="{{ $donation->image ? asset('storage/' . $donation->image) : asset('images/default-placeholder.png') }}" 
-                                alt="{{ $donation->name }}"
-                                class="w-full h-[22rem] sm:h-[28rem] object-contain transition-transform duration-500 ease-out hover:scale-105">
-                            <div class="absolute inset-0 bg-gray-800/20 opacity-0 hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                                <span class="bg-white text-gray-800 px-3 py-1 rounded-full text-xs sm:text-sm font-medium shadow-sm">
-                                    Quick view
-                                </span>
+       <!-- Two-Column Layout -->
+            <div class="flex flex-col lg:flex-row gap-8 items-stretch">
+                <!-- Left Column: Image Slider & Product Info -->
+                <div class="lg:w-1/3 flex flex-col gap-6 h-full">
+                    <!-- Swiper Slider -->
+                        
+                    <div class="relative swiper mySwiper rounded-xl overflow-hidden shadow-lg h-[28rem] sm:h-[32rem]">
+                        <div class="swiper-wrapper h-full">
+                               {{-- @dd($donation->images) --}}
+                           @if ($donation->images && $donation->images->count() > 0)
+                           
+                            @foreach ($donation->images as $image)
+                            
+                                <div class="swiper-slide flex items-center justify-center bg-white h-full">
+                                    <img src="{{ asset('storage/' . $image->image) }}" ... >
+                                </div>
+                            @endforeach
+                        @else
+                            <div class="swiper-slide flex items-center justify-center bg-white h-full">
+                                <img src="{{ asset('images/default-placeholder.png') }}" alt="No image" class="w-full h-full object-cover">
                             </div>
+                        @endif
+                        </div>
+
+                        <!-- Swiper Pagination (overlay) -->
+                        <div class="swiper-pagination absolute bottom-4 left-1/2 transform -translate-x-1/2 z-10"></div>
+                        <!-- Swiper Navigation -->
+                        <div
+                            class="swiper-button-next !text-white text-3xl z-20 hover:!text-gray-200 transition-colors duration-300">
+                        </div>
+                        <div
+                            class="swiper-button-prev !text-white text-3xl z-20 hover:!text-gray-200 transition-colors duration-300">
                         </div>
                     </div>
-
-                    <!-- Slide 2 -->
-                    <div class="swiper-slide flex items-center justify-center bg-white">
-                        <img 
-                            src="{{ $donation->image2 ?? asset('images/default-placeholder.png') }}" 
-                            alt="Additional 1" 
-                            class="w-full h-[22rem] sm:h-[28rem] object-contain">
-                    </div>
-
-                    <!-- Slide 3 -->
-                    <div class="swiper-slide flex items-center justify-center bg-white">
-                        <div class="relative">
-                            <img 
-                                src="{{ $donation->image3 ?? asset('images/default-placeholder.png') }}" 
-                                alt="Additional 2"
-                                class="w-full h-[22rem] sm:h-[28rem] object-contain transition-transform duration-500 ease-out hover:scale-105">
-                            <div class="absolute inset-0 bg-gray-800/20 opacity-0 hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                                <span class="bg-white text-gray-800 px-3 py-1 rounded-full text-xs sm:text-sm font-medium shadow-sm">
-                                    Quick view
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Pagination -->
-                <div class="swiper-pagination !bottom-3"></div>
-
-                <!-- Navigation -->
-                <div class="swiper-button-next"></div>
-                <div class="swiper-button-prev"></div>
-            </div>
-
-                <!-- Product Info Card -->
+                <!-- donation Info Card -->
                 <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-md">
                     <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">
                         {{ $donation->name }}
@@ -356,10 +336,10 @@
                                             <div class="absolute top-1 left-1 z-10 bg-[#D9D9D9] text-gray-700 text-[10px] sm:text-xs px-1.5 py-0.5 sm:px-2 sm:py-1 rounded-full">
                                                 Donation
                                             </div>
-
                                         <div class="relative aspect-square overflow-hidden">
-                                            <img src="{{ $donationItem->image ? asset('storage/' . $donationItem->image) : asset('images/default-placeholder.png') }}" 
-                                                alt="{{ $donationItem->name }}" 
+                                          <img src="{{ $donationItem->first_image ? asset('storage/' . $donationItem->first_image) : asset('images/default.jpg') }}" 
+                                            alt="{{ $donation->name }}" 
+                                            class="w-full h-full object-cover">
                                                 class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105">
 
                                             <div class="absolute inset-0 bg-gray-800 bg-opacity-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
@@ -497,20 +477,7 @@
             // Focus on textarea
             commentTextarea.focus();
         }
-
-        document.addEventListener('DOMContentLoaded', function() {
-            // Initialize Swiper
-    new Swiper(".mySwiper", {
-        loop: true,
-        pagination: {
-            el: ".swiper-pagination",
-            clickable: true,
-        },
-        navigation: {
-            nextEl: ".swiper-button-next",
-            prevEl: ".swiper-button-prev",
-        },
-    });
+       
 
             // JavaScript to expand comments on hover
     document.querySelectorAll('.comment-item').forEach(item => {
@@ -530,8 +497,6 @@
             }
         });
     });
-});
-
         // Rest of your existing JavaScript functions remain the same...
 function toggleDropdown(commentId) {
     const dropdown = document.getElementById('dropdown-' + commentId);
@@ -1200,6 +1165,26 @@ window.addEventListener("popstate", function (event) {
             document.addEventListener('click', (e)=>{
                 if (!e.target.closest('#mention-suggestions') && !e.target.closest('textarea.mentionable')) hideSuggestions();
             });
+
+              document.addEventListener('DOMContentLoaded', function () {
+        new Swiper(".mySwiper", {
+            loop: true,
+            autoplay: {
+                delay: 3500,
+                disableOnInteraction: false,
+            },
+            pagination: {
+                el: ".swiper-pagination",
+                clickable: true,
+            },
+            navigation: {
+                nextEl: ".swiper-button-next",
+                prevEl: ".swiper-button-prev",
+            },
+            effect: "slide", // you can use "fade" or "coverflow"
+            speed: 800,
+        });
+    });
         })();
     </script>
 
@@ -1238,5 +1223,9 @@ window.addEventListener("popstate", function (event) {
             font-weight: 500;
             color: #6c757d;
         }
+
+
+
+
 </style>
 </x-app-layout>

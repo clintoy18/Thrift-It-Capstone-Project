@@ -8,12 +8,12 @@ class DonationRepository
 {
     public function all()
     {
-        return Donation::all();
+        return Donation::with('images')->get();
     }
 
     public function find($id)
     {
-        return Donation::findOrFail($id);
+        return Donation::with('images')->findOrFail($id);
     }
 
     public function create(array $data)
@@ -34,21 +34,19 @@ class DonationRepository
 
     public function getByUser($userId)
     {
-        return Donation::where('user_id', $userId)->get();
-    }
-    public function findWithRelations($id)
-    {
-        return Donation::with(['user','category','comments.user'])->findOrFail($id);
+        return Donation::where('user_id', $userId)
+            ->with('images')
+            ->latest()
+            ->get();
     }
 
-    //get more donations of the user excluding the current donation
     public function getMoreByUser($userId, $excludeDonationId, $limit = 6)
     {
         return Donation::where('user_id', $userId)
             ->where('id', '!=', $excludeDonationId)
+            ->with('images')
             ->latest()
             ->take($limit)
             ->get();
     }
-
 }
