@@ -63,7 +63,12 @@
 .swiper-pagination-bullet-active {
     background:rgb(0, 0, 0); /* theme color */
 }
-
+/* Add this to your global CSS if needed */
+body.modal-open {
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden;
+}
 /* Dark mode */
 @media (prefers-color-scheme: dark) {
     .swiper-button-next,

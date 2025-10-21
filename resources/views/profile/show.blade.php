@@ -2,7 +2,7 @@
     <!-- Main Container with Dark Mode Support -->
     <div class="py-6 bg-white overflow-hidden dark:bg-gray-900">
         <!-- Responsive Container with Maximum Width -->
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" x-data="{}">
             
             <!-- ===== PROFILE HEADER SECTION ===== -->
             <!-- Flex container for responsive header layout -->
@@ -10,7 +10,7 @@
                 <div class="flex items-center gap-3">
                     <!-- Dynamic Title based on User Context -->
                     <h2 class="text-2xl font-extrabold text-gray-900 dark:text-gray-100 flex items-center">
-                        {{ Auth::id() === $user->id ? '' : $user->fname . "'s Profile" }}
+                        {{ Auth::id() === $user->id ? 'My Profile' : $user->fname . "'s Profile" }}
                         
                         <!-- Verified User Badge -->
                         @if ($user->is_verified)
@@ -30,7 +30,7 @@
             </div>
 
             <!-- ===== PROFILE INFORMATION SECTION ===== -->
-            <div class="pb-6 mb-8">
+            <div class="pb-6 mb-0">
               <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
                   <!-- Enhanced Section Title -->
                 <h3 class="text-xl font-bold text-gray-900 dark:text-gray-100 mb-6 flex items-center gap-3">
@@ -87,35 +87,47 @@
                         <!-- Report User Section (Visible to other users only) -->
                 @if (Auth::id() !== $user->id)
                     <div class="mt-3 pt-3 border-t border-gray-200 dark:border-gray-600 flex items-center gap-4">
-                        <!-- Report User Link -->
-                        <a href="{{ route('reports.create', $user->id) }}"
-                            class="inline-flex items-center gap-2 px-3 py-1.5 text-sm text-red-600 
-                                dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 transition">
-                            <!-- Warning Icon -->
+                        <!-- Report User Button -->
+                        <button type="button"
+                                x-on:click="window.dispatchEvent(new CustomEvent('open-modal', { detail: 'report-modal' }))"
+                                class="inline-flex items-center gap-2 px-3 py-1.5 text-sm text-red-600 
+                                    dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 transition
+                                    focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
                                 viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                                     d="M12 9v2m0 4h.01M5.455 4.455a2.836 2.836 0 012-1.455h9.09a2.836 2.836 0 012 1.455l3.182 5.455a2.836 2.836 0 010 2.182L18.545 17.09a2.836 2.836 0 01-2 1.455H7.455a2.836 2.836 0 01-2-1.455L2.273 12.09a2.836 2.836 0 010-2.182L5.455 4.455z" />
                             </svg>
                             Report User
-                        </a>
+                        </button>
 
-                        <!-- Review User Link -->
-                        <a href="{{ route('reviews.create', $user->id) }}"
-                            class="inline-flex items-center gap-2 px-3 py-1.5 text-sm text-yellow-600 
-                                dark:text-yellow-400 hover:text-yellow-700 dark:hover:text-yellow-300 transition">
-                            <!-- Star Icon -->
+                        <!-- Review User Button -->
+                        <button type="button"
+                                x-on:click="window.dispatchEvent(new CustomEvent('open-modal', { detail: 'review-modal' }))"
+                                class="inline-flex items-center gap-2 px-3 py-1.5 text-sm text-yellow-600 
+                                       dark:text-yellow-400 hover:text-yellow-700 dark:hover:text-yellow-300 transition
+                                       focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
-                                viewBox="0 0 24 24" stroke="currentColor">
+                                 viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                    d="M12 17.27l5.18 3.05-1.64-5.81L20 9.24l-6-.51L12 3 10 8.73l-6 .51 4.46 5.27-1.64 5.81L12 17.27z" />
+                                      d="M12 17.27l5.18 3.05-1.64-5.81L20 9.24l-6-.51L12 3 10 8.73l-6 .51 4.46 5.27-1.64 5.81L12 17.27z" />
                             </svg>
                             Review User
-                        </a>
+                        </button>
+                 
                     </div>
                 @endif
 
             </div> 
+
+            <!-- ===== DASHBOARD SECTION (Only visible to profile owner) ===== -->
+            @if (Auth::id() === $user->id)
+                <div class="mt-12 p-4 sm:p-8 bg-gradient-to-r from-amber-50 to-amber-100 dark:from-amber-900/20 dark:to-amber-800/10 shadow-lg sm:rounded-lg mb-8 border border-amber-200 dark:border-amber-700">
+                    <div class="max-w-full">
+                        @include('profile.partials.dashboard')
+                    </div>
+                </div>
+            @endif
 
             <!-- ===== TAB NAVIGATION SECTION ===== -->
             <div class="flex flex-col p-4">
@@ -173,10 +185,7 @@
                 <div class="text-lg font-bold text-[#B59F84]">{{ $availableProducts->count() }}</div>
                 <div class="text-sm text-gray-500 dark:text-gray-400">Available</div>
             </div>
-            <div>
-                <div class="text-lg font-bold text-[#8A7560]">{{ $soldProducts->count() }}</div>
-                <div class="text-sm text-gray-500 dark:text-gray-400">Sold</div>
-            </div>
+           
         </div>
     </div>
 
@@ -778,5 +787,9 @@
                     activate('products');
                 })();
             </script>
+
+            <!-- Modals: single instances on the page -->
+            <x-review-modal :user="$user" />
+            <x-report-modal :user="$user" />
 
 </x-app-layout>

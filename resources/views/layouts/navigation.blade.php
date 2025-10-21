@@ -199,15 +199,7 @@
                                         </svg>
                                         Data & Privacy
                                     </a>
-                                    @if (!Auth::user()->is_verified)
-                                        <a href="{{ route('admin.users.verify', Auth::id()) }}" 
-                                            class="block px-4 py-3 text-sm text-blue-600 hover:bg-blue-50 transition-colors duration-200 flex items-center gap-3">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                            </svg>
-                                            Get Verified
-                                        </a>
-                                    @endif
+                                   
                                     
                                     <!-- Payment & Subscription -->
                                     <div class="px-4 py-2 bg-gradient-to-r from-gray-50 to-gray-100 border-b border-gray-200">

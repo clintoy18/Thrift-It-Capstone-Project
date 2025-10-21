@@ -4,7 +4,6 @@
     'itemsSold' => 0,
     'itemsDonated' => 0,
     'revenue' => 0,
-    'unreadMessages' => 0,
 ])
 
 <div class="dashboard-stats">

@@ -85,11 +85,21 @@ class ProfileController extends Controller
         // Orders received for this user's products
         $orders = $user->ordersAsSeller()->with(['product', 'buyer'])->get();
 
+        // Dashboard statistics (only for profile owner)
+        $totalListings = $user->products()->count();
+        $itemsSold = $user->products()->where('status', 'sold')->count();
+        $revenue = $user->products()->where('status', 'sold')->sum('price');
+        $itemsDonated = $user->donations()->where('status', 'donated')->count();
+
         return view('profile.show', [
             'user' => $user,
             'availableProducts' => $availableProducts,
             'soldProducts' => $soldProducts,
             'orders' => $orders,
+            'totalListings' => $totalListings,
+            'itemsSold' => $itemsSold,
+            'revenue' => $revenue,
+            'itemsDonated' => $itemsDonated,
         ]);
     }
 
