@@ -24,7 +24,7 @@ class StoreReportsRequest extends FormRequest
     {
         return [
             'reason' => ['required', 'string', 'max:255'],
-            'description' => ['required', 'string', 'min:10', 'max:1000'],
+            'description' => ['required', 'string', 'min:30', 'max:1000'],
         ];
     }
 

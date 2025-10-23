@@ -24,7 +24,7 @@ class UpdateDonationRequest extends FormRequest
     {
         return [
             'category_id' => 'required|exists:categories,id',
-            'name' => 'required|string|max:255',
+            'name' => 'required|string|min:30|max:255',
             'status' => 'required|in:available,donated',
             'image' => 'nullable|image|max:2048',
         ];
