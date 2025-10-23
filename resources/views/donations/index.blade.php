@@ -26,9 +26,9 @@
                                         @endif
 
                                         <div class="relative aspect-square overflow-hidden">
-                                            <img src="{{ $donation->image ? asset('storage/' . $donation->image) : asset('images/default-placeholder.png') }}" 
-                                                 alt="{{ $donation->name }}" 
-                                                 class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105">
+                                           <img src="{{ $donation->first_image ? asset('storage/' . $donation->first_image) : asset('images/default.jpg') }}" 
+                                            alt="{{ $donation->name }}" 
+                                            class="w-full h-full object-cover">
 
                                             <div class="absolute inset-0 bg-gray-800 bg-opacity-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                                                 <span class="bg-white text-gray-800 px-2 py-0.5 rounded-full text-[10px] sm:text-xs font-medium">

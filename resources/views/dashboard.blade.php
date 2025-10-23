@@ -114,7 +114,7 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
                 <!-- Women Segment -->
                 <div class="group overflow-hidden rounded-md shadow-md h-auto w-full animate-stagger-1 relative z-10">
-                    <a href="{{ route('segments.show', ['segment' => '1']) }}" class="block relative overflow-hidden">
+                    <a href="{{ route('segments.show', ['segment' => '2']) }}" class="block relative overflow-hidden">
                         <div class="relative overflow-hidden">
                             <img src="{{ asset('storage/segments/women.png') }}"
                                 alt="Shop by Women"
@@ -140,7 +140,7 @@
 
                 <!-- Men Segment -->
                 <div class="group overflow-hidden rounded-md shadow-md h-auto w-full animate-stagger-2 relative z-10">
-                    <a href="{{ route('segments.show', ['segment' => '2']) }}" class="block relative overflow-hidden">
+                    <a href="{{ route('segments.show', ['segment' => '1']) }}" class="block relative overflow-hidden">
                         <div class="relative overflow-hidden">
                             <img src="{{ asset('storage/segments/men.png') }}"
                                 alt="Shop by Men"
@@ -387,7 +387,7 @@
                         <p class="font-poppins text-[#603E14] mb-6 text-lg leading-[30px] tracking-[0.1em] animate-fade-in animation-delay-600">
                             Fashion with a Purpose—Shop, Upcycle, and Donate to Create a Sustainable Tomorrow.
                         </p>
-                        <a href="#" class="inline-flex items-center justify-center bg-[#816849] text-white px-4 py-3 rounded-[30px] text-lg font-semibold hover:bg-[#a08e77] hover:scale-105 transition-all duration-200 w-[200px] animate-pulse-soft hover:animate-none relative z-10">
+                        <a href="{{route('donations.hub')}}" class="inline-flex items-center justify-center bg-[#816849] text-white px-4 py-3 rounded-[30px] text-lg font-semibold hover:bg-[#a08e77] hover:scale-105 transition-all duration-200 w-[200px] animate-pulse-soft hover:animate-none relative z-10">
                             Donate Now
                         </a>
                     </div>
@@ -468,7 +468,7 @@
                 </div>
                 
                 <div class="text-center mt-6">
-                    <a href="#" class="inline-flex items-center justify-center bg-[#816849] text-white px-8 py-4 rounded-full text-base font-semibold hover:bg-[#a08e77] transition-all duration-300 shadow-md transform hover:scale-105 animate-bounce-in animation-delay-400 relative z-10">
+                    <a href="{{route('donations.hub')}}" class="inline-flex items-center justify-center bg-[#816849] text-white px-8 py-4 rounded-full text-base font-semibold hover:bg-[#a08e77] transition-all duration-300 shadow-md transform hover:scale-105 animate-bounce-in animation-delay-400 relative z-10">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 14v6m-3-3h6M6 10h2a2 2 0 012 2v6a2 2 0 01-2 2H6a2 2 0 01-2-2v-6a2 2 0 012-2zm10-4a2 2 0 11-4 0 2 2 0 014 0zM4 10a2 2 0 100-4 2 2 0 000 4zm16-2a2 2 0 11-4 0 2 2 0 014 0z" />
                         </svg>
