@@ -39,15 +39,19 @@
                         <!-- User Info Content Section -->
                         <div class="relative bg-[#E1D5B6] dark:bg-gray-800 px-6 py-5">
                             
-                            <!-- User Avatar Container -->
-                            <!-- Positioned absolutely to overlap the background section -->
-                            <div class="absolute -top-[60px] left-[100px] -translate-x-1/2 w-[100px] h-[100px] 
-                                        bg-[#B59F84] dark:bg-gray-700 rounded-full border-4 border-white 
-                                        dark:border-gray-800 flex items-center justify-center z-10">
-                                <!-- Initials Display -->
-                                <span class="text-2xl font-bold text-gray-800 dark:text-gray-200 text-white">
-                                    {{ strtoupper(substr($user->fname, 0, 1) . substr($user->lname, 0, 1)) }}
-                                </span>
+                            <!-- User Profile Pic Container -->
+                            <div class="absolute -top-[60px] left-[100px] -translate-x-1/2 w-[100px] h-[100px]
+                                rounded-full border-4 border-white dark:border-gray-800 overflow-hidden shadow-lg z-10">
+                                
+                                @if ($user->profile_pic)
+                                    <img src="{{ asset('storage/' . $user->profile_pic) }}" 
+                                        alt="Profile Picture"
+                                        class="w-full h-full object-cover">
+                                @else
+                                    <img src="{{ asset('images/default-profile.jpg') }}" 
+                                        alt="Default Profile Picture"
+                                        class="w-full h-full object-cover">
+                                @endif
                             </div>
                             <!-- User Details Container -->
                             <div class="flex items-start -top-[10px] justify-between max-w-5xl mx-auto pt-6">

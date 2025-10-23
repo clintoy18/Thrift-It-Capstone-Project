@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 use App\Models\User;
+use Illuminate\Support\Facades\Storage;
 
 
 
@@ -61,18 +62,29 @@ class ProfileController extends Controller
     /**
      * Update the user's profile information.
      */
-    public function update(ProfileUpdateRequest $request): RedirectResponse
+   public function update(ProfileUpdateRequest $request): RedirectResponse
     {
-        $request->user()->fill($request->validated());
+        $user = $request->user();
 
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
+        $validated = $request->validated();
+
+        // Handle profile picture upload
+        if ($request->hasFile('profile_pic')) {
+            $path = $request->file('profile_pic')->store('profile-pictures', 'public');
+            $validated['profile_pic'] = $path;
         }
 
-        $request->user()->save();
+        $user->fill($validated);
+
+        if ($user->isDirty('email')) {
+            $user->email_verified_at = null;
+        }
+
+        $user->save();
 
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }
+
 
     public function show(User $user)
     {
@@ -138,5 +150,22 @@ class ProfileController extends Controller
         }
 
         return back()->with('status', 'Verification document uploaded successfully and sent for review.');
+    }
+
+    public function uploadProfilePic(Request $request)
+    {
+        $request->validate([
+            'profile_pic' => 'required|image|mimes:jpg,jpeg,png|max:2048',
+        ]);
+
+        $user = $request->user();
+
+        // Store new picture
+        $path = $request->file('profile_pic')->store('profile-pictures', 'public');
+
+        // Update user record
+        $user->update(['profile_pic' => $path]);
+
+        return back()->with('status', 'Profile picture updated successfully!');
     }
 }
