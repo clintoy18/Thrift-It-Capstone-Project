@@ -101,6 +101,10 @@
                                         class="w-full mt-4 px-6 py-3 bg-[#B59F84] text-white rounded-lg hover:bg-[#a08e77] transition-all duration-300 font-medium">
                                         Buy Now
                                     </button>
+                                    <a href="{{ route('private.chat', $product->user->id) }}?auto_message=1&product_id={{ $product->id }}&product_name={{ urlencode($product->name) }}&product_image={{ urlencode(asset('storage/' . $product->first_image)) }}"
+                                        class="w-full mt-4 px-6 py-3 bg-[#B59F84] text-white rounded-lg hover:bg-[#a08e77] transition-all duration-300 font-medium inline-block text-center">
+                                        Available
+                                    </a>
                                 @else
                                     <button type="button" disabled
                                         class="w-full mt-4 px-6 py-3 bg-gray-300 text-gray-600 rounded-lg cursor-not-allowed font-medium">
