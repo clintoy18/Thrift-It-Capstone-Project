@@ -34,172 +34,40 @@
                             class="swiper-button-prev !text-white text-3xl z-20 hover:!text-gray-200 transition-colors duration-300">
                         </div>
                     </div>
-                    <!-- Product Info Card -->
-                    <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-md">
-                        <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-                            {{ $product->name }}
-                        </h1>
-                        <p class="text-sm text-gray-500 dark:text-gray-400">
-                            Size: {{ $product->size }} ·
-                            {{ ucfirst($product->condition) }} ·
-                            {{ $product->category->name ?? 'No Category' }}
-                        </p>
-                        <div class="space-y-4 mt-4">
-                            <h2 class="text-xl font-semibold text-gray-800 dark:text-gray-200">Details</h2>
-                            <p class="text-gray-600 dark:text-gray-400">{{ $product->status }}</p>
-                            <p class="text-gray-600 dark:text-gray-400">{{ $product->description }}</p>
+                   <!-- Product Info Card -->
+            <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-md hover:shadow-lg transition-shadow duration-300">
 
-                        </div>
-                        @if ($product->listingtype === 'for donation')
-                            <p class="text-lg font-bold text-green-500 dark:text-green-400">For Donation</p>
-                        @else
-                            <p class="text-2xl font-bold text-gray-900 dark:text-white">
-                                ₱{{ number_format($product->price, 2) }}</p>
-                        @endif
-                        <p class="text-sm text-gray-500 dark:text-gray-400">Quantity: {{ $product->qty }}</p>
-                        <p class="text-sm text-gray-500 dark:text-gray-400">Status: {{ ucfirst($product->status) }}</p>
-                        <p class="text-sm text-gray-500 dark:text-gray-400">
-                            Location: {{ $product->barangay->name ?? 'N/A' }}, Cebu City, Cebu 6000
-                        </p>
+                <!-- Product Name -->
+                <h1 class="text-3xl font-extrabold text-gray-900 dark:text-white mb-2">
+                    {{ $product->name }}
+                </h1>
 
-                        <!-- Show Update Button if User Owns the Product -->
-                        @if (Auth::id() === $product->user_id)
-                            <div class="flex flex-col gap-3 mt-4">
-                                <a href="{{ route('products.edit', $product->id) }}"
-                                    class="px-6 py-3 bg-[#B59F84] text-white rounded-lg hover:bg-[#a08e77] transition-all duration-300 text-center font-medium">
-                                    Update Product
-                                </a>
-                                @if ($product->status === 'available')
-                                    <form action="{{ route('products.markAsSold', $product) }}" method="POST"
-                                        class="inline">
-                                        @csrf
-                                        @method('PUT')
-                                        <button type="submit"
-                                            class="w-full px-6 py-3 bg-green-100 text-green-600 rounded-lg hover:bg-green-200 dark:bg-green-900 dark:text-green-300 dark:hover:bg-green-800 transition-all duration-300 font-medium"
-                                            onclick="return confirm('Mark this product as Sold?')">
-                                            Mark as Sold
-                                        </button>
-                                    </form>
-                                @else
-                                    <button type="button" disabled
-                                        class="w-full px-6 py-3 bg-gray-300 dark:bg-gray-600 text-gray-500 dark:text-gray-400 rounded-lg cursor-not-allowed font-medium">
-                                        Item Marked as Sold
-                                    </button>
-                                @endif
-                            </div>
-                        @endif
-                        <!-- Wrap both button + modal inside the same x-data -->
-                        <div x-data="{ open: false }">
-                            @php
-                                $existingOrder = $product->orders()->where('buyer_id', Auth::id())->first();
-                            @endphp
-                        <!-- Message Card (Warm Theme) -->
-                                <div class="w-full max-w-sm mt-4 bg-[#f8f4f0] text-gray-800 p-4 rounded-lg space-y-3 shadow-md mx-auto sm:max-w-md border border-[#d9cbb6]">
-                                    <div class="flex items-center gap-2">
-                                        <!-- Message Icon -->
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                            stroke-width="1.8" stroke="#B59F84" class="w-5 h-5">
-                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                d="M8.625 12h6.75m-6.75 3h4.125M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                        </svg>
-                                        <span class="font-semibold text-sm text-[#5c4a3e]">Send seller a message</span>
-                                    </div>
+                <!-- Product Meta -->
+                <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">
+                    <span class="font-medium">Size:</span> {{ $product->size }} ·
+                    <span class="font-medium">Condition:</span> {{ ucfirst($product->condition) }} ·
+                    <span class="font-medium">Category:</span> {{ $product->category->name ?? 'No Category' }}
+                </p>
 
-                                    <textarea
-                                        class="w-full bg-white border border-[#d9cbb6] text-gray-700 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#B59F84] resize-none"
-                                        rows="2"
-                                        readonly>Hi {{ $product->user->name }}, is this still available?</textarea>
-
-                                    <a href="{{ route('private.chat', $product->user->id) }}?auto_message=1&product_id={{ $product->id }}&product_name={{ urlencode($product->name) }}&product_image={{ urlencode(asset('storage/' . $product->first_image)) }}"
-                                        class="block w-full bg-[#B59F84] text-white text-center py-2.5 rounded-md font-medium hover:bg-[#a08e77] transition-all duration-300">
-                                        Send
-                                    </a>
-                                </div>
-                        <!-- Buy Now Button -->
-                        @if ($product->listingtype !== 'for donation' && Auth::id() !== $product->user_id && (!$existingOrder || $existingOrder->status === 'cancelled'))
-                            @if ($product->qr_code)
-                                <button type="button" @click="open = true"
-                                    class="w-full mt-4 px-6 py-3 bg-[#B59F84] text-white rounded-lg hover:bg-[#a08e77] transition-all duration-300 font-medium">
-                                    Buy Now
-                                </button>
-                            @else
-                              
-                            @endif
-                        @endif
-                          <!-- Enhanced Payment Modal -->
-<div x-show="open" x-transition
-    class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
-    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md mx-4 overflow-hidden relative">
-        <!-- Header with Gradient Background -->
-        <div class="bg-gradient-to-r from-[#B59F84] to-[#8A7B66] p-6 text-white">
-            <div class="flex items-center justify-between">
-                <div class="flex items-center space-x-3">
-                    <div class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                                  d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
-                        </svg>
-                    </div>
-                    <div>
-                        <h2 class="text-xl font-bold">Complete Your Purchase</h2>
-                        <p class="text-white/80 text-sm">Secure payment process</p>
-                    </div>
-                </div>
-                <button type="button" @click="open = false; clearFileInput()"
-                    class="w-8 h-8 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center transition-all duration-200">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                    </svg>
-                </button>
-            </div>
-        </div>
-
-        <!-- Progress Steps - UPDATED -->
-        <div class="px-6 pt-6">
-            <div class="flex items-center justify-between mb-8">
-                <div class="flex flex-col items-center">
-                    <div class="w-8 h-8 bg-[#B59F84] rounded-full flex items-center justify-center text-white text-sm font-bold">
-                        1
-                    </div>
-                    <span class="text-xs text-gray-600 mt-1">Scan QR</span>
-                </div>
-                <div class="flex-1 h-1 bg-gray-200 mx-2">
-                    <div class="h-1 bg-[#B59F84] transition-all duration-300" id="progress-line"></div>
-                </div>
-                <div class="flex flex-col items-center">
-                    <div class="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center text-gray-500 text-sm font-bold transition-all duration-300" id="step-2-circle">
-                        2
-                    </div>
-                    <span class="text-xs text-gray-600 mt-1">Upload Proof</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- Content - Scrollable -->
-        <div class="p-6 max-h-96 overflow-y-auto">
-            <!-- QR Code Section -->
-            <div class="mb-8">
-                <div class="flex items-center space-x-2 mb-4">
-                    <div class="w-6 h-6 bg-[#F8EED6] rounded-full flex items-center justify-center">
-                        <svg class="w-3 h-3 text-[#634600]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                                  d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"></path>
-                        </svg>
-                    </div>
-                    <h3 class="text-lg font-semibold text-gray-800">Scan to Pay</h3>
-                </div>
-                
-                <div class="bg-gradient-to-br from-[#F8EED6] to-[#F4F2ED] rounded-xl p-4 mb-4">
-                    <p class="text-sm text-[#603E14] mb-3 text-center">
-                        Use your mobile banking app to scan this QR code
+                <!-- Status & Description -->
+                <div class="space-y-2 mb-4">
+                    <p class="text-gray-600 dark:text-gray-400">
+                        <span class="font-medium">Status:</span> {{ ucfirst($product->status) }}
                     </p>
-                    <div class="flex justify-center">
-                        <div class="relative">
-                            <img src="{{ asset('storage/' . $product->qr_code) }}" alt="QR Code"
-                                class="w-48 h-48 object-contain border-4 border-white rounded-lg shadow-md">
-                            <div class="absolute inset-0 border-2 border-dashed border-[#B59F84] rounded-lg animate-pulse"></div>
-                        </div>
-                    </div>
+                    <p class="text-gray-600 dark:text-gray-400">{{ $product->description }}</p>
+                </div>
+
+                <!-- Price / Donation -->
+                <div class="mb-4">
+                    @if ($product->listingtype === 'for donation')
+                        <p class="inline-block px-3 py-1 text-green-700 dark:text-green-300 bg-green-100 dark:bg-green-900 rounded-full font-semibold">
+                            For Donation
+                        </p>
+                    @else
+                        <p class="text-2xl font-bold text-gray-900 dark:text-white">
+                            ₱{{ number_format($product->price, 2) }}
+                        </p>
+                    @endif
                 </div>
 
                 <!-- Payment Instructions -->
