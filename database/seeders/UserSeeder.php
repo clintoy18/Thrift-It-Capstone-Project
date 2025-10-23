@@ -41,5 +41,21 @@ class UserSeeder extends Seeder
             'role' => '0',
             'email_verified_at' => now(),
         ]);
+         User::create([
+            'fname' => 'Clint',
+            'lname' => 'Alonzo',
+            'email' => 'clint@example.com',
+            'password' => Hash::make('password123'),
+            'role' => '0',
+            'email_verified_at' => now(),
+        ]);
+         User::create([
+            'fname' => 'Renzo',
+            'lname' => 'Toring',
+            'email' => 'renzo@example.com',
+            'password' => Hash::make('password123'),
+            'role' => '0',
+            'email_verified_at' => now(),
+        ]);
     }
 }
