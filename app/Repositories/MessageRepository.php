@@ -45,12 +45,13 @@ class MessageRepository
             ->get();
     }
 
-    public function createMessageWithUser($userId, $receiverId, $messageContent)
+    public function createMessageWithUser($userId, $receiverId, $messageContent, $imagePath = null)
     {
         $message = $this->create([
             'user_id' => $userId,
             'receiver_id' => $receiverId,
             'message' => $messageContent,
+            'image' => $imagePath,
         ]);
 
         return $message->load('user');
