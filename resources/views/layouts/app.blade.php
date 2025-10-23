@@ -15,19 +15,22 @@
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+        
+        <!-- KEEP ONLY ONE Alpine.js SCRIPT -->
         <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+        
         <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
          
         <!-- Pass Authenticated User ID to JavaScript -->
         <meta name="user-id" content="{{ Auth::check() ? Auth::id() : '' }}">
-        <script src="//unpkg.com/alpinejs" defer></script>
 
         <!-- Swiper CSS -->
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
-        <script src="https://kit.fontawesome.com/YOUR_KIT_ID.js" crossorigin="anonymous"></script>
+        <!-- Remove or update the FontAwesome kit with your actual ID -->
+        <!-- <script src="https://kit.fontawesome.com/YOUR_KIT_ID.js" crossorigin="anonymous"></script> -->
     </head>
     <body class="font-sans antialiased">
         <div class="min-h-screen ">
@@ -50,8 +53,10 @@
                 {{ $slot }}
             </main>
             
-            <!-- Include the footer component -->
-            <x-footer />
+            <!-- Include the footer component - hide on chat pages -->
+            @unless(request()->routeIs('private.chat'))
+                <x-footer />
+            @endunless
         </div>
 
         <!-- Swiper JS -->
