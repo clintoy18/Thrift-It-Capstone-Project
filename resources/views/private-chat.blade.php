@@ -152,30 +152,30 @@
                 <!-- Chat Area -->
                 <div class="flex-1 flex flex-col w-full">
                     <!-- Chat Header -->
-                    <div class="bg-white lg:bg-gradient-to-r lg:from-[#634600] lg:to-[#B59F84] border-b border-gray-200 lg:border-none px-4 sm:px-6 py-3 sm:py-4 text-gray-900 lg:text-white">
+                    <div class="bg-gradient-to-r from-[#634600] to-[#B59F84] border-b border-gray-200 lg:border-none px-4 sm:px-6 py-3 sm:py-4 text-white">
                         <div class="flex items-center justify-between">
                             <div class="flex items-center space-x-3">
                                 <!-- Mobile Back Button -->
-                                <button id="mobile-back-button" class="lg:hidden text-gray-600 hover:text-gray-800 transition-colors">
+                                <button id="mobile-back-button" class="lg:hidden text-white hover:text-gray-200 transition-colors">
                                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
                                     </svg>
                                 </button>
-                                <div class="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-r from-[#634600] to-[#B59F84] lg:bg-white lg:bg-opacity-20 rounded-full flex items-center justify-center">
+                                <div class="w-10 h-10 sm:w-12 sm:h-12 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
                                     <span class="text-white font-semibold text-sm">{{ substr($recipient->fname, 0, 1) }}{{ substr($recipient->lname, 0, 1) }}</span>
                                 </div>
                                 <div>
                                     <h3 class="font-semibold text-base sm:text-lg">{{ $recipient->fname }} {{ $recipient->lname }}</h3>
-                                    <p class="text-gray-500 lg:text-white text-xs sm:text-sm lg:opacity-80">Active now</p>
+                                    <p class="text-white text-xs sm:text-sm opacity-80">Active now</p>
                                 </div>
                             </div>
                             <div class="flex items-center space-x-2">
-                                <button class="p-2 text-gray-600 lg:text-white hover:bg-gray-100 lg:hover:bg-white lg:hover:bg-opacity-20 rounded-full transition-colors">
+                                <button class="p-2 text-white hover:bg-white hover:bg-opacity-20 rounded-full transition-colors">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
                                     </svg>
                                 </button>
-                                <button class="p-2 text-gray-600 lg:text-white hover:bg-gray-100 lg:hover:bg-white lg:hover:bg-opacity-20 rounded-full transition-colors">
+                                <button class="p-2 text-white hover:bg-white hover:bg-opacity-20 rounded-full transition-colors">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
                                     </svg>
@@ -213,7 +213,14 @@
                                         <!-- Message Bubble -->
                                         <div class="flex flex-col {{ $msg->user_id === auth()->id() ? 'items-end' : 'items-start' }}">
                                             <div class="px-4 py-3 rounded-2xl text-sm {{ $msg->user_id === auth()->id() ? 'bg-gradient-to-r from-[#634600] to-[#B59F84] text-white rounded-br-md' : 'bg-white text-[#634600] rounded-bl-md shadow-sm border border-[#B59F84]' }}">
-                                                <div class="text-sm whitespace-pre-line break-words">{!! preg_replace('/https?:\/\/[^\s]+\/products\/\d+/', '', nl2br(e($msg->message))) !!}</div>
+                                                @if($msg->image)
+                                                    <div class="mb-2">
+                                                        <img src="{{ asset('storage/' . $msg->image) }}" alt="Shared image" class="max-w-full h-auto rounded-lg shadow-sm">
+                                                    </div>
+                                                @endif
+                                                @if($msg->message)
+                                                    <div class="text-sm whitespace-pre-line break-words">{!! preg_replace('/https?:\/\/[^\s]+\/products\/\d+/', '', nl2br(e($msg->message))) !!}</div>
+                                                @endif
                                                 
                                                 <!-- Product Preview Card (if message contains product link) -->
                                                 @php
@@ -227,28 +234,67 @@
                                                         $product = \App\Models\Product::find($productId);
                                                     @endphp
                                                     @if($product)
-                                                        <div class="mt-2 p-2 bg-white bg-opacity-20 rounded-lg border border-white border-opacity-30 group">
-                                                            <div class="flex gap-2">
-                                                                @if($product->first_image)
-                                                                    <img src="{{ asset('storage/' . $product->first_image) }}" 
-                                                                         alt="{{ $product->name }}" 
-                                                                         class="w-12 h-12 sm:w-16 sm:h-16 object-cover rounded-lg">
-                                                                @endif
-                                                                <div class="flex-1 min-w-0">
-                                                                    <h4 class="font-semibold text-xs sm:text-sm truncate">{{ $product->name }}</h4>
-                                                                    <p class="text-xs opacity-80 truncate">{{ $product->category->name ?? 'No Category' }}</p>
-                                                                    @if($product->listingtype !== 'for donation')
-                                                                        <p class="text-xs font-bold">₱{{ number_format($product->price, 2) }}</p>
+                                                        <div class="mt-3 p-3 bg-white bg-opacity-95 rounded-xl border border-white border-opacity-40 shadow-lg group hover:bg-opacity-100 transition-all duration-200">
+                                                            <div class="flex gap-3">
+                                                                <!-- Product Image -->
+                                                                <div class="relative flex-shrink-0">
+                                                                    @if($product->first_image)
+                                                                        <img src="{{ asset('storage/' . $product->first_image) }}" 
+                                                                             alt="{{ $product->name }}" 
+                                                                             class="w-16 h-16 sm:w-20 sm:h-20 object-cover rounded-lg shadow-sm">
                                                                     @else
-                                                                        <p class="text-xs font-bold text-green-400">For Donation</p>
+                                                                        <div class="w-16 h-16 sm:w-20 sm:h-20 bg-gray-100 rounded-lg flex items-center justify-center">
+                                                                            <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                                                            </svg>
+                                                                        </div>
                                                                     @endif
+                                                                    <!-- Status Badge -->
+                                                                    @if($product->listingtype === 'for donation')
+                                                                        <div class="absolute -top-1 -right-1 bg-green-500 text-white text-xs px-1.5 py-0.5 rounded-full font-medium">
+                                                                            FREE
+                                                                        </div>
+                                                                    @endif
+                                                                </div>
+                                                                
+                                                                <!-- Product Details -->
+                                                                <div class="flex-1 min-w-0">
+                                                                    <div class="flex items-start justify-between mb-1">
+                                                                        <h4 class="font-semibold text-sm sm:text-base text-gray-900 truncate pr-2">{{ $product->name }}</h4>
+                                                                        <div class="flex-shrink-0">
+                                                                            <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                                                            </svg>
+                                                                        </div>
+                                                                    </div>
                                                                     
-                                                                    <!-- Hidden link that shows on hover -->
-                                                                    <div class="mt-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                                                                    <p class="text-xs text-gray-600 mb-2 flex items-center">
+                                                                        <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
+                                                                        </svg>
+                                                                        {{ $product->category->name ?? 'No Category' }}
+                                                                    </p>
+                                                                    
+                                                                    <div class="flex items-center justify-between">
+                                                                        @if($product->listingtype !== 'for donation')
+                                                                            <p class="text-sm font-bold text-[#634600]">₱{{ number_format($product->price, 2) }}</p>
+                                                                        @else
+                                                                            <p class="text-sm font-bold text-green-600 flex items-center">
+                                                                                <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                                                                                </svg>
+                                                                                For Donation
+                                                                            </p>
+                                                                        @endif
+                                                                        
+                                                                        <!-- View Product Link -->
                                                                         <a href="{{ route('products.show', $product->id) }}" 
                                                                            target="_blank" 
-                                                                           class="text-xs text-blue-300 hover:text-blue-200 underline">
-                                                                            🔗 View Product
+                                                                           class="text-xs text-[#634600] hover:text-[#56432C] font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center">
+                                                                            <span>View</span>
+                                                                            <svg class="w-3 h-3 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                                                                            </svg>
                                                                         </a>
                                                                     </div>
                                                                 </div>
@@ -280,27 +326,162 @@
                         @endif
                     </div>
 
-                    <!-- Message Input - COMPACT DESIGN -->
+                    <!-- Message Input - ENHANCED DESIGN -->
                     <div class="p-3 sm:p-4 bg-white border-t border-gray-200 lg:border-[#B59F84] shadow-sm sticky bottom-0 z-10 w-full">
-                        <form id="private-chat-form" method="POST" action="{{ route('private.chat.send', $recipient->id) }}" data-ajax="true">
-                            @csrf
-                            <div class="flex items-center space-x-2 w-full">
-                                <button type="button" class="p-2 text-gray-500 lg:text-[#786126] hover:text-gray-700 lg:hover:text-[#634600] hover:bg-gray-100 lg:hover:bg-[#B59F84] lg:hover:bg-opacity-20 rounded-full transition-colors flex-shrink-0">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"></path>
+                        <!-- Image Preview Area -->
+                        <div id="image-preview-container" class="mb-3 hidden">
+                            <div class="flex items-center space-x-2 p-2 bg-gray-50 rounded-lg">
+                                <img id="image-preview" src="" alt="Preview" class="w-12 h-12 object-cover rounded-lg">
+                                <div class="flex-1">
+                                    <p class="text-sm text-gray-600" id="image-filename"></p>
+                                    <p class="text-xs text-gray-500">Click to remove</p>
+                                </div>
+                                <button type="button" id="remove-image" class="text-red-500 hover:text-red-700 p-1">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                                     </svg>
                                 </button>
+                            </div>
+                        </div>
+
+                        <!-- Emoji Picker (Hidden by default) -->
+                        <div id="emoji-picker" class="mb-3 hidden bg-white border border-gray-200 rounded-lg p-3 shadow-lg">
+                            <div class="grid grid-cols-8 gap-1 max-h-32 overflow-y-auto">
+                                <button type="button" class="emoji-btn p-2 hover:bg-gray-100 rounded text-lg" data-emoji="😀">😀</button>
+                                <button type="button" class="emoji-btn p-2 hover:bg-gray-100 rounded text-lg" data-emoji="😃">😃</button>
+                                <button type="button" class="emoji-btn p-2 hover:bg-gray-100 rounded text-lg" data-emoji="😄">😄</button>
+                                <button type="button" class="emoji-btn p-2 hover:bg-gray-100 rounded text-lg" data-emoji="😁">😁</button>
+                                <button type="button" class="emoji-btn p-2 hover:bg-gray-100 rounded text-lg" data-emoji="😆">😆</button>
+                                <button type="button" class="emoji-btn p-2 hover:bg-gray-100 rounded text-lg" data-emoji="😅">😅</button>
+                                <button type="button" class="emoji-btn p-2 hover:bg-gray-100 rounded text-lg" data-emoji="😂">😂</button>
+                                <button type="button" class="emoji-btn p-2 hover:bg-gray-100 rounded text-lg" data-emoji="🤣">🤣</button>
+                                <button type="button" class="emoji-btn p-2 hover:bg-gray-100 rounded text-lg" data-emoji="😊">😊</button>
+                                <button type="button" class="emoji-btn p-2 hover:bg-gray-100 rounded text-lg" data-emoji="😇">😇</button>
+                                <button type="button" class="emoji-btn p-2 hover:bg-gray-100 rounded text-lg" data-emoji="🙂">🙂</button>
+                                <button type="button" class="emoji-btn p-2 hover:bg-gray-100 rounded text-lg" data-emoji="🙃">🙃</button>
+                                <button type="button" class="emoji-btn p-2 hover:bg-gray-100 rounded text-lg" data-emoji="😉">😉</button>
+                                <button type="button" class="emoji-btn p-2 hover:bg-gray-100 rounded text-lg" data-emoji="😌">😌</button>
+                                <button type="button" class="emoji-btn p-2 hover:bg-gray-100 rounded text-lg" data-emoji="😍">😍</button>
+                                <button type="button" class="emoji-btn p-2 hover:bg-gray-100 rounded text-lg" data-emoji="🥰">🥰</button>
+                                <button type="button" class="emoji-btn p-2 hover:bg-gray-100 rounded text-lg" data-emoji="😘">😘</button>
+                                <button type="button" class="emoji-btn p-2 hover:bg-gray-100 rounded text-lg" data-emoji="😗">😗</button>
+                                <button type="button" class="emoji-btn p-2 hover:bg-gray-100 rounded text-lg" data-emoji="😙">😙</button>
+                                <button type="button" class="emoji-btn p-2 hover:bg-gray-100 rounded text-lg" data-emoji="😚">😚</button>
+                                <button type="button" class="emoji-btn p-2 hover:bg-gray-100 rounded text-lg" data-emoji="😋">😋</button>
+                                <button type="button" class="emoji-btn p-2 hover:bg-gray-100 rounded text-lg" data-emoji="😛">😛</button>
+                                <button type="button" class="emoji-btn p-2 hover:bg-gray-100 rounded text-lg" data-emoji="😝">😝</button>
+                                <button type="button" class="emoji-btn p-2 hover:bg-gray-100 rounded text-lg" data-emoji="😜">😜</button>
+                                <button type="button" class="emoji-btn p-2 hover:bg-gray-100 rounded text-lg" data-emoji="🤪">🤪</button>
+                                <button type="button" class="emoji-btn p-2 hover:bg-gray-100 rounded text-lg" data-emoji="🤨">🤨</button>
+                                <button type="button" class="emoji-btn p-2 hover:bg-gray-100 rounded text-lg" data-emoji="🧐">🧐</button>
+                                <button type="button" class="emoji-btn p-2 hover:bg-gray-100 rounded text-lg" data-emoji="🤓">🤓</button>
+                                <button type="button" class="emoji-btn p-2 hover:bg-gray-100 rounded text-lg" data-emoji="😎">😎</button>
+                                <button type="button" class="emoji-btn p-2 hover:bg-gray-100 rounded text-lg" data-emoji="🤩">🤩</button>
+                                <button type="button" class="emoji-btn p-2 hover:bg-gray-100 rounded text-lg" data-emoji="🥳">🥳</button>
+                                <button type="button" class="emoji-btn p-2 hover:bg-gray-100 rounded text-lg" data-emoji="😏">😏</button>
+                                <button type="button" class="emoji-btn p-2 hover:bg-gray-100 rounded text-lg" data-emoji="😒">😒</button>
+                                <button type="button" class="emoji-btn p-2 hover:bg-gray-100 rounded text-lg" data-emoji="😞">😞</button>
+                                <button type="button" class="emoji-btn p-2 hover:bg-gray-100 rounded text-lg" data-emoji="😔">😔</button>
+                                <button type="button" class="emoji-btn p-2 hover:bg-gray-100 rounded text-lg" data-emoji="😟">😟</button>
+                                <button type="button" class="emoji-btn p-2 hover:bg-gray-100 rounded text-lg" data-emoji="😕">😕</button>
+                                <button type="button" class="emoji-btn p-2 hover:bg-gray-100 rounded text-lg" data-emoji="🙁">🙁</button>
+                                <button type="button" class="emoji-btn p-2 hover:bg-gray-100 rounded text-lg" data-emoji="☹️">☹️</button>
+                                <button type="button" class="emoji-btn p-2 hover:bg-gray-100 rounded text-lg" data-emoji="😣">😣</button>
+                                <button type="button" class="emoji-btn p-2 hover:bg-gray-100 rounded text-lg" data-emoji="😖">😖</button>
+                                <button type="button" class="emoji-btn p-2 hover:bg-gray-100 rounded text-lg" data-emoji="😫">😫</button>
+                                <button type="button" class="emoji-btn p-2 hover:bg-gray-100 rounded text-lg" data-emoji="😩">😩</button>
+                                <button type="button" class="emoji-btn p-2 hover:bg-gray-100 rounded text-lg" data-emoji="🥺">🥺</button>
+                                <button type="button" class="emoji-btn p-2 hover:bg-gray-100 rounded text-lg" data-emoji="😢">😢</button>
+                                <button type="button" class="emoji-btn p-2 hover:bg-gray-100 rounded text-lg" data-emoji="😭">😭</button>
+                                <button type="button" class="emoji-btn p-2 hover:bg-gray-100 rounded text-lg" data-emoji="😤">😤</button>
+                                <button type="button" class="emoji-btn p-2 hover:bg-gray-100 rounded text-lg" data-emoji="😠">😠</button>
+                                <button type="button" class="emoji-btn p-2 hover:bg-gray-100 rounded text-lg" data-emoji="😡">😡</button>
+                                <button type="button" class="emoji-btn p-2 hover:bg-gray-100 rounded text-lg" data-emoji="🤬">🤬</button>
+                                <button type="button" class="emoji-btn p-2 hover:bg-gray-100 rounded text-lg" data-emoji="🤯">🤯</button>
+                                <button type="button" class="emoji-btn p-2 hover:bg-gray-100 rounded text-lg" data-emoji="😳">😳</button>
+                                <button type="button" class="emoji-btn p-2 hover:bg-gray-100 rounded text-lg" data-emoji="🥵">🥵</button>
+                                <button type="button" class="emoji-btn p-2 hover:bg-gray-100 rounded text-lg" data-emoji="🥶">🥶</button>
+                                <button type="button" class="emoji-btn p-2 hover:bg-gray-100 rounded text-lg" data-emoji="😱">😱</button>
+                                <button type="button" class="emoji-btn p-2 hover:bg-gray-100 rounded text-lg" data-emoji="😨">😨</button>
+                                <button type="button" class="emoji-btn p-2 hover:bg-gray-100 rounded text-lg" data-emoji="😰">😰</button>
+                                <button type="button" class="emoji-btn p-2 hover:bg-gray-100 rounded text-lg" data-emoji="😥">😥</button>
+                                <button type="button" class="emoji-btn p-2 hover:bg-gray-100 rounded text-lg" data-emoji="😓">😓</button>
+                                <button type="button" class="emoji-btn p-2 hover:bg-gray-100 rounded text-lg" data-emoji="🤗">🤗</button>
+                                <button type="button" class="emoji-btn p-2 hover:bg-gray-100 rounded text-lg" data-emoji="🤔">🤔</button>
+                                <button type="button" class="emoji-btn p-2 hover:bg-gray-100 rounded text-lg" data-emoji="🤭">🤭</button>
+                                <button type="button" class="emoji-btn p-2 hover:bg-gray-100 rounded text-lg" data-emoji="🤫">🤫</button>
+                                <button type="button" class="emoji-btn p-2 hover:bg-gray-100 rounded text-lg" data-emoji="🤥">🤥</button>
+                                <button type="button" class="emoji-btn p-2 hover:bg-gray-100 rounded text-lg" data-emoji="😶">😶</button>
+                                <button type="button" class="emoji-btn p-2 hover:bg-gray-100 rounded text-lg" data-emoji="😐">😐</button>
+                                <button type="button" class="emoji-btn p-2 hover:bg-gray-100 rounded text-lg" data-emoji="😑">😑</button>
+                                <button type="button" class="emoji-btn p-2 hover:bg-gray-100 rounded text-lg" data-emoji="😬">😬</button>
+                                <button type="button" class="emoji-btn p-2 hover:bg-gray-100 rounded text-lg" data-emoji="🙄">🙄</button>
+                                <button type="button" class="emoji-btn p-2 hover:bg-gray-100 rounded text-lg" data-emoji="😯">😯</button>
+                                <button type="button" class="emoji-btn p-2 hover:bg-gray-100 rounded text-lg" data-emoji="😦">😦</button>
+                                <button type="button" class="emoji-btn p-2 hover:bg-gray-100 rounded text-lg" data-emoji="😧">😧</button>
+                                <button type="button" class="emoji-btn p-2 hover:bg-gray-100 rounded text-lg" data-emoji="😮">😮</button>
+                                <button type="button" class="emoji-btn p-2 hover:bg-gray-100 rounded text-lg" data-emoji="😲">😲</button>
+                                <button type="button" class="emoji-btn p-2 hover:bg-gray-100 rounded text-lg" data-emoji="🥱">🥱</button>
+                                <button type="button" class="emoji-btn p-2 hover:bg-gray-100 rounded text-lg" data-emoji="😴">😴</button>
+                                <button type="button" class="emoji-btn p-2 hover:bg-gray-100 rounded text-lg" data-emoji="🤤">🤤</button>
+                                <button type="button" class="emoji-btn p-2 hover:bg-gray-100 rounded text-lg" data-emoji="😪">😪</button>
+                                <button type="button" class="emoji-btn p-2 hover:bg-gray-100 rounded text-lg" data-emoji="😵">😵</button>
+                                <button type="button" class="emoji-btn p-2 hover:bg-gray-100 rounded text-lg" data-emoji="🤐">🤐</button>
+                                <button type="button" class="emoji-btn p-2 hover:bg-gray-100 rounded text-lg" data-emoji="🥴">🥴</button>
+                                <button type="button" class="emoji-btn p-2 hover:bg-gray-100 rounded text-lg" data-emoji="🤢">🤢</button>
+                                <button type="button" class="emoji-btn p-2 hover:bg-gray-100 rounded text-lg" data-emoji="🤮">🤮</button>
+                                <button type="button" class="emoji-btn p-2 hover:bg-gray-100 rounded text-lg" data-emoji="🤧">🤧</button>
+                                <button type="button" class="emoji-btn p-2 hover:bg-gray-100 rounded text-lg" data-emoji="🤒">🤒</button>
+                                <button type="button" class="emoji-btn p-2 hover:bg-gray-100 rounded text-lg" data-emoji="🤕">🤕</button>
+                                <button type="button" class="emoji-btn p-2 hover:bg-gray-100 rounded text-lg" data-emoji="🤑">🤑</button>
+                                <button type="button" class="emoji-btn p-2 hover:bg-gray-100 rounded text-lg" data-emoji="🤠">🤠</button>
+                                <button type="button" class="emoji-btn p-2 hover:bg-gray-100 rounded text-lg" data-emoji="😈">😈</button>
+                                <button type="button" class="emoji-btn p-2 hover:bg-gray-100 rounded text-lg" data-emoji="👿">👿</button>
+                                <button type="button" class="emoji-btn p-2 hover:bg-gray-100 rounded text-lg" data-emoji="👹">👹</button>
+                                <button type="button" class="emoji-btn p-2 hover:bg-gray-100 rounded text-lg" data-emoji="👺">👺</button>
+                                <button type="button" class="emoji-btn p-2 hover:bg-gray-100 rounded text-lg" data-emoji="🤡">🤡</button>
+                                <button type="button" class="emoji-btn p-2 hover:bg-gray-100 rounded text-lg" data-emoji="💩">💩</button>
+                                <button type="button" class="emoji-btn p-2 hover:bg-gray-100 rounded text-lg" data-emoji="👻">👻</button>
+                                <button type="button" class="emoji-btn p-2 hover:bg-gray-100 rounded text-lg" data-emoji="💀">💀</button>
+                                <button type="button" class="emoji-btn p-2 hover:bg-gray-100 rounded text-lg" data-emoji="☠️">☠️</button>
+                                <button type="button" class="emoji-btn p-2 hover:bg-gray-100 rounded text-lg" data-emoji="👽">👽</button>
+                                <button type="button" class="emoji-btn p-2 hover:bg-gray-100 rounded text-lg" data-emoji="👾">👾</button>
+                                <button type="button" class="emoji-btn p-2 hover:bg-gray-100 rounded text-lg" data-emoji="🤖">🤖</button>
+                                <button type="button" class="emoji-btn p-2 hover:bg-gray-100 rounded text-lg" data-emoji="🎃">🎃</button>
+                                <button type="button" class="emoji-btn p-2 hover:bg-gray-100 rounded text-lg" data-emoji="😺">😺</button>
+                                <button type="button" class="emoji-btn p-2 hover:bg-gray-100 rounded text-lg" data-emoji="😸">😸</button>
+                                <button type="button" class="emoji-btn p-2 hover:bg-gray-100 rounded text-lg" data-emoji="😹">😹</button>
+                                <button type="button" class="emoji-btn p-2 hover:bg-gray-100 rounded text-lg" data-emoji="😻">😻</button>
+                                <button type="button" class="emoji-btn p-2 hover:bg-gray-100 rounded text-lg" data-emoji="😼">😼</button>
+                                <button type="button" class="emoji-btn p-2 hover:bg-gray-100 rounded text-lg" data-emoji="😽">😽</button>
+                                <button type="button" class="emoji-btn p-2 hover:bg-gray-100 rounded text-lg" data-emoji="🙀">🙀</button>
+                                <button type="button" class="emoji-btn p-2 hover:bg-gray-100 rounded text-lg" data-emoji="😿">😿</button>
+                                <button type="button" class="emoji-btn p-2 hover:bg-gray-100 rounded text-lg" data-emoji="😾">😾</button>
+                            </div>
+                        </div>
+
+                        <form id="private-chat-form" method="POST" action="{{ route('private.chat.send', $recipient->id) }}" data-ajax="true" enctype="multipart/form-data">
+                            @csrf
+                            <div class="flex items-center space-x-2 w-full">
+                                <!-- Image Upload Button -->
+                                <label for="image-upload" class="p-2 text-gray-500 lg:text-[#786126] hover:text-gray-700 lg:hover:text-[#634600] hover:bg-gray-100 lg:hover:bg-[#B59F84] lg:hover:bg-opacity-20 rounded-full transition-colors flex-shrink-0 cursor-pointer">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                    </svg>
+                                    <input type="file" id="image-upload" name="image" accept="image/*" class="hidden">
+                                </label>
+                                
                                 <div class="flex-1 relative min-w-0">
                                     <input
                                         type="text"
                                         name="message"
                                         id="message-input"
                                         class="w-full border border-gray-300 lg:border-[#B59F84] rounded-full px-4 py-3 pr-10 focus:outline-none focus:ring-2 focus:ring-[#634600] focus:border-[#634600] resize-none text-sm bg-white text-gray-900 placeholder-gray-500 min-h-[44px]"
-                                        placeholder="Type a message..."
-                                        required
+                                        placeholder="Type a message or select an image..."
                                         autocomplete="off"
                                     >
-                                    <button type="button" class="absolute right-2 top-1/2 transform -translate-y-1/2 p-1 text-gray-400 lg:text-[#786126] hover:text-gray-600 lg:hover:text-[#634600]">
+                                    <!-- Emoji Button -->
+                                    <button type="button" id="emoji-toggle" class="absolute right-2 top-1/2 transform -translate-y-1/2 p-1 text-gray-400 lg:text-[#786126] hover:text-gray-600 lg:hover:text-[#634600]">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                         </svg>
@@ -326,8 +507,56 @@
     </div>
 
     <script>
+    // Emoji picker functionality
+    function initEmojiPicker() {
+        const emojiToggle = document.getElementById('emoji-toggle');
+        const emojiPicker = document.getElementById('emoji-picker');
+        const messageInput = document.getElementById('message-input');
+
+        if (!emojiToggle || !emojiPicker || !messageInput) {
+            console.log('Emoji elements not found, retrying...');
+            setTimeout(initEmojiPicker, 100);
+            return;
+        }
+
+        console.log('Initializing emoji picker...');
+
+        emojiToggle.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('Emoji toggle clicked');
+            emojiPicker.classList.toggle('hidden');
+        });
+
+        // Close emoji picker when clicking outside
+        document.addEventListener('click', function(e) {
+            if (emojiToggle && emojiPicker && !emojiToggle.contains(e.target) && !emojiPicker.contains(e.target)) {
+                emojiPicker.classList.add('hidden');
+            }
+        });
+
+        // Emoji selection
+        document.querySelectorAll('.emoji-btn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                const emoji = this.getAttribute('data-emoji');
+                const currentValue = messageInput.value;
+                const cursorPos = messageInput.selectionStart;
+                const newValue = currentValue.slice(0, cursorPos) + emoji + currentValue.slice(cursorPos);
+                messageInput.value = newValue;
+                messageInput.focus();
+                messageInput.setSelectionRange(cursorPos + emoji.length, cursorPos + emoji.length);
+                emojiPicker.classList.add('hidden');
+                console.log('Emoji selected:', emoji);
+            });
+        });
+    }
+
     // Enhanced Mobile navigation functionality
     document.addEventListener('DOMContentLoaded', function() {
+        // Initialize emoji picker when DOM is ready
+        initEmojiPicker();
         const conversationsToggle = document.getElementById('conversations-toggle');
         const conversationsSidebar = document.getElementById('conversations-sidebar');
         const closeConversations = document.getElementById('close-conversations');
@@ -399,6 +628,49 @@
         });
     });
 
+    // Image upload functionality
+    const imageUpload = document.getElementById('image-upload');
+    const imagePreviewContainer = document.getElementById('image-preview-container');
+    const imagePreview = document.getElementById('image-preview');
+    const imageFilename = document.getElementById('image-filename');
+    const removeImageBtn = document.getElementById('remove-image');
+
+    console.log('Image upload elements:', {
+        imageUpload: !!imageUpload,
+        imagePreviewContainer: !!imagePreviewContainer,
+        imagePreview: !!imagePreview,
+        imageFilename: !!imageFilename,
+        removeImageBtn: !!removeImageBtn
+    });
+
+    imageUpload.addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        console.log('Image file selected:', file);
+        if (file) {
+            console.log('File details:', {
+                name: file.name,
+                size: file.size,
+                type: file.type
+            });
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                imagePreview.src = e.target.result;
+                imageFilename.textContent = file.name;
+                imagePreviewContainer.classList.remove('hidden');
+                console.log('Image preview loaded');
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    removeImageBtn.addEventListener('click', function() {
+        imageUpload.value = '';
+        imagePreviewContainer.classList.add('hidden');
+        imagePreview.src = '';
+        imageFilename.textContent = '';
+    });
+
+
     // Chat functionality
     document.getElementById('private-chat-form').addEventListener('submit', function(e) {
         e.preventDefault();
@@ -407,30 +679,58 @@
         const url = form.action;
         const messageInput = form.querySelector('input[name="message"]');
         const message = messageInput.value.trim();
+        const imageFile = form.querySelector('input[name="image"]').files[0];
         const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
         const messagesContainer = document.getElementById('private-messages-container');
 
-        if (!message) return; // Do not send empty messages
+        console.log('Form submission:', { message, imageFile, hasImage: !!imageFile });
+
+        if (!message && !imageFile) {
+            console.log('No message or image provided');
+            showNotification('Please enter a message or select an image', 'error');
+            return; // Do not send empty messages
+        }
 
         // Show typing indicator
         showTypingIndicator();
 
+        // Create FormData for file upload
+        const formData = new FormData();
+        formData.append('message', message);
+        if (imageFile) {
+            formData.append('image', imageFile);
+        }
+        formData.append('_token', token);
+
+        console.log('Sending request to:', url);
+        console.log('FormData contents:');
+        for (let pair of formData.entries()) {
+            console.log(pair[0] + ': ' + pair[1]);
+        }
+
         fetch(url, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
                 'X-CSRF-TOKEN': token,
                 'Accept': 'application/json'
             },
-            body: JSON.stringify({ message })
+            body: formData
         })
         .then(response => {
-            if (!response.ok) throw new Error('Network error');
+            console.log('Response status:', response.status);
+            if (!response.ok) {
+                console.error('Response not ok:', response.status, response.statusText);
+                throw new Error('Network error: ' + response.status);
+            }
             return response.json();
         })
         .then(data => {
-            // Clear input
+            // Clear input and image
             messageInput.value = '';
+            imageUpload.value = '';
+            imagePreviewContainer.classList.add('hidden');
+            imagePreview.src = '';
+            imageFilename.textContent = '';
             
             // Remove typing indicator
             removeTypingIndicator();
@@ -440,6 +740,18 @@
             const userFullName = `${user.fname ?? ''} ${user.lname ?? ''}`.trim();
 
             // Create new message HTML
+            let messageContent = '';
+            if (data.message.image) {
+                messageContent = `
+                    <div class="mb-2">
+                        <img src="/storage/${data.message.image}" alt="Shared image" class="max-w-full h-auto rounded-lg shadow-sm">
+                    </div>
+                `;
+            }
+            if (data.message.message) {
+                messageContent += `<div class="text-sm whitespace-pre-line break-words">${data.message.message.replace(/\n/g, '<br>')}</div>`;
+            }
+
             const newMessageHTML = `
                 <div class="flex justify-end message-item">
                     <div class="flex max-w-[85%] sm:max-w-xs lg:max-w-md flex-row-reverse items-end space-x-2">
@@ -453,7 +765,7 @@
                         <!-- Message Bubble -->
                         <div class="flex flex-col items-end">
                             <div class="px-4 py-3 rounded-2xl bg-gradient-to-r from-[#634600] to-[#B59F84] text-white rounded-br-md">
-                                <div class="text-sm whitespace-pre-line break-words">${data.message.message.replace(/\n/g, '<br>')}</div>
+                                ${messageContent}
                             </div>
                             <div class="mt-1 text-right">
                                 <span class="text-xs text-gray-500 lg:text-[#786126] px-2">just now</span>
@@ -480,7 +792,7 @@
         .catch(error => {
             console.error('Error:', error);
             removeTypingIndicator();
-            showNotification('Failed to send message.', 'error');
+            showNotification('Failed to send message. Please try again.', 'error');
         });
     });
 

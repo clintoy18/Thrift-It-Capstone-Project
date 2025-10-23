@@ -43,19 +43,25 @@ class MessageService
         return $this->messageRepository->delete($message);
     }
 
-    public function sendPrivateMessage($senderId, $receiverId, $messageContent)
+    public function sendPrivateMessage($senderId, $receiverId, $messageContent, $imageFile = null)
     {
         // Validate message content
-        if (empty(trim($messageContent))) {
-            return ['error' => 'Message cannot be empty.'];
+        if (empty(trim($messageContent)) && !$imageFile) {
+            return ['error' => 'Message or image is required.'];
         }
 
-        if (strlen($messageContent) > 1000) {
+        if ($messageContent && strlen($messageContent) > 1000) {
             return ['error' => 'Message cannot exceed 1000 characters.'];
         }
 
+        // Handle image upload
+        $imagePath = null;
+        if ($imageFile) {
+            $imagePath = $imageFile->store('chat_images', 'public');
+        }
+
         // Create the message
-        $message = $this->messageRepository->createMessageWithUser($senderId, $receiverId, $messageContent);
+        $message = $this->messageRepository->createMessageWithUser($senderId, $receiverId, $messageContent, $imagePath);
 
         // Broadcast the event
         broadcast(new PrivateMessageSent($message, User::find($receiverId)))->toOthers();
