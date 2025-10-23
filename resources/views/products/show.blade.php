@@ -173,14 +173,19 @@
 
                         <!-- User Info Section -->
                         <div class="relative bg-[#E1D5B6] dark:bg-gray-800 p-6">
-                            <!-- Avatar -->
-                            <div
-                                class="absolute -top-10 left-6 w-20 h-20 bg-[#B59F84] rounded-full border-4 border-white dark:border-gray-800 flex items-center justify-center shadow-md">
-                                <span class="text-2xl font-bold text-white">
-                                    {{ strtoupper(substr($product->user->fname, 0, 1) . substr($product->user->lname, 0, 1)) }}
-                                </span>
-                            </div>
-
+                           <div class="absolute -top-[60px] left-[100px] -translate-x-1/2 w-[100px] h-[100px]
+                            rounded-full border-4 border-white dark:border-gray-800 overflow-hidden shadow-lg z-10">
+                            
+                            @if ($product->user->profile_pic)
+                                <img src="{{ asset('storage/' . $product->user->profile_pic) }}" 
+                                    alt="Profile Picture"
+                                    class="w-full h-full object-cover">
+                            @else
+                                <img src="{{ asset('images/default-profile.jpg') }}" 
+                                    alt="Default Profile Picture"
+                                    class="w-full h-full object-cover">
+                            @endif
+                        </div>
                             <!-- User Details -->
                             <div class="flex items-start justify-between pt-10">
                                 <div class="flex-1">
@@ -227,9 +232,6 @@
                             @endif
                         </div>
                     </div>
-
-
-
                     <!-- Comments Section -->
                     <div class="bg-[#F4F2ED] dark:bg-gray-800   rounded-xl p-10 shadow-md">
                         <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4">Comments</h3>
@@ -241,16 +243,20 @@
                                 <div class="comment-item bg-white dark:bg-gray-700 rounded-lg p-4 shadow-sm"
                                     data-comment-id="{{ $comment->id }}" id="comment-{{ $comment->id }}">
                                     <div class="flex gap-3">
-                                        <!-- User Avatar -->
+                                       <!-- User Avatar -->
                                         <div class="flex-shrink-0">
-                                            <div
-                                                class="w-10 h-10 bg-[#B59F84] rounded-full border-2 border-white dark:border-gray-800 flex items-center justify-center">
-                                                <span class="text-sm font-bold text-white">
-                                                    {{ strtoupper(substr($comment->user->fname, 0, 1) . substr($comment->user->lname, 0, 1)) }}
-                                                </span>
+                                            <div class="w-10 h-10 rounded-full border-2 border-white dark:border-gray-800 overflow-hidden bg-[#B59F84] flex items-center justify-center">
+                                                @if ($comment->user->profile_pic)
+                                                    <img src="{{ asset('storage/' . $comment->user->profile_pic) }}" 
+                                                        alt="{{ $comment->user->fname }}'s Profile Picture"
+                                                        class="w-full h-full object-cover">
+                                                @else
+                                                    <img src="{{ asset('images/default-profile.jpg') }}" 
+                                                        alt="Default Profile Picture"
+                                                        class="w-full h-full object-cover">
+                                                @endif
                                             </div>
                                         </div>
-
                                         <!-- Comment Content -->
                                         <div class="flex-1">
                                             <div class="flex justify-between items-start mb-1">
@@ -364,17 +370,20 @@
                                             <div class="reply-item flex gap-3" data-comment-id="{{ $reply->id }}"
                                                 id="reply-{{ $reply->id }}"
                                                 data-parent-id="{{ $reply->parent_id }}">
-
-                                                <!-- Avatar -->
+                                                <!-- User Avatar -->
                                                 <div class="flex-shrink-0">
-                                                    <div
-                                                        class="w-8 h-8 bg-[#B59F84] rounded-full border-2 border-white dark:border-gray-800 flex items-center justify-center">
-                                                        <span class="text-xs font-bold text-white">
-                                                            {{ strtoupper(substr($reply->user->fname, 0, 1) . substr($reply->user->lname, 0, 1)) }}
-                                                        </span>
+                                                    <div class="w-10 h-10 rounded-full border-2 border-white dark:border-gray-800 overflow-hidden bg-[#B59F84] flex items-center justify-center">
+                                                        @if ($reply->user->profile_pic)
+                                                            <img src="{{ asset('storage/' . $reply->user->profile_pic) }}" 
+                                                                alt="{{ $reply->user->fname }}'s Profile Picture"
+                                                                class="w-full h-full object-cover">
+                                                        @else
+                                                            <img src="{{ asset('images/default-profile.jpg') }}" 
+                                                                alt="Default Profile Picture"
+                                                                class="w-full h-full object-cover">
+                                                        @endif
                                                     </div>
                                                 </div>
-
                                                 <!-- Reply Content -->
                                                 <div class="flex-1">
                                                     <div>

@@ -37,7 +37,7 @@
                      alt="Profile Picture" 
                      class="w-28 h-28 rounded-full object-cover border-4 border-blue-500 shadow-md hover:scale-105 transition-transform duration-300">
             @else
-                <img src="{{ asset('images/default-profile.png') }}" 
+                <img src="{{ asset('images/default-profile.jpg') }}" 
                      alt="Default Profile Picture" 
                      class="w-28 h-28 rounded-full object-cover border-4 border-gray-300 dark:border-gray-600 shadow-md hover:scale-105 transition-transform duration-300">
             @endif
