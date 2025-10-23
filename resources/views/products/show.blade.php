@@ -240,14 +240,19 @@
 
                         <!-- User Info Section -->
                         <div class="relative bg-[#E1D5B6] dark:bg-gray-800 p-6">
-                            <!-- Avatar -->
-                            <div
-                                class="absolute -top-10 left-6 w-20 h-20 bg-[#B59F84] rounded-full border-4 border-white dark:border-gray-800 flex items-center justify-center shadow-md">
-                                <span class="text-2xl font-bold text-white">
-                                    {{ strtoupper(substr($product->user->fname, 0, 1) . substr($product->user->lname, 0, 1)) }}
-                                </span>
-                            </div>
-
+                           <div class="absolute -top-[60px] left-[100px] -translate-x-1/2 w-[100px] h-[100px]
+                            rounded-full border-4 border-white dark:border-gray-800 overflow-hidden shadow-lg z-10">
+                            
+                            @if ($product->user->profile_pic)
+                                <img src="{{ asset('storage/' . $product->user->profile_pic) }}" 
+                                    alt="Profile Picture"
+                                    class="w-full h-full object-cover">
+                            @else
+                                <img src="{{ asset('images/default-profile.jpg') }}" 
+                                    alt="Default Profile Picture"
+                                    class="w-full h-full object-cover">
+                            @endif
+                        </div>
                             <!-- User Details -->
                             <div class="flex items-start justify-between pt-10">
                                 <div class="flex-1">
@@ -294,160 +299,201 @@
                             @endif
                         </div>
                     </div>
-
-
-
                     <!-- Comments Section -->
                     <div class="bg-[#F4F2ED] dark:bg-gray-800   rounded-xl p-10 shadow-md">
                         <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4">Comments</h3>
 
-                    <!-- Scrollable Comment List -->
-                    <div id="comments-container" class="space-y-4 max-h-80 overflow-y-auto pr-2">
-                        @forelse($product->comments as $comment)
-                            <!-- Comment Item -->
-                            <div class="comment-item bg-white dark:bg-gray-700 rounded-lg p-4 shadow-sm" data-comment-id="{{ $comment->id }}" id="comment-{{ $comment->id }}">
-                                <div class="flex gap-3">
-                                    <!-- User Avatar -->
-                                    <div class="flex-shrink-0">
-                                        <div class="w-10 h-10 bg-[#B59F84] rounded-full border-2 border-white dark:border-gray-800 flex items-center justify-center">
-                                            <span class="text-sm font-bold text-white">
-                                                {{ strtoupper(substr($comment->user->fname, 0, 1) . substr($comment->user->lname, 0, 1)) }}
-                                            </span>
-                                        </div>
-                                    </div>
-                                    
-                                    <!-- Comment Content -->
-                                    <div class="flex-1">
-                                        <div class="flex justify-between items-start mb-1">
-                                            <div>
-                                                <a href="{{ route('profile.show', $comment->user->id) }}" class="font-semibold text-gray-800 dark:text-gray-200 hover:underline">
-                                                    {{ $comment->user->fname }} {{ $comment->user->lname }}
-                                                </a>
-                                                <span class="text-xs text-gray-500 dark:text-gray-400 ml-2">
-                                                    {{ $comment->created_at->diffForHumans() }}
+                        <!-- Scrollable Comment List -->
+                        <div id="comments-container" class="space-y-4 max-h-80 overflow-y-auto pr-2">
+                            @forelse($product->comments as $comment)
+                                <!-- Comment Item -->
+                                <div class="comment-item bg-white dark:bg-gray-700 rounded-lg p-4 shadow-sm"
+                                    data-comment-id="{{ $comment->id }}" id="comment-{{ $comment->id }}">
+                                    <div class="flex gap-3">
+                                        <!-- User Avatar -->
+                                        <div class="flex-shrink-0">
+                                            <div
+                                                class="w-10 h-10 bg-[#B59F84] rounded-full border-2 border-white dark:border-gray-800 flex items-center justify-center">
+                                                <span class="text-sm font-bold text-white">
+                                                    {{ strtoupper(substr($comment->user->fname, 0, 1) . substr($comment->user->lname, 0, 1)) }}
                                                 </span>
                                             </div>
-                                            
-                                            <!-- Comment Options (for comment owner) -->
-                                            @if(Auth::id() === $comment->user_id)
-                                                <div class="relative">
-                                                    <button type="button" class="p-1 rounded hover:bg-gray-100 dark:hover:bg-gray-600" onclick="toggleDropdown({{ $comment->id }})">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-600 dark:text-gray-200" viewBox="0 0 20 20" fill="currentColor">
-                                                            <path d="M6 10a2 2 0 11-4 0 2 2 0 014 0zm6 0a2 2 0 11-4 0 2 2 0 014 0zm6 0a2 2 0 11-4 0 2 2 0 014 0z" />
-                                                        </svg>
-                                                    </button>
-                                                    <div id="dropdown-{{ $comment->id }}" class="absolute right-0 mt-1 w-28 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded shadow z-10 hidden">
-                                                        <button type="button" onclick="toggleEditForm({{ $comment->id }})" class="w-full text-left px-3 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700">
-                                                            Edit
+                                        </div>
+
+                                        <!-- Comment Content -->
+                                        <div class="flex-1">
+                                            <div class="flex justify-between items-start mb-1">
+                                                <div>
+                                                    <a href="{{ route('profile.show', $comment->user->id) }}"
+                                                        class="hover:underline">
+                                                        <x-user-name-badge :user="$comment->user" />
+                                                    </a>
+                                                    <span class="text-xs text-gray-500 dark:text-gray-400 ml-2">
+                                                        {{ $comment->created_at->diffForHumans() }}
+                                                    </span>
+                                                </div>
+
+                                                <!-- Comment Options (for comment owner) -->
+                                                @if (Auth::id() === $comment->user_id)
+                                                    <div class="relative">
+                                                        <button type="button"
+                                                            class="p-1 rounded hover:bg-gray-100 dark:hover:bg-gray-600"
+                                                            onclick="toggleDropdown({{ $comment->id }})">
+                                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                                class="h-4 w-4 text-gray-600 dark:text-gray-200"
+                                                                viewBox="0 0 20 20" fill="currentColor">
+                                                                <path
+                                                                    d="M6 10a2 2 0 11-4 0 2 2 0 014 0zm6 0a2 2 0 11-4 0 2 2 0 014 0zm6 0a2 2 0 11-4 0 2 2 0 014 0z" />
+                                                            </svg>
                                                         </button>
-                                                        <button type="button" onclick="deleteComment({{ $comment->id }})" class="w-full text-left px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700">
-                                                            Delete
+                                                        <div id="dropdown-{{ $comment->id }}"
+                                                            class="absolute right-0 mt-1 w-28 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded shadow z-10 hidden">
+                                                            <button type="button"
+                                                                onclick="toggleEditForm({{ $comment->id }})"
+                                                                class="w-full text-left px-3 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700">
+                                                                Edit
+                                                            </button>
+                                                            <button type="button"
+                                                                onclick="deleteComment({{ $comment->id }})"
+                                                                class="w-full text-left px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700">
+                                                                Delete
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                @endif
+                                            </div>
+                                            <div id="comment-content-{{ $comment->id }}"
+                                                class="text-gray-800 dark:text-gray-200 mb-2">
+                                                {{ $comment->content }}
+                                            </div>
+                                            <div
+                                                class="flex items-center gap-4 text-xs text-gray-500 dark:text-gray-400">
+                                                <button onclick="toggleLike({{ $comment->id }})"
+                                                    class="flex items-center gap-1 hover:text-[#B59F84] transition-colors duration-200 {{ $comment->userLikes->count() > 0 ? 'text-[#B59F84]' : 'text-gray-500' }}"
+                                                    id="like-btn-{{ $comment->id }}">
+                                                    <svg class="w-4 h-4"
+                                                        fill="{{ $comment->userLikes->count() > 0 ? 'currentColor' : 'none' }}"
+                                                        stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            stroke-width="2"
+                                                            d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z">
+                                                        </path>
+                                                    </svg>
+                                                    <span
+                                                        id="like-count-{{ $comment->id }}">{{ $comment->likes_count }}</span>
+                                                </button>
+                                                <button
+                                                    onclick="startReply({{ $comment->id }}, '{{ addslashes($comment->user->fname . ' ' . $comment->user->lname) }}')"
+                                                    class="flex items-center gap-1 hover:text-[#B59F84] transition-colors duration-200">
+                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor"
+                                                        viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            stroke-width="2"
+                                                            d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z">
+                                                        </path>
+                                                    </svg>
+                                                    Reply
+                                                </button>
+                                                @if ($comment->replies && $comment->replies->count() > 0)
+                                                    <button onclick="toggleReplies({{ $comment->id }})"
+                                                        class="text-[#B59F84] hover:underline">
+                                                        {{ $comment->replies->count() }}
+                                                        {{ $comment->replies->count() == 1 ? 'reply' : 'replies' }}
+                                                    </button>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Edit Form (Hidden by Default) -->
+                                    @if (Auth::id() === $comment->user_id)
+                                        <form id="inline-edit-form-{{ $comment->id }}"
+                                            action="{{ route('comments.update', $comment->id) }}" method="POST"
+                                            class="inline-edit-form hidden mt-2 bg-gray-100 dark:bg-gray-600 p-3 rounded-lg"
+                                            data-id="{{ $comment->id }}">
+                                            @csrf
+                                            @method('PUT')
+                                            <textarea name="content" rows="2"
+                                                class="w-full border rounded p-2 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200">{{ old('content', $comment->content) }}</textarea>
+                                            <div class="flex gap-2 mt-2">
+                                                <button type="submit"
+                                                    class="px-3 py-1 bg-[#B59F84] text-white rounded text-sm hover:bg-[#a08e77] transition-all duration-200">Save</button>
+                                                <button type="button" onclick="cancelEdit({{ $comment->id }})"
+                                                    class="px-3 py-1 bg-gray-300 text-gray-800 rounded hover:bg-gray-400 text-sm">Cancel</button>
+                                            </div>
+                                        </form>
+                                    @endif
+
+                                    <!-- Replies Container - MODIFIED for flat structure -->
+                                    <!-- In your Blade template, update the replies container structure -->
+                                    <!-- Replies Container - All replies in one vertical thread -->
+                                    <div id="replies-{{ $comment->id }}"
+                                        class="hidden ml-4 mt-3 space-y-3 border-l-2 border-gray-200 dark:border-gray-600 pl-4">
+                                        @foreach ($comment->replies as $reply)
+                                            <div class="reply-item flex gap-3" data-comment-id="{{ $reply->id }}"
+                                                id="reply-{{ $reply->id }}"
+                                                data-parent-id="{{ $reply->parent_id }}">
+
+                                                <!-- Avatar -->
+                                                <div class="flex-shrink-0">
+                                                    <div
+                                                        class="w-8 h-8 bg-[#B59F84] rounded-full border-2 border-white dark:border-gray-800 flex items-center justify-center">
+                                                        <span class="text-xs font-bold text-white">
+                                                            {{ strtoupper(substr($reply->user->fname, 0, 1) . substr($reply->user->lname, 0, 1)) }}
+                                                        </span>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Reply Content -->
+                                                <div class="flex-1">
+                                                    <div>
+                                                        <a href="{{ route('profile.show', $reply->user->id) }}"
+                                                            class="text-sm font-semibold text-gray-800 dark:text-gray-200 hover:underline">
+                                                            {{ $reply->user->fname }} {{ $reply->user->lname }}
+                                                        </a>
+                                                        <span class="text-xs text-gray-500 dark:text-gray-400 ml-2">
+                                                            {{ $reply->created_at->diffForHumans() }}
+                                                        </span>
+                                                    </div>
+
+                                                    <p class="text-sm text-gray-800 dark:text-gray-200">
+                                                        {{ $reply->content }}</p>
+
+                                                    <!-- Actions -->
+                                                    <div
+                                                        class="mt-2 flex items-center gap-3 text-xs text-gray-500 dark:text-gray-400">
+                                                        <button onclick="toggleLike({{ $reply->id }})"
+                                                            class="flex items-center gap-1 hover:text-[#B59F84] transition-colors duration-200 {{ $reply->userLikes->count() > 0 ? 'text-[#B59F84]' : 'text-gray-500' }}"
+                                                            id="like-btn-{{ $reply->id }}">
+                                                            <svg class="w-3 h-3"
+                                                                fill="{{ $reply->userLikes->count() > 0 ? 'currentColor' : 'none' }}"
+                                                                stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                                    stroke-width="2"
+                                                                    d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z">
+                                                                </path>
+                                                            </svg>
+                                                            <span
+                                                                id="like-count-{{ $reply->id }}">{{ $reply->likes_count }}</span>
+                                                        </button>
+
+                                                        <!-- Reply button -->
+                                                        <button
+                                                            onclick="startReply({{ $reply->id }}, '{{ addslashes($reply->user->fname . ' ' . $reply->user->lname) }}')"
+                                                            class="hover:text-[#B59F84] transition-colors duration-200">
+                                                            Reply
                                                         </button>
                                                     </div>
                                                 </div>
-                                            @endif
-                                        </div>
-                                        <div id="comment-content-{{ $comment->id }}" class="text-gray-800 dark:text-gray-200 mb-2">
-                                            {{ $comment->content }}
-                                        </div>
-                                        <div class="flex items-center gap-4 text-xs text-gray-500 dark:text-gray-400">
-                                            <button onclick="toggleLike({{ $comment->id }})" class="flex items-center gap-1 hover:text-[#B59F84] transition-colors duration-200 {{ $comment->userLikes->count() > 0 ? 'text-[#B59F84]' : 'text-gray-500' }}" id="like-btn-{{ $comment->id }}">
-                                                <svg class="w-4 h-4" fill="{{ $comment->userLikes->count() > 0 ? 'currentColor' : 'none' }}" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
-                                                </svg>
-                                                <span id="like-count-{{ $comment->id }}">{{ $comment->likes_count }}</span>
-                                            </button>
-                                            <button onclick="startReply({{ $comment->id }}, '{{ addslashes($comment->user->fname . ' ' . $comment->user->lname) }}')" class="flex items-center gap-1 hover:text-[#B59F84] transition-colors duration-200">
-                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
-                                                </svg>
-                                                Reply
-                                            </button>
-                                            @if($comment->replies && $comment->replies->count() > 0)
-                                                <button onclick="toggleReplies({{ $comment->id }})" class="text-[#B59F84] hover:underline">
-                                                    {{ $comment->replies->count() }} {{ $comment->replies->count() == 1 ? 'reply' : 'replies' }}
-                                                </button>
-                                            @endif
-                                        </div>
+                                            </div>
+                                        @endforeach
                                     </div>
                                 </div>
-                                
-                                <!-- Edit Form (Hidden by Default) -->
-                                @if(Auth::id() === $comment->user_id)
-                                    <form id="inline-edit-form-{{ $comment->id }}" action="{{ route('comments.update', $comment->id) }}" method="POST" class="inline-edit-form hidden mt-2 bg-gray-100 dark:bg-gray-600 p-3 rounded-lg" data-id="{{ $comment->id }}">
-                                        @csrf
-                                        @method('PUT')
-                                        <textarea name="content" rows="2" class="w-full border rounded p-2 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200">{{ old('content', $comment->content) }}</textarea>
-                                        <div class="flex gap-2 mt-2">
-                                            <button type="submit" class="px-3 py-1 bg-[#B59F84] text-white rounded text-sm hover:bg-[#a08e77] transition-all duration-200">Save</button>
-                                            <button type="button" onclick="cancelEdit({{ $comment->id }})" class="px-3 py-1 bg-gray-300 text-gray-800 rounded hover:bg-gray-400 text-sm">Cancel</button>
-                                        </div>
-                                    </form>
-                                @endif
-                                
-                                <!-- Replies Container - MODIFIED for flat structure -->
-                               <!-- In your Blade template, update the replies container structure -->
-<!-- Replies Container - All replies in one vertical thread -->
-<div id="replies-{{ $comment->id }}" 
-    class="hidden ml-4 mt-3 space-y-3 border-l-2 border-gray-200 dark:border-gray-600 pl-4">
-    @foreach($comment->replies as $reply)
-        <div class="reply-item flex gap-3" data-comment-id="{{ $reply->id }}" id="reply-{{ $reply->id }}" data-parent-id="{{ $reply->parent_id }}">
-            
-            <!-- Avatar -->
-            <div class="flex-shrink-0">
-                <div class="w-8 h-8 bg-[#B59F84] rounded-full border-2 border-white dark:border-gray-800 flex items-center justify-center">
-                    <span class="text-xs font-bold text-white">
-                        {{ strtoupper(substr($reply->user->fname, 0, 1) . substr($reply->user->lname, 0, 1)) }}
-                    </span>
-                </div>
-            </div>
-
-            <!-- Reply Content -->
-            <div class="flex-1">
-                <div>
-                    <a href="{{ route('profile.show', $reply->user->id) }}"
-                        class="text-sm font-semibold text-gray-800 dark:text-gray-200 hover:underline">
-                        {{ $reply->user->fname }} {{ $reply->user->lname }}
-                    </a>
-                    <span class="text-xs text-gray-500 dark:text-gray-400 ml-2">
-                        {{ $reply->created_at->diffForHumans() }}
-                    </span>
-                </div>
-
-                <p class="text-sm text-gray-800 dark:text-gray-200">{{ $reply->content }}</p>
-
-                <!-- Actions -->
-                <div class="mt-2 flex items-center gap-3 text-xs text-gray-500 dark:text-gray-400">
-                    <button onclick="toggleLike({{ $reply->id }})"
-                        class="flex items-center gap-1 hover:text-[#B59F84] transition-colors duration-200 {{ $reply->userLikes->count() > 0 ? 'text-[#B59F84]' : 'text-gray-500' }}"
-                        id="like-btn-{{ $reply->id }}">
-                        <svg class="w-3 h-3"
-                            fill="{{ $reply->userLikes->count() > 0 ? 'currentColor' : 'none' }}"
-                            stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                stroke-width="2"
-                                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z">
-                            </path>
-                        </svg>
-                        <span id="like-count-{{ $reply->id }}">{{ $reply->likes_count }}</span>
-                    </button>
-
-                    <!-- Reply button -->
-                    <button onclick="startReply({{ $reply->id }}, '{{ addslashes($reply->user->fname . ' ' . $reply->user->lname) }}')" 
-                            class="hover:text-[#B59F84] transition-colors duration-200">
-                        Reply
-                    </button>
-                </div>
-            </div>
-        </div>
-    @endforeach
-</div>
-                            </div>
-                        @empty
-                            <p class="text-gray-600 dark:text-gray-400 text-sm py-4 text-center">No comments yet.
-                                Be the first to comment!</p>
-                        @endforelse
-                    </div>
+                            @empty
+                                <p class="text-gray-600 dark:text-gray-400 text-sm py-4 text-center">No comments yet.
+                                    Be the first to comment!</p>
+                            @endforelse
+                        </div>
 
                         <!-- Comment Form -->
                         @auth
