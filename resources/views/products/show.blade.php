@@ -94,20 +94,45 @@
                                 $existingOrder = $product->orders()->where('buyer_id', Auth::id())->first();
                             @endphp
 
-                            <!-- Buy Now Button -->
-                            @if ($product->listingtype !== 'for donation' && Auth::id() !== $product->user_id && (!$existingOrder || $existingOrder->status === 'cancelled'))
-                                @if ($product->qr_code)
-                                    <button type="button" @click="open = true"
-                                        class="w-full mt-4 px-6 py-3 bg-[#B59F84] text-white rounded-lg hover:bg-[#a08e77] transition-all duration-300 font-medium">
-                                        Buy Now
-                                    </button>
-                                @else
-                                    <button type="button" disabled
-                                        class="w-full mt-4 px-6 py-3 bg-gray-300 text-gray-600 rounded-lg cursor-not-allowed font-medium">
-                                        Buy Now (Unavailable - No QR Code)
-                                    </button>
-                                @endif
-                            @endif
+<!-- Buy Now Button -->
+@if ($product->listingtype !== 'for donation' && Auth::id() !== $product->user_id && (!$existingOrder || $existingOrder->status === 'cancelled'))
+    @if ($product->qr_code)
+        <button type="button" @click="open = true"
+            class="w-full mt-4 px-6 py-3 bg-[#B59F84] text-white rounded-lg hover:bg-[#a08e77] transition-all duration-300 font-medium">
+            Buy Now
+        </button>
+
+        <!-- Message Card (Warm Theme) -->
+        <div class="w-full max-w-sm mt-4 bg-[#f8f4f0] text-gray-800 p-4 rounded-lg space-y-3 shadow-md mx-auto sm:max-w-md border border-[#d9cbb6]">
+            <div class="flex items-center gap-2">
+                <!-- Message Icon -->
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                    stroke-width="1.8" stroke="#B59F84" class="w-5 h-5">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M8.625 12h6.75m-6.75 3h4.125M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span class="font-semibold text-sm text-[#5c4a3e]">Send seller a message</span>
+            </div>
+
+            <textarea
+                class="w-full bg-white border border-[#d9cbb6] text-gray-700 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#B59F84] resize-none"
+                rows="2"
+                readonly>Hi {{ $product->user->name }}, is this still available?</textarea>
+
+            <a href="{{ route('private.chat', $product->user->id) }}?auto_message=1&product_id={{ $product->id }}&product_name={{ urlencode($product->name) }}&product_image={{ urlencode(asset('storage/' . $product->first_image)) }}"
+                class="block w-full bg-[#B59F84] text-white text-center py-2.5 rounded-md font-medium hover:bg-[#a08e77] transition-all duration-300">
+                Send
+            </a>
+        </div>
+    @else
+        <button type="button" disabled
+            class="w-full mt-4 px-6 py-3 bg-gray-300 text-gray-600 rounded-lg cursor-not-allowed font-medium">
+            Buy Now (Unavailable - No QR Code)
+        </button>
+    @endif
+@endif
+
+
 
                           <!-- Enhanced Payment Modal -->
 <div x-show="open" x-transition

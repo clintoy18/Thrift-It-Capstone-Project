@@ -163,7 +163,49 @@
                                     <!-- Message Bubble -->
                                     <div class="flex flex-col {{ $msg->user_id === auth()->id() ? 'items-end' : 'items-start' }}">
                                         <div class="px-4 py-2 rounded-2xl {{ $msg->user_id === auth()->id() ? 'bg-gradient-to-r from-[#634600] to-[#B59F84] text-white rounded-br-md' : 'bg-white text-[#634600] rounded-bl-md shadow-sm border border-[#B59F84]' }}">
-                                            <p class="text-sm">{{ $msg->message }}</p>
+                                            <div class="text-sm whitespace-pre-line">{!! preg_replace('/https?:\/\/[^\s]+\/products\/\d+/', '', nl2br(e($msg->message))) !!}</div>
+                                            
+                                            <!-- Product Preview Card (if message contains product link) -->
+                                            @php
+                                                $productUrlPattern = '/\/products\/(\d+)/';
+                                                preg_match($productUrlPattern, $msg->message, $matches);
+                                                $productId = $matches[1] ?? null;
+                                            @endphp
+                                            
+                                            @if($productId)
+                                                @php
+                                                    $product = \App\Models\Product::find($productId);
+                                                @endphp
+                                                @if($product)
+                                                    <div class="mt-3 p-3 bg-white bg-opacity-20 rounded-lg border border-white border-opacity-30 group">
+                                                        <div class="flex gap-3">
+                                                            @if($product->first_image)
+                                                                <img src="{{ asset('storage/' . $product->first_image) }}" 
+                                                                     alt="{{ $product->name }}" 
+                                                                     class="w-16 h-16 object-cover rounded-lg">
+                                                            @endif
+                                                            <div class="flex-1">
+                                                                <h4 class="font-semibold text-sm">{{ $product->name }}</h4>
+                                                                <p class="text-xs opacity-80">{{ $product->category->name ?? 'No Category' }}</p>
+                                                                @if($product->listingtype !== 'for donation')
+                                                                    <p class="text-xs font-bold">₱{{ number_format($product->price, 2) }}</p>
+                                                                @else
+                                                                    <p class="text-xs font-bold text-green-400">For Donation</p>
+                                                                @endif
+                                                                
+                                                                <!-- Hidden link that shows on hover -->
+                                                                <div class="mt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                                                                    <a href="{{ route('products.show', $product->id) }}" 
+                                                                       target="_blank" 
+                                                                       class="text-xs text-blue-300 hover:text-blue-200 underline">
+                                                                        🔗 View Product
+                                                                    </a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                @endif
+                                            @endif
                                         </div>
                                         <div class="mt-1 {{ $msg->user_id === auth()->id() ? 'text-right' : 'text-left' }}">
                                             <span class="text-xs text-[#786126]">{{ $msg->created_at->diffForHumans() }}</span>
@@ -287,7 +329,7 @@ document.getElementById('private-chat-form').addEventListener('submit', function
                     <!-- Message Bubble -->
                     <div class="flex flex-col items-end">
                         <div class="px-4 py-2 rounded-2xl bg-gradient-to-r from-[#634600] to-[#B59F84] text-white rounded-br-md">
-                            <p class="text-sm">${data.message.message}</p>
+                            <div class="text-sm whitespace-pre-line">${data.message.message.replace(/\n/g, '<br>')}</div>
                         </div>
                         <div class="mt-1 text-right">
                             <span class="text-xs text-[#786126]">just now</span>
@@ -380,6 +422,49 @@ messageInput.addEventListener('keypress', function(e) {
 window.addEventListener('load', function() {
     const messagesContainer = document.getElementById('private-messages-container');
     messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    
+    // Check for auto-message parameter and send message automatically
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('auto_message') === '1') {
+        // Auto-send "Is this available?" message with product details
+        setTimeout(() => {
+            const messageInput = document.getElementById('message-input');
+            const form = document.getElementById('private-chat-form');
+            
+            if (messageInput && form) {
+                const productId = urlParams.get('product_id');
+                const productName = urlParams.get('product_name');
+                const productImage = urlParams.get('product_image');
+                
+                if (productId && productName) {
+                    // Create rich message with product details
+                    const productUrl = `${window.location.origin}/products/${productId}`;
+                    const productImageUrl = productImage || '';
+                    let message = `Is this available?\n\n📦 ${decodeURIComponent(productName)}\n🔗 ${productUrl}`;
+                    
+                    // Add image if available (this will be handled by the backend preview)
+                    if (productImageUrl) {
+                        message += `\n🖼️ [Product Image]`;
+                    }
+                    
+                    messageInput.value = message;
+                } else {
+                    // Fallback to simple message
+                    messageInput.value = 'Is this available?';
+                }
+                
+                form.dispatchEvent(new Event('submit'));
+                
+                // Remove all auto-message parameters from URL to prevent re-sending on refresh
+                const newUrl = new URL(window.location);
+                newUrl.searchParams.delete('auto_message');
+                newUrl.searchParams.delete('product_id');
+                newUrl.searchParams.delete('product_name');
+                newUrl.searchParams.delete('product_image');
+                window.history.replaceState({}, '', newUrl);
+            }
+        }, 1000); // Small delay to ensure page is fully loaded
+    }
 });
 
 // Function to show typing indicator
