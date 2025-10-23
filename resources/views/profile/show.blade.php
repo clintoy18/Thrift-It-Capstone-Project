@@ -8,23 +8,8 @@
             <!-- Flex container for responsive header layout -->
             <div class="flex flex-col sm:flex-row justify-between items-center mb-8 gap-4">
                 <div class="flex items-center gap-3">
-                    <!-- Dynamic Title based on User Context -->
-                    <h2 class="text-2xl font-extrabold text-gray-900 dark:text-gray-100 flex items-center">
-                        {{ Auth::id() === $user->id ? 'My Profile' : $user->fname . "'s Profile" }}
-                        
-                        <!-- Verified User Badge -->
-                        @if ($user->is_verified)
-                            <span class="ml-2 inline-flex items-center px-2 py-0.5 rounded-full bg-green-100 dark:bg-green-900">
-                                <!-- Checkmark Icon for Verification -->
-                                <svg class="w-5 h-5 text-green-600 dark:text-green-300" fill="none" 
-                                     stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
-                                </svg>
-                                <span class="ml-1 text-xs font-semibold text-green-700 dark:text-green-200">
-                                    Verified User
-                                </span>
-                            </span>
-                        @endif
+                   <h2 class="text-2xl font-extrabold text-gray-900 dark:text-gray-100 flex items-center">
+                        <x-user-name-badge :user="$user" :show-full-name="true" />
                     </h2>
                 </div>
             </div>
