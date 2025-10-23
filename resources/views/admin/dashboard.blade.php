@@ -15,32 +15,6 @@
 
     <div class="py-8">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <!-- Welcome Banner -->
-            <div class="mb-8 bg-[#F4F2ED] rounded-xl shadow-lg overflow-hidden border border-gray-200 dark:border-gray-700">
-                <div class="p-6 text-gray-800 dark:text-gray-200">
-                    <div class="flex flex-col md:flex-row justify-between items-center">
-                        <div class="mb-4 md:mb-0">
-                            <h3 class="text-2xl font-bold mb-2 flex items-center">
-                                <i class="fas fa-gem text-indigo-600 dark:text-indigo-400 mr-3"></i>
-                                Welcome back, Administrator!
-                            </h3>
-                            <p class="text-gray-600 dark:text-gray-300">Here's what's happening with your platform today.</p>
-                        </div>
-                        <div class="flex items-center space-x-6">
-                            <div class="text-center">
-                                <div class="text-3xl font-bold text-indigo-600 dark:text-indigo-400">{{ $stats['new_users_today'] }}</div>
-                                <div class="text-sm text-gray-600 dark:text-gray-300">New Users Today</div>
-                            </div>
-                            <div class="h-12 w-px bg-gray-300 dark:bg-gray-600 opacity-50"></div>
-                            <div class="text-center">
-                                <div class="text-3xl font-bold text-green-600 dark:text-green-400">{{ $stats['new_products_today'] }}</div>
-                                <div class="text-sm text-gray-600 dark:text-gray-300">New Products Today</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
             <!-- Statistics Cards -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                 <!-- Total Users Card -->

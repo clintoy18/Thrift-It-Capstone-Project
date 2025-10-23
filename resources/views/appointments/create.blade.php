@@ -60,7 +60,7 @@
                             <!-- Contact Number -->
                             <div class="md:col-span-2">
                                 <label for="contactnumber" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Contact Number</label>
-                                <input type="tel" id="contactnumber" name="contactnumber" class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl placeholder-gray-500 focus:ring-2 focus:ring-[#B59F84] focus:border-[#B59F84] bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 transition" placeholder="Enter your contact number" value="{{ old('contactnumber') }}">
+                                <input type="tel" name="contactnumber" pattern="[0-9]{10,11}" placeholder="09123456789" class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl placeholder-gray-500 focus:ring-2 focus:ring-[#B59F84] focus:border-[#B59F84] bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 transition" placeholder="Enter your contact number" value="{{ old('contactnumber') }}">
                                 @error('contactnumber')
                                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                                 @enderror
