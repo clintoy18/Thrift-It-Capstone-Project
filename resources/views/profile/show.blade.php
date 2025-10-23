@@ -49,13 +49,12 @@
                                     {{ strtoupper(substr($user->fname, 0, 1) . substr($user->lname, 0, 1)) }}
                                 </span>
                             </div>
-
                             <!-- User Details Container -->
                             <div class="flex items-start -top-[10px] justify-between max-w-5xl mx-auto pt-6">
                                 <div class="flex-1">
                                     <!-- User Full Name -->
                                     <h3 class="font-semibold text-gray-800 dark:text-gray-200 text-lg">
-                                        {{ $user->fname }} {{ $user->lname }}
+                                        <x-user-name-badge :user="$user" :show-full-name="true" />
                                     </h3>
                                     
                                     <!-- Rating Display -->
