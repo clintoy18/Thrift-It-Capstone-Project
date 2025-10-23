@@ -26,7 +26,7 @@ class StoreDonationRequest extends FormRequest
         return [
             'category_id' => 'required|exists:categories,id', 
             'name' => 'required|string|max:255',
-            'description' => 'required|string',
+            'description' => 'required|min:30|string',
             'approval_status' => 'in:approved,pending,rejected',
             'size' => 'required|string',
              // Multi-image input from the form: images[]
