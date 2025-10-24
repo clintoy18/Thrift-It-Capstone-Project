@@ -12,7 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('messages', function (Blueprint $table) {
-            $table->string('image')->nullable()->after('message');
+            // ✅ Rename 'image' to 'image_path' or any new name you prefer
+            $table->string('image_path')->nullable()->after('message');
         });
     }
 
@@ -22,7 +23,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('messages', function (Blueprint $table) {
-            $table->dropColumn('image');
+            $table->dropColumn('image_path');
         });
     }
 };
