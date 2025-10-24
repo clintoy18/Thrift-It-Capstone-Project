@@ -8,8 +8,16 @@
                     </svg>
                 </a>
                 <div class="flex items-center space-x-3">
-                    <div class="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center">
-                        <span class="text-white font-semibold text-sm">{{ substr($recipient->fname, 0, 1) }}{{ substr($recipient->lname, 0, 1) }}</span>
+                    <div class="w-10 h-10 rounded-full flex items-center justify-center overflow-hidden bg-gradient-to-r from-purple-500 to-pink-500">
+                        @if ($recipient->profile_pic)
+                            <img src="{{ asset('storage/' . $recipient->profile_pic) }}" 
+                                alt="{{ $recipient->fname }} {{ $recipient->lname }}'s Profile Picture"
+                                class="w-full h-full object-cover">
+                        @else
+                            <span class="text-white font-semibold text-sm">
+                                {{ substr($recipient->fname, 0, 1) }}{{ substr($recipient->lname, 0, 1) }}
+                            </span>
+                        @endif
                     </div>
                     <div>
                         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
@@ -106,18 +114,26 @@
                                 <a href="{{ route('private.chat', $conversation['user']->id) }}" 
                                    class="flex items-center p-4 hover:bg-gray-50 lg:hover:bg-[#B59F84] lg:hover:bg-opacity-20 transition-colors border-b border-gray-100 lg:border-[#B59F84] lg:border-opacity-20 {{ $conversation['user']->id == $recipient->id ? 'bg-gray-50 lg:bg-[#B59F84] lg:bg-opacity-30 lg:border-r-2 lg:border-[#634600]' : '' }}">
                                     <!-- Avatar -->
-                                    <div class="relative">
-                                        <div class="w-12 h-12 bg-gradient-to-r from-[#634600] to-[#B59F84] rounded-full flex items-center justify-center">
-                                            <span class="text-white font-semibold text-sm">{{ substr($conversation['user']->fname, 0, 1) }}{{ substr($conversation['user']->lname, 0, 1) }}</span>
-                                        </div>
-                                        @if($conversation['unread_count'] > 0)
-                                            <div class="absolute -top-1 -right-1 w-5 h-5 bg-[#634600] text-white text-xs rounded-full flex items-center justify-center">
-                                                {{ $conversation['unread_count'] > 9 ? '9+' : $conversation['unread_count'] }}
-                                            </div>
+                                <div class="relative">
+                                    <div class="w-12 h-12 rounded-full flex items-center justify-center overflow-hidden bg-gradient-to-r from-[#634600] to-[#B59F84]">
+                                        @if($conversation['user']->profile_pic)
+                                            <img src="{{ asset('storage/' . $conversation['user']->profile_pic) }}" 
+                                                alt="{{ $conversation['user']->fname }} {{ $conversation['user']->lname }}'s Profile Picture"
+                                                class="w-full h-full object-cover rounded-full">
+                                        @else
+                                            <span class="text-white font-semibold text-sm">
+                                                {{ substr($conversation['user']->fname, 0, 1) }}{{ substr($conversation['user']->lname, 0, 1) }}
+                                            </span>
                                         @endif
                                     </div>
-                                    
-                                    <!-- Conversation Info -->
+
+                                    @if($conversation['unread_count'] > 0)
+                                        <div class="absolute -top-1 -right-1 w-5 h-5 bg-[#634600] text-white text-xs rounded-full flex items-center justify-center">
+                                            {{ $conversation['unread_count'] > 9 ? '9+' : $conversation['unread_count'] }}
+                                        </div>
+                                    @endif
+                                </div>
+                                 <!-- Conversation Info -->
                                     <div class="ml-3 flex-1 min-w-0">
                                         <div class="flex items-center justify-between">
                                             <p class="text-sm font-semibold text-gray-900 lg:text-[#634600] truncate">
@@ -161,8 +177,16 @@
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
                                     </svg>
                                 </button>
-                                <div class="w-10 h-10 sm:w-12 sm:h-12 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
-                                    <span class="text-white font-semibold text-sm">{{ substr($recipient->fname, 0, 1) }}{{ substr($recipient->lname, 0, 1) }}</span>
+                                <div class="w-10 h-10 sm:w-12 sm:h-12 bg-white bg-opacity-20 rounded-full flex items-center justify-center overflow-hidden">
+                                @if($recipient->profile_pic)
+                                    <img src="{{ asset('storage/' . $recipient->profile_pic) }}" 
+                                        alt="{{ $recipient->fname }} {{ $recipient->lname }}'s Profile Picture"
+                                        class="w-full h-full object-cover">
+                                @else
+                                    <span class="text-white font-semibold text-sm">
+                                        {{ substr($recipient->fname, 0, 1) }}{{ substr($recipient->lname, 0, 1) }}
+                                    </span>
+                                @endif
                                 </div>
                                 <div>
                                     <h3 class="font-semibold text-base sm:text-lg">{{ $recipient->fname }} {{ $recipient->lname }}</h3>
@@ -199,17 +223,21 @@
                                     <div class="flex max-w-[85%] sm:max-w-xs lg:max-w-md {{ $msg->user_id === auth()->id() ? 'flex-row-reverse' : 'flex-row' }} items-end space-x-2">
                                         <!-- Avatar -->
                                         <div class="w-6 h-6 sm:w-8 sm:h-8 rounded-full flex-shrink-0 {{ $msg->user_id === auth()->id() ? 'ml-1 sm:ml-2' : 'mr-1 sm:mr-2' }}">
-                                            @if($msg->user_id === auth()->id())
-                                                <div class="w-6 h-6 sm:w-8 sm:h-8 bg-gradient-to-r from-[#634600] to-[#B59F84] rounded-full flex items-center justify-center">
-                                                    <span class="text-white text-xs font-semibold">{{ substr(auth()->user()->fname, 0, 1) }}{{ substr(auth()->user()->lname, 0, 1) }}</span>
-                                                </div>
+                                            @php
+                                                $user = $msg->user_id === auth()->id() ? auth()->user() : $msg->user;
+                                            @endphp
+                                            @if($user->profile_pic)
+                                                <img src="{{ asset('storage/' . $user->profile_pic) }}" 
+                                                    alt="{{ $user->fname }} {{ $user->lname }}'s Profile Picture"
+                                                    class="w-full h-full object-cover rounded-full">
                                             @else
-                                                <div class="w-6 h-6 sm:w-8 sm:h-8 bg-gradient-to-r from-[#B59F84] to-[#786126] rounded-full flex items-center justify-center">
-                                                    <span class="text-white text-xs font-semibold">{{ substr($msg->user->fname, 0, 1) }}{{ substr($msg->user->lname, 0, 1) }}</span>
+                                                <div class="w-full h-full bg-gradient-to-r {{ $msg->user_id === auth()->id() ? 'from-[#634600] to-[#B59F84]' : 'from-[#B59F84] to-[#786126]' }} rounded-full flex items-center justify-center">
+                                                    <span class="text-white text-xs font-semibold">
+                                                        {{ substr($user->fname, 0, 1) }}{{ substr($user->lname, 0, 1) }}
+                                                    </span>
                                                 </div>
                                             @endif
                                         </div>
-                                        
                                         <!-- Message Bubble -->
                                         <div class="flex flex-col {{ $msg->user_id === auth()->id() ? 'items-end' : 'items-start' }}">
                                             <div class="px-4 py-3 rounded-2xl text-sm {{ $msg->user_id === auth()->id() ? 'bg-gradient-to-r from-[#634600] to-[#B59F84] text-white rounded-br-md' : 'bg-white text-[#634600] rounded-bl-md shadow-sm border border-[#B59F84]' }}">
