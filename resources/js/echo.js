@@ -41,7 +41,7 @@ if (currentUserId) {
             console.log('Received real-time message:', e);
             
             // Only show message if we're in the correct chat
-            if (e.sender.id !== recipientId) return;
+            if (!(e.sender.id === recipientId || e.sender.id === currentUserId)) return;
 
             const container = document.getElementById('private-messages-container');
             if (!container) return;
@@ -58,21 +58,23 @@ if (currentUserId) {
         });
 }
 
-// Function to create message bubble HTML
 function createMessageBubble(message, sender, isOwnMessage) {
-    const initials = sender.fname.charAt(0) + sender.lname.charAt(0);
     const timeAgo = 'just now';
-    
+
+    // Decide avatar: real pic or initials
+    const avatarHTML = sender.profile_pic
+        ? `<img src="${sender.profile_pic}" alt="${sender.fname} ${sender.lname}" class="w-8 h-8 object-cover rounded-full">`
+        : `<div class="w-8 h-8 bg-gradient-to-r ${isOwnMessage ? 'from-[#634600] to-[#B59F84]' : 'from-[#B59F84] to-[#786126]'} rounded-full flex items-center justify-center">
+              <span class="text-white text-xs font-semibold">${sender.fname.charAt(0)}${sender.lname.charAt(0)}</span>
+          </div>`;
+
     return `
-        <div class="flex ${isOwnMessage ? 'justify-end' : 'justify-start'}">
+        <div class="flex ${isOwnMessage ? 'justify-end' : 'justify-start'} mb-2">
             <div class="flex max-w-xs lg:max-w-md ${isOwnMessage ? 'flex-row-reverse' : 'flex-row'} items-end space-x-2">
                 <!-- Avatar -->
                 <div class="w-8 h-8 rounded-full flex-shrink-0 ${isOwnMessage ? 'ml-2' : 'mr-2'}">
-                    <div class="w-8 h-8 bg-gradient-to-r ${isOwnMessage ? 'from-[#634600] to-[#B59F84]' : 'from-[#B59F84] to-[#786126]'} rounded-full flex items-center justify-center">
-                        <span class="text-white text-xs font-semibold">${initials}</span>
-                    </div>
+                    ${avatarHTML}
                 </div>
-                
                 <!-- Message Bubble -->
                 <div class="flex flex-col ${isOwnMessage ? 'items-end' : 'items-start'}">
                     <div class="px-4 py-2 rounded-2xl ${isOwnMessage ? 'bg-gradient-to-r from-[#634600] to-[#B59F84] text-white rounded-br-md' : 'bg-white text-[#634600] rounded-bl-md shadow-sm border border-[#B59F84]'}">
@@ -86,6 +88,7 @@ function createMessageBubble(message, sender, isOwnMessage) {
         </div>
     `;
 }
+
 
 // Notification listener
 const authUserId = Number(document.querySelector('meta[name="user-id"]')?.content);
