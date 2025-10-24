@@ -1,4 +1,4 @@
-<nav class="fixed top-0 left-0 w-full bg-[#F4F2ED] px-4 sm:px-6 md:px-6 py-6 z-50 shadow-sm">
+<nav class="fixed top-0 left-0 w-full bg-[#F4F2ED] dark:bg-[#1E1E1E] text-gray-800 dark:text-gray-200 px-4 sm:px-6 md:px-6 py-4 z-50 shadow-sm">
     <div class="max-w-7xl mx-auto" x-data="{ mobileMenuOpen: false }">
         <!-- Desktop Navigation -->
         <div class="flex justify-between items-center">
@@ -243,7 +243,7 @@
                 @endauth
             </div>
             <!-- Mobile Navbar -->
-            <div class="flex items-center justify-between md:hidden w-full px-4 py-1 bg-[#F4F2ED]">
+            <div class="flex items-center justify-between md:hidden w-full px-4 py-1 bg-[#F4F2ED] dark:bg-[#1E1E1E]">
                 <!-- Search Bar -->
                 <div class="flex-1 mx-2">
                     <form action="{{ route('search') }}" method="GET" class="flex items-center bg-white px-3 py-2 rounded-full shadow-sm border">
@@ -278,7 +278,9 @@
                 </div>
             </div>
         <!-- Mobile Menu -->
-        <div x-show="mobileMenuOpen" x-transition class="md:hidden mt-2 py-2 bg-gray-100 rounded-lg shadow-md">
+        <div x-show="mobileMenuOpen" x-transition 
+         class="absolute top-0 left-0 right-0 bg-gray-100 rounded-b-lg shadow-md md:hidden z-50">
+
             <div class="flex flex-col space-y-2 px-4">
                 @auth
                     @if ($role !== 2)
@@ -381,6 +383,6 @@
 </nav>
 <style>
     body {
-        padding-top: 96px; /* adjust according to your nav height */
+        padding-top: 72px; /* adjust according to your nav height */
     }
 </style>
