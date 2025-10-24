@@ -48,7 +48,7 @@
                 @auth
                     @if ($role !== 2)
                         <a href="#" class="text-gray-700">🤍</a> <!-- Wishlist -->
-                        <a href="#" class="text-gray-700">🛒</a> <!-- Cart -->
+                       
 
                         <!-- Messages -->
                         <a href="{{ route('messages.index') }}" class="text-gray-700 relative">
@@ -277,109 +277,100 @@
                     </button>
                 </div>
             </div>
-        <!-- Mobile Menu -->
-        <div x-show="mobileMenuOpen" x-transition 
-         class="absolute top-0 left-0 right-0 bg-gray-100 rounded-b-lg shadow-md md:hidden z-50">
-
-            <div class="flex flex-col space-y-2 px-4">
-                @auth
-                    @if ($role !== 2)
-                        <a href="#" class="flex items-center text-gray-700 py-2 hover:text-red-600">
-                            <span class="mr-2">🤍</span> Wishlist
-                        </a>
-                        <a href="#" class="flex items-center text-gray-700 py-2 hover:text-red-600">
-                            <span class="mr-2">🛒</span> Cart
-                        </a>
-                        <a href="{{ route('messages.index') }}" class="flex items-center text-gray-700 py-2 hover:text-red-600">
-                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8-1.325 0-2.58-.26-3.68-.725L3 20l1.32-3.96C3.474 15.003 3 13.55 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z">
-                                </path>
-                            </svg>
-                            Messages
-                        </a>
-                    @endif
-
-                    @if ($role === 0)
-                        <a href="{{ route('dashboard') }}" class="flex items-center text-gray-700 py-2 hover:text-red-600">Home</a>
-                        <a href="{{ route('products.index') }}" class="flex items-center text-gray-700 py-2 hover:text-red-600">Sell</a>
-                        <a href="{{ route('donations.hub') }}" class="flex items-center text-gray-700 py-2 hover:text-red-600">Donation Hub</a>
-                        <a href="{{ route('appointments.index') }}" class="flex items-center text-gray-700 py-2 hover:text-red-600">Upcycle</a>
-                    @elseif($role === 1)
-                        <a href="{{ route('upcycler.index') }}" class="flex items-center text-gray-700 py-2 hover:text-red-600">Manage Appointments</a>
-                    @endif
-
-                    <a href="{{ route('profile.show', ['user' => Auth::id()]) }}" class="flex items-center text-gray-700 py-2 hover:text-red-600">Profile</a>
-                    
-                    <!-- Mobile Settings Dropdown -->
-                    <div x-data="{ mobileSettingsOpen: false }" class="relative">
-                        <button @click="mobileSettingsOpen = !mobileSettingsOpen" 
-                            class="w-full text-left flex items-center justify-between text-gray-700 py-2 hover:text-red-600">
-                            <span>Settings</span>
-                            <svg class="w-4 h-4 transition-transform" :class="{ 'rotate-180': mobileSettingsOpen }" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-                            </svg>
-                        </button>
-                        
-                        <!-- Mobile Settings Submenu -->
-                        <div x-show="mobileSettingsOpen" x-transition class="ml-4 mt-2 space-y-1">
-                            <!-- Personal Information -->
-                            <div class="px-2 py-1">
-                                <span class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Personal Information</span>
-                            </div>
-                <a href="{{ route('profile.edit') }}#profile-information" 
-                    class="block px-2 py-1 text-sm text-gray-600 hover:text-red-600">
-                    Update Profile Information
+       <!-- Mobile Menu -->
+<div x-show="mobileMenuOpen" x-transition 
+     class="fixed top-16 left-0 right-0 bg-white shadow-lg border-t border-gray-200 md:hidden z-50 max-h-[80vh] overflow-y-auto">
+    <div class="flex flex-col space-y-0 px-4 py-4">
+        @auth
+            @if ($role !== 2)
+                <a href="#" class="flex items-center text-gray-700 py-3 hover:text-[#B59F84] border-b border-gray-100">
+                    <span class="mr-3 text-lg">🤍</span> 
+                    <span class="font-medium">Wishlist</span>
                 </a>
-                            
-                            <!-- Security & Sign-in -->
-                            <div class="px-2 py-1">
-                                <span class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Security & Sign-in</span>
-                            </div>
-                <a href="{{ route('profile.edit1') }}#update-password" 
-                    class="block px-2 py-1 text-sm text-gray-600 hover:text-red-600">
-                    Update Password
+               
+                <a href="{{ route('messages.index') }}" class="flex items-center text-gray-700 py-3 hover:text-[#B59F84] border-b border-gray-100">
+                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8-1.325 0-2.58-.26-3.68-.725L3 20l1.32-3.96C3.474 15.003 3 13.55 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z">
+                        </path>
+                    </svg>
+                    <span class="font-medium">Messages</span>
                 </a>
-                            
-                            <!-- Data & Privacy -->
-                            <div class="px-2 py-1">
-                                <span class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Data & Privacy</span>
-                            </div>
-                <a href="{{ route('profile.edit2') }}" 
-                    class="block px-2 py-1 text-sm text-gray-600 hover:text-red-600">
-                    Data & Privacy
-                </a>
-                            @if (!Auth::user()->is_verified)
-                                <a href="{{ route('admin.users.verify', Auth::id()) }}" 
-                                    class="block px-2 py-1 text-sm text-blue-600 hover:text-blue-800">
-                                    Get Verified
-                                </a>
-                            @endif
-                            
-                            <!-- Payment & Subscription -->
-                            <div class="px-2 py-1">
-                                <span class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Payment & Subscription</span>
-                            </div>
-                            <a href="{{ route('pricing.index') }}" 
-                                class="block px-2 py-1 text-sm text-gray-600 hover:text-red-600">
-                                Pricing Plans
-                            </a>
-                        </div>
+            @endif
+
+            @if ($role === 0)
+                <a href="{{ route('dashboard') }}" class="flex items-center text-gray-700 py-3 hover:text-[#B59F84] border-b border-gray-100 font-medium">Home</a>
+                <a href="{{ route('products.index') }}" class="flex items-center text-gray-700 py-3 hover:text-[#B59F84] border-b border-gray-100 font-medium">Sell</a>
+                <a href="{{ route('donations.hub') }}" class="flex items-center text-gray-700 py-3 hover:text-[#B59F84] border-b border-gray-100 font-medium">Donation Hub</a>
+                <a href="{{ route('appointments.index') }}" class="flex items-center text-gray-700 py-3 hover:text-[#B59F84] border-b border-gray-100 font-medium">Upcycle</a>
+            @elseif($role === 1)
+                <a href="{{ route('upcycler.index') }}" class="flex items-center text-gray-700 py-3 hover:text-[#B59F84] border-b border-gray-100 font-medium">Manage Appointments</a>
+            @endif
+
+            <a href="{{ route('profile.show', ['user' => Auth::id()]) }}" class="flex items-center text-gray-700 py-3 hover:text-[#B59F84] border-b border-gray-100 font-medium">Profile</a>
+            
+            <!-- Mobile Settings Dropdown -->
+            <div x-data="{ mobileSettingsOpen: false }" class="relative border-b border-gray-100">
+                <button @click="mobileSettingsOpen = !mobileSettingsOpen" 
+                    class="w-full text-left flex items-center justify-between text-gray-700 py-3 hover:text-[#B59F84] font-medium">
+                    <span>Settings</span>
+                    <svg class="w-4 h-4 transition-transform" :class="{ 'rotate-180': mobileSettingsOpen }" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                    </svg>
+                </button>
+                
+                <!-- Mobile Settings Submenu -->
+                <div x-show="mobileSettingsOpen" x-transition class="ml-4 mt-2 space-y-0 pb-2">
+                    <!-- Personal Information -->
+                    <div class="px-2 py-1">
+                        <span class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Personal Information</span>
                     </div>
+                    <a href="{{ route('profile.edit') }}#profile-information" 
+                        class="block px-2 py-2 text-sm text-gray-600 hover:text-[#B59F84]">
+                        Update Profile Information
+                    </a>
+                                
+                    <!-- Security & Sign-in -->
+                    <div class="px-2 py-1 mt-2">
+                        <span class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Security & Sign-in</span>
+                    </div>
+                    <a href="{{ route('profile.edit1') }}#update-password" 
+                        class="block px-2 py-2 text-sm text-gray-600 hover:text-[#B59F84]">
+                        Update Password
+                    </a>
+                                
+                    <!-- Data & Privacy -->
+                    <div class="px-2 py-1 mt-2">
+                        <span class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Data & Privacy</span>
+                    </div>
+                    <a href="{{ route('profile.edit2') }}" 
+                        class="block px-2 py-2 text-sm text-gray-600 hover:text-[#B59F84]">
+                        Data & Privacy
+                    </a>
                     
-                    <form method="POST" action="{{ route('logout') }}" class="block">
-                        @csrf
-                        <button type="submit" class="w-full text-left flex items-center text-gray-700 py-2 hover:text-red-600">
-                            Log Out
-                        </button>
-                    </form>
-                @else
-                    <a href="{{ route('register') }}" class="flex items-center text-gray-700 py-2 hover:text-red-600">Sign up</a>
-                    <a href="{{ route('login') }}" class="flex items-center text-gray-700 py-2 hover:text-red-600">Login</a>
-                @endauth
+                    <!-- Payment & Subscription -->
+                    <div class="px-2 py-1 mt-2">
+                        <span class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Payment & Subscription</span>
+                    </div>
+                    <a href="{{ route('pricing.index') }}" 
+                        class="block px-2 py-2 text-sm text-gray-600 hover:text-[#B59F84]">
+                        Pricing Plans
+                    </a>
+                </div>
             </div>
-        </div>
+            
+            <form method="POST" action="{{ route('logout') }}" class="block">
+                @csrf
+                <button type="submit" class="w-full text-left flex items-center text-gray-700 py-3 hover:text-[#B59F84] font-medium">
+                    Log Out
+                </button>
+            </form>
+        @else
+            <a href="{{ route('register') }}" class="flex items-center text-gray-700 py-3 hover:text-[#B59F84] border-b border-gray-100 font-medium">Sign up</a>
+            <a href="{{ route('login') }}" class="flex items-center text-gray-700 py-3 hover:text-[#B59F84] border-b border-gray-100 font-medium">Login</a>
+        @endauth
     </div>
+</div>
 </nav>
 <style>
     body {
