@@ -1,4 +1,4 @@
-<nav class="w-full bg-[#F4F2ED] px-4 sm:px-6 md:px-8 py-6 relative z-50">
+<nav class="fixed top-0 left-0 w-full bg-[#F4F2ED] px-4 sm:px-6 md:px-6 py-6 z-50 shadow-sm">
     <div class="max-w-7xl mx-auto" x-data="{ mobileMenuOpen: false }">
         <!-- Desktop Navigation -->
         <div class="flex justify-between items-center">
@@ -242,87 +242,43 @@
         hover:bg-[#a08e77] hover:scale-105 transition-all duration-200 w-[100px]">Login</a>
                 @endauth
             </div>
+            <!-- Mobile Navbar -->
+            <div class="flex items-center justify-between md:hidden w-full px-4 py-1 bg-[#F4F2ED]">
+                <!-- Search Bar -->
+                <div class="flex-1 mx-2">
+                    <form action="{{ route('search') }}" method="GET" class="flex items-center bg-white px-3 py-2 rounded-full shadow-sm border">
+                        <input type="text" name="query" value="{{ request('query') }}" placeholder="Search for a product..."
+                            class="w-full border-none outline-none text-sm bg-transparent text-gray-700" required>
+                        <button type="submit" class="ml-2 text-gray-500 hover:text-blue-500">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M8 4a4 4 0 1 1 2.83 6.83l3.88 3.88a1 1 0 0 1-1.42 1.42l-3.88-3.88A4 4 0 0 1 8 4zm0 2a2 2 0 1 0 0 4 2 2 0 0 0 0-4z" clip-rule="evenodd"/>
+                            </svg>
+                        </button>
+                    </form>
+                </div>
 
-            <!-- Mobile Menu Toggle -->
-            <div class="flex md:hidden items-center gap-2">
-                @auth
-                    @if ($role !== 2)
-                        <!-- Notification Bell -->
-                        <div id="notif-bell" x-data="{
-                            open: false,
-                            notifications: [],
-                            markAsRead() {
-                                fetch('{{ route('notifications.read') }}', {
-                                    method: 'POST',
-                                    headers: {
-                                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                                        'Accept': 'application/json',
-                                    }
-                                }).then(() => {
-                                    this.notifications.forEach(n => n.is_read = true);
-                                });
-                            }
-                        }" x-init="notifications = {{ Js::from(\App\Models\Notification::where('user_id', Auth::id())->latest()->take(5)->get()) }};"
-                            @new-notification.window="notifications.unshift($event.detail)">
-                            <button @click="open = !open; if(open) markAsRead()" class="relative">
-                                🔔
-                                <span x-show="notifications.filter(n => !n.is_read).length > 0"
-                                    class="absolute top-0 right-0 bg-red-600 text-white text-xs rounded-full px-1">
-                                    <span x-text="notifications.filter(n => !n.is_read).length"></span>
-                                </span>
-                            </button>
-                            <div x-show="open" @click.away="open = false" x-transition
-                                class="absolute right-20 mt-2 w-72 bg-white shadow-lg rounded-xl overflow-hidden z-50 border border-gray-200">
-                                <div class="px-4 py-2 bg-gray-50 border-b border-gray-200">
-                                    <span class="text-sm font-semibold text-gray-700">Notifications</span>
-                                </div>
-                                <div class="max-h-64 overflow-y-auto divide-y divide-gray-100 custom-scroll">
-                                    <template x-for="notif in notifications" :key="notif.id">
-                                        <a :href="`/products/${notif.data.product_id}`"
-                                            class="block px-4 py-3 hover:bg-gray-50 transition">
-                                            <p class="text-sm text-gray-700">
-                                                <strong class="text-[#B59F84]" x-text="notif.data.from_user"></strong>
-                                                commented: <span x-text="notif.data.content"></span>
-                                            </p>
-                                            <span class="text-xs text-gray-400" x-text="notif.created_at"></span>
-                                        </a>
-                                    </template>
-                                </div>
-                            </div>
-                        </div>
-                    @endif
-                @endauth
+                <!-- Icons: Notifications + Menu -->
+                <div class="flex items-center space-x-3">
+                    <!-- Notification Bell -->
+                    <div id="notif-bell" x-data="{ open: false, notifications: [], markAsRead() { fetch('{{ route('notifications.read') }}', { method: 'POST', headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}', 'Accept': 'application/json' } }).then(() => { this.notifications.forEach(n => n.is_read = true); }); } }" x-init="notifications = {{ Js::from(\App\Models\Notification::where('user_id', Auth::id())->latest()->take(5)->get()) }};" @new-notification.window="notifications.unshift($event.detail)">
+                        <button @click="open = !open; if(open) markAsRead()" class="relative">
+                            🔔
+                            <span x-show="notifications.filter(n => !n.is_read).length > 0" class="absolute top-0 right-0 bg-red-600 text-white text-xs rounded-full px-1">
+                                <span x-text="notifications.filter(n => !n.is_read).length"></span>
+                            </span>
+                        </button>
+                    </div>
 
-                <button @click="mobileMenuOpen = !mobileMenuOpen"
-                    class="p-2 rounded-md text-gray-700 hover:bg-gray-200 focus:outline-none">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M4 6h16M4 12h16m-7 6h7" />
-                    </svg>
-                </button>
+                    <!-- Hamburger Menu -->
+                    <button @click="mobileMenuOpen = !mobileMenuOpen" class="p-2 rounded-md text-gray-700 hover:bg-gray-200 focus:outline-none">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                        </svg>
+                    </button>
+                </div>
             </div>
-        </div>
-
-        <!-- Mobile Search Bar -->
-        <div class="mt-3 md:hidden">
-            <form action="{{ route('search') }}" method="GET"
-                class="flex items-center bg-white px-3 py-2 rounded-full shadow-sm border">
-                <input type="text" name="query" value="{{ request('query') }}"
-                    placeholder="Search for a product..."
-                    class="w-full border-none outline-none text-sm bg-transparent text-gray-700" required>
-                <button type="submit" class="ml-2 text-gray-500 hover:text-blue-500">
-                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd"
-                            d="M8 4a4 4 0 1 1 2.83 6.83l3.88 3.88a1 1 0 0 1-1.42 1.42l-3.88-3.88A4 4 0 0 1 8 4zm0 2a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"
-                            clip-rule="evenodd" />
-                    </svg>
-                </button>
-            </form>
-        </div>
-
         <!-- Mobile Menu -->
-        <div x-show="mobileMenuOpen" class="md:hidden mt-2 py-2 bg-gray-100 rounded-lg shadow-md">
+        <div x-show="mobileMenuOpen" x-transition class="md:hidden mt-2 py-2 bg-gray-100 rounded-lg shadow-md">
             <div class="flex flex-col space-y-2 px-4">
                 @auth
                     @if ($role !== 2)
@@ -423,3 +379,8 @@
         </div>
     </div>
 </nav>
+<style>
+    body {
+        padding-top: 96px; /* adjust according to your nav height */
+    }
+</style>
