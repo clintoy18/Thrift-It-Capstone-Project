@@ -83,18 +83,24 @@
                     <!-- User Info Section -->
                     <div class="relative bg-[#E1D5B6] dark:bg-gray-800 p-6">
                         <!-- Avatar -->
-                        <div class="absolute -top-10 left-6 w-20 h-20 bg-[#B59F84] rounded-full border-4 border-white dark:border-gray-800 flex items-center justify-center shadow-md">
-                            <span class="text-2xl font-bold text-white">
-                                {{ strtoupper(substr($donation->user->fname, 0, 1) . substr($donation->user->lname, 0, 1)) }}
-                            </span>
+                        <div class="absolute -top-10 left-6 w-20 h-20 rounded-full border-4 border-white dark:border-gray-800 overflow-hidden shadow-md">
+                            @if ($donation->user->profile_pic)
+                                <img src="{{ asset('storage/' . $donation->user->profile_pic) }}" 
+                                    alt="Profile Picture"
+                                    class="w-full h-full object-cover">
+                            @else
+                                <img src="{{ asset('images/default-profile.jpg') }}" 
+                                    alt="Default Profile Picture"
+                                    class="w-full h-full object-cover">
+                            @endif
                         </div>
                         
                         <!-- User Details -->
                         <div class="flex items-start justify-between pt-10">
                             <div class="flex-1">
-                                <h3 class="font-semibold text-gray-900 dark:text-white text-xl">
-                                    {{ $donation->user->fname }} {{ $donation->user->lname }}
-                                </h3>
+                                <div class="product-card">
+                                    <x-user-name-badge :user="$donation->user" />
+                                </div>
                                 <!-- Rating -->
                                 <div class="flex items-center mt-2">
                                     <div class="flex text-yellow-400">
@@ -147,10 +153,16 @@
                                 <div class="flex gap-3">
                                     <!-- User Avatar -->
                                     <div class="flex-shrink-0">
-                                        <div class="w-10 h-10 bg-[#B59F84] rounded-full border-2 border-white dark:border-gray-800 flex items-center justify-center">
-                                            <span class="text-sm font-bold text-white">
-                                                {{ strtoupper(substr($comment->user->fname, 0, 1) . substr($comment->user->lname, 0, 1)) }}
-                                            </span>
+                                    <div class="w-10 h-10 rounded-full border-2 border-white dark:border-gray-800 overflow-hidden bg-[#B59F84] flex items-center justify-center">
+                                                        @if ($comment->user->profile_pic)
+                                                            <img src="{{ asset('storage/' . $comment->user->profile_pic) }}" 
+                                                                alt="{{ $comment->user->fname }}'s Profile Picture"
+                                                                class="w-full h-full object-cover">
+                                                        @else
+                                                            <img src="{{ asset('images/default-profile.jpg') }}" 
+                                                                alt="Default Profile Picture"
+                                                                class="w-full h-full object-cover">
+                                                        @endif
                                         </div>
                                     </div>
                                     
@@ -158,8 +170,8 @@
                                     <div class="flex-1">
                                         <div class="flex justify-between items-start mb-1">
                                             <div>
-                                                <a href="{{ route('profile.show', $comment->user->id) }}" class="font-semibold text-gray-800 dark:text-gray-200 hover:underline">
-                                                    {{ $comment->user->fname }} {{ $comment->user->lname }}
+                                                <a href="{{ route('profile.show', $comment->user->id) }}" class="hover:underline">
+                                                    <x-user-name-badge :user="$comment->user" />
                                                 </a>
                                                 <span class="text-xs text-gray-500 dark:text-gray-400 ml-2">
                                                     {{ $comment->created_at->diffForHumans() }}
@@ -231,10 +243,16 @@
             
             <!-- Avatar -->
             <div class="flex-shrink-0">
-                <div class="w-8 h-8 bg-[#B59F84] rounded-full border-2 border-white dark:border-gray-800 flex items-center justify-center">
-                    <span class="text-xs font-bold text-white">
-                        {{ strtoupper(substr($reply->user->fname, 0, 1) . substr($reply->user->lname, 0, 1)) }}
-                    </span>
+                <div class="w-8 h-8 bg-[#B59F84] rounded-full border-2 border-white dark:border-gray-800 overflow-hidden flex items-center justify-center">
+                    @if ($reply->user->profile_pic)
+                        <img src="{{ asset('storage/' . $reply->user->profile_pic) }}" 
+                            alt="{{ $reply->user->fname }}'s Profile Picture"
+                            class="w-full h-full object-cover">
+                    @else
+                        <img src="{{ asset('images/default-profile.jpg') }}" 
+                            alt="Default Profile Picture"
+                            class="w-full h-full object-cover">
+                    @endif
                 </div>
             </div>
 
@@ -242,8 +260,8 @@
             <div class="flex-1">
                     <div>
                         <a href="{{ route('profile.show', $reply->user->id) }}" 
-                           class="text-sm font-semibold text-gray-800 dark:text-gray-200 hover:underline">
-                            {{ $reply->user->fname }} {{ $reply->user->lname }}
+                           class="hover:underline">
+                            <x-user-name-badge :user="$reply->user" />
                         </a>
                         <span class="text-xs text-gray-500 dark:text-gray-400 ml-2">
                             {{ $reply->created_at->diffForHumans() }}
@@ -288,17 +306,20 @@
                     @auth
                         <form id="comment-form" action="{{ route('comments.store') }}" method="POST" class="mt-6">
                             @csrf
-                                <input type="hidden" name="donation_id" value="{{ $donation->id }}">
-                                <input type="hidden" name="parent_id" id="parent_id" value="">
-                                <div class="relative flex flex-col md:flex-row items-stretch md:items-center gap-3 w-full max-w-xl bg-white dark:bg-gray-800 p-3 rounded-2xl border border-gray-200 dark:border-gray-600 shadow-md">
+                            <input type="hidden" name="donation_id" value="{{ $donation->id }}">
+                            <input type="hidden" name="parent_id" id="parent_id" value="">
+                            <div class="relative flex flex-col md:flex-row items-stretch md:items-center gap-3 w-full max-w-xl bg-white dark:bg-gray-800 p-3 rounded-2xl border border-gray-200 dark:border-gray-600 shadow-md">
+                                <div class="relative w-full flex items-center">
                                     <textarea name="content" id="comment-content" placeholder="Write a comment..."
-                                        class="mentionable flex-1 w-full resize-none overflow-hidden rounded-lg px-4 py-2 text-sm text-gray-800 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#B59F84] border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700"
+                                        class="mentionable flex-1 w-full resize-none overflow-hidden rounded-lg px-4 py-2 text-sm text-gray-800 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#B59F84] border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 pr-10"
                                         rows="2" oninput="this.style.height='auto';this.style.height=this.scrollHeight+'px';" required></textarea>
-                                <button type="submit"
-                                        class="mt-2 md:mt-0 md:self-center bg-[#B59F84] text-white font-semibold px-4 py-2 rounded-lg shadow hover:bg-[#a08e77] transition-all duration-300 ease-in-out w-full md:w-auto">
-                                    <i class="fas fa-paper-plane"></i>
-                                </button>
+                                    <button type="submit"
+                                        class="absolute right-2 bottom-2 bg-[#B59F84] text-white font-semibold px-3 py-2 rounded-lg shadow hover:bg-[#a08e77] transition-all duration-300 ease-in-out md:static md:ml-3 md:bottom-auto md:right-auto md:w-auto">
+                                        <i class="fas fa-paper-plane"></i>
+                                    </button>
+                                </div>
                             </div>
+
                             <div id="comment-error" class="text-red-500 mt-2 text-sm hidden"></div>
                                 
                                 <!-- Reply indicator (hidden by default) -->
@@ -798,10 +819,15 @@ window.addEventListener("popstate", function (event) {
                 <div class="flex gap-3">
                     <!-- User Avatar -->
                     <div class="flex-shrink-0">
-                        <div class="w-10 h-10 bg-[#B59F84] rounded-full border-2 border-white dark:border-gray-800 flex items-center justify-center">
-                                <span class="text-sm font-bold text-white">
-                                ${commentData.user.fname ? (commentData.user.fname.charAt(0) + commentData.user.lname.charAt(0)).toUpperCase() : 'U'}
-                            </span>
+                         <div class="w-10 h-10 rounded-full border-2 border-white dark:border-gray-800 overflow-hidden bg-[#B59F84] flex items-center justify-center">
+                            ${commentData.user.profile_pic ? 
+                                `<img src="/storage/${commentData.user.profile_pic}" 
+                                    alt="${commentData.user.fname}'s Profile Picture"
+                                    class="w-full h-full object-cover">` :
+                                `<img src="/images/default-profile.jpg" 
+                                    alt="Default Profile Picture"
+                                    class="w-full h-full object-cover">`
+                            }
                         </div>
                     </div>
                    
@@ -811,8 +837,8 @@ window.addEventListener("popstate", function (event) {
         <!-- Comment Header -->
         <div class="flex justify-between items-start mb-1">
             <div>
-                <a href="/profile/${commentData.user.id}" class="font-semibold text-gray-800 dark:text-gray-200 hover:underline">
-                    ${commentData.user.fname} ${commentData.user.lname}
+                <a href="/profile/${commentData.user.id}" class="hover:underline">
+                    ${createUserNameBadge(commentData.user)}
                 </a>
                 <span class="text-xs text-gray-500 dark:text-gray-400 ml-2">
                     ${commentData.created_at ? getTimeAgo(new Date(commentData.created_at)) : 'just now'}
@@ -1000,16 +1026,21 @@ window.addEventListener("popstate", function (event) {
     const replyHtml = `
                 <div class="reply-item flex gap-3" id="reply-${commentData.id}" data-comment-id="${commentData.id}" data-parent-id="${commentData.parent_id}">
                     <div class="flex-shrink-0">
-                        <div class="w-8 h-8 bg-[#B59F84] rounded-full border-2 border-white dark:border-gray-800 flex items-center justify-center">
-                            <span class="text-xs font-bold text-white">
-                        ${(commentData.user?.fname?.charAt(0).toUpperCase() ?? '')}${(commentData.user?.lname?.charAt(0).toUpperCase() ?? '')}
-                    </span>
+                        <div class="w-8 h-8 bg-[#B59F84] rounded-full border-2 border-white dark:border-gray-800 overflow-hidden flex items-center justify-center">
+                           ${commentData.user.profile_pic ? 
+                                `<img src="/storage/${commentData.user.profile_pic}" 
+                                    alt="${commentData.user.fname}'s Profile Picture"
+                                    class="w-full h-full object-cover">` :
+                                `<img src="/images/default-profile.jpg" 
+                                    alt="Default Profile Picture"
+                                    class="w-full h-full object-cover">`
+                            }
                 </div>
             </div>
                     <div class="flex-1">
                 <div>
-                            <a href="/profile/${commentData.user?.id}" class="text-sm font-semibold text-gray-800 dark:text-gray-200 hover:underline">
-                        ${commentData.user?.fname ?? ''} ${commentData.user?.lname ?? ''}
+                            <a href="/profile/${commentData.user?.id}" class="hover:underline">
+                        ${createUserNameBadge(commentData.user)}
                     </a>
                             <span class="text-xs text-gray-500 dark:text-gray-400 ml-2">just now</span>
                 </div>
@@ -1060,6 +1091,29 @@ window.addEventListener("popstate", function (event) {
         } else {
             return date.toLocaleDateString();
         }
+    }
+
+    // Helper function to create user name badge with verification status
+    function createUserNameBadge(user) {
+        let badgeHtml = `<span class="flex items-center space-x-2">
+            <span class="font-medium text-gray-900 dark:text-gray-100">${user.fname} ${user.lname}</span>`;
+        
+        if (user.verification_status === 'approved') {
+            badgeHtml += `
+                <span class="inline-flex items-center justify-center w-5 h-5 bg-[#B59F84] text-white rounded-full relative">
+                    <!-- Scalloped shape using SVG -->
+                    <svg viewBox="0 0 24 24" class="absolute w-full h-full">
+                        <path fill="#B59F84" d="M12 0l2.9 4.4 5 1.1-3.6 3.8.9 5-4.2-2.2-4.2 2.2.9-5-3.6-3.8 5-1.1L12 0z"/>
+                    </svg>
+                    <!-- White checkmark -->
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 z-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                    </svg>
+                </span>`;
+        }
+        
+        badgeHtml += `</span>`;
+        return badgeHtml;
     }
 
     // Update replies count

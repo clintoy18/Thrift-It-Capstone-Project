@@ -25,8 +25,8 @@
         </div>
     </div>
 
-    <!-- Stats Grid -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+    <!-- Desktop View - Grid Layout -->
+    <div class="hidden sm:grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         <!-- Total Listings -->
         <div class="stat-card group">
             <div class="stat-icon-wrapper">
@@ -40,9 +40,6 @@
             <div class="stat-content">
                 <h3 class="stat-label">Total Listings</h3>
                 <p class="stat-value">{{ $totalListings }}</p>
-            </div>
-            <div class="stat-trend">
-                <!-- Empty as per original -->
             </div>
         </div>
 
@@ -60,9 +57,6 @@
                 <h3 class="stat-label">Items Sold</h3>
                 <p class="stat-value">{{ $itemsSold }}</p>
             </div>
-            <div class="stat-trend">
-                <!-- Empty as per original -->
-            </div>
         </div>
 
         <!-- Items Donated -->
@@ -78,9 +72,6 @@
             <div class="stat-content">
                 <h3 class="stat-label">Items Donated</h3>
                 <p class="stat-value">{{ $itemsDonated }}</p>
-            </div>
-            <div class="stat-trend">
-                <!-- Empty as per original -->
             </div>
         </div>
 
@@ -98,8 +89,48 @@
                 <h3 class="stat-label">Revenue</h3>
                 <p class="stat-value">₱{{ number_format($revenue, 2) }}</p>
             </div>
-            <div class="stat-trend">
-                <!-- Empty as per original -->
+        </div>
+    </div>
+
+    <!-- Mobile View - List Layout -->
+    <div class="sm:hidden space-y-4">
+        <!-- Time Filter for Mobile -->
+        <div class="flex items-center justify-between py-2 border-b border-gray-200 dark:border-gray-700">
+            <span class="text-sm font-medium text-gray-600 dark:text-gray-400">All time</span>
+        </div>
+
+        <!-- Stats List -->
+        <div class="space-y-3">
+            <!-- Total Listings -->
+            <div class="mobile-stat-item">
+                <div class="flex items-center justify-between py-3">
+                    <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Total Listings</span>
+                    <span class="text-lg font-semibold text-gray-900 dark:text-gray-100">{{ $totalListings }}</span>
+                </div>
+            </div>
+
+            <!-- Items Sold -->
+            <div class="mobile-stat-item">
+                <div class="flex items-center justify-between py-3">
+                    <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Items Sold</span>
+                    <span class="text-lg font-semibold text-gray-900 dark:text-gray-100">{{ $itemsSold }}</span>
+                </div>
+            </div>
+
+            <!-- Items Donated -->
+            <div class="mobile-stat-item">
+                <div class="flex items-center justify-between py-3">
+                    <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Items Donated</span>
+                    <span class="text-lg font-semibold text-gray-900 dark:text-gray-100">{{ $itemsDonated }}</span>
+                </div>
+            </div>
+
+            <!-- Revenue -->
+            <div class="mobile-stat-item">
+                <div class="flex items-center justify-between py-3">
+                    <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Revenue</span>
+                    <span class="text-lg font-semibold text-gray-900 dark:text-gray-100">₱{{ number_format($revenue, 2) }}</span>
+                </div>
             </div>
         </div>
     </div>
@@ -107,6 +138,7 @@
 
 @push('styles')
 <style>
+    /* Desktop Styles */
     .stat-card {
         @apply bg-white dark:bg-gray-800 rounded-2xl border border-gray-200/80 dark:border-gray-700/80 p-6 transition-all duration-500 ease-out relative overflow-hidden;
         box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px 0 rgba(0, 0, 0, 0.03);
@@ -162,11 +194,16 @@
     .stat-card:hover .stat-value {
         @apply text-gray-800 dark:text-white;
     }
-    
-    .stat-trend {
-        @apply mt-4 flex items-center space-x-2;
+
+    /* Mobile Styles */
+    .mobile-stat-item {
+        @apply border-b border-gray-100 dark:border-gray-800 last:border-b-0;
     }
-    
+
+    .mobile-stat-item:last-child {
+        @apply border-b-0;
+    }
+
     /* Enhanced animations */
     @keyframes fadeInUp {
         from {
@@ -189,9 +226,40 @@
     .stat-card:nth-child(3) { animation-delay: 0.3s; }
     .stat-card:nth-child(4) { animation-delay: 0.4s; }
     
+    /* Mobile animations */
+    @keyframes mobileSlideIn {
+        from {
+            opacity: 0;
+            transform: translateX(-10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+    
+    .mobile-stat-item {
+        animation: mobileSlideIn 0.4s ease-out forwards;
+        opacity: 0;
+    }
+    
+    .mobile-stat-item:nth-child(1) { animation-delay: 0.1s; }
+    .mobile-stat-item:nth-child(2) { animation-delay: 0.2s; }
+    .mobile-stat-item:nth-child(3) { animation-delay: 0.3s; }
+    .mobile-stat-item:nth-child(4) { animation-delay: 0.4s; }
+    
     /* Smooth dark mode transitions */
     .dashboard-stats * {
         @apply transition-colors duration-300;
+    }
+
+    /* Optimize for reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+        .stat-card,
+        .mobile-stat-item {
+            animation: none;
+            opacity: 1;
+        }
     }
 </style>
 @endpush

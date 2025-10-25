@@ -279,7 +279,7 @@
             </div>
        <!-- Mobile Menu -->
 <div x-show="mobileMenuOpen" x-transition 
-     class="fixed top-16 left-0 right-0 bg-white shadow-lg border-t border-gray-200 md:hidden z-50 max-h-[80vh] overflow-y-auto">
+     class="fixed top-[90px] left-0 right-0 bg-white shadow-lg border-t border-gray-200 md:hidden z-40 max-h-[70vh] overflow-y-auto">
     <div class="flex flex-col space-y-0 px-4 py-4">
         @auth
             @if ($role !== 2)

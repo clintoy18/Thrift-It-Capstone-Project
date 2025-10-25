@@ -113,6 +113,8 @@ class CommentController extends Controller
                             'id'    => $comment->user->id,
                             'fname' => $comment->user->fname,
                             'lname' => $comment->user->lname,
+                            'verification_status' => $comment->user->verification_status,
+                            'profile_pic' => $comment->user->profile_pic,
                         ],
                     ],
                 ], 201);
