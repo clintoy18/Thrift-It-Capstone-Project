@@ -139,4 +139,10 @@ class DonationController extends Controller
         $donations = $this->donationService->getAllDonations();
         return view('donations.donation-hub', compact('donations'));
     }
+
+        public function markAsDonated(Donation $donation): RedirectResponse
+    {
+        $this->donationService->updateDonation($donation, ['status' => 'donated']);
+        return redirect()->route('donations.show')->with('success', 'Item marked as donated.');
+    }
 }

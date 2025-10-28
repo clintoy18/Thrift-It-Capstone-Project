@@ -3,7 +3,7 @@
     <div class="py-6 bg-white overflow-hidden dark:bg-gray-900">
         <!-- Responsive Container with Maximum Width -->
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" x-data="{}">
-            
+        {{--             
             <!-- ===== PROFILE HEADER SECTION ===== -->
             <!-- Flex container for responsive header layout -->
             <div class="flex flex-col sm:flex-row justify-between items-center mb-8 gap-4">
@@ -12,7 +12,7 @@
                         <x-user-name-badge :user="$user" :show-full-name="true" />
                     </h2>
                 </div>
-            </div>
+            </div> --}}
 
             <!-- ===== PROFILE INFORMATION SECTION ===== -->
             <div class="pb-6 mb-0">
@@ -24,7 +24,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
                         </svg>
                     </div>
-                    Profile Information
+                      <x-user-name-badge :user="$user" :show-full-name="true" />'s Profile 
                 </h3>
                 <!-- User Profile Card Container -->
                 <div class="bg-white dark:bg-gray-800 rounded-lg  overflow-hidden">

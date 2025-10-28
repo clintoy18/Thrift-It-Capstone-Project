@@ -47,7 +47,7 @@
                     <div class="p-5">
                         <div class="flex justify-between items-start">
                             <div>
-                                <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">Total Products</h3>
+                                <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">Total Items</h3>
                                 <p class="text-3xl font-bold text-green-600 dark:text-green-400">{{ $stats['total_products'] }}</p>
                                 <div class="flex items-center mt-2 text-sm text-gray-500 dark:text-gray-400">
                                     <i class="fas fa-box mr-1 text-green-500"></i>
@@ -60,7 +60,7 @@
                         </div>
                         <div class="mt-4">
                             <a href="{{ route('admin.products.index') }}" class="inline-flex items-center text-sm font-medium text-green-600 dark:text-green-400 hover:text-green-800 dark:hover:text-green-300 transition-colors duration-200">
-                                Manage Products
+                                Manage Items
                                 <i class="fas fa-arrow-right ml-1 text-xs"></i>
                             </a>
                         </div>
@@ -72,7 +72,7 @@
                     <div class="p-5">
                         <div class="flex justify-between items-start">
                             <div>
-                                <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">Products Sold</h3>
+                                <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">Items Sold</h3>
                                 <p class="text-3xl font-bold text-purple-600 dark:text-purple-400">{{ $stats['total_products_sold'] }}</p>
                                 <div class="flex items-center mt-2 text-sm text-gray-500 dark:text-gray-400">
                                     <i class="fas fa-chart-line mr-1 text-purple-500"></i>

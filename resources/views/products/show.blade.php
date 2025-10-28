@@ -1,5 +1,5 @@
 <x-app-layout>
-    <div class="py-12 bg-gray-100 dark:bg-gray-900">
+    <div class="py-12 bg-white">
         <div class="max-w-7xl mx-auto p-6">
             <!-- Two-Column Layout -->
             <div class="flex flex-col lg:flex-row gap-8 items-stretch">
@@ -562,12 +562,16 @@
                                     <div class="relative w-full flex items-center">
                                         <textarea name="content" id="comment-content" placeholder="Write a comment..."
                                             class="mentionable flex-1 w-full resize-none overflow-hidden rounded-lg px-4 py-2 text-sm text-gray-800 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#B59F84] border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 pr-10"
-                                            rows="2" oninput="this.style.height='auto';this.style.height=this.scrollHeight+'px';" required></textarea>
-                                        <button type="submit"
+                                            rows="2" oninput="this.style.height='auto';this.style.height=this.scrollHeight+'px'; handleCommentInput()" required></textarea>
+                                            <button type="submit"
                                             class="absolute right-2 bottom-2 bg-[#B59F84] text-white font-semibold px-3 py-2 rounded-lg shadow hover:bg-[#a08e77] transition-all duration-300 ease-in-out md:static md:ml-3 md:bottom-auto md:right-auto md:w-auto">
+                                            
                                             <i class="fas fa-paper-plane"></i>
                                         </button>
+
                                     </div>
+                                    <button type="button" id="reply-cancel-btn" onclick="cancelReply()" class="hidden ml-2 text-[#B59F84] hover:underline">Cancel</button>
+
                                 </div>
 
                                 <div id="comment-error" class="text-gray-600 mt-2 text-sm hidden"></div>
@@ -576,8 +580,7 @@
                                 <div id="reply-indicator"
                                     class="hidden mt-2 text-sm text-gray-600 dark:text-gray-400 bg-gray-50 dark:bg-gray-700 rounded-lg p-3">
                                     <span id="replying-to" class="font-medium"></span>
-                                    <button type="button" onclick="cancelReply()"
-                                        class="ml-2 text-[#B59F84] hover:underline">Cancel</button>
+                                  
                                 </div>
                             </form>
                         @else
@@ -691,6 +694,19 @@
 
     <script>
         // Modal-specific file handling functions
+         // Handle comment input to show/hide cancel button
+         function handleCommentInput() {
+            const textarea = document.getElementById('comment-content');
+            const cancelBtn = document.getElementById('reply-cancel-btn');
+            
+            if (textarea && cancelBtn) {
+                if (textarea.value.trim().length > 0) {
+                    cancelBtn.classList.remove('hidden');
+                } else {
+                    cancelBtn.classList.add('hidden');
+                }
+            }
+        }
 function clearModalFileInput() {
     const fileInput = document.getElementById('modal-fileInput');
     const filePreview = document.getElementById('modal-filePreview');
@@ -849,7 +865,10 @@ document.addEventListener('DOMContentLoaded', function() {
             // Show reply indicator
             replyingToSpan.textContent = `Replying to ${displayName}`;
             replyIndicator.classList.remove('hidden');
+        
 
+            // Show cancel button since we have content (the @username)
+            handleCommentInput();
             // Focus on the textarea
             commentTextarea.focus();
 
@@ -874,6 +893,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const commentTextarea = document.getElementById('comment-content');
             const parentIdField = document.getElementById('parent_id');
             const replyIndicator = document.getElementById('reply-indicator');
+            const cancelBtn = document.getElementById('reply-cancel-btn');
 
             // Clear values
             commentTextarea.value = '';
@@ -882,6 +902,14 @@ document.addEventListener('DOMContentLoaded', function() {
             // Hide reply indicator
             replyIndicator.classList.add('hidden');
 
+            // Hide cancel button
+            if (cancelBtn) {
+                cancelBtn.classList.add('hidden');
+            }
+            
+            // Reset textarea height
+            commentTextarea.style.height = 'auto';
+            
             // Focus on textarea
             commentTextarea.focus();
         }
@@ -1295,6 +1323,8 @@ document.addEventListener('DOMContentLoaded', function() {
                             if (data.success) {
                                 // Clear the textarea and reset form
                                 document.getElementById('comment-content').value = '';
+                                // Hide cancel button
+                                handleCommentInput();
                                 cancelReply(); // Reset reply state
 
                                 // Add the new comment/reply to the list

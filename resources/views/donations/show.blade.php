@@ -61,12 +61,29 @@
                         <p class="text-sm text-gray-500">Quantity: {{ $donation->qty }}</p>
                         <p class="text-sm text-gray-500">Status: {{ ucfirst($donation->status) }}</p>
 
-                        @if(Auth::id() === $donation->user_id)
-                            <a href="{{ route('donations.edit', $donation->id) }}" 
-                               class="px-6 py-3 bg-[#B59F84] text-white rounded-lg hover:bg-[#a08e77] transition-all duration-300 text-center font-medium">
-                                Update donation
-                            </a>
+                    <!-- Owner Actions -->
+                @if(Auth::id() === $donation->user_id)
+                    <div class="flex flex-col gap-3 mt-4">
+                        <a href="{{ route('donations.edit', $donation->id) }}"
+                            class="px-6 py-3 bg-[#B59F84] text-white rounded-lg hover:bg-[#a08e77] transition-all duration-300 text-center font-medium">
+                            Update donation
+                        </a>
+
+                        
+                        @if($donation->status === 'available')
+                            <form action="{{ route('donations.markAsDonated', $donation) }}" method="POST">
+                                @csrf
+                                @method('PUT')
+                                <button type="submit"
+                                    class="w-full px-6 py-3 bg-green-100 text-green-600 rounded-lg hover:bg-green-200 dark:bg-green-900 dark:text-green-300 dark:hover:bg-green-800 transition-all duration-300 font-medium"
+                                    onclick="return confirm('Mark this item as donated?')">
+                                    Mark as Donated
+                                </button>
+                            </form>
+                        @else
                         @endif
+                    </div>
+                @endif
                     </div>
                 </div>
                 </div>
@@ -312,12 +329,14 @@
                                 <div class="relative w-full flex items-center">
                                     <textarea name="content" id="comment-content" placeholder="Write a comment..."
                                         class="mentionable flex-1 w-full resize-none overflow-hidden rounded-lg px-4 py-2 text-sm text-gray-800 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#B59F84] border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 pr-10"
-                                        rows="2" oninput="this.style.height='auto';this.style.height=this.scrollHeight+'px';" required></textarea>
+                                        rows="2" oninput="this.style.height='auto';this.style.height=this.scrollHeight+'px'; handleCommentInput()" required></textarea>
                                     <button type="submit"
                                         class="absolute right-2 bottom-2 bg-[#B59F84] text-white font-semibold px-3 py-2 rounded-lg shadow hover:bg-[#a08e77] transition-all duration-300 ease-in-out md:static md:ml-3 md:bottom-auto md:right-auto md:w-auto">
                                         <i class="fas fa-paper-plane"></i>
                                     </button>
                                 </div>
+                                <button type="button" id="reply-cancel-btn" onclick="cancelReply()" class="hidden ml-2 text-[#B59F84] hover:underline">Cancel</button>
+
                             </div>
 
                             <div id="comment-error" class="text-red-500 mt-2 text-sm hidden"></div>
@@ -325,7 +344,7 @@
                                 <!-- Reply indicator (hidden by default) -->
                                 <div id="reply-indicator" class="hidden mt-2 text-sm text-gray-600 dark:text-gray-400 bg-gray-50 dark:bg-gray-700 rounded-lg p-3">
                                     <span id="replying-to" class="font-medium"></span>
-                                    <button type="button" onclick="cancelReply()" class="ml-2 text-[#B59F84] hover:underline">Cancel</button>
+                               
                                 </div>
                         </form>
                     @else
@@ -440,6 +459,20 @@
         let currentReplyParentId = null;
         let currentReplyUsername = null;
 
+        // Handle comment input to show/hide cancel button
+        function handleCommentInput() {
+            const textarea = document.getElementById('comment-content');
+            const cancelBtn = document.getElementById('reply-cancel-btn');
+            
+            if (textarea && cancelBtn) {
+                if (textarea.value.trim().length > 0) {
+                    cancelBtn.classList.remove('hidden');
+                } else {
+                    cancelBtn.classList.add('hidden');
+                }
+            }
+        }
+
         // Function to start a reply (Instagram-style)
         function startReply(commentId, displayName) {
             // Set the current reply state
@@ -466,6 +499,9 @@
             replyingToSpan.textContent = `Replying to ${displayName}`;
             replyIndicator.classList.remove('hidden');
             
+            // Show cancel button since we have content (the @username)
+            handleCommentInput();
+            
             // Focus on the textarea
             commentTextarea.focus();
             
@@ -487,6 +523,7 @@
             const commentTextarea = document.getElementById('comment-content');
             const parentIdField = document.getElementById('parent_id');
             const replyIndicator = document.getElementById('reply-indicator');
+            const cancelBtn = document.getElementById('reply-cancel-btn');
             
             // Clear values
             commentTextarea.value = '';
@@ -494,6 +531,14 @@
             
             // Hide reply indicator
             replyIndicator.classList.add('hidden');
+            
+            // Hide cancel button
+            if (cancelBtn) {
+                cancelBtn.classList.add('hidden');
+            }
+            
+            // Reset textarea height
+            commentTextarea.style.height = 'auto';
             
             // Focus on textarea
             commentTextarea.focus();
@@ -724,6 +769,8 @@ window.addEventListener("popstate", function (event) {
                     if (data.success) {
                                 // Clear the textarea and reset form
                         document.getElementById('comment-content').value = '';
+                                // Hide cancel button
+                                handleCommentInput();
                                 cancelReply(); // Reset reply state
 
                                 // Add the new comment/reply to the list
