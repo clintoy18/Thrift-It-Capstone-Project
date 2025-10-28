@@ -8,7 +8,9 @@ class DonationRepository
 {
     public function all()
     {
-        return Donation::with('images')->get();
+        return Donation::
+        where('approval_status','approved')
+        ->with('images')->get();
     }
 
     public function find($id)
