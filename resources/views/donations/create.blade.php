@@ -200,16 +200,6 @@
                                     </select>
                                     <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Size options will update based on category.</p>
                                 </div>
-
-                               <div>
-                                    <label for="status" class="block text-sm font-semibold text-gray-700 dark:text-gray-300">Status</label>
-                                    <select id="status" name="status" class="mt-1 block w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-[#B59F84] focus:border-[#B59F84] transition">
-                                        <option value="available" selected>Available</option>
-                                        <option value="sold">Sold</option>
-                                    </select>
-                                    <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Set to Available for donation.</p>
-                                </div>
-                                
                             </div>
                             <div class="flex justify-center sm:justify-end  mt-9 mb-[-40px]">
                                     <button type="submit" class="inline-flex items-center justify-center bg-[#B59F84] text-white px-8 sm:px-10 py-2 rounded-[10px] text-sm sm:text-base font-semibold hover:bg-[#a08e77] transform hover:scale-105 transition-all duration-300 shadow-md w-full sm:w-auto">

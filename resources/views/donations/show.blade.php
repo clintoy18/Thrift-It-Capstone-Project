@@ -61,12 +61,29 @@
                         <p class="text-sm text-gray-500">Quantity: {{ $donation->qty }}</p>
                         <p class="text-sm text-gray-500">Status: {{ ucfirst($donation->status) }}</p>
 
-                        @if(Auth::id() === $donation->user_id)
-                            <a href="{{ route('donations.edit', $donation->id) }}" 
-                               class="px-6 py-3 bg-[#B59F84] text-white rounded-lg hover:bg-[#a08e77] transition-all duration-300 text-center font-medium">
-                                Update donation
-                            </a>
+                    <!-- Owner Actions -->
+                @if(Auth::id() === $donation->user_id)
+                    <div class="flex flex-col gap-3 mt-4">
+                        <a href="{{ route('donations.edit', $donation->id) }}"
+                            class="px-6 py-3 bg-[#B59F84] text-white rounded-lg hover:bg-[#a08e77] transition-all duration-300 text-center font-medium">
+                            Update donation
+                        </a>
+
+                        
+                        @if($donation->status === 'available')
+                            <form action="{{ route('donations.markAsDonated', $donation) }}" method="POST">
+                                @csrf
+                                @method('PUT')
+                                <button type="submit"
+                                    class="w-full px-6 py-3 bg-green-100 text-green-600 rounded-lg hover:bg-green-200 dark:bg-green-900 dark:text-green-300 dark:hover:bg-green-800 transition-all duration-300 font-medium"
+                                    onclick="return confirm('Mark this item as donated?')">
+                                    Mark as Donated
+                                </button>
+                            </form>
+                        @else
                         @endif
+                    </div>
+                @endif
                     </div>
                 </div>
                 </div>

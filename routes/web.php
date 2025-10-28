@@ -145,6 +145,10 @@ Route::middleware('auth')->group(function () {
     Route::put('/products/{product}/mark-as-sold', [ProductController::class, 'markAsSold'])
     ->name('products.markAsSold');   
 
+        //mark item as sold
+    Route::put('/donations/{donation}/mark-as-donated', [DonationController::class, 'markAsDonated'])
+    ->name('donations.markAsDonated');   
+
 
     //route for pricing page
     Route::get('/pricing', [PricingController::class, 'index'])->name('pricing.index');
