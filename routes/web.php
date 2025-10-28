@@ -15,6 +15,7 @@ use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\AdminReportController;
 use App\Http\Controllers\Admin\AdminUserController;
 use App\Http\Controllers\Admin\AdminProductController;
+use App\Http\Controllers\Admin\AdminDonationController;
 use App\Http\Controllers\LandingPageController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\PrivateChatController;
@@ -24,6 +25,7 @@ use App\Http\Controllers\SegmentController;
 use App\Http\Controllers\PricingController;
 use App\Http\Controllers\EcoPostController;
 use App\Http\Controllers\OrderController;
+
 use App\Models\Notification;
 use Illuminate\Support\Facades\Auth;
 
@@ -101,6 +103,8 @@ Route::middleware(['auth', 'verified', 'rolemiddleware:admin'])->prefix('admin')
     Route::resource('reports', AdminReportController::class);
     Route::resource('users', AdminUserController::class);
     Route::resource('products', AdminProductController::class);
+    Route::resource('donations', AdminDonationController::class);
+
     // Sales Report Routes
     Route::get('/sales/monthly-report/{month}', [App\Http\Controllers\Admin\SalesReportController::class, 'generateMonthlyReport'])->name('sales.monthly-report');
     Route::get('/sales/yearly-report', [App\Http\Controllers\Admin\SalesReportController::class, 'generateYearlyReport'])->name('sales.yearly-report');
@@ -112,6 +116,11 @@ Route::middleware(['auth', 'verified', 'rolemiddleware:admin'])->prefix('admin')
     Route::put('/products/{product}/reject', [AdminProductController::class, 'reject'])
     ->name('products.reject');
  
+        //approve and reject donations
+    Route::put('/donations/{donation}/approve', [AdminDonationController::class, 'approve'])
+    ->name('donations.approve');
+    Route::put('/donations/{donation}/reject', [AdminDonationController::class, 'reject'])
+    ->name('donations.reject');
 
     //verify -reject user
     Route::put('/users/{user}/verify', [AdminUserController::class, 'verify'])->name('users.verify');

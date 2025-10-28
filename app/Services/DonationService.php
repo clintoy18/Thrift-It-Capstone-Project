@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Repositories\DonationRepository;
 use Illuminate\Support\Facades\Storage;
+use App\Models\Segment;
 
 class DonationService
 {
@@ -58,6 +59,16 @@ class DonationService
     public function deleteDonation($donation)
     {
         return $this->donationRepository->delete($donation);
+    }
+
+    public function getApprovedDonationsBySegment(Segment $segment, ?int $categoryId = null)
+    {
+        return $this->donationRepository->getApprovedDonations($segment, $categoryId);
+    }
+
+    public function getDonationsByStatusPaginated(string $status, int $perPage = 10)
+    {
+        return $this->donationRepository->getByStatusPaginated($status, $perPage);
     }
 
         public function getDonationsByUser($userId)
