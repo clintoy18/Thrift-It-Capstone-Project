@@ -1,4 +1,4 @@
-<nav class="fixed top-0 left-0 w-full bg-[#F4F2ED] dark:bg-[#1E1E1E] text-gray-800 dark:text-gray-200 px-4 sm:px-6 md:px-6 py-4 z-50 shadow-sm">
+<nav class="fixed top-0 left-0 w-full bg-[#F4F2ED]  dark:bg-gray-800 text-gray-800 dark:text-gray-200 px-4 sm:px-6 md:px-6 py-4 z-50 shadow-sm">
     <div class="max-w-7xl mx-auto" x-data="{ mobileMenuOpen: false }">
         <!-- Desktop Navigation -->
         <div class="flex justify-between items-center">
@@ -243,10 +243,10 @@
                 @endauth
             </div>
             <!-- Mobile Navbar -->
-            <div class="flex items-center justify-between md:hidden w-full px-4 py-1 bg-[#F4F2ED] dark:bg-[#1E1E1E]">
+            <div class="flex items-center justify-between md:hidden w-full px-4 py-1 bg-[#F4F2ED]  dark:bg-gray-800 dark:text-gray-200">
                 <!-- Search Bar -->
                 <div class="flex-1 mx-2">
-                    <form action="{{ route('search') }}" method="GET" class="flex items-center bg-white px-3 py-2 rounded-full shadow-sm border">
+                    <form action="{{ route('search') }}" method="GET" class="flex items-center bg-white  dark:bg-gray-800 dark:text-gray-200 px-3 py-2 rounded-full shadow-sm border">
                         <input type="text" name="query" value="{{ request('query') }}" placeholder="Search for a product..."
                             class="w-full border-none outline-none text-sm bg-transparent text-gray-700" required>
                         <button type="submit" class="ml-2 text-gray-500 hover:text-blue-500">
