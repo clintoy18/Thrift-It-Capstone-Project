@@ -1,12 +1,16 @@
 import { defineConfig } from 'vite';
 import laravel from 'laravel-vite-plugin';
 
+const host = process.env.VITE_HOST || 'localhost';
+const port = process.env.VITE_PORT || 5173;
+
 export default defineConfig({
   server: {
-    host: '0.0.0.0', // allow LAN access
-    port: 5173,
+    host: host === '0.0.0.0' ? true : host,
+    port: parseInt(port),
+    strictPort: true,
     hmr: {
-      host: '192.168.5.193', // 👈 your PC’s IPv4 (same as above)
+      host: host,
     },
   },
   plugins: [
