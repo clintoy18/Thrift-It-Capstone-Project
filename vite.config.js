@@ -6,7 +6,7 @@ export default defineConfig({
     host: '0.0.0.0', // allow LAN access
     port: 5173,
     hmr: {
-      host: '0.0.0.0', // 👈 your PC’s IPv4 (same as above)
+      host: '192.168.5.193', // 👈 your PC’s IPv4 (same as above)
     },
   },
   plugins: [
