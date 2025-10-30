@@ -347,6 +347,71 @@
                             @endif
                         </div>
                     </div>
+
+
+         <!-- Google Maps Location Section -->
+<div class="mt-6 bg-white dark:bg-gray-800 rounded-xl p-6 shadow-md">
+    <div class="flex items-center gap-2 mb-4">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-[#B59F84]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                  d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                  d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+        </svg>
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Location</h3>
+    </div>
+    
+    <!-- Location Details -->
+    <div class="mb-4">
+        <p class="text-sm text-gray-600 dark:text-gray-400">
+            <span class="font-medium">Address:</span> 
+            {{ $product->barangay->name ?? 'N/A' }}, Cebu City, Cebu 6000
+        </p>
+    </div>
+
+   <!-- Alternative approach -->
+<div class="rounded-lg overflow-hidden shadow-lg border border-gray-200 dark:border-gray-700">
+    <div id="google-map-container" class="w-full h-64 bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
+        @if($product->barangay && $product->barangay->name)
+            <!-- Alternative URL format that should show the pin -->
+            <iframe 
+                id="location-map"
+                width="100%" 
+                height="100%" 
+                style="border:0;" 
+                loading="lazy" 
+                allowfullscreen
+                referrerpolicy="no-referrer-when-downgrade"
+                src="https://maps.google.com/maps?q={{ urlencode($product->barangay->name . ', Cebu City, Cebu, Philippines') }}&z=15&output=embed">
+            </iframe>
+        @else
+            <!-- Fallback content -->
+            <div class="text-center text-gray-500 dark:text-gray-400 p-4">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto mb-2 opacity-50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                          d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 11111.314 0z"/>
+                </svg>
+                <p class="text-sm">Location information not available</p>
+            </div>
+        @endif
+    </div>
+</div>
+
+    <!-- Map Actions -->
+    <div class="mt-4 flex gap-3">
+        @if($product->barangay && $product->barangay->name)
+            <a href="https://www.google.com/maps/search/?api=1&query={{ urlencode($product->barangay->name . ', Cebu City, Cebu, Philippines') }}" 
+               target="_blank"
+               class="flex-1 bg-[#B59F84] text-white text-center py-2.5 rounded-lg hover:bg-[#a08e77] transition-all duration-300 font-medium text-sm">
+                Open in Google Maps
+            </a>
+            <button onclick="copyLocation()" 
+                    class="px-4 py-2.5 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-300 font-medium text-sm">
+                Copy Address
+            </button>
+        @endif
+    </div>
+</div>
                     <!-- Comments Section -->
                     <div class="bg-[#F4F2ED] dark:bg-gray-800   rounded-xl p-10 shadow-md">
                         <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4">Comments</h3>
@@ -693,6 +758,39 @@
 
 
     <script>
+        // Add this to your existing JavaScript
+// Copy location function
+function copyLocation() {
+    const locationText = "{{ $product->barangay->name ?? 'N/A' }}, Cebu City, Cebu 6000";
+    
+    navigator.clipboard.writeText(locationText).then(() => {
+        // Show success feedback
+        const button = event.target;
+        const originalText = button.textContent;
+        button.textContent = 'Copied!';
+        button.classList.remove('text-gray-700', 'dark:text-gray-300');
+        button.classList.add('text-green-600');
+        
+        setTimeout(() => {
+            button.textContent = originalText;
+            button.classList.remove('text-green-600');
+            button.classList.add('text-gray-700', 'dark:text-gray-300');
+        }, 2000);
+    }).catch(err => {
+        console.error('Failed to copy location: ', err);
+        alert('Failed to copy location to clipboard');
+    });
+}
+
+// Optional: Add loading state for better UX
+document.addEventListener('DOMContentLoaded', function() {
+    const iframe = document.getElementById('location-map');
+    if (iframe) {
+        iframe.addEventListener('load', function() {
+            this.style.opacity = '1';
+        });
+    }
+});
         // Modal-specific file handling functions
          // Handle comment input to show/hide cancel button
          function handleCommentInput() {
