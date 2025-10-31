@@ -1,5 +1,5 @@
 <x-app-layout>
-    <div class="py-12 bg-white">
+    <div class="py-12 bg-white dark:bg-gray-600 dark:text-gray-200 ">
         <div class="max-w-7xl mx-auto p-6">
             <!-- Two-Column Layout -->
             <div class="flex flex-col lg:flex-row gap-8 items-stretch">
@@ -113,16 +113,16 @@
 
                     <!-- Message Seller - Only show to buyers, not to the owner -->
                     @if(Auth::check() && Auth::id() !== $product->user_id)
-                        <div class="w-full max-w-sm mt-4 bg-[#f8f4f0] text-gray-800 p-4 rounded-lg shadow-md mx-auto border border-[#d9cbb6]">
-                            <div class="flex items-center gap-2 mb-2">
+                        <div class="w-full max-w-sm mt-4 bg-[#f8f4f0] dark:bg-gray-800 dark:text-gray-200 text-gray-800 p-4 rounded-lg shadow-md mx-auto border border-[#d9cbb6]">
+                            <div class="flex items-center gap-2 mb-2 dark:bg-gray-800 dark:text-gray-200">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                     stroke-width="1.8" stroke="#B59F84" class="w-5 h-5">
                                     <path stroke-linecap="round" stroke-linejoin="round"
                                         d="M8.625 12h6.75m-6.75 3h4.125M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                                 </svg>
-                                <span class="font-semibold text-sm text-[#5c4a3e]">Send seller a message</span>
+                                <span class="font-semibold text-sm text-[#5c4a3e] dark:text-gray-200">Send seller a message</span>
                             </div>
-                            <textarea class="w-full bg-white border border-[#d9cbb6] text-gray-700 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#B59F84] resize-none" rows="2" readonly>Hi {{ $product->user->fname }}, is this still available?</textarea>
+                            <textarea class="w-full bg-white border border-[#d9cbb6] dark:bg-gray-800 dark:text-gray-200 text-gray-700 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#B59F84] resize-none" rows="2" readonly>Hi {{ $product->user->fname }}, is this still available?</textarea>
                             <a href="{{ route('private.chat', $product->user->id) }}?auto_message=1&product_id={{ $product->id }}&product_name={{ urlencode($product->name) }}&product_image={{ urlencode(asset('storage/' . $product->first_image)) }}"
                                 class="block w-full bg-[#B59F84] text-white text-center py-2.5 rounded-md font-medium hover:bg-[#a08e77] transition-all duration-300">
                                 Send
@@ -350,7 +350,7 @@
 
 
          <!-- Google Maps Location Section -->
-<div class="mt-6 bg-white dark:bg-gray-800 rounded-xl p-6 shadow-md">
+<div class="mt-1 bg-white dark:bg-gray-800 rounded-xl p-6 shadow-md">
     <div class="flex items-center gap-2 mb-4">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-[#B59F84]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
