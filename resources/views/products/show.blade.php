@@ -1,5 +1,5 @@
 <x-app-layout>
-    <div class="py-12 bg-white dark:bg-gray-600 dark:text-gray-200 ">
+    <div class="py-12 bg-white dark:bg-gray-700 dark:text-gray-200">
         <div class="max-w-7xl mx-auto p-6">
             <!-- Two-Column Layout -->
             <div class="flex flex-col lg:flex-row gap-8 items-stretch">
@@ -658,7 +658,7 @@
                 </div>
             </div>
         </div>
-    </div>
+
     <!-- More Products from the Same User -->
     @if ($moreProducts->count())
         <div class="py-6 bg-white dark:bg-gray-900 mt-10">
@@ -754,6 +754,7 @@
     @endif
     </div>
     </div>
+</div>
 
 
 

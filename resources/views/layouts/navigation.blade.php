@@ -158,7 +158,7 @@
                                             Personal Information
                                         </span>
                                     </div>
-                                    <a href="{{ route('profile.edit') }}#profile-information" 
+                                    <a href="{{ route('profile.edit') }}" 
                                         class="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-100 transition-colors duration-200 flex items-center gap-3">
                                         <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
@@ -175,7 +175,7 @@
                                             Security & Sign-in
                                         </span>
                                     </div>
-                                    <a href="{{ route('profile.edit1') }}#update-password" 
+                                    <a href="{{ route('profile.edit1') }}" 
                                         class="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-100 transition-colors duration-200 flex items-center gap-3">
                                         <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/>
@@ -325,7 +325,7 @@
                     <div class="px-2 py-1">
                         <span class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Personal Information</span>
                     </div>
-                    <a href="{{ route('profile.edit') }}#profile-information" 
+                    <a href="{{ route('profile.edit') }}" 
                         class="block px-2 py-2 text-sm text-gray-600 hover:text-[#B59F84]">
                         Update Profile Information
                     </a>

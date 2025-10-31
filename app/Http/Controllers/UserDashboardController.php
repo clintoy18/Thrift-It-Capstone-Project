@@ -16,10 +16,22 @@ class UserDashboardController extends Controller
      */
     public function index()
     {
-        $products = Product::with(['category', 'user'])->where('status','available')->orWhere('approval_status','approved')->get();
+        $products = Product::with(['category', 'user'])
+            ->where(function ($query) {
+                $query->where('status', 'available')
+                    ->orWhere('approval_status', 'approved');
+            })
+            ->whereHas('user', function ($query) {
+                // Only include users who have an active subscription
+                $query->whereHas('subscriptions', function ($subQuery) {
+                    $subQuery->whereNull('ends_at'); // Active subscription
+                });
+            })
+            ->paginate(10);
+
         $donations = Donation::with(['user', 'category'])->where('status', 'available')->get();
         $segments = Segment::all();
-        return view('dashboard', compact('products','donations','segments'));
+        return view('dashboard', compact('products', 'donations', 'segments'));
     }
 
     /**
