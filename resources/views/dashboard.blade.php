@@ -250,6 +250,7 @@
                                 </div>
                             @endforeach
                         </div>
+                   
                     @else
                         <x-empty-message message="No active products found." link="{{ route('products.create') }}" />
                     @endif
