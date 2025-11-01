@@ -279,7 +279,7 @@
             </div>
        <!-- Mobile Menu -->
 <div x-show="mobileMenuOpen" x-transition 
-     class="fixed top-[90px] left-0 right-0 bg-white shadow-lg border-t border-gray-200 md:hidden z-40 max-h-[70vh] overflow-y-auto">
+     class="mobile-menu-dropdown fixed top-[90px] inset-x-0 bg-white shadow-lg border-t border-gray-200 md:hidden z-50 max-h-[70vh] overflow-y-auto">
     <div class="flex flex-col space-y-0 px-4 py-4">
         @auth
             @if ($role !== 2)
@@ -375,5 +375,19 @@
 <style>
     body {
         padding-top: 72px; /* adjust according to your nav height */
+    }
+    
+    /* Fix mobile menu positioning on private chat page */
+    @media (max-width: 767px) {
+        .mobile-menu-dropdown {
+            position: fixed !important;
+            top: 90px !important;
+            left: 0 !important;
+            right: 0 !important;
+            width: 100% !important;
+            transform: translateX(0) !important;
+            margin: 0 !important;
+            max-width: 100vw !important;
+        }
     }
 </style>

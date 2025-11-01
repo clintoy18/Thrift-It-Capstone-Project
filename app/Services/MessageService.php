@@ -45,23 +45,37 @@ class MessageService
 
     public function sendPrivateMessage($senderId, $receiverId, $messageContent, $imageFile = null)
     {
-        // Validate message content
-        if (empty(trim($messageContent)) && !$imageFile) {
+        // Validate message content - handle null or empty string
+        $messageText = $messageContent ? trim($messageContent) : '';
+        $hasMessage = !empty($messageText);
+        $hasImage = $imageFile !== null;
+
+        if (!$hasMessage && !$hasImage) {
             return ['error' => 'Message or image is required.'];
         }
 
-        if ($messageContent && strlen($messageContent) > 1000) {
+        if ($hasMessage && strlen($messageText) > 1000) {
             return ['error' => 'Message cannot exceed 1000 characters.'];
         }
 
         // Handle image upload
         $imagePath = null;
-        if ($imageFile) {
-            $imagePath = $imageFile->store('chat_images', 'public');
+        if ($hasImage) {
+            try {
+                $imagePath = $imageFile->store('chat_images', 'public');
+            } catch (\Exception $e) {
+                return ['error' => 'Failed to upload image: ' . $e->getMessage()];
+            }
         }
 
-        // Create the message
-        $message = $this->messageRepository->createMessageWithUser($senderId, $receiverId, $messageContent, $imagePath);
+        // Create the message (use empty string for image-only messages since DB doesn't allow null)
+        // TODO: Run migration to make message column nullable for proper null handling
+        $message = $this->messageRepository->createMessageWithUser(
+            $senderId, 
+            $receiverId, 
+            $hasMessage ? $messageText : '', 
+            $imagePath
+        );
 
         // Broadcast the event
         broadcast(new PrivateMessageSent($message, User::find($receiverId)))->toOthers();
