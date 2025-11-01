@@ -60,44 +60,37 @@ if (currentUserId) {
 
 function createMessageBubble(message, sender, isOwnMessage) {
     const timeAgo = 'just now';
-
-    // Decide avatar: real pic or initials
     const avatarHTML = sender.profile_pic
-        ? `<img src="${sender.profile_pic}" alt="${sender.fname} ${sender.lname}" class="w-8 h-8 object-cover rounded-full">`
-        : `<div class="w-8 h-8 bg-gradient-to-r ${isOwnMessage ? 'from-[#634600] to-[#B59F84]' : 'from-[#B59F84] to-[#786126]'} rounded-full flex items-center justify-center">
-              <span class="text-white text-xs font-semibold">${sender.fname.charAt(0)}${sender.lname.charAt(0)}</span>
-          </div>`;
+        ? `<img src="${sender.profile_pic}" class="w-8 h-8 rounded-full object-cover">`
+        : `<div class="w-8 h-8 bg-[#B59F84] text-white rounded-full flex items-center justify-center text-xs font-semibold">
+              ${sender.fname.charAt(0)}${sender.lname.charAt(0)}
+           </div>`;
 
-    // Message bubble
     const bubbleClasses = isOwnMessage
         ? 'bg-gradient-to-r from-[#634600] to-[#B59F84] text-white rounded-2xl rounded-br-md'
         : 'bg-white text-[#634600] rounded-2xl rounded-bl-md shadow-sm border border-[#B59F84]';
 
-    // Multi-line and URL-safe message content
     const safeMessage = message.message
         ? message.message.replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\n/g, "<br>")
+        : '';
+
+    const imageHTML = message.image_url 
+        ? `<div class="mb-2"><img src="${message.image_url}" class="max-w-xs rounded-lg shadow-sm"></div>`
         : '';
 
     return `
         <div class="flex ${isOwnMessage ? 'justify-end' : 'justify-start'} mb-2 message-item">
             <div class="flex max-w-[85%] sm:max-w-xs lg:max-w-md ${isOwnMessage ? 'flex-row-reverse' : 'flex-row'} items-end space-x-2">
-                
-                <!-- Avatar -->
-                <div class="w-8 h-8 rounded-full flex-shrink-0 ${isOwnMessage ? 'ml-1 sm:ml-2' : 'mr-1 sm:mr-2'}">
-                    ${avatarHTML}
-                </div>
-
-                <!-- Message Bubble -->
+                <div class="w-8 h-8 rounded-full flex-shrink-0 ${isOwnMessage ? 'ml-1' : 'mr-1'}">${avatarHTML}</div>
                 <div class="flex flex-col ${isOwnMessage ? 'items-end' : 'items-start'}">
                     <div class="px-4 py-2 text-sm break-words ${bubbleClasses}">
+                        ${imageHTML}
                         ${safeMessage}
                     </div>
-                    <!-- Timestamp -->
                     <div class="mt-1 ${isOwnMessage ? 'text-right' : 'text-left'}">
-                        <span class="text-xs text-gray-500 lg:text-[#786126] px-2">${timeAgo}</span>
+                        <span class="text-xs text-gray-500">${timeAgo}</span>
                     </div>
                 </div>
-
             </div>
         </div>
     `;
