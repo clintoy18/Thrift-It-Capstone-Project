@@ -60,30 +60,74 @@
                         <p class="text-sm text-gray-500">Quantity: {{ $donation->qty }}</p>
                         <p class="text-sm text-gray-500">Status: {{ ucfirst($donation->status) }}</p>
 
-                    <!-- Owner Actions -->
                 @if(Auth::id() === $donation->user_id)
                     <div class="flex flex-col gap-3 mt-4">
                         <a href="{{ route('donations.edit', $donation->id) }}"
                             class="px-6 py-3 bg-[#B59F84] text-white rounded-lg hover:bg-[#a08e77] transition-all duration-300 text-center font-medium">
-                            Update donation
+                            Update Donation
                         </a>
 
-                        
-                         @if($donation->status === 'available' && $donation->approval_status === 'approved')
-
-                            <form action="{{ route('donations.markAsDonated', $donation) }}" method="POST">
-                                @csrf
-                                @method('PUT')
-                                <button type="submit"
-                                    class="w-full px-6 py-3 bg-green-100 text-green-600 rounded-lg hover:bg-green-200 dark:bg-green-900 dark:text-green-300 dark:hover:bg-green-800 transition-all duration-300 font-medium"
-                                    onclick="return confirm('Mark this item as donated?')">
-                                    Mark as Donated
-                                </button>
-                            </form>
-                        @else
+                        @if($donation->status === 'available' && $donation->approval_status === 'approved' && !$donation->proof)
+                            <!-- Trigger Modal Instead of Direct Form Submit -->
+                            <button 
+                                type="button"
+                                onclick="openProofModal({{ $donation->id }})"
+                                class="w-full px-6 py-3 bg-green-100 text-green-600 rounded-lg hover:bg-green-200 dark:bg-green-900 dark:text-green-300 dark:hover:bg-green-800 transition-all duration-300 font-medium">
+                                Mark as Donated
+                            </button>
                         @endif
                     </div>
                 @endif
+
+                <!-- Modal (Include Once Per Page) -->
+<div id="proofModal" class="fixed inset-0 hidden bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div class="bg-white w-full max-w-md p-6 rounded-2xl shadow-xl relative">
+        <!-- Close Button -->
+        <button 
+            onclick="closeProofModal()" 
+            class="absolute top-3 right-3 text-gray-500 hover:text-gray-700 text-2xl">
+            &times;
+        </button>
+
+        <!-- Modal Header -->
+        <h2 class="text-xl font-semibold mb-4 text-center text-gray-800">
+            Upload Donation Proof
+        </h2>
+
+        <!-- Proof Upload Form -->
+        <form id="proofForm" method="POST" enctype="multipart/form-data">
+            @csrf
+            @method('PUT')
+
+            <div class="mb-4">
+                <label for="proof" class="block text-gray-700 font-medium mb-2">
+                    Upload Proof Image
+                </label>
+                <input 
+                    type="file" 
+                    name="proof" 
+                    id="proof" 
+                    accept="image/*" 
+                    class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-[#B59F84] focus:outline-none" 
+                    required>
+            </div>
+
+            <div class="flex justify-end mt-5">
+                <button 
+                    type="button" 
+                    onclick="closeProofModal()"
+                    class="bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 py-2 rounded-lg mr-2">
+                    Cancel
+                </button>
+                <button 
+                    type="submit"
+                    class="bg-[#B59F84] hover:bg-[#a08e77] text-white px-4 py-2 rounded-lg">
+                    Submit Proof
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
                     </div>
                 </div>
                 </div>
@@ -1287,6 +1331,18 @@ window.addEventListener("popstate", function (event) {
         });
     });
         })();
+
+        //upload proof script
+        function openProofModal(donationId) {
+        const modal = document.getElementById('proofModal');
+        const form = document.getElementById('proofForm');
+        form.action = `/donations/${donationId}/mark-as-donated`; 
+        modal.classList.remove('hidden');
+    }
+
+    function closeProofModal() {
+        document.getElementById('proofModal').classList.add('hidden');
+    }
     </script>
 
 <style>

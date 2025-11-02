@@ -55,10 +55,10 @@
                         <span class="font-medium">Status:</span> {{ ucfirst($product->status) }}
                     </p>
                     <div class=" dark:bg-gray-700 rounded-lg ">
-    <p class="text-gray-600 dark:text-gray-400 break-words whitespace-pre-wrap overflow-hidden text-left">
-        {{ $product->description }}
-    </p>
-</div>
+                    <p class="text-gray-600 dark:text-gray-400 break-words whitespace-pre-wrap overflow-hidden text-left">
+                        {{ $product->description }}
+                    </p>
+                </div>
                 </div>
 
                 <!-- Price / Donation -->

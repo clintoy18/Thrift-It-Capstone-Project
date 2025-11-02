@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 use App\Http\Requests\StoreDonationRequest;
 use App\Http\Requests\UpdateDonationRequest;
+use App\Http\Requests\SubmitProofAction as SubmitProofRequest;
+
 use App\Models\Donation;
 use App\Models\Comment;
 
@@ -149,9 +151,19 @@ class DonationController extends Controller
         return view('donations.donation-hub', compact('donations'));
     }
 
-   public function markAsDonated(Donation $donation): RedirectResponse
+    public function markAsDonated(SubmitProofRequest $request, Donation $donation): RedirectResponse
     {
-        $this->donationService->updateDonation($donation, ['status' => 'donated']);
-        return redirect()->route('donations.index')->with('success', 'Item marked as donated.');
+        // Store proof image
+        $proofPath = $request->file('proof')->store('proofs', 'public');
+
+        $this->donationService->updateDonation($donation, [
+            'proof' => $proofPath,
+            'verification_status' => 'pending',
+        ]);
+
+        return redirect()
+            ->route('donations.index')
+            ->with('success', 'Proof submitted successfully! Awaiting admin verification to redeem points.');
     }
+
 }
