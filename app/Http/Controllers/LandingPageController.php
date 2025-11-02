@@ -7,6 +7,8 @@ use App\Services\LandingService;
 use App\Models\Product;
 use App\Models\Donation;
 use App\Models\Segment;
+use App\Models\Categories;
+use App\Models\Barangay;
 
 class LandingPageController extends Controller
 {
@@ -17,11 +19,27 @@ class LandingPageController extends Controller
         $this->landingService = $landingService;
     }
 
-    public function index()
+    public function index(Request $request)
     { 
-        $products = Product::with(['category', 'user'])->where('status','available')->get();
+        $selectedCategoryId = $request->query('category');
+        $selectedBarangayId = $request->query('barangay');
+        
+        $query = Product::with(['category', 'user', 'barangay'])->where('status','available');
+        
+        if ($selectedCategoryId) {
+            $query->where('category_id', $selectedCategoryId);
+        }
+
+        if ($selectedBarangayId) {
+            $query->where('barangay_id', $selectedBarangayId);
+        }
+        
+        $products = $query->get();
         $donations = Donation::with(['user', 'category'])->where('status', 'available')->get();
         $segments = Segment::all();
-        return view('dashboard', compact('products','donations','segments'));
+        $categories = Categories::all();
+        $barangays = Barangay::all();
+        
+        return view('dashboard', compact('products','donations','segments', 'categories', 'barangays', 'selectedCategoryId', 'selectedBarangayId'));
     }
 }

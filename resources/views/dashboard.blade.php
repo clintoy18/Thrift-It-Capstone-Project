@@ -193,7 +193,46 @@
     </div>
         {{-- Show products in dashboard --}}
             <div class=" shadow-sm overflow-hidden dark:bg-gray-800 bg-white my-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-                <div class="p-4 sm:p-6">
+                <div class="p-4 sm:p-6" id="productsContainer">
+                <div class="flex gap-2">
+                    <div x-data="{ open: false }" class="relative">
+                        <button @click="open = !open" class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 text-sm shadow-sm">
+                            <span>Category</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-700 dark:text-gray-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                        </button>
+                        <div x-cloak x-show="open" @click.outside="open = false" class="absolute right-0 mt-2 w-44 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg z-20 py-1">
+                            <a data-category-link href="{{ route('dashboard') }}" class="block px-3 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg">All</a>
+                            @foreach($categories as $cat)
+                                <a data-category-link href="{{ route('dashboard', ['category' => $cat->id]) }}" class="block px-3 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg {{ (isset($selectedCategoryId) && (int)$selectedCategoryId === $cat->id) ? 'font-semibold' : '' }}">
+                                    {{ $cat->name }}
+                                </a>
+                            @endforeach
+                        </div>
+                    </div>
+                    <div x-data="{ open: false }" class="relative">
+                        <button @click="open = !open" class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 text-sm shadow-sm">
+                            <span>Location</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-700 dark:text-gray-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                        </button>
+                        <div x-cloak x-show="open" @click.outside="open = false" class="absolute right-0 mt-2 w-44 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg z-20 py-1 max-h-96 overflow-y-auto">
+                            <a data-location-link href="{{ route('dashboard') }}" class="block px-3 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg">All</a>
+                            @foreach($barangays as $barangay)
+                                <a data-location-link href="{{ route('dashboard', ['barangay' => $barangay->id]) }}" class="block px-3 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg {{ (isset($selectedBarangayId) && (int)$selectedBarangayId === $barangay->id) ? 'font-semibold' : '' }}">
+                                    {{ $barangay->name }}
+                                </a>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+                <div id="loadingIndicator" class="hidden flex items-center justify-center py-4">
+                    <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-[#634600]"></div>
+                    <span class="ml-2 text-gray-600 dark:text-gray-300">Loading products...</span>
+                </div>
+                    <div id="productsGrid" class="mt-4">
                     @if($products->count() > 0)
                         <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-4 md:gap-6">
                             @foreach ($products as $product)
@@ -254,6 +293,7 @@
                     @else
                         <x-empty-message message="No active products found." link="{{ route('products.create') }}" />
                     @endif
+                    </div>
                 </div>
             </div>
 
@@ -979,6 +1019,161 @@
     // Observe all animated elements
     document.querySelectorAll('[class*="animate-"]').forEach(el => {
         observer.observe(el);
+    });
+
+    // Dashboard filtering without page refresh
+    document.addEventListener('DOMContentLoaded', function() {
+        const productsGrid = document.getElementById('productsGrid');
+        const loadingIndicator = document.getElementById('loadingIndicator');
+        if (!productsGrid) return;
+
+        // Helper function to show loading
+        function showLoading() {
+            if (loadingIndicator) {
+                loadingIndicator.classList.remove('hidden');
+            }
+            productsGrid.style.opacity = '0.5';
+        }
+
+        // Helper function to hide loading
+        function hideLoading() {
+            if (loadingIndicator) {
+                loadingIndicator.classList.add('hidden');
+            }
+            productsGrid.style.opacity = '1';
+        }
+
+        // Helper function to initialize favorite buttons
+        function initFavoriteButtons() {
+            productsGrid.querySelectorAll('.favorite-btn').forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const svg = this.querySelector('svg');
+                    if (svg.getAttribute('fill') === 'none') {
+                        svg.setAttribute('fill', 'currentColor');
+                        svg.setAttribute('stroke', 'none');
+                        this.classList.add('text-red-500');
+                    } else {
+                        svg.setAttribute('fill', 'none');
+                        svg.setAttribute('stroke', 'currentColor');
+                        this.classList.remove('text-red-500');
+                    }
+                });
+            });
+        }
+
+        // Handle category links
+        document.querySelectorAll('[data-category-link]').forEach(link => {
+            link.addEventListener('click', async (e) => {
+                e.preventDefault();
+                const currentUrl = new URL(window.location);
+                const linkUrl = new URL(e.currentTarget.href, window.location.origin);
+                
+                // Build query params preserving location
+                const params = new URLSearchParams();
+                if (linkUrl.searchParams.get('category')) {
+                    params.set('category', linkUrl.searchParams.get('category'));
+                }
+                if (currentUrl.searchParams.get('barangay')) {
+                    params.set('barangay', currentUrl.searchParams.get('barangay'));
+                }
+                
+                showLoading();
+                
+                // Fetch filtered products
+                const dashboardUrl = window.location.pathname + (params.toString() ? '?' + params.toString() : '');
+                try {
+                    const response = await fetch(dashboardUrl, {
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest',
+                            'Accept': 'text/html'
+                        }
+                    });
+                    const html = await response.text();
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(html, 'text/html');
+                    const newProductsGrid = doc.getElementById('productsGrid');
+                    
+                    if (newProductsGrid) {
+                        productsGrid.innerHTML = newProductsGrid.innerHTML;
+                        initFavoriteButtons();
+                    }
+                } catch (error) {
+                    console.error('Error filtering products:', error);
+                } finally {
+                    hideLoading();
+                }
+                
+                // Update URL without reloading
+                const newUrl = new URL(window.location);
+                if (linkUrl.searchParams.get('category')) {
+                    newUrl.searchParams.set('category', linkUrl.searchParams.get('category'));
+                } else {
+                    newUrl.searchParams.delete('category');
+                }
+                if (currentUrl.searchParams.get('barangay')) {
+                    newUrl.searchParams.set('barangay', currentUrl.searchParams.get('barangay'));
+                }
+                window.history.pushState({}, '', newUrl);
+            });
+        });
+        
+        // Handle location links
+        document.querySelectorAll('[data-location-link]').forEach(link => {
+            link.addEventListener('click', async (e) => {
+                e.preventDefault();
+                const currentUrl = new URL(window.location);
+                const linkUrl = new URL(e.currentTarget.href, window.location.origin);
+                
+                // Build query params preserving category
+                const params = new URLSearchParams();
+                if (currentUrl.searchParams.get('category')) {
+                    params.set('category', currentUrl.searchParams.get('category'));
+                }
+                if (linkUrl.searchParams.get('barangay')) {
+                    params.set('barangay', linkUrl.searchParams.get('barangay'));
+                }
+                
+                showLoading();
+                
+                // Fetch filtered products
+                const dashboardUrl = window.location.pathname + (params.toString() ? '?' + params.toString() : '');
+                try {
+                    const response = await fetch(dashboardUrl, {
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest',
+                            'Accept': 'text/html'
+                        }
+                    });
+                    const html = await response.text();
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(html, 'text/html');
+                    const newProductsGrid = doc.getElementById('productsGrid');
+                    
+                    if (newProductsGrid) {
+                        productsGrid.innerHTML = newProductsGrid.innerHTML;
+                        initFavoriteButtons();
+                    }
+                } catch (error) {
+                    console.error('Error filtering products:', error);
+                } finally {
+                    hideLoading();
+                }
+                
+                // Update URL without reloading
+                const newUrl = new URL(window.location);
+                if (currentUrl.searchParams.get('category')) {
+                    newUrl.searchParams.set('category', currentUrl.searchParams.get('category'));
+                }
+                if (linkUrl.searchParams.get('barangay')) {
+                    newUrl.searchParams.set('barangay', linkUrl.searchParams.get('barangay'));
+                } else {
+                    newUrl.searchParams.delete('barangay');
+                }
+                window.history.pushState({}, '', newUrl);
+            });
+        });
     });
 </script>
 </x-app-layout>
