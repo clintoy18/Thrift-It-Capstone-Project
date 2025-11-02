@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Models\Barangay;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -25,6 +26,7 @@ class ProfileController extends Controller
     {
 
         $user = $request->user(); // logged-in user only
+         $barangays = Barangay::all();
 
         $totalListings = $user->products()->count();
         $itemsSold = $user->products()->where('status', 'sold')->count();
@@ -37,7 +39,8 @@ class ProfileController extends Controller
             'totalListings',
             'itemsSold',
             'revenue',
-            'itemsDonated'
+            'itemsDonated',
+            'barangays'
         ));
     }
 
@@ -62,28 +65,38 @@ class ProfileController extends Controller
     /**
      * Update the user's profile information.
      */
-   public function update(ProfileUpdateRequest $request): RedirectResponse
+    public function update(ProfileUpdateRequest $request): RedirectResponse
     {
         $user = $request->user();
 
+        // Get all validated fields
         $validated = $request->validated();
 
-        // Handle profile picture upload
+        // ✅ Handle profile picture upload (optional)
         if ($request->hasFile('profile_pic')) {
             $path = $request->file('profile_pic')->store('profile-pictures', 'public');
             $validated['profile_pic'] = $path;
         }
 
+        // ✅ Allow Barangay updates
+        if ($request->filled('barangay_id')) {
+            $validated['barangay_id'] = $request->barangay_id;
+        }
+
+        // ✅ Fill all updated fields into the user model
         $user->fill($validated);
 
+        // ✅ Reset email verification if changed
         if ($user->isDirty('email')) {
             $user->email_verified_at = null;
         }
 
+        // ✅ Save changes
         $user->save();
 
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }
+
 
 
     public function show(User $user)
