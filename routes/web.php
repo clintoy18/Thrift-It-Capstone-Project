@@ -126,6 +126,12 @@ Route::middleware(['auth', 'verified', 'rolemiddleware:admin'])->prefix('admin')
     Route::put('/donations/{donation}/reject', [AdminDonationController::class, 'reject'])
     ->name('donations.reject');
 
+    //verify donations and add points to donor/user
+    Route::get('/donations/reward-management', [AdminDonationController::class, 'rewardManagement'])->name('donations.rewardManagement');
+    Route::put('/donations/{donation}/verify', [AdminDonationController::class, 'verifyProof'])
+        ->name('donations.verifyProof');
+    Route::put('/donations/{donation}/reject-proof', [AdminDonationController::class, 'rejectProof'])->name('donations.rejectProof');
+
     //verify -reject user
     Route::put('/users/{user}/verify', [AdminUserController::class, 'verify'])->name('users.verify');
     Route::put('/users/{user}/reject', [AdminUserController::class, 'reject'])->name('users.reject');

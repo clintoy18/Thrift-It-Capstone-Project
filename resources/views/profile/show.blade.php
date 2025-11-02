@@ -26,87 +26,93 @@
                     </div>
                       <x-user-name-badge :user="$user" :show-full-name="true" />'s Profile 
                 </h3>
-                <!-- User Profile Card Container -->
-                <div class="bg-white dark:bg-gray-800 rounded-lg  overflow-hidden">
-                                        
-                        <!-- Background Image Section -->
-                        <!-- Hero-style background with gradient overlay -->
-                        <div class="relative h-32 bg-center bg-cover"
-                            style="background-image: url('{{ asset('images/Rectangle 99.png') }}');">
-                            <div class="absolute inset-0 bg-gradient-to-b from-transparent to-black/30"></div>
-                        </div>
+    <!-- User Profile Card Container -->
+    <div class="bg-white dark:bg-gray-800 rounded-lg overflow-hidden">
+        <!-- Background Image Section -->
+        <div class="relative h-32 bg-center bg-cover"
+            style="background-image: url('{{ asset('images/Rectangle 99.png') }}');">
+            <div class="absolute inset-0 bg-gradient-to-b from-transparent to-black/30"></div>
+        </div>
 
-                        <!-- User Info Content Section -->
-                        <div class="relative bg-[#E1D5B6] dark:bg-gray-800 px-6 py-5">
-                            
-                            <!-- User Profile Pic Container -->
-                            <div class="absolute -top-[60px] left-[100px] -translate-x-1/2 w-[100px] h-[100px]
-                                rounded-full border-4 border-white dark:border-gray-800 overflow-hidden shadow-lg z-10">
-                                
-                                @if ($user->profile_pic)
-                                    <img src="{{ asset('storage/' . $user->profile_pic) }}" 
-                                        alt="Profile Picture"
-                                        class="w-full h-full object-cover">
-                                @else
-                                    <img src="{{ asset('images/default-profile.jpg') }}" 
-                                        alt="Default Profile Picture"
-                                        class="w-full h-full object-cover">
-                                @endif
-                            </div>
-                            <!-- User Details Container -->
-                            <div class="flex items-start -top-[10px] justify-between max-w-5xl mx-auto pt-6">
-                                <div class="flex-1">
-                                    <!-- User Full Name -->
-                                    <h3 class="font-semibold text-gray-800 dark:text-gray-200 text-lg">
-                                        <x-user-name-badge :user="$user" :show-full-name="true" />
-                                    </h3>
-                                    
-                                    <!-- Rating Display -->
-                                    <div class="flex items-center mt-1">
-                                        <!-- Star Rating Icons -->
-                                        <div class="flex text-yellow-500">
-                                            <span>★★★★★</span> <!-- Static 5-star rating -->
-                                        </div>
-                                        <span class="ml-2 text-sm text-gray-600 dark:text-gray-400">(5)</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                        <!-- Report User Section (Visible to other users only) -->
-                @if (Auth::id() !== $user->id)
-                    <div class="mt-3 pt-3 border-t border-gray-200 dark:border-gray-600 flex items-center gap-4">
-                        <!-- Report User Button -->
-                        <button type="button"
-                                x-on:click="window.dispatchEvent(new CustomEvent('open-modal', { detail: 'report-modal' }))"
-                                class="inline-flex items-center gap-2 px-3 py-1.5 text-sm text-red-600 
-                                    dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 transition
-                                    focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
-                                viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                    d="M12 9v2m0 4h.01M5.455 4.455a2.836 2.836 0 012-1.455h9.09a2.836 2.836 0 012 1.455l3.182 5.455a2.836 2.836 0 010 2.182L18.545 17.09a2.836 2.836 0 01-2 1.455H7.455a2.836 2.836 0 01-2-1.455L2.273 12.09a2.836 2.836 0 010-2.182L5.455 4.455z" />
-                            </svg>
-                            Report User
-                        </button>
-
-                        <!-- Review User Button -->
-                        <button type="button"
-                                x-on:click="window.dispatchEvent(new CustomEvent('open-modal', { detail: 'review-modal' }))"
-                                class="inline-flex items-center gap-2 px-3 py-1.5 text-sm text-yellow-600 
-                                       dark:text-yellow-400 hover:text-yellow-700 dark:hover:text-yellow-300 transition
-                                       focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
-                                 viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                      d="M12 17.27l5.18 3.05-1.64-5.81L20 9.24l-6-.51L12 3 10 8.73l-6 .51 4.46 5.27-1.64 5.81L12 17.27z" />
-                            </svg>
-                            Review User
-                        </button>
-                 
-                    </div>
+        <!-- User Info Content Section -->
+        <div class="relative bg-[#E1D5B6] dark:bg-gray-800 px-6 py-5">
+            
+            <!-- User Profile Pic Container -->
+            <div class="absolute -top-[60px] left-[100px] -translate-x-1/2 w-[100px] h-[100px]
+                rounded-full border-4 border-white dark:border-gray-800 overflow-hidden shadow-lg z-10">
+                
+                @if ($user->profile_pic)
+                    <img src="{{ asset('storage/' . $user->profile_pic) }}" 
+                        alt="Profile Picture"
+                        class="w-full h-full object-cover">
+                @else
+                    <img src="{{ asset('images/default-profile.jpg') }}" 
+                        alt="Default Profile Picture"
+                        class="w-full h-full object-cover">
                 @endif
+            </div>
 
-            </div> 
+            <!-- User Details Container -->
+            <div class="flex items-start justify-between max-w-5xl mx-auto pt-6">
+                <!-- User Info Left -->
+                <div class="flex-1">
+                    <h3 class="font-semibold text-gray-800 dark:text-gray-200 text-lg">
+                        <x-user-name-badge :user="$user" :show-full-name="true" />
+                    </h3>
+
+                    <!-- Rating Display -->
+                    <div class="flex items-center mt-1">
+                        <div class="flex text-yellow-500">
+                            <span>★★★★★</span> <!-- Static 5-star rating -->
+                        </div>
+                        <span class="ml-2 text-sm text-gray-600 dark:text-gray-400">(5)</span>
+                    </div>
+                </div>
+
+                <!-- User Points (Right Side) -->
+                <div class="text-center">
+                    <span class="block text-sm font-medium text-gray-700 dark:text-gray-300">Eco Points</span>
+                    <span class="text-5xl font-bold text-[#B59F84] dark:text-yellow-400">
+                        {{ $user->points ?? 0 }}
+                    </span>
+                </div>
+            </div>
+
+            <!-- Report / Review Section -->
+            @if (Auth::id() !== $user->id)
+                <div class="mt-3 pt-3 border-t border-gray-200 dark:border-gray-600 flex items-center gap-4">
+                    <!-- Report User Button -->
+                    <button type="button"
+                            x-on:click="window.dispatchEvent(new CustomEvent('open-modal', { detail: 'report-modal' }))"
+                            class="inline-flex items-center gap-2 px-3 py-1.5 text-sm text-red-600 
+                                dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 transition
+                                focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                d="M12 9v2m0 4h.01M5.455 4.455a2.836 2.836 0 012-1.455h9.09a2.836 2.836 0 012 1.455l3.182 5.455a2.836 2.836 0 010 2.182L18.545 17.09a2.836 2.836 0 01-2 1.455H7.455a2.836 2.836 0 01-2-1.455L2.273 12.09a2.836 2.836 0 010-2.182L5.455 4.455z" />
+                        </svg>
+                        Report User
+                    </button>
+
+                    <!-- Review User Button -->
+                    <button type="button"
+                            x-on:click="window.dispatchEvent(new CustomEvent('open-modal', { detail: 'review-modal' }))"
+                            class="inline-flex items-center gap-2 px-3 py-1.5 text-sm text-yellow-600 
+                                dark:text-yellow-400 hover:text-yellow-700 dark:hover:text-yellow-300 transition
+                                focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                d="M12 17.27l5.18 3.05-1.64-5.81L20 9.24l-6-.51L12 3 10 8.73l-6 .51 4.46 5.27-1.64 5.81L12 17.27z" />
+                        </svg>
+                        Review User
+                    </button>
+                </div>
+            @endif
+        </div>
+    </div>
+
 
             <!-- ===== DASHBOARD SECTION (Only visible to profile owner) ===== -->
             @if (Auth::id() === $user->id)

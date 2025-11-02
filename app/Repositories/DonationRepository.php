@@ -9,14 +9,14 @@ class DonationRepository
 {
     public function all()
     {
-        return Donation::
-        where('approval_status','approved')
-        ->with('images')->get();
+        return Donation::where('approval_status', 'approved')
+            ->with('donationImages')
+            ->get();
     }
 
     public function find($id)
     {
-        return Donation::with('images')->findOrFail($id);
+        return Donation::with('donationImages')->findOrFail($id);
     }
 
     public function create(array $data)
@@ -38,7 +38,7 @@ class DonationRepository
     public function getByUser($userId)
     {
         return Donation::where('user_id', $userId)
-            ->with('images')
+            ->with('donationImages')
             ->latest()
             ->get();
     }
@@ -47,18 +47,18 @@ class DonationRepository
     {
         return Donation::where('user_id', $userId)
             ->where('id', '!=', $excludeDonationId)
-            ->with('images')
+            ->with('donationImages')
             ->latest()
             ->take($limit)
             ->get();
     }
 
-     public function getApprovedDonations(Segment $segment, ?int $categoryId = null)
+    public function getApprovedDonationsBySegement(Segment $segment, ?int $categoryId = null)
     {
-        $query = $segment->products()
+        $query = $segment->donations()
             ->where('approval_status', 'approved')
             ->where('status', 'available')
-            ->with(['category', 'images']);
+            ->with(['category', 'donationImages']);
 
         if ($categoryId) {
             $query->where('category_id', $categoryId);
@@ -67,13 +67,11 @@ class DonationRepository
         return $query->get();
     }
 
-
-   public function getByStatusPaginated(string $status, int $perPage = 10)
+    public function getByStatusPaginated(string $status, int $perPage = 10)
     {
         return Donation::with(['user', 'category'])
-            ->where('approval_status', $status)  
+            ->where('approval_status', $status)
             ->latest()
             ->paginate($perPage);
     }
-
 }

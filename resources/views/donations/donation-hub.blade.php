@@ -109,7 +109,7 @@
                 </h2>
                 <a href="{{ route('donations.index') }}" 
                    class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#B59F84] text-white shadow-md hover:bg-[#a08e77] transition">
-                    <span class="font-semibold">My Donations</span>
+                    <span class="font-semibold">Donate an Item</span>
                 </a>
             </div>
 
