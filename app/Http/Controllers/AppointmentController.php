@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateAppointmentRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use App\Models\Appointment;
 use App\Services\AppointmentService;
 
 class AppointmentController extends Controller
@@ -48,9 +49,13 @@ class AppointmentController extends Controller
     public function store(StoreAppointmentRequest $request)
     {
         $validated = $request->validated();
-        $validated['user_id'] = Auth::id(); 
-        $this->appointmentService->createAppointment($validated);
-        return redirect()->route('appointments.index')->with('success', 'Appointment created successfully!');
+        $validated['user_id'] = Auth::id();
+
+        // Pass both validated data and image files
+        $this->appointmentService->createAppointment($validated, $request->file('images'));
+
+        return redirect()->route('appointments.index')
+                        ->with('success', 'Appointment created successfully!');
     }
 
     /**
@@ -58,7 +63,7 @@ class AppointmentController extends Controller
      */
     public function show($appointmentid)
     {
-        $appointment = $this->appointmentService->getAppointmentById($appointmentid);
+        $appointment = Appointment::with(['images'])->getAppointmentById($appointmentid);
         return view('appointments.show', compact('appointment'));
     }
 

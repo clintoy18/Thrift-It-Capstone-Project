@@ -22,12 +22,25 @@ class AppointmentService
 
     public function getAppointmentById($id)
     {
-        return $this->appointmentRepository->find($id);
+        return $this->appointmentRepository->getByUpcycler($id);
     }
 
-    public function createAppointment(array $data)
+    public function createAppointment(array $data, ?array $images = null)
     {
-        return $this->appointmentRepository->create($data);
+        $appointment = $this->appointmentRepository->create($data);
+
+        if ($images && count($images) > 0) {
+            foreach ($images as $image) {
+                $path = $image->store('appointment_images', 'public');
+
+                // Save record in the appointment_images table
+                $appointment->images()->create([
+                    'image_path' => $path, // make sure your column name matches the migration
+                ]);
+            }
+        }
+
+        return $appointment;
     }
 
     public function updateAppointment(Appointment $appointment, array $data)

@@ -24,7 +24,7 @@ class StoreAppointmentRequest extends FormRequest
     {
         return [
             'upcycler_id' => 'required|exists:users,id',
-            'appdetails' => 'nullable|string|min:30|max:255',
+            'appdetails' => 'nullable|string|min:20|max:255',
             'contactnumber' => 'required|numeric|digits_between:10,15',
             'apptype' => ['required', 'in:Resize,Customize,Patchwork,Fabric Dyeing'],
             'appstatus' => ['nullable', 'in:pending,approved,declined,completed,cancelled'],
