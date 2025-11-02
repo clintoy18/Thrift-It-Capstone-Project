@@ -33,10 +33,14 @@ use Illuminate\Support\Facades\Auth;
 
 Route::get('/search', [SearchController::class, 'index'])->name('search');
 Route::get('/', [LandingPageController::class, 'index'])->name('landing.index');
+Route::get('/products', [LandingPageController::class, 'products'])->name('landing.products');
 
 Route::get('/dashboard', [UserDashboardController::class, 'index'])
     ->middleware(['auth', 'verified', 'rolemiddleware:user'])
     ->name('dashboard');
+Route::get('/dashboard/products', [UserDashboardController::class, 'products'])
+    ->middleware(['auth', 'verified', 'rolemiddleware:user'])
+    ->name('dashboard.products');
 
 Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])
     ->middleware(['auth', 'verified', 'rolemiddleware:admin'])

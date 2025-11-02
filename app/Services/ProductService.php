@@ -77,9 +77,9 @@ class ProductService
         return $this->productRepository->delete($product);
     }
 
-    public function getApprovedProductsBySegment(Segment $segment, ?int $categoryId = null)
+    public function getApprovedProductsBySegment(Segment $segment, ?int $categoryId = null, ?int $barangayId = null)
     {
-        return $this->productRepository->getApproveProducts($segment, $categoryId);
+        return $this->productRepository->getApproveProducts($segment, $categoryId, $barangayId);
     }
 
     public function getProductsByStatusPaginated(string $status, int $perPage = 10)

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Segment;
 use App\Models\Categories;
+use App\Models\Barangay;
 use Illuminate\Http\Request;
 use App\Services\ProductService;
 
@@ -21,8 +22,10 @@ class SegmentController extends Controller
     public function show(Request $request, Segment $segment)
     {
         $selectedCategoryId = $request->query('category');
-        $products = $this->productService->getApprovedProductsBySegment($segment, $selectedCategoryId ? (int)$selectedCategoryId : null);
+        $selectedBarangayId = $request->query('barangay');
+        $products = $this->productService->getApprovedProductsBySegment($segment, $selectedCategoryId ? (int)$selectedCategoryId : null, $selectedBarangayId ? (int)$selectedBarangayId : null);
         $categories = Categories::all();
+        $barangays = Barangay::all();
 
         // Use different views based on segment name (more flexible)
         $viewName = match(strtolower($segment->name)) {
@@ -32,13 +35,14 @@ class SegmentController extends Controller
             default => 'segments.show'
         };
 
-        return view($viewName, compact('segment', 'products', 'categories', 'selectedCategoryId'));
+        return view($viewName, compact('segment', 'products', 'categories', 'barangays', 'selectedCategoryId', 'selectedBarangayId'));
     }
 
     public function products(Request $request, Segment $segment)
     {
         $selectedCategoryId = $request->query('category');
-        $products = $this->productService->getApprovedProductsBySegment($segment, $selectedCategoryId ? (int)$selectedCategoryId : null);
+        $selectedBarangayId = $request->query('barangay');
+        $products = $this->productService->getApprovedProductsBySegment($segment, $selectedCategoryId ? (int)$selectedCategoryId : null, $selectedBarangayId ? (int)$selectedBarangayId : null);
         $html = view('segments.partials.products-grid', compact('products'))->render();
         return response()->json(['html' => $html]);
     }
