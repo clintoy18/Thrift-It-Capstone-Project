@@ -12,16 +12,6 @@
                 <p class="mt-2 text-lg text-[#603E14] dark:text-gray-200 mb-6">
                     Manage your sustainable fashion items 🌿
                 </p>
-
-                <!-- Buttons -->
-                <div class="flex flex-col gap-3 mb-8">
-                    <a href="{{ route('products.create') }}"
-                       class="inline-block bg-[#B59F84] hover:bg-[#a08e77] text-white font-semibold px-6 py-3 rounded-full shadow-lg transition">
-                        List New Product
-                    </a>
-                   
-                </div>
-
                 <!-- Stats Box -->
                 <div class="bg-white/70 dark:bg-gray-700/60 rounded-lg p-4 shadow-sm mb-6 text-left">
                     <h2 class="text-lg font-semibold text-[#634600] dark:text-white mb-2">

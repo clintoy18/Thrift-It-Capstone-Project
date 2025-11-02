@@ -44,12 +44,12 @@ class DonationService
         return $donation;
     }
 
-    public function updateDonation($donation, array $data, $images = null)
+    public function updateDonation($donation, array $data, $donationImages = null)
     {
-        if ($images) {
-            foreach ($images as $image) {
+        if ($donationImages) {
+            foreach ($donationImages as $image) {
                 $path = $image->store('donation_images', 'public');
-                $donation->images()->create(['image' => $path]);
+                $donation->donationImages()->create(['image' => $path]);
             }
         }
 
@@ -63,7 +63,12 @@ class DonationService
 
     public function getApprovedDonationsBySegment(Segment $segment, ?int $categoryId = null)
     {
-        return $this->donationRepository->getApprovedDonations($segment, $categoryId);
+        return $this->donationRepository->getApprovedDonationsBySegement($segment, $categoryId);
+    }
+
+    public function getApprovedDonations()
+    {
+        return $this->donationRepository->all();
     }
 
     public function getDonationsByStatusPaginated(string $status, int $perPage = 10)

@@ -14,8 +14,8 @@
                 {{-- Swiper (keep same dimensions) --}}
                 <div class="relative swiper mySwiper rounded-xl overflow-hidden shadow-lg h-[28rem] sm:h-[32rem]">
                     <div class="swiper-wrapper h-full">
-                        @if ($donation->images && $donation->images->count() > 0)
-                            @foreach ($donation->images as $image)
+                        @if ($donation->donationImages && $donation->donationImages->count() > 0)
+                            @foreach ($donation->donationImages as $image)
                                 <div class="swiper-slide flex items-center justify-center bg-white h-full">
                                     <img src="{{ asset('storage/' . $image->image) }}" 
                                          alt="{{ $donation->name }}"

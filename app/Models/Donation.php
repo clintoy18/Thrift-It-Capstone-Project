@@ -26,6 +26,9 @@ class Donation extends Model
         'status',
         'segment_id',
         'barangay_id',
+        'proof',
+        'verification_status',           
+
     ];
 
 
@@ -85,14 +88,14 @@ class Donation extends Model
         return $this->belongsTo(Barangay::class, 'barangay_id');
     }
 
-    public function images()
+    public function donationImages()
     {
         return $this->hasMany(DonationImage::class);
     }
 
     public function getFirstImageAttribute()
     {
-        $firstImage = $this->images()->first();
+        $firstImage = $this->donationImages()->first();
         return $firstImage ? $firstImage->image : null;
     }
 }
