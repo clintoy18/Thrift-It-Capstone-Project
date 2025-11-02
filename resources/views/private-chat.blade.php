@@ -241,12 +241,12 @@
                                         <!-- Message Bubble -->
                                         <div class="flex flex-col {{ $msg->user_id === auth()->id() ? 'items-end' : 'items-start' }}">
                                             <div class="px-4 py-3 rounded-2xl text-sm {{ $msg->user_id === auth()->id() ? 'bg-gradient-to-r from-[#634600] to-[#B59F84] text-white rounded-br-md' : 'bg-white text-[#634600] rounded-bl-md shadow-sm border border-[#B59F84]' }}">
-                                                @if($msg->image)
+                                                @if($msg->image_path)
                                                     <div class="mb-2">
-                                                        <img src="{{ asset('storage/' . $msg->image) }}" alt="Shared image" class="max-w-full h-auto rounded-lg shadow-sm">
+                                                        <img src="{{ asset('storage/' . $msg->image_path) }}" alt="Shared image" class="max-w-full h-auto rounded-lg shadow-sm">
                                                     </div>
                                                 @endif
-                                                @if($msg->message)
+                                                @if($msg->message && trim($msg->message))
                                                     <div class="text-sm whitespace-pre-line break-words">{!! preg_replace('/https?:\/\/[^\s]+\/products\/\d+/', '', nl2br(e($msg->message))) !!}</div>
                                                 @endif
                                                 
@@ -359,12 +359,12 @@
                         <!-- Image Preview Area -->
                         <div id="image-preview-container" class="mb-3 hidden">
                             <div class="flex items-center space-x-2 p-2 bg-gray-50 rounded-lg">
-                                <img id="image-preview" src="" alt="Preview" class="w-12 h-12 object-cover rounded-lg">
+                                <img id="image-preview" src="" alt="Preview" class="w-12 h-12 object-cover rounded-lg cursor-pointer">
                                 <div class="flex-1">
                                     <p class="text-sm text-gray-600" id="image-filename"></p>
                                     <p class="text-xs text-gray-500">Click to remove</p>
                                 </div>
-                                <button type="button" id="remove-image" class="text-red-500 hover:text-red-700 p-1">
+                                <button type="button" id="remove-image" class="text-red-500 hover:text-red-700 p-1" title="Remove image">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                                     </svg>
@@ -675,6 +675,20 @@
         const file = e.target.files[0];
         console.log('Image file selected:', file);
         if (file) {
+            // Validate file size (10MB max)
+            if (file.size > 10 * 1024 * 1024) {
+                showNotification('Image size must be less than 10MB', 'error');
+                imageUpload.value = '';
+                return;
+            }
+            
+            // Validate file type
+            if (!file.type.startsWith('image/')) {
+                showNotification('Please select a valid image file', 'error');
+                imageUpload.value = '';
+                return;
+            }
+            
             console.log('File details:', {
                 name: file.name,
                 size: file.size,
@@ -691,11 +705,36 @@
         }
     });
 
-    removeImageBtn.addEventListener('click', function() {
+    // Function to remove image
+    function removeImage() {
         imageUpload.value = '';
         imagePreviewContainer.classList.add('hidden');
         imagePreview.src = '';
         imageFilename.textContent = '';
+    }
+    
+    // Remove image button click
+    removeImageBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        removeImage();
+    });
+    
+    // Remove image when clicking on preview
+    imagePreview.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        removeImage();
+    });
+    
+    // Remove image when clicking on preview container
+    imagePreviewContainer.addEventListener('click', function(e) {
+        if (e.target === imagePreviewContainer || e.target.closest('#remove-image')) {
+            return; // Let the remove button handle it
+        }
+        if (e.target === imagePreview || imagePreview.contains(e.target)) {
+            removeImage();
+        }
     });
 
 
@@ -711,7 +750,15 @@
         const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
         const messagesContainer = document.getElementById('private-messages-container');
 
-        console.log('Form submission:', { message, imageFile, hasImage: !!imageFile });
+        console.log('Form submission:', { 
+            message, 
+            imageFile: imageFile ? {
+                name: imageFile.name,
+                size: imageFile.size,
+                type: imageFile.type
+            } : null,
+            hasImage: !!imageFile 
+        });
 
         if (!message && !imageFile) {
             console.log('No message or image provided');
@@ -733,7 +780,11 @@
         console.log('Sending request to:', url);
         console.log('FormData contents:');
         for (let pair of formData.entries()) {
-            console.log(pair[0] + ': ' + pair[1]);
+            if (pair[1] instanceof File) {
+                console.log(pair[0] + ': [File] ' + pair[1].name + ' (' + pair[1].size + ' bytes, ' + pair[1].type + ')');
+            } else {
+                console.log(pair[0] + ': ' + pair[1]);
+            }
         }
 
         fetch(url, {
@@ -741,16 +792,42 @@
             headers: {
                 'X-CSRF-TOKEN': token,
                 'Accept': 'application/json'
+                // Don't set Content-Type for FormData - browser sets it automatically with boundary
             },
             body: formData
         })
-        .then(response => {
+        .then(async response => {
             console.log('Response status:', response.status);
-            if (!response.ok) {
-                console.error('Response not ok:', response.status, response.statusText);
-                throw new Error('Network error: ' + response.status);
+            
+            // Try to parse JSON, but handle errors gracefully
+            let data;
+            try {
+                data = await response.json();
+            } catch (e) {
+                console.error('Failed to parse JSON response:', e);
+                throw new Error('Invalid response from server');
             }
-            return response.json();
+            
+            if (!response.ok) {
+                console.error('Response not ok:', response.status, response.statusText, data);
+                const errorMessage = data.error || data.message || 'Failed to send message. Please try again.';
+                throw new Error(errorMessage);
+            }
+            
+            // Check if response has error field
+            if (data.error) {
+                console.error('Error in response:', data.error);
+                throw new Error(data.error);
+            }
+            
+            // Verify message structure
+            if (!data.message) {
+                console.error('No message in response:', data);
+                throw new Error('Invalid response: no message data');
+            }
+            
+            console.log('Message sent successfully:', data.message);
+            return data;
         })
         .then(data => {
             // Clear input and image
@@ -764,19 +841,28 @@
             removeTypingIndicator();
 
             // Construct full user name safely
+            if (!data.message.user) {
+                console.error('No user in message:', data.message);
+                showNotification('Error: User data missing', 'error');
+                return;
+            }
+            
             const user = data.message.user;
             const userFullName = `${user.fname ?? ''} ${user.lname ?? ''}`.trim();
 
             // Create new message HTML
             let messageContent = '';
-            if (data.message.image) {
+            // Handle image (check both image_path and image_url)
+            if (data.message.image_path || data.message.image_url) {
+                const imageSrc = data.message.image_url || `/storage/${data.message.image_path}`;
                 messageContent = `
                     <div class="mb-2">
-                        <img src="/storage/${data.message.image}" alt="Shared image" class="max-w-full h-auto rounded-lg shadow-sm">
+                        <img src="${imageSrc}" alt="Shared image" class="max-w-full h-auto rounded-lg shadow-sm">
                     </div>
                 `;
             }
-            if (data.message.message) {
+            // Only show message text if it exists and is not empty
+            if (data.message.message && data.message.message.trim()) {
                 messageContent += `<div class="text-sm whitespace-pre-line break-words">${data.message.message.replace(/\n/g, '<br>')}</div>`;
             }
 
@@ -818,9 +904,13 @@
             }, 100);
         })
         .catch(error => {
-            console.error('Error:', error);
+            console.error('Error sending message:', error);
             removeTypingIndicator();
-            showNotification('Failed to send message. Please try again.', 'error');
+            const errorMessage = error.message || 'Failed to send message. Please try again.';
+            showNotification(errorMessage, 'error');
+            
+            // Don't clear the image preview on error so user can retry
+            // Keep the form state so user can fix and resubmit
         });
     });
 

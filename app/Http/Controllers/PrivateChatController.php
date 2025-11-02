@@ -49,15 +49,19 @@ class PrivateChatController extends Controller
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:10240' // 10MB max
         ]);
 
-        if (empty($request->message) && !$request->hasFile('image')) {
+        $messageContent = trim($request->input('message', ''));
+        $hasMessage = !empty($messageContent);
+        $hasImage = $request->hasFile('image');
+
+        if (!$hasMessage && !$hasImage) {
             return response()->json(['error' => 'Message or image is required.'], 400);
         }
 
         $result = $this->messageService->sendPrivateMessage(
             Auth::id(),
             $user->id,
-            $request->message,
-            $request->file('image')
+            $hasMessage ? $messageContent : null,
+            $hasImage ? $request->file('image') : null
         );
 
         if (isset($result['error'])) {
@@ -65,10 +69,33 @@ class PrivateChatController extends Controller
         }
 
         $message = $result['message'];
-        $message->image_url = $message->image_path
+        
+        // Ensure user relationship is loaded
+        if (!$message->relationLoaded('user')) {
+            $message->load('user');
+        }
+        
+        // Add image_url for easy access
+        $message->setAttribute('image_url', $message->image_path
             ? asset('storage/' . $message->image_path)
-            : null;
+            : null);
 
-        return response()->json(['message' => $message]);
+        // Return message as resource/array for JSON serialization
+        return response()->json([
+            'message' => [
+                'id' => $message->id,
+                'user_id' => $message->user_id,
+                'receiver_id' => $message->receiver_id,
+                'message' => $message->message,
+                'image_path' => $message->image_path,
+                'image_url' => $message->image_url,
+                'created_at' => $message->created_at,
+                'user' => [
+                    'id' => $message->user->id,
+                    'fname' => $message->user->fname,
+                    'lname' => $message->user->lname,
+                ]
+            ]
+        ]);
     }
 }
