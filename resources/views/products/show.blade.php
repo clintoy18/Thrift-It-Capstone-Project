@@ -89,7 +89,7 @@
                         </a>
 
                         
-                        @if($product->status === 'available')
+                        @if($product->status === 'available' && $product->approval_status === 'approved')
                             <form action="{{ route('products.markAsSold', $product) }}" method="POST">
                                 @csrf
                                 @method('PUT')

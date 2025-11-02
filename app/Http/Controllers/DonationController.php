@@ -42,15 +42,26 @@ class DonationController extends Controller
    
     public function store(StoreDonationRequest $request)
     {
+        // Validate request data
         $validated = $request->validated();
+
+        // Attach authenticated user ID
         $validated['user_id'] = Auth::id();
 
-        $images = $request->file('images', []);
-        $donations = $this->donationService->createDonation($validated, $images);
+        // Handle images safely (if any)
+        $images = $request->hasFile('images') ? $request->file('images') : [];
 
-       return redirect()->route('donations.index')->with('success', 'Donation created successfully!');
-    //    return dd($donation, $images);
+        // Create donation via service layer
+        $this->donationService->createDonation($validated, $images);
+
+        // Redirect with success message
+        return redirect()
+            ->route('donations.index')
+            ->with('success', 'Donation created successfully!');
     }
+
+
+    
 
     /**
      * Display the specified resource.
@@ -60,9 +71,7 @@ class DonationController extends Controller
         Cache::forget("donation_{$id}_comments");
         Cache::forget("donation_{$id}_with_comments");
 
-        $donation = Donation::with(['user', 'category', 'images'])->findOrFail($id);
-  
-
+        $donation = Donation::with(['user', 'category', 'donationImages'])->findOrFail($id);
         $allComments = Comment::with(['user'])
             ->where('donation_id', $id)
             ->orderBy('created_at', 'asc')
@@ -136,13 +145,13 @@ class DonationController extends Controller
 
     public function getAllDonations()
     {
-        $donations = $this->donationService->getAllDonations();
+        $donations = $this->donationService->getApprovedDonations();
         return view('donations.donation-hub', compact('donations'));
     }
 
-        public function markAsDonated(Donation $donation): RedirectResponse
+   public function markAsDonated(Donation $donation): RedirectResponse
     {
         $this->donationService->updateDonation($donation, ['status' => 'donated']);
-        return redirect()->route('donations.show')->with('success', 'Item marked as donated.');
+        return redirect()->route('donations.index')->with('success', 'Item marked as donated.');
     }
 }

@@ -12,6 +12,7 @@ class OrderController extends Controller
 
     public function store(Request $request, Product $product)
     {
+        // add address field for the buyer or make use of the barangay in user profile later
         $request->validate([
             'proof' => 'required|image|mimes:jpeg,png,jpg|max:5120',
         ]);
@@ -40,7 +41,7 @@ class OrderController extends Controller
             return back()->with('error', 'Invalid status.');
         }
 
-        // Update product status if order is approved
+        // Update product status if order is approved IMPORTANT! --- MUST ADD NOTIFICATIONS AFTER UPDATING STATUS ---
         if ($status === 'approved' && $order->product) {
             $order->product->update(['status' => 'sold']);
         }

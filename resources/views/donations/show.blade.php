@@ -10,24 +10,23 @@
             <div class="flex flex-col lg:flex-row gap-8 items-stretch">
                 <!-- Left Column: Image Slider & Product Info -->
                 <div class="lg:w-1/3 flex flex-col gap-6 h-full">
-                    <!-- Swiper Slider -->
-                        
+                 <!-- Swiper Slider -->
                     <div class="relative swiper mySwiper rounded-xl overflow-hidden shadow-lg h-[28rem] sm:h-[32rem]">
                         <div class="swiper-wrapper h-full">
-                               {{-- @dd($donation->images) --}}
-                           @if ($donation->images && $donation->images->count() > 0)
-                           
-                            @foreach ($donation->images as $image)
-                            
+                            @if ($donation->donationImages&& $donation->donationImages->count() > 0)
+                                @foreach ($donation->donationImages as $image)
+                                    <div class="swiper-slide flex items-center justify-center bg-white h-full">
+                                        <img src="{{ asset('storage/' . $image->image) }}" alt="{{ $donation->name }}"
+                                            class="w-full h-full object-cover transition-transform duration-500 ease-out hover:scale-105">
+                                    </div>
+                                @endforeach
+                            @else
+                                <!-- Fallback placeholder if no images -->
                                 <div class="swiper-slide flex items-center justify-center bg-white h-full">
-                                    <img src="{{ asset('storage/' . $image->image) }}" ... >
+                                    <img src="{{ asset('images/default-placeholder.png') }}" alt="No image"
+                                        class="w-full h-full object-cover">
                                 </div>
-                            @endforeach
-                        @else
-                            <div class="swiper-slide flex items-center justify-center bg-white h-full">
-                                <img src="{{ asset('images/default-placeholder.png') }}" alt="No image" class="w-full h-full object-cover">
-                            </div>
-                        @endif
+                            @endif
                         </div>
 
                         <!-- Swiper Pagination (overlay) -->
@@ -70,7 +69,8 @@
                         </a>
 
                         
-                        @if($donation->status === 'available')
+                         @if($donation->status === 'available' && $donation->approval_status === 'approved')
+
                             <form action="{{ route('donations.markAsDonated', $donation) }}" method="POST">
                                 @csrf
                                 @method('PUT')
