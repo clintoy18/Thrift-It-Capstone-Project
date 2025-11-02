@@ -28,7 +28,7 @@ class AdminProductController extends Controller
 
     public function show(Product $product): View
     {
-        $product->load(['user', 'category', 'comments.user']);
+        $product->load(['user', 'category', 'comments.user','images']);
         return view('admin.products.show', compact('product'));
     }
     
