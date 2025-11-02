@@ -11,32 +11,35 @@
             {{-- Product Overview Section --}}
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
 
-                {{-- Swiper (keep same dimensions) --}}
-                <div class="relative swiper mySwiper rounded-xl overflow-hidden shadow-lg h-[28rem] sm:h-[32rem]">
-                    <div class="swiper-wrapper h-full">
-                        @if ($product->images && $product->images->count() > 0)
-                            @foreach ($product->images as $image)
+                 <!-- Swiper Slider -->
+                    <div class="relative swiper mySwiper rounded-xl overflow-hidden shadow-lg h-[28rem] sm:h-[32rem]">
+                        <div class="swiper-wrapper h-full">
+                            @if ($product->images && $product->images->count() > 0)
+                                @foreach ($product->images as $image)
+                                    <div class="swiper-slide flex items-center justify-center bg-white h-full">
+                                        <img src="{{ asset('storage/' . $image->image) }}" alt="{{ $product->name }}"
+                                            class="w-full h-full object-cover transition-transform duration-500 ease-out hover:scale-105">
+                                    </div>
+                                @endforeach
+                            @else
+                                <!-- Fallback placeholder if no images -->
                                 <div class="swiper-slide flex items-center justify-center bg-white h-full">
-                                    <img src="{{ asset('storage/' . $image->image) }}" 
-                                         alt="{{ $product->name }}"
-                                         class="w-full h-full object-cover transition-transform duration-500 ease-out hover:scale-105">
+                                    <img src="{{ asset('images/default-placeholder.png') }}" alt="No image"
+                                        class="w-full h-full object-cover">
                                 </div>
-                            @endforeach
-                        @else
-                            <div class="swiper-slide flex items-center justify-center bg-gray-50 h-full">
-                                <img src="{{ asset('images/default-placeholder.png') }}" 
-                                     alt="No image available"
-                                     class="w-full h-full object-cover opacity-80">
-                            </div>
-                        @endif
+                            @endif
+                        </div>
+
+                        <!-- Swiper Pagination (overlay) -->
+                        <div class="swiper-pagination absolute bottom-4 left-1/2 transform -translate-x-1/2 z-10"></div>
+                        <!-- Swiper Navigation -->
+                        <div
+                            class="swiper-button-next !text-white text-3xl z-20 hover:!text-gray-200 transition-colors duration-300">
+                        </div>
+                        <div
+                            class="swiper-button-prev !text-white text-3xl z-20 hover:!text-gray-200 transition-colors duration-300">
+                        </div>
                     </div>
-
-                    {{-- Swiper Controls --}}
-                    <div class="swiper-pagination absolute bottom-4 left-1/2 transform -translate-x-1/2 z-10"></div>
-                    <div class="swiper-button-next !text-white text-3xl z-20 hover:!text-gray-200 transition-colors duration-300"></div>
-                    <div class="swiper-button-prev !text-white text-3xl z-20 hover:!text-gray-200 transition-colors duration-300"></div>
-                </div>
-
                 {{-- Product Details --}}
                 <div class="col-span-1 lg:col-span-2 bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-md border border-gray-100 dark:border-gray-700">
                     <div class="flex justify-between items-start mb-6">
