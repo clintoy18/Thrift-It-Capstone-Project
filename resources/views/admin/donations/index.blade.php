@@ -10,6 +10,14 @@
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6">
 
+                    {{-- Go Back to Dashboard Button  PALIHOG KO IMPROVE PRE--}}
+                    <div class="mb-6">
+                        <a href="{{ route('admin.dashboard') }}"
+                            class="inline-flex items-center px-4 py-2 bg-[#B59F84] text-white text-sm font-medium rounded-md hover:bg-[#a08e77] transition-all duration-300">
+                            ← Back to Dashboard
+                        </a>
+                    </div>
+
                     {{-- Tabs --}}
                     <div class="flex border-b border-gray-300 dark:border-gray-700 mb-6">
                         <button id="tab-approval"
