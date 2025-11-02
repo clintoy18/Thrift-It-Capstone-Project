@@ -191,111 +191,151 @@
             </div>
         </div>
     </div>
-        {{-- Show products in dashboard --}}
-            <div class=" shadow-sm overflow-hidden dark:bg-gray-800 bg-white my-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-                <div class="p-4 sm:p-6" id="productsContainer">
-                <div class="flex gap-2">
-                    <div x-data="{ open: false }" class="relative">
-                        <button @click="open = !open" class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 text-sm shadow-sm">
-                            <span>Category</span>
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-700 dark:text-gray-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <polyline points="6 9 12 15 18 9"></polyline>
-                            </svg>
-                        </button>
-                        <div x-cloak x-show="open" @click.outside="open = false" class="absolute right-0 mt-2 w-44 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg z-20 py-1">
-                            <a data-category-link href="{{ route('dashboard') }}" class="block px-3 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg">All</a>
-                            @foreach($categories as $cat)
-                                <a data-category-link href="{{ route('dashboard', ['category' => $cat->id]) }}" class="block px-3 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg {{ (isset($selectedCategoryId) && (int)$selectedCategoryId === $cat->id) ? 'font-semibold' : '' }}">
-                                    {{ $cat->name }}
-                                </a>
-                            @endforeach
-                        </div>
-                    </div>
-                    <div x-data="{ open: false }" class="relative">
-                        <button @click="open = !open" class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 text-sm shadow-sm">
-                            <span>Location</span>
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-700 dark:text-gray-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <polyline points="6 9 12 15 18 9"></polyline>
-                            </svg>
-                        </button>
-                        <div x-cloak x-show="open" @click.outside="open = false" class="absolute right-0 mt-2 w-44 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg z-20 py-1 max-h-96 overflow-y-auto">
-                            <a data-location-link href="{{ route('dashboard') }}" class="block px-3 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg">All</a>
-                            @foreach($barangays as $barangay)
-                                <a data-location-link href="{{ route('dashboard', ['barangay' => $barangay->id]) }}" class="block px-3 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg {{ (isset($selectedBarangayId) && (int)$selectedBarangayId === $barangay->id) ? 'font-semibold' : '' }}">
-                                    {{ $barangay->name }}
-                                </a>
-                            @endforeach
-                        </div>
-                    </div>
-                </div>
-                <div id="loadingIndicator" class="hidden flex items-center justify-center py-4">
-                    <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-[#634600]"></div>
-                    <span class="ml-2 text-gray-600 dark:text-gray-300">Loading products...</span>
-                </div>
-                    <div id="productsGrid" class="mt-4">
-                    @if($products->count() > 0)
-                        <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-4 md:gap-6">
-                            @foreach ($products as $product)
-                                <div class="group relative bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition duration-200 border border-[#D9D9D9] dark:border-gray-700">
-                                    <a href="{{ route('products.show', $product->id) }}" class="block h-full">
-                                        @if($product->listingtype === 'for donation')
-                                            <div class="absolute top-1 left-1 z-10 bg-[#D9D9D9] text-gray-700 text-[10px] sm:text-xs px-1.5 py-0.5 sm:px-2 sm:py-1 rounded-full">
-                                                Donation
-                                            </div>
-                                        @endif
-                                       <div class="relative aspect-square overflow-hidden">
-                                       <img src="{{ asset('storage/' . $product->first_image) }}" 
-                                            alt="{{ $product->name }}" 
-                                            class="w-full h-full object-cover">
-                                            <div class="absolute inset-0 bg-gray-800 bg-opacity-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                                                <span class="bg-white text-gray-800 px-2 py-0.5 rounded-full text-[10px] sm:text-xs font-medium">
-                                                    Quick view
-                                                </span>
-                                            </div>
-                                        </div>
-                                        <div class="p-2 sm:p-3">
-                                            <div class="flex justify-between items-start">
-                                                <h3 class="text-xs sm:text-sm font-bold text-gray-900 dark:text-white  transition-colors truncate max-w-[70%]">
-                                                    {{ $product->name }}
-                                                </h3>
-                                                <span class="text-[10px] sm:text-xs font-medium px-1 py-0.5 bg-[#D9D9D9] dark:bg-gray-700 rounded text-gray-700 dark:text-gray-300">
-                                                    {{ $product->size ?? 'L' }}
-                                                </span>
-                                            </div>
-
-                                            <p class="text-gray-500 dark:text-gray-400 text-[10px] sm:text-xs mt-0.5 truncate">
-                                                {{ $product->category->name ?? 'No Category' }}
-                                            </p>
-                                            <p class="text-gray-500 dark:text-gray-400 text-[10px] sm:text-xs mt-0.5 truncate">
-                                              <i>  {{ $product->barangay->name ?? 'N/A' }}, Cebu City</i>
-                                            </p>
-
-                                            <div class="flex justify-between items-center mt-1">
-                                                <p class="text-xs sm:text-sm font-bold {{ $product->listingtype === 'for donation' ? 'text-gray-700' : 'text-black-600' }}">
-                                                    {{ $product->listingtype === 'for donation' ? 'For Donation' : '₱' . number_format($product->price, 2) }}
-                                                </p>
-
-                                                <button class="favorite-btn text-gray-400 hover:text-gray-600 focus:outline-none transition-colors" 
-                                                        data-id="{{ $product->id }}" 
-                                                        type="button"
-                                                        onclick="event.preventDefault(); event.stopPropagation();">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:h-5 sm:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                                                    </svg>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </div>
-                            @endforeach
-                        </div>
-                   
-                    @else
-                        <x-empty-message message="No active products found." link="{{ route('products.create') }}" />
-                    @endif
-                    </div>
+    {{-- Show products in dashboard --}}
+<div class="shadow-sm overflow-hidden dark:bg-gray-800 bg-white my-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+    <div class="p-4 sm:p-6" id="productsContainer">
+        <!-- Filters Section with Higher z-index -->
+        <div class="flex gap-2 relative z-50">
+            <!-- Category Dropdown -->
+            <div x-data="{ open: false }" class="relative z-50">
+                <button @click="open = !open" class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 text-sm shadow-sm z-50">
+                    <span id="categoryButtonText">{{ isset($selectedCategoryId) && $categories->where('id', $selectedCategoryId)->first() ? $categories->where('id', $selectedCategoryId)->first()->name : 'Category' }}</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-700 dark:text-gray-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </button>
+                <!-- Dropdown Menu -->
+                <div x-cloak x-show="open" @click.outside="open = false" 
+                     x-transition:enter="transition ease-out duration-200"
+                     x-transition:enter-start="opacity-0 transform scale-95"
+                     x-transition:enter-end="opacity-100 transform scale-100"
+                     x-transition:leave="transition ease-in duration-150"
+                     x-transition:leave-start="opacity-100 transform scale-100"
+                     x-transition:leave-end="opacity-0 transform scale-95"
+                     class="absolute left-0 mt-2 w-48 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg z-[60] py-1 max-h-64 overflow-y-auto">
+                    <a href="javascript:void(0)" 
+                       data-category-link 
+                       data-category-name="All" 
+                       class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg ajax-category-link">
+                        All Categories
+                    </a>
+                    @foreach($categories as $cat)
+                        <a href="javascript:void(0)" 
+                           data-category-link 
+                           data-category-name="{{ $cat->name }}" 
+                           class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg ajax-category-link {{ (isset($selectedCategoryId) && (int)$selectedCategoryId === $cat->id) ? 'font-semibold bg-gray-100 dark:bg-gray-700' : '' }}">
+                            {{ $cat->name }}
+                        </a>
+                    @endforeach
                 </div>
             </div>
+
+            <!-- Location Dropdown -->
+            <div x-data="{ open: false }" class="relative z-50">
+                <button @click="open = !open" class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 text-sm shadow-sm z-50">
+                    <span id="locationButtonText">{{ isset($selectedBarangayId) && $barangays->where('id', $selectedBarangayId)->first() ? $barangays->where('id', $selectedBarangayId)->first()->name : 'Location' }}</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-700 dark:text-gray-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </button>
+                <!-- Dropdown Menu -->
+                <div x-cloak x-show="open" @click.outside="open = false"
+                     x-transition:enter="transition ease-out duration-200"
+                     x-transition:enter-start="opacity-0 transform scale-95"
+                     x-transition:enter-end="opacity-100 transform scale-100"
+                     x-transition:leave="transition ease-in duration-150"
+                     x-transition:leave-start="opacity-100 transform scale-100"
+                     x-transition:leave-end="opacity-0 transform scale-95"
+                     class="absolute left-0 mt-2 w-48 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg z-[60] py-1 max-h-64 overflow-y-auto">
+                    <a href="javascript:void(0)" 
+                       data-location-link 
+                       data-location-name="All" 
+                       class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg ajax-location-link">
+                        All Locations
+                    </a>
+                    @foreach($barangays as $barangay)
+                        <a href="javascript:void(0)" 
+                           data-location-link 
+                           data-location-name="{{ $barangay->name }}" 
+                           class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg ajax-location-link {{ (isset($selectedBarangayId) && (int)$selectedBarangayId === $barangay->id) ? 'font-semibold bg-gray-100 dark:bg-gray-700' : '' }}">
+                            {{ $barangay->name }}
+                        </a>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading Indicator -->
+        <div id="loadingIndicator" class="hidden flex items-center justify-center py-4">
+            <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-[#634600]"></div>
+            <span class="ml-2 text-gray-600 dark:text-gray-300">Loading products...</span>
+        </div>
+
+        <!-- Products Grid -->
+        <div id="productsGrid" class="mt-4 relative z-10">
+            @if($products->count() > 0)
+                <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-4 md:gap-6">
+                    @foreach ($products as $product)
+                        <div class="group relative bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition duration-200 border border-[#D9D9D9] dark:border-gray-700">
+                            <a href="{{ route('products.show', $product->id) }}" class="block h-full">
+                                @if($product->listingtype === 'for donation')
+                                    <div class="absolute top-1 left-1 z-10 bg-[#D9D9D9] text-gray-700 text-[10px] sm:text-xs px-1.5 py-0.5 sm:px-2 sm:py-1 rounded-full">
+                                        Donation
+                                    </div>
+                                @endif
+                               <div class="relative aspect-square overflow-hidden">
+                               <img src="{{ asset('storage/' . $product->first_image) }}" 
+                                    alt="{{ $product->name }}" 
+                                    class="w-full h-full object-cover">
+                                    <div class="absolute inset-0 bg-gray-800 bg-opacity-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                                        <span class="bg-white text-gray-800 px-2 py-0.5 rounded-full text-[10px] sm:text-xs font-medium">
+                                            Quick view
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="p-2 sm:p-3">
+                                    <div class="flex justify-between items-start">
+                                        <h3 class="text-xs sm:text-sm font-bold text-gray-900 dark:text-white transition-colors truncate max-w-[70%]">
+                                            {{ $product->name }}
+                                        </h3>
+                                        <span class="text-[10px] sm:text-xs font-medium px-1 py-0.5 bg-[#D9D9D9] dark:bg-gray-700 rounded text-gray-700 dark:text-gray-300">
+                                            {{ $product->size ?? 'L' }}
+                                        </span>
+                                    </div>
+
+                                    <p class="text-gray-500 dark:text-gray-400 text-[10px] sm:text-xs mt-0.5 truncate">
+                                        {{ $product->category->name ?? 'No Category' }}
+                                    </p>
+                                    <p class="text-gray-500 dark:text-gray-400 text-[10px] sm:text-xs mt-0.5 truncate">
+                                      <i>  {{ $product->barangay->name ?? 'N/A' }}, Cebu City</i>
+                                    </p>
+
+                                    <div class="flex justify-between items-center mt-1">
+                                        <p class="text-xs sm:text-sm font-bold {{ $product->listingtype === 'for donation' ? 'text-gray-700' : 'text-black-600' }}">
+                                            {{ $product->listingtype === 'for donation' ? 'For Donation' : '₱' . number_format($product->price, 2) }}
+                                        </p>
+
+                                        <button class="favorite-btn text-gray-400 hover:text-gray-600 focus:outline-none transition-colors" 
+                                                data-id="{{ $product->id }}" 
+                                                type="button"
+                                                onclick="event.preventDefault(); event.stopPropagation();">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:h-5 sm:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    @endforeach
+                </div>
+            @else
+                <x-empty-message message="No active products found." link="{{ route('products.create') }}" />
+            @endif
+        </div>
+    </div>
+</div>
+            
 
     {{-- <!-- NEW: Why Choose Thrift-IT Section -->
     <div class="py-16 bg-gradient-to-br from-[#F8EED6] to-[#F4F2ED] dark:from-gray-800 dark:to-gray-900 overflow-hidden relative z-10">
@@ -986,41 +1026,6 @@
         new HeroParticleSystem();
     });
 
-    // Existing JavaScript for other interactions
-    document.querySelectorAll('.favorite-btn').forEach(button => {
-        button.addEventListener('click', function() {
-            const svg = this.querySelector('svg');
-            if (svg.getAttribute('fill') === 'none') {
-                svg.setAttribute('fill', 'currentColor');
-                svg.setAttribute('stroke', 'none');
-                this.classList.add('text-red-500');
-            } else {
-                svg.setAttribute('fill', 'none');
-                svg.setAttribute('stroke', 'currentColor');
-                this.classList.remove('text-red-500');
-            }
-        });
-    });
-
-    // Intersection Observer for scroll animations
-    const observerOptions = {
-        threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px'
-    };
-
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.style.animationPlayState = 'running';
-            }
-        });
-    }, observerOptions);
-
-    // Observe all animated elements
-    document.querySelectorAll('[class*="animate-"]').forEach(el => {
-        observer.observe(el);
-    });
-
     // Dashboard filtering without page refresh
     document.addEventListener('DOMContentLoaded', function() {
         const productsGrid = document.getElementById('productsGrid');
@@ -1045,8 +1050,13 @@
 
         // Helper function to initialize favorite buttons
         function initFavoriteButtons() {
-            productsGrid.querySelectorAll('.favorite-btn').forEach(button => {
-                button.addEventListener('click', function(e) {
+            document.querySelectorAll('.favorite-btn').forEach(button => {
+                // Remove existing event listeners
+                const newButton = button.cloneNode(true);
+                button.parentNode.replaceChild(newButton, button);
+                
+                // Add new event listener
+                newButton.addEventListener('click', function(e) {
                     e.preventDefault();
                     e.stopPropagation();
                     const svg = this.querySelector('svg');
@@ -1064,32 +1074,56 @@
         }
 
         // Handle category links
-        document.querySelectorAll('[data-category-link]').forEach(link => {
+        document.querySelectorAll('.ajax-category-link').forEach(link => {
             link.addEventListener('click', async (e) => {
                 e.preventDefault();
-                const currentUrl = new URL(window.location);
-                const linkUrl = new URL(e.currentTarget.href, window.location.origin);
+                
+                // Close dropdown
+                const dropdown = link.closest('[x-data]');
+                if (dropdown && dropdown.__x) {
+                    dropdown.__x.$data.open = false;
+                }
+
+                const categoryName = link.getAttribute('data-category-name');
+                const categoryButtonText = document.getElementById('categoryButtonText');
+                
+                // Update button text immediately
+                if (categoryButtonText) {
+                    categoryButtonText.textContent = categoryName;
+                }
                 
                 // Build query params preserving location
+                const currentUrl = new URL(window.location);
                 const params = new URLSearchParams();
-                if (linkUrl.searchParams.get('category')) {
-                    params.set('category', linkUrl.searchParams.get('category'));
+                
+                // Only add category if it's not "All"
+                if (categoryName !== 'All') {
+                    const categoryId = link.getAttribute('href').split('category=')[1];
+                    if (categoryId) {
+                        params.set('category', categoryId);
+                    }
                 }
+                
+                // Preserve location filter
                 if (currentUrl.searchParams.get('barangay')) {
                     params.set('barangay', currentUrl.searchParams.get('barangay'));
                 }
                 
                 showLoading();
                 
-                // Fetch filtered products
-                const dashboardUrl = window.location.pathname + (params.toString() ? '?' + params.toString() : '');
                 try {
+                    const dashboardUrl = '{{ route("dashboard") }}' + (params.toString() ? '?' + params.toString() : '');
                     const response = await fetch(dashboardUrl, {
                         headers: {
                             'X-Requested-With': 'XMLHttpRequest',
                             'Accept': 'text/html'
                         }
                     });
+                    
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    
                     const html = await response.text();
                     const parser = new DOMParser();
                     const doc = parser.parseFromString(html, 'text/html');
@@ -1101,51 +1135,78 @@
                     }
                 } catch (error) {
                     console.error('Error filtering products:', error);
+                    // Fallback: reload the page
+                    window.location.href = '{{ route("dashboard") }}' + (params.toString() ? '?' + params.toString() : '');
+                    return;
                 } finally {
                     hideLoading();
                 }
                 
                 // Update URL without reloading
                 const newUrl = new URL(window.location);
-                if (linkUrl.searchParams.get('category')) {
-                    newUrl.searchParams.set('category', linkUrl.searchParams.get('category'));
+                if (categoryName !== 'All') {
+                    const categoryId = link.getAttribute('href').split('category=')[1];
+                    if (categoryId) {
+                        newUrl.searchParams.set('category', categoryId);
+                    }
                 } else {
                     newUrl.searchParams.delete('category');
-                }
-                if (currentUrl.searchParams.get('barangay')) {
-                    newUrl.searchParams.set('barangay', currentUrl.searchParams.get('barangay'));
                 }
                 window.history.pushState({}, '', newUrl);
             });
         });
         
         // Handle location links
-        document.querySelectorAll('[data-location-link]').forEach(link => {
+        document.querySelectorAll('.ajax-location-link').forEach(link => {
             link.addEventListener('click', async (e) => {
                 e.preventDefault();
-                const currentUrl = new URL(window.location);
-                const linkUrl = new URL(e.currentTarget.href, window.location.origin);
+                
+                // Close dropdown
+                const dropdown = link.closest('[x-data]');
+                if (dropdown && dropdown.__x) {
+                    dropdown.__x.$data.open = false;
+                }
+
+                const locationName = link.getAttribute('data-location-name');
+                const locationButtonText = document.getElementById('locationButtonText');
+                
+                // Update button text immediately
+                if (locationButtonText) {
+                    locationButtonText.textContent = locationName;
+                }
                 
                 // Build query params preserving category
+                const currentUrl = new URL(window.location);
                 const params = new URLSearchParams();
+                
+                // Preserve category filter
                 if (currentUrl.searchParams.get('category')) {
                     params.set('category', currentUrl.searchParams.get('category'));
                 }
-                if (linkUrl.searchParams.get('barangay')) {
-                    params.set('barangay', linkUrl.searchParams.get('barangay'));
+                
+                // Only add location if it's not "All"
+                if (locationName !== 'All') {
+                    const locationId = link.getAttribute('href').split('barangay=')[1];
+                    if (locationId) {
+                        params.set('barangay', locationId);
+                    }
                 }
                 
                 showLoading();
                 
-                // Fetch filtered products
-                const dashboardUrl = window.location.pathname + (params.toString() ? '?' + params.toString() : '');
                 try {
+                    const dashboardUrl = '{{ route("dashboard") }}' + (params.toString() ? '?' + params.toString() : '');
                     const response = await fetch(dashboardUrl, {
                         headers: {
                             'X-Requested-With': 'XMLHttpRequest',
                             'Accept': 'text/html'
                         }
                     });
+                    
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    
                     const html = await response.text();
                     const parser = new DOMParser();
                     const doc = parser.parseFromString(html, 'text/html');
@@ -1157,22 +1218,63 @@
                     }
                 } catch (error) {
                     console.error('Error filtering products:', error);
+                    // Fallback: reload the page
+                    window.location.href = '{{ route("dashboard") }}' + (params.toString() ? '?' + params.toString() : '');
+                    return;
                 } finally {
                     hideLoading();
                 }
                 
                 // Update URL without reloading
                 const newUrl = new URL(window.location);
-                if (currentUrl.searchParams.get('category')) {
-                    newUrl.searchParams.set('category', currentUrl.searchParams.get('category'));
-                }
-                if (linkUrl.searchParams.get('barangay')) {
-                    newUrl.searchParams.set('barangay', linkUrl.searchParams.get('barangay'));
+                if (locationName !== 'All') {
+                    const locationId = link.getAttribute('href').split('barangay=')[1];
+                    if (locationId) {
+                        newUrl.searchParams.set('barangay', locationId);
+                    }
                 } else {
                     newUrl.searchParams.delete('barangay');
                 }
                 window.history.pushState({}, '', newUrl);
             });
+        });
+
+        // Initialize favorite buttons on page load
+        initFavoriteButtons();
+
+        // Existing JavaScript for other interactions
+        document.querySelectorAll('.favorite-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const svg = this.querySelector('svg');
+                if (svg.getAttribute('fill') === 'none') {
+                    svg.setAttribute('fill', 'currentColor');
+                    svg.setAttribute('stroke', 'none');
+                    this.classList.add('text-red-500');
+                } else {
+                    svg.setAttribute('fill', 'none');
+                    svg.setAttribute('stroke', 'currentColor');
+                    this.classList.remove('text-red-500');
+                }
+            });
+        });
+
+        // Intersection Observer for scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animationPlayState = 'running';
+                }
+            });
+        }, observerOptions);
+
+        // Observe all animated elements
+        document.querySelectorAll('[class*="animate-"]').forEach(el => {
+            observer.observe(el);
         });
     });
 </script>

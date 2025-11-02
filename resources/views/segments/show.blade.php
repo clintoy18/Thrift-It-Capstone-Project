@@ -98,15 +98,15 @@
                 <div class="flex gap-2">
                 <div x-data="{ open: false }" class="relative">
                     <button @click="open = !open" class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 text-sm shadow-sm">
-                        <span>Category</span>
+                        <span id="categoryButtonText">{{ isset($selectedCategoryId) && $categories->where('id', $selectedCategoryId)->first() ? $categories->where('id', $selectedCategoryId)->first()->name : 'Category' }}</span>
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-700 dark:text-gray-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <polyline points="6 9 12 15 18 9"></polyline>
                         </svg>
                     </button>
                     <div x-cloak x-show="open" @click.outside="open = false" class="absolute right-0 mt-2 w-44 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg z-20 py-1">
-                        <a data-category-link href="{{ route('segments.show', ['segment' => $segment->id]) }}" class="block px-3 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg">All</a>
+                        <a data-category-link data-category-name="All" href="{{ route('segments.show', ['segment' => $segment->id]) }}" class="block px-3 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg">All</a>
                         @foreach($categories as $cat)
-                            <a data-category-link href="{{ route('segments.show', ['segment' => $segment->id, 'category' => $cat->id]) }}" class="block px-3 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg {{ (isset($selectedCategoryId) && (int)$selectedCategoryId === $cat->id) ? 'font-semibold' : '' }}">
+                            <a data-category-link data-category-name="{{ $cat->name }}" href="{{ route('segments.show', ['segment' => $segment->id, 'category' => $cat->id]) }}" class="block px-3 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg {{ (isset($selectedCategoryId) && (int)$selectedCategoryId === $cat->id) ? 'font-semibold' : '' }}">
                                 {{ $cat->name }}
                             </a>
                         @endforeach
@@ -114,15 +114,15 @@
                     </div>
                     <div x-data="{ open: false }" class="relative">
                         <button @click="open = !open" class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 text-sm shadow-sm">
-                            <span>Location</span>
+                            <span id="locationButtonText">{{ isset($selectedBarangayId) && $barangays->where('id', $selectedBarangayId)->first() ? $barangays->where('id', $selectedBarangayId)->first()->name : 'Location' }}</span>
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-700 dark:text-gray-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <polyline points="6 9 12 15 18 9"></polyline>
                             </svg>
                         </button>
                         <div x-cloak x-show="open" @click.outside="open = false" class="absolute right-0 mt-2 w-44 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg z-20 py-1 max-h-96 overflow-y-auto">
-                            <a data-location-link href="{{ route('segments.show', ['segment' => $segment->id]) }}" class="block px-3 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg">All</a>
+                            <a data-location-link data-location-name="All" href="{{ route('segments.show', ['segment' => $segment->id]) }}" class="block px-3 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg">All</a>
                             @foreach($barangays as $barangay)
-                                <a data-location-link href="{{ route('segments.show', ['segment' => $segment->id, 'barangay' => $barangay->id]) }}" class="block px-3 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg {{ (isset($selectedBarangayId) && (int)$selectedBarangayId === $barangay->id) ? 'font-semibold' : '' }}">
+                                <a data-location-link data-location-name="{{ $barangay->name }}" href="{{ route('segments.show', ['segment' => $segment->id, 'barangay' => $barangay->id]) }}" class="block px-3 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg {{ (isset($selectedBarangayId) && (int)$selectedBarangayId === $barangay->id) ? 'font-semibold' : '' }}">
                                     {{ $barangay->name }}
                                 </a>
                             @endforeach
@@ -171,6 +171,13 @@
                         e.preventDefault();
                         const currentUrl = new URL(window.location);
                         const linkUrl = new URL(e.currentTarget.href, window.location.origin);
+                        const categoryButtonText = document.getElementById('categoryButtonText');
+                        
+                        // Update button text
+                        const categoryName = e.currentTarget.getAttribute('data-category-name') || 'Category';
+                        if (categoryButtonText) {
+                            categoryButtonText.textContent = categoryName;
+                        }
                         
                         // Build query params for API call preserving location
                         const params = new URLSearchParams();
@@ -215,6 +222,13 @@
                         e.preventDefault();
                         const currentUrl = new URL(window.location);
                         const linkUrl = new URL(e.currentTarget.href, window.location.origin);
+                        const locationButtonText = document.getElementById('locationButtonText');
+                        
+                        // Update button text
+                        const locationName = e.currentTarget.getAttribute('data-location-name') || 'Location';
+                        if (locationButtonText) {
+                            locationButtonText.textContent = locationName;
+                        }
                         
                         // Build query params for API call preserving category
                         const params = new URLSearchParams();
