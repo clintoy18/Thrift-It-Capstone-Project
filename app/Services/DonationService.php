@@ -35,7 +35,7 @@ class DonationService
             foreach ($images as $image) {
                 $path = $image->store('donation_images', 'public');
 
-                $donation->images()->create([
+                $donation->donationImages()->create([
                     'image' => $path,
                 ]);
             }
