@@ -59,52 +59,54 @@
                             </svg>
                         </a>
 
-                        <!-- Notification Bell -->
-                        <div id="notif-bell" x-data="{
-                            open: false,
-                            notifications: [],
-                            markAsRead() {
-                                fetch('{{ route('notifications.read') }}', {
-                                    method: 'POST',
-                                    headers: {
-                                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                                        'Accept': 'application/json',
-                                    }
-                                }).then(() => {
-                                    this.notifications.forEach(n => n.is_read = true);
-                                });
-                            }
-                        }" x-init="notifications = {{ Js::from(\App\Models\Notification::where('user_id', Auth::id())->latest()->take(5)->get()) }};"
-                            @new-notification.window="notifications.unshift($event.detail)">
-                            <!-- Bell Icon -->
-                            <button @click="open = !open; if(open) markAsRead()" class="relative">
-                                🔔
-                                <span x-show="notifications.filter(n => !n.is_read).length > 0"
-                                    class="absolute top-0 right-0 bg-red-600 text-white text-xs rounded-full px-1">
-                                    <span x-text="notifications.filter(n => !n.is_read).length"></span>
-                                </span>
-                            </button>
+<!-- Notification Bell -->
+<div id="notif-bell" x-data="{
+    open: false,
+    notifications: [],
+    markAsRead() {
+        fetch('{{ route('notifications.read') }}', {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Accept': 'application/json',
+            }
+        }).then(() => {
+            this.notifications.forEach(n => n.is_read = true);
+        });
+    }
+}" 
+x-init="notifications = {{ Js::from(\App\Models\Notification::where('user_id', Auth::id())->latest()->take(5)->get()) }};"
+@new-notification.window="notifications.unshift($event.detail)">
+    <!-- Bell Icon -->
+    <button @click="open = !open; if(open) markAsRead()" class="relative">
+        🔔
+        <span x-show="notifications.filter(n => !n.is_read).length > 0"
+            class="absolute top-0 right-0 bg-red-600 text-white text-xs rounded-full px-1">
+            <span x-text="notifications.filter(n => !n.is_read).length"></span>
+        </span>
+    </button>
 
-                            <!-- Dropdown -->
-                            <div x-show="open" @click.away="open = false" x-transition
-                                class="absolute right-20 mt-2 w-72 bg-white shadow-lg rounded-xl overflow-hidden z-50 border border-gray-200">
-                                <div class="px-4 py-2 bg-gray-50 border-b border-gray-200">
-                                    <span class="text-sm font-semibold text-gray-700">Notifications</span>
-                                </div>
-                                <div class="max-h-64 overflow-y-auto divide-y divide-gray-100 custom-scroll">
-                                    <template x-for="notif in notifications" :key="notif.id">
-                                        <a :href="`/products/${notif.data.product_id}`"
-                                            class="block px-4 py-3 hover:bg-gray-50 transition">
-                                            <p class="text-sm text-gray-700">
-                                                <strong class="text-[#B59F84]" x-text="notif.data.from_user"></strong>
-                                                commented: <span x-text="notif.data.content"></span>
-                                            </p>
-                                            <span class="text-xs text-gray-400" x-text="notif.created_at"></span>
-                                        </a>
-                                    </template>
-                                </div>
-                            </div>
-                        </div>
+    <!-- Dropdown -->
+    <div x-show="open" @click.away="open = false" x-transition
+        class="absolute right-20 mt-2 w-80 bg-white shadow-lg rounded-xl overflow-hidden z-50 border border-gray-200">
+        <div class="px-4 py-2 bg-gray-50 border-b border-gray-200">
+            <span class="text-sm font-semibold text-gray-700">Notifications</span>
+        </div>
+        <div class="max-h-64 overflow-y-auto divide-y divide-gray-100 custom-scroll">
+            <template x-for="notif in notifications" :key="notif.id">
+                <a :href="notif.data.product_id ? `/products/${notif.data.product_id}` : '#'"
+                   class="block px-4 py-3 hover:bg-gray-50 transition">
+                    <p class="text-sm text-gray-700">
+                        <strong class="text-[#B59F84]" x-text="notif.data.from_user || 'System'"></strong>
+                        <span x-text="notif.data.message || (notif.data.content ? 'commented: ' + notif.data.content : '')"></span>
+                    </p>
+                    <span class="text-xs text-gray-400" x-text="notif.created_at"></span>
+                </a>
+            </template>
+        </div>
+    </div>
+</div>
+
                     @endif
                 @endauth
 

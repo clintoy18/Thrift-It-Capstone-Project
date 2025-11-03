@@ -124,6 +124,33 @@ if (authUserId) {
         });
 }
 
+// Product Status Notification listener
+if (authUserId) {
+    window.Echo.private(`notifications-channel.${authUserId}`)
+        .listen('.product.status.notification', (e) => {
+            console.log("🔔 Product Status Notification:", e);
+
+            // Show friendly toast based on status
+            showNotificationToast(e.message); // e.message already contains "approved" or "rejected" text
+
+            // Dispatch event for Alpine or any frontend updates
+            window.dispatchEvent(new CustomEvent('new-notification', {
+                detail: {
+                    id: Date.now(),
+                    data: {
+                        product_id: e.id,
+                        product_name: e.name,
+                        status: e.status,
+                        message: e.message,
+                        from_user: e.from_user,
+                    },
+                    created_at: new Date().toISOString(),
+                    is_read: false,
+                }
+            }));
+        });
+}
+
 // Function to show toast notification
 function showNotificationToast(message) {
     const toast = document.createElement("div");
