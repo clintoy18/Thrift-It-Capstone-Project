@@ -151,6 +151,33 @@ if (authUserId) {
         });
 }
 
+// Order Placed Notification listener
+if (authUserId) {
+    window.Echo.private(`notifications-channel.${authUserId}`)
+        .listen('.order.placed.notification', (e) => {
+            console.log("🛒 New Order Notification:", e);
+
+            // Show a nice toast message
+            showNotificationToast(`🛍️ New Order: ${e.buyer_name} placed an order for ${e.product_name}`);
+
+            // Dispatch event for Alpine/Live updates
+            window.dispatchEvent(new CustomEvent('new-notification', {
+                detail: {
+                    id: Date.now(),
+                    data: {
+                        order_id: e.id,
+                        product_name: e.product_name,
+                        buyer_name: e.buyer_name,
+                        message: e.message,
+                    },
+                    created_at: new Date().toISOString(),
+                    is_read: false,
+                }
+            }));
+        });
+}
+
+
 // Function to show toast notification
 function showNotificationToast(message) {
     const toast = document.createElement("div");
