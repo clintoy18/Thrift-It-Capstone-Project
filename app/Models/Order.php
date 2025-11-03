@@ -30,7 +30,14 @@ class Order extends Model
     // Seller relationship (owner of the product)
     public function seller()
     {
-        return $this->product->user();
+        return $this->hasOneThrough(
+            User::class,
+            Product::class,
+            'id',      
+            'id',    
+            'product_id',
+            'user_id'    
+        );
     }
 
     public function isPending() {
