@@ -40,6 +40,33 @@
                         </div>
                         <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">Appointment Information</h3>
                     </div>
+                    <!-- Appointment Images -->
+                    @if($appointment->apptImages->count() > 0)
+                        <div class="bg-[#F8F4EC] dark:bg-gray-700 rounded-lg p-6 mb-6">
+                            <div class="flex items-center space-x-3 mb-4">
+                                <div class="p-2 bg-[#F1E9D2] dark:bg-[#9C8770] rounded-lg">
+                                    <svg class="w-5 h-5 text-[#B59F84] dark:text-[#F1E9D2]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-8h6a2 2 0 012 2v12a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h6z" />
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h4 class="text-md font-semibold text-gray-900 dark:text-gray-100">Uploaded Images</h4>
+                                    <p class="text-sm text-gray-600 dark:text-gray-400">Preview of uploaded appointment images</p>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                                @foreach ($appointment->apptImages as $image)
+                                    <div class="relative group">
+                                        <img src="{{ asset('storage/' . $image->image_path) }}" 
+                                            alt="Appointment Image" 
+                                            class="rounded-lg shadow-md object-cover w-full h-40 transition-transform duration-300 group-hover:scale-105">
+                                        <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 rounded-lg transition duration-300"></div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    @endif
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <!-- User Information -->
