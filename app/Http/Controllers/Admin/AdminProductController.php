@@ -10,6 +10,7 @@ use Illuminate\Http\RedirectResponse;
 use App\Services\ProductService;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\ProductApprovedMail;
+use App\Mail\ProductRejectedMail;
 
 class AdminProductController extends Controller
 {
@@ -70,9 +71,10 @@ class AdminProductController extends Controller
     public function reject(Product $product): RedirectResponse
     {
         $this->productService->updateProduct($product, ['approval_status' => 'rejected']);
+        Mail::to($product->user->email)->send(new ProductRejectedMail($product));
 
         return redirect()->route('admin.products.index')
-            ->with('success', 'Product rejected successfully.');
+            ->with('error', 'Product rejected!.');
     }
 
 
