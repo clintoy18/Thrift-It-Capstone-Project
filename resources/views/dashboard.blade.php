@@ -213,17 +213,17 @@
                      x-transition:leave-start="opacity-100 transform scale-100"
                      x-transition:leave-end="opacity-0 transform scale-95"
                      class="absolute left-0 mt-2 w-48 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg z-[60] py-1 max-h-64 overflow-y-auto">
-                    <a href="javascript:void(0)" 
-                       data-category-link 
+                    <a data-category-link 
                        data-category-name="All" 
-                       class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg ajax-category-link">
+                       href="{{ route('dashboard') }}" 
+                       class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg">
                         All Categories
                     </a>
                     @foreach($categories as $cat)
-                        <a href="javascript:void(0)" 
-                           data-category-link 
+                        <a data-category-link 
                            data-category-name="{{ $cat->name }}" 
-                           class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg ajax-category-link {{ (isset($selectedCategoryId) && (int)$selectedCategoryId === $cat->id) ? 'font-semibold bg-gray-100 dark:bg-gray-700' : '' }}">
+                           href="{{ route('dashboard', ['category' => $cat->id]) }}" 
+                           class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg {{ (isset($selectedCategoryId) && (int)$selectedCategoryId === $cat->id) ? 'font-semibold bg-gray-100 dark:bg-gray-700' : '' }}">
                             {{ $cat->name }}
                         </a>
                     @endforeach
@@ -247,17 +247,17 @@
                      x-transition:leave-start="opacity-100 transform scale-100"
                      x-transition:leave-end="opacity-0 transform scale-95"
                      class="absolute left-0 mt-2 w-48 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg z-[60] py-1 max-h-64 overflow-y-auto">
-                    <a href="javascript:void(0)" 
-                       data-location-link 
+                    <a data-location-link 
                        data-location-name="All" 
-                       class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg ajax-location-link">
+                       href="{{ route('dashboard') }}" 
+                       class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg">
                         All Locations
                     </a>
                     @foreach($barangays as $barangay)
-                        <a href="javascript:void(0)" 
-                           data-location-link 
+                        <a data-location-link 
                            data-location-name="{{ $barangay->name }}" 
-                           class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg ajax-location-link {{ (isset($selectedBarangayId) && (int)$selectedBarangayId === $barangay->id) ? 'font-semibold bg-gray-100 dark:bg-gray-700' : '' }}">
+                           href="{{ route('dashboard', ['barangay' => $barangay->id]) }}" 
+                           class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg {{ (isset($selectedBarangayId) && (int)$selectedBarangayId === $barangay->id) ? 'font-semibold bg-gray-100 dark:bg-gray-700' : '' }}">
                             {{ $barangay->name }}
                         </a>
                     @endforeach
@@ -1074,7 +1074,7 @@
         }
 
         // Handle category links
-        document.querySelectorAll('.ajax-category-link').forEach(link => {
+        document.querySelectorAll('[data-category-link]').forEach(link => {
             link.addEventListener('click', async (e) => {
                 e.preventDefault();
                 
@@ -1084,27 +1084,21 @@
                     dropdown.__x.$data.open = false;
                 }
 
-                const categoryName = link.getAttribute('data-category-name');
+                const currentUrl = new URL(window.location);
+                const linkUrl = new URL(link.href, window.location.origin);
                 const categoryButtonText = document.getElementById('categoryButtonText');
                 
-                // Update button text immediately
+                // Update button text
+                const categoryName = link.getAttribute('data-category-name') || 'Category';
                 if (categoryButtonText) {
                     categoryButtonText.textContent = categoryName;
                 }
                 
                 // Build query params preserving location
-                const currentUrl = new URL(window.location);
                 const params = new URLSearchParams();
-                
-                // Only add category if it's not "All"
-                if (categoryName !== 'All') {
-                    const categoryId = link.getAttribute('href').split('category=')[1];
-                    if (categoryId) {
-                        params.set('category', categoryId);
-                    }
+                if (linkUrl.searchParams.get('category')) {
+                    params.set('category', linkUrl.searchParams.get('category'));
                 }
-                
-                // Preserve location filter
                 if (currentUrl.searchParams.get('barangay')) {
                     params.set('barangay', currentUrl.searchParams.get('barangay'));
                 }
@@ -1135,29 +1129,26 @@
                     }
                 } catch (error) {
                     console.error('Error filtering products:', error);
-                    // Fallback: reload the page
-                    window.location.href = '{{ route("dashboard") }}' + (params.toString() ? '?' + params.toString() : '');
-                    return;
                 } finally {
                     hideLoading();
                 }
                 
                 // Update URL without reloading
                 const newUrl = new URL(window.location);
-                if (categoryName !== 'All') {
-                    const categoryId = link.getAttribute('href').split('category=')[1];
-                    if (categoryId) {
-                        newUrl.searchParams.set('category', categoryId);
-                    }
+                if (linkUrl.searchParams.get('category')) {
+                    newUrl.searchParams.set('category', linkUrl.searchParams.get('category'));
                 } else {
                     newUrl.searchParams.delete('category');
+                }
+                if (currentUrl.searchParams.get('barangay')) {
+                    newUrl.searchParams.set('barangay', currentUrl.searchParams.get('barangay'));
                 }
                 window.history.pushState({}, '', newUrl);
             });
         });
         
         // Handle location links
-        document.querySelectorAll('.ajax-location-link').forEach(link => {
+        document.querySelectorAll('[data-location-link]').forEach(link => {
             link.addEventListener('click', async (e) => {
                 e.preventDefault();
                 
@@ -1167,29 +1158,23 @@
                     dropdown.__x.$data.open = false;
                 }
 
-                const locationName = link.getAttribute('data-location-name');
+                const currentUrl = new URL(window.location);
+                const linkUrl = new URL(link.href, window.location.origin);
                 const locationButtonText = document.getElementById('locationButtonText');
                 
-                // Update button text immediately
+                // Update button text
+                const locationName = link.getAttribute('data-location-name') || 'Location';
                 if (locationButtonText) {
                     locationButtonText.textContent = locationName;
                 }
                 
                 // Build query params preserving category
-                const currentUrl = new URL(window.location);
                 const params = new URLSearchParams();
-                
-                // Preserve category filter
                 if (currentUrl.searchParams.get('category')) {
                     params.set('category', currentUrl.searchParams.get('category'));
                 }
-                
-                // Only add location if it's not "All"
-                if (locationName !== 'All') {
-                    const locationId = link.getAttribute('href').split('barangay=')[1];
-                    if (locationId) {
-                        params.set('barangay', locationId);
-                    }
+                if (linkUrl.searchParams.get('barangay')) {
+                    params.set('barangay', linkUrl.searchParams.get('barangay'));
                 }
                 
                 showLoading();
@@ -1218,20 +1203,17 @@
                     }
                 } catch (error) {
                     console.error('Error filtering products:', error);
-                    // Fallback: reload the page
-                    window.location.href = '{{ route("dashboard") }}' + (params.toString() ? '?' + params.toString() : '');
-                    return;
                 } finally {
                     hideLoading();
                 }
                 
                 // Update URL without reloading
                 const newUrl = new URL(window.location);
-                if (locationName !== 'All') {
-                    const locationId = link.getAttribute('href').split('barangay=')[1];
-                    if (locationId) {
-                        newUrl.searchParams.set('barangay', locationId);
-                    }
+                if (currentUrl.searchParams.get('category')) {
+                    newUrl.searchParams.set('category', currentUrl.searchParams.get('category'));
+                }
+                if (linkUrl.searchParams.get('barangay')) {
+                    newUrl.searchParams.set('barangay', linkUrl.searchParams.get('barangay'));
                 } else {
                     newUrl.searchParams.delete('barangay');
                 }
