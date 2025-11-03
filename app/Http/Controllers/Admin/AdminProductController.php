@@ -24,8 +24,9 @@ class AdminProductController extends Controller
     {
         $approvedProducts = $this->productService->getProductsByStatusPaginated('approved');
         $pendingProducts = $this->productService->getProductsByStatusPaginated('pending');
+        $rejectedProducts = $this->productService->getProductsByStatusPaginated('rejected');
 
-        return view('admin.products.index', compact('approvedProducts', 'pendingProducts'));
+        return view('admin.products.index', compact('approvedProducts', 'pendingProducts','rejectedProducts'));
     }
 
     public function show(Product $product): View
