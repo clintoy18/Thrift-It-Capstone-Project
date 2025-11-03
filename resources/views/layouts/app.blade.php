@@ -30,10 +30,30 @@
         <!-- Swiper CSS -->
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 
+        <!-- Loader -->
+        <div id="loader" class="fixed inset-0 z-50 flex items-center justify-center bg-white dark:bg-gray-900">
+            <div class="spinner border-4 border-t-4 border-gray-200 border-t-gray-800 rounded-full w-16 h-16 animate-spin"></div>
+        </div>
+
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
         <!-- Remove or update the FontAwesome kit with your actual ID -->
         <!-- <script src="https://kit.fontawesome.com/YOUR_KIT_ID.js" crossorigin="anonymous"></script> -->
+
+        <style>
+        .spinner {
+        border: 4px solid rgba(0, 0, 0, 0.1);
+        border-top-color: #B59F84; /* your brand color */
+        border-radius: 50%;
+        width: 64px;
+        height: 64px;
+        animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+        to { transform: rotate(360deg); }
+        }
+        </style>
     </head>
     <body class="font-sans antialiased">
         <div class="min-h-screen ">
@@ -68,4 +88,11 @@
         <!-- Yield page-specific scripts -->
         @stack('scripts')
     </body>
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const loader = document.getElementById('loader');
+        if(loader) loader.style.display = 'none';
+    });
+    </script>
+
 </html>
