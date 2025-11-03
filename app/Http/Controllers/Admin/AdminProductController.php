@@ -7,8 +7,9 @@ use App\Http\Requests\ApprovalStatusProductUpdateRequest;
 use App\Models\Product;
 use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use App\Services\ProductService;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\ProductApprovedMail;
 
 class AdminProductController extends Controller
 {
@@ -60,7 +61,8 @@ class AdminProductController extends Controller
     public function approve(Product $product): RedirectResponse
     {
         $this->productService->updateProduct($product, ['approval_status' => 'approved']);
-
+        //email user once product is approved
+         Mail::to($product->user->email)->send(new ProductApprovedMail($product));
         return redirect()->route('admin.products.index')
             ->with('success', 'Product approved successfully.');
     }
