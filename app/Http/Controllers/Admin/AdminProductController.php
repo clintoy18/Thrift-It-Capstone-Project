@@ -7,8 +7,10 @@ use App\Http\Requests\ApprovalStatusProductUpdateRequest;
 use App\Models\Product;
 use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use App\Services\ProductService;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\ProductApprovedMail;
+use App\Mail\ProductRejectedMail;
 
 class AdminProductController extends Controller
 {
@@ -22,8 +24,9 @@ class AdminProductController extends Controller
     {
         $approvedProducts = $this->productService->getProductsByStatusPaginated('approved');
         $pendingProducts = $this->productService->getProductsByStatusPaginated('pending');
+        $rejectedProducts = $this->productService->getProductsByStatusPaginated('rejected');
 
-        return view('admin.products.index', compact('approvedProducts', 'pendingProducts'));
+        return view('admin.products.index', compact('approvedProducts', 'pendingProducts','rejectedProducts'));
     }
 
     public function show(Product $product): View
@@ -60,7 +63,8 @@ class AdminProductController extends Controller
     public function approve(Product $product): RedirectResponse
     {
         $this->productService->updateProduct($product, ['approval_status' => 'approved']);
-
+        //email user once product is approved
+         Mail::to($product->user->email)->send(new ProductApprovedMail($product));
         return redirect()->route('admin.products.index')
             ->with('success', 'Product approved successfully.');
     }
@@ -68,9 +72,10 @@ class AdminProductController extends Controller
     public function reject(Product $product): RedirectResponse
     {
         $this->productService->updateProduct($product, ['approval_status' => 'rejected']);
+        Mail::to($product->user->email)->send(new ProductRejectedMail($product));
 
         return redirect()->route('admin.products.index')
-            ->with('success', 'Product rejected successfully.');
+            ->with('error', 'Product rejected!.');
     }
 
 
