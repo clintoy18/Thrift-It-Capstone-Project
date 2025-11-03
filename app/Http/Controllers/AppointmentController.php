@@ -63,7 +63,7 @@ class AppointmentController extends Controller
      */
     public function show($appointmentid)
     {
-        $appointment = Appointment::with(['images'])->getAppointmentById($appointmentid);
+        $appointment = Appointment::with(['apptImages'])->getAppointmentById($appointmentid);
         return view('appointments.show', compact('appointment'));
     }
 

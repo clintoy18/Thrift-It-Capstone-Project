@@ -13,7 +13,7 @@ class AppointmentRepository
 
     public function find($id)
     {
-     return Appointment::with('images')->findOrFail($id);
+     return Appointment::with('apptImages')->findOrFail($id);
     }
 
     public function create(array $data)

@@ -25,16 +25,16 @@ class AppointmentService
         return $this->appointmentRepository->getByUpcycler($id);
     }
 
-    public function createAppointment(array $data, ?array $images = null)
+    public function createAppointment(array $data, ?array $apptImages = null)
     {
         $appointment = $this->appointmentRepository->create($data);
 
-        if ($images && count($images) > 0) {
-            foreach ($images as $image) {
+        if ($apptImages && count($apptImages) > 0) {
+            foreach ($apptImages as $image) {
                 $path = $image->store('appointment_images', 'public');
 
                 // Save record in the appointment_images table
-                $appointment->images()->create([
+                $appointment->apptImages()->create([
                     'image_path' => $path, // make sure your column name matches the migration
                 ]);
             }
