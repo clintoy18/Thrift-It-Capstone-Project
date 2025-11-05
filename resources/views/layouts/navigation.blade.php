@@ -48,8 +48,6 @@
                     </div>
                 @endif
             @endauth
-
-
             <!-- Icons + Dropdown -->
             <div class="hidden md:flex items-center gap-2 lg:gap-4">
                 @auth
@@ -65,7 +63,6 @@
                                 </path>
                             </svg>
                         </a>
-
                         <!-- Notification Bell -->
                         <div id="notif-bell" x-data="{
                             open: false,
@@ -84,14 +81,19 @@
                         }" x-init="notifications = {{ Js::from(\App\Models\Notification::where('user_id', Auth::id())->latest()->take(5)->get()) }};"
                             @new-notification.window="notifications.unshift($event.detail)">
                             <!-- Bell Icon -->
-                            <button @click="open = !open; if(open) markAsRead()" class="relative">
-                                🔔
+                            <button @click="open = !open; if(open) markAsRead()" class="relative focus:outline-none mt-1.5">
+                                <!-- Use Heroicon Bell -->
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                    stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-gray-700">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.971 8.971 0 0118 9.75V9a6 6 0 10-12 0v.75a8.971 8.971 0 01-2.311 6.022c1.742.68 3.55 1.17 5.454 1.31m5.714 0a24.048 24.048 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
+                                </svg>
+                                <!-- Notification Count Badge -->
                                 <span x-show="notifications.filter(n => !n.is_read).length > 0"
-                                    class="absolute top-0 right-0 bg-red-600 text-white text-xs rounded-full px-1">
+                                    class="absolute -top-1 -right-1 bg-red-600 text-white text-xs rounded-full px-1.5 py-0.5">
                                     <span x-text="notifications.filter(n => !n.is_read).length"></span>
                                 </span>
                             </button>
-
                             <!-- Dropdown -->
                             <div x-show="open" @click.away="open = false" x-transition
                                 class="absolute right-20 mt-2 w-80 bg-white shadow-lg rounded-xl overflow-hidden z-50 border border-gray-200">
