@@ -15,6 +15,7 @@ use App\Http\Requests\SubmitProofAction as SubmitProofRequest;
 
 use App\Models\Donation;
 use App\Models\Comment;
+use App\Models\Barangay;
 
 use Illuminate\Http\RedirectResponse;
 
@@ -35,7 +36,9 @@ class DonationController extends Controller
     public function create()
     {
         $categories = Categories::all(); 
-        return view('donations.create', compact('categories'));
+        $barangays = Barangay::all();
+
+        return view('donations.create', compact('categories','barangays'));
     }
 
     /**
