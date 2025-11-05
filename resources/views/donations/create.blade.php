@@ -150,128 +150,137 @@
 
 
                     <!-- Right Side - Form Container -->
-<div class="lg:col-span-3 flex justify-end relative lg:left-[250px] w-[640px]">
-    <div class="bg-[#F4F2ED] dark:bg-gray-800 shadow-lg rounded-lg w-full p-6">
-        <!-- Item Description Section -->
-        <div class="space-y-4">
-            <h3 class="text-xl font-bold text-gray-900 dark:text-gray-100">Item Description</h3>
-            <p class="text-sm text-gray-600 dark:text-gray-400">
-                Tell us about the item you're donating.
-            </p>
-            <div class="h-px w-full bg-gray-200 dark:bg-gray-700"></div>
+                    <div class="lg:col-span-3 flex justify-end relative lg:left-[250px] w-[640px]">
+                        <div class="bg-[#F4F2ED] dark:bg-gray-800 shadow-lg rounded-lg w-full p-6">
+                            <!-- Item Description Section -->
+                            <div class="space-y-4">
+                                <h3 class="text-xl font-bold text-gray-900 dark:text-gray-100">Item Description</h3>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">
+                                    Tell us about the item you're donating.
+                                </p>
+                                <div class="h-px w-full bg-gray-200 dark:bg-gray-700"></div>
 
-            <!-- Item Name -->
-            <div>
-                <label for="name" class="block text-sm font-semibold text-gray-700 dark:text-gray-300">
-                    Item Name <span class="text-red-500">*</span>
-                </label>
-                <input type="text" id="name" name="name"
-                    class="mt-1 block w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-[#B59F84] focus:border-[#B59F84]"
-                    placeholder="e.g., Vintage Denim Jacket" value="{{ old('name') }}" required>
-                <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Use clear, descriptive words.</p>
-            </div>
+                                <!-- Item Name -->
+                                <div>
+                                    <label for="name"
+                                        class="block text-sm font-semibold text-gray-700 dark:text-gray-300">
+                                        Item Name <span class="text-red-500">*</span>
+                                    </label>
+                                    <input type="text" id="name" name="name"
+                                        class="mt-1 block w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-[#B59F84] focus:border-[#B59F84]"
+                                        placeholder="e.g., Vintage Denim Jacket" value="{{ old('name') }}" required>
+                                    <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Use clear, descriptive
+                                        words.</p>
+                                </div>
 
-            <!-- Category -->
-            <div>
-                <label for="category_id" class="block text-sm font-semibold text-gray-700 dark:text-gray-300">
-                    Category <span class="text-red-500">*</span>
-                </label>
-                <select id="category_id" name="category_id"
-                    class="mt-1 block w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-[#B59F84] focus:border-[#B59F84]"
-                    required>
-                    <option value="" disabled selected>Select a category</option>
-                    @foreach ($categories as $category)
-                        <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>
-                            {{ $category->name }}
-                        </option>
-                    @endforeach
-                </select>
-                <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">
-                    Choose the closest match for better organization.
-                </p>
-            </div>
+                                <!-- Category -->
+                                <div>
+                                    <label for="category_id"
+                                        class="block text-sm font-semibold text-gray-700 dark:text-gray-300">
+                                        Category <span class="text-red-500">*</span>
+                                    </label>
+                                    <select id="category_id" name="category_id"
+                                        class="mt-1 block w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-[#B59F84] focus:border-[#B59F84]"
+                                        required>
+                                        <option value="" disabled selected>Select a category</option>
+                                        @foreach ($categories as $category)
+                                            <option value="{{ $category->id }}"
+                                                {{ old('category_id') == $category->id ? 'selected' : '' }}>
+                                                {{ $category->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                                        Choose the closest match for better organization.
+                                    </p>
+                                </div>
 
-            <!-- Barangay -->
-            <div>
-                <label for="barangay_id" class="block text-sm font-semibold text-gray-700 dark:text-gray-300">
-                    Barangay <span class="text-red-500">*</span>
-                </label>
-                <select id="barangay_id" name="barangay_id"
-                    class="mt-1 block w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-[#B59F84] focus:border-[#B59F84]"
-                    required>
-                    <option value="" disabled selected>Select a barangay</option>
-                    @foreach ($barangays as $barangay)
-                        <option value="{{ $barangay->id }}" {{ old('barangay_id') == $barangay->id ? 'selected' : '' }}>
-                            {{ $barangay->name }}
-                        </option>
-                    @endforeach
-                </select>
-                @error('barangay_id')
-                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                @enderror
-            </div>
+                                <!-- Barangay -->
+                                <div>
+                                    <label for="barangay_id"
+                                        class="block text-sm font-semibold text-gray-700 dark:text-gray-300">
+                                        Barangay <span class="text-red-500">*</span>
+                                    </label>
+                                    <select id="barangay_id" name="barangay_id"
+                                        class="mt-1 block w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-[#B59F84] focus:border-[#B59F84]"
+                                        required>
+                                        <option value="" disabled selected>Select a barangay</option>
+                                        @foreach ($barangays as $barangay)
+                                            <option value="{{ $barangay->id }}"
+                                                {{ old('barangay_id') == $barangay->id ? 'selected' : '' }}>
+                                                {{ $barangay->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    @error('barangay_id')
+                                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                    @enderror
+                                </div>
 
-            <!-- Condition -->
-            <div>
-                <label for="condition" class="block text-sm font-semibold text-gray-700 dark:text-gray-300">
-                    Condition <span class="text-red-500">*</span>
-                </label>
-                <select id="condition" name="condition"
-                    class="mt-1 block w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-[#B59F84] focus:border-[#B59F84]"
-                    required>
-                    <option value="new">New</option>
-                    <option value="used">Used</option>
-                </select>
-            </div>
+                                <!-- Condition -->
+                                <div>
+                                    <label for="condition"
+                                        class="block text-sm font-semibold text-gray-700 dark:text-gray-300">
+                                        Condition <span class="text-red-500">*</span>
+                                    </label>
+                                    <select id="condition" name="condition"
+                                        class="mt-1 block w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-[#B59F84] focus:border-[#B59F84]"
+                                        required>
+                                        <option value="new">New</option>
+                                        <option value="used">Used</option>
+                                    </select>
+                                </div>
 
-            <!-- Size -->
-            <div>
-                <label for="size" class="block text-sm font-semibold text-gray-700 dark:text-gray-300">
-                    Size <span class="text-red-500">*</span>
-                </label>
-                <select id="size" name="size"
-                    class="mt-1 block w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-[#B59F84] focus:border-[#B59F84]"
-                    required>
-                    <option value="">Select size</option>
-                    <optgroup label="Clothing">
-                        <option value="S">S</option>
-                        <option value="M">M</option>
-                        <option value="L">L</option>
-                        <option value="XL">XL</option>
-                        <option value="XXL">XXL</option>
-                    </optgroup>
-                    <optgroup label="Shoes">
-                        <option value="6">6</option>
-                        <option value="7">7</option>
-                        <option value="8">8</option>
-                        <option value="9">9</option>
-                    </optgroup>
-                    <optgroup label="Accessories">
-                        <option value="One Size">One Size</option>
-                    </optgroup>
-                </select>
-            </div>
+                                <!-- Size -->
+                                <div>
+                                    <label for="size"
+                                        class="block text-sm font-semibold text-gray-700 dark:text-gray-300">
+                                        Size <span class="text-red-500">*</span>
+                                    </label>
+                                    <select id="size" name="size"
+                                        class="mt-1 block w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-[#B59F84] focus:border-[#B59F84]"
+                                        required>
+                                        <option value="">Select size</option>
+                                        <optgroup label="Clothing">
+                                            <option value="S">S</option>
+                                            <option value="M">M</option>
+                                            <option value="L">L</option>
+                                            <option value="XL">XL</option>
+                                            <option value="XXL">XXL</option>
+                                        </optgroup>
+                                        <optgroup label="Shoes">
+                                            <option value="6">6</option>
+                                            <option value="7">7</option>
+                                            <option value="8">8</option>
+                                            <option value="9">9</option>
+                                        </optgroup>
+                                        <optgroup label="Accessories">
+                                            <option value="One Size">One Size</option>
+                                        </optgroup>
+                                    </select>
+                                </div>
 
-            <!-- Description -->
-            <div>
-                <label for="description" class="block text-sm font-semibold text-gray-700 dark:text-gray-300">
-                    Description <span class="text-red-500">*</span>
-                </label>
-                <textarea id="description" name="description" rows="4"
-                    class="mt-1 block w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-[#B59F84] focus:border-[#B59F84] resize-none"
-                    placeholder="Describe the item's condition, any flaws, or special features..." required>{{ old('description') }}</textarea>
-            </div>
+                                <!-- Description -->
+                                <div>
+                                    <label for="description"
+                                        class="block text-sm font-semibold text-gray-700 dark:text-gray-300">
+                                        Description <span class="text-red-500">*</span>
+                                    </label>
+                                    <textarea id="description" name="description" rows="4"
+                                        class="mt-1 block w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-[#B59F84] focus:border-[#B59F84] resize-none"
+                                        placeholder="Describe the item's condition, any flaws, or special features..." required>{{ old('description') }}</textarea>
+                                </div>
 
-            <!-- Submit Button -->
-            <div class="flex justify-end mt-8">
-                <button type="submit"
-                    class="inline-flex items-center justify-center bg-[#B59F84] text-white px-10 py-2 rounded-lg text-base font-semibold hover:bg-[#a08e77] transform hover:scale-105 transition-all duration-300 shadow-md">
-                    Donate Item
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
+                                <!-- Submit Button -->
+                                <div class="flex justify-end mt-8">
+                                    <button type="submit"
+                                        class="inline-flex items-center justify-center bg-[#B59F84] text-white px-10 py-2 rounded-lg text-base font-semibold hover:bg-[#a08e77] transform hover:scale-105 transition-all duration-300 shadow-md">
+                                        Donate Item
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
 
                 </div>
