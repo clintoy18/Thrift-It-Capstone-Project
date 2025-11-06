@@ -121,7 +121,7 @@
                 <div class="group overflow-hidden rounded-md shadow-md h-auto w-full animate-stagger-1 relative z-10">
                     <a href="{{ route('segments.show', ['segment' => '2']) }}" class="block relative overflow-hidden">
                         <div class="relative overflow-hidden">
-                            <img src="{{ asset('storage/segments/women.png') }}" alt="Shop by Women"
+                            <img src="{{ asset('images/women.png') }}" alt="Shop by Women"
                                 class="w-full h-[400px] object-cover transition-all duration-700 group-hover:scale-110">
                             <div
                                 class="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-500">
@@ -151,7 +151,7 @@
                 <div class="group overflow-hidden rounded-md shadow-md h-auto w-full animate-stagger-2 relative z-10">
                     <a href="{{ route('segments.show', ['segment' => '1']) }}" class="block relative overflow-hidden">
                         <div class="relative overflow-hidden">
-                            <img src="{{ asset('storage/segments/men.png') }}" alt="Shop by Men"
+                            <img src="{{ asset('images/men.png') }}" alt="Shop by Men"
                                 class="w-full h-[400px] object-cover transition-all duration-700 group-hover:scale-110">
                             <div
                                 class="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-500">
@@ -181,7 +181,7 @@
                 <div class="group overflow-hidden rounded-md shadow-md h-auto w-full animate-stagger-3 relative z-10">
                     <a href="{{ route('segments.show', ['segment' => '3']) }}" class="block relative overflow-hidden">
                         <div class="relative overflow-hidden">
-                            <img src="{{ asset('storage/segments/kids.png') }}" alt="Shop by Kids"
+                            <img src="{{ asset('images/kids.png') }}" alt="Shop by Kids"
                                 class="w-full h-[400px] object-cover transition-all duration-700 group-hover:scale-110">
                             <div
                                 class="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-500">
