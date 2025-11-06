@@ -306,8 +306,8 @@
                                         </div>
                                     @endif
                                     <div class="relative aspect-square overflow-hidden">
-                                        <img src="{{ asset('storage/' . $product->first_image) }}"
-                                            alt="{{ $product->name }}" class="w-full h-full object-cover">
+                                        {{-- S3 BUCKET  fetch image--}}
+                                        <img src="{{ Storage::disk('s3')->url($product->images->first()->image) }}" alt="Product Image">
                                         <div
                                             class="absolute inset-0 bg-gray-800 bg-opacity-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                                             <span
