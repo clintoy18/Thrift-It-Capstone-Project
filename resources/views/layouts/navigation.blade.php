@@ -443,10 +443,10 @@
                         </form>
                     @else
                         <a href="{{ route('register') }}"
-                            class="flex items-center text-gray-700 py-3 hover:text-[#B59F84] border-b border-gray-100 font-medium">Sign
+                            class="flex items-center text-gray-700 py-3  dark:text-gray-200 hover:text-[#B59F84] border-b border-gray-100 font-medium">Sign
                             up</a>
                         <a href="{{ route('login') }}"
-                            class="flex items-center text-gray-700 py-3 hover:text-[#B59F84] border-b border-gray-100 font-medium">Login</a>
+                            class="flex items-center text-gray-700 py-3  dark:text-gray-200 hover:text-[#B59F84] border-b border-gray-100 font-medium">Login</a>
                     @endauth
                 </div>
             </div>
