@@ -265,7 +265,7 @@
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
                                 <button type="submit"
-                                    class="w-full text-left block px-4 py-2 text-gray-700 hover:bg-gray-200">
+                                    class="w-full text-left block px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-200">
                                     Log Out
                                 </button>
                             </form>
@@ -273,12 +273,12 @@
                     </div>
                 @else
                     <a href="{{ route('register') }}"
-                        class="inline-flex items-center justify-center bg-[#B59F84] text-white 
+                        class="inline-flex items-center justify-center bg-[#B59F84] dark:text-gray-200 text-white 
         px-[20px] py-1.5 rounded-[25px] text-base font-semibold 
-        hover:bg-[#a08e77] hover:scale-105 transition-all duration-200 w-[100px]">Sign
+        hover:bg-[#a08e77] hover:scale-105 transition-all duration-200  w-[100px]">Sign
                         up</a>
                     <a href="{{ route('login') }}"
-                        class="inline-flex items-center justify-center bg-[#B59F84] text-white 
+                        class="inline-flex items-center justify-center dark:text-gray-200 bg-[#B59F84] text-white 
         px-[20px] py-1.5 rounded-[25px] text-base font-semibold 
         hover:bg-[#a08e77] hover:scale-105 transition-all duration-200 w-[100px]">Login</a>
                 @endauth
