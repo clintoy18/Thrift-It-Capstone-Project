@@ -6,7 +6,7 @@
             <!-- Logo -->
             <a href="{{ Auth::check() ? (Auth::user()->role === 2 ? route('admin.dashboard') : (Auth::user()->role === 1 ? route('upcycler') : route('dashboard'))) : url('/') }}"
                 class="flex-shrink-0">
-                <img src="{{ asset('storage/bgimages/logo.png') }}" alt="THRIFT - IT Logo" class="h-10 sm:h-12">
+                <img src="{{ asset('images/logo.png') }}" alt="THRIFT - IT Logo" class="h-10 sm:h-12">
             </a>
 
             <!-- Navigation Links for Authenticated User -->
