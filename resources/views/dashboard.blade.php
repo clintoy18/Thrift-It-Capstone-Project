@@ -121,7 +121,7 @@
                 <div class="group overflow-hidden rounded-md shadow-md h-auto w-full animate-stagger-1 relative z-10">
                     <a href="{{ route('segments.show', ['segment' => '2']) }}" class="block relative overflow-hidden">
                         <div class="relative overflow-hidden">
-                            <img src="{{ asset('storage/segments/women.png') }}" alt="Shop by Women"
+                            <img src="{{ asset('images/women.png') }}" alt="Shop by Women"
                                 class="w-full h-[400px] object-cover transition-all duration-700 group-hover:scale-110">
                             <div
                                 class="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-500">
@@ -151,7 +151,7 @@
                 <div class="group overflow-hidden rounded-md shadow-md h-auto w-full animate-stagger-2 relative z-10">
                     <a href="{{ route('segments.show', ['segment' => '1']) }}" class="block relative overflow-hidden">
                         <div class="relative overflow-hidden">
-                            <img src="{{ asset('storage/segments/men.png') }}" alt="Shop by Men"
+                            <img src="{{ asset('images/men.png') }}" alt="Shop by Men"
                                 class="w-full h-[400px] object-cover transition-all duration-700 group-hover:scale-110">
                             <div
                                 class="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-500">
@@ -181,7 +181,7 @@
                 <div class="group overflow-hidden rounded-md shadow-md h-auto w-full animate-stagger-3 relative z-10">
                     <a href="{{ route('segments.show', ['segment' => '3']) }}" class="block relative overflow-hidden">
                         <div class="relative overflow-hidden">
-                            <img src="{{ asset('storage/segments/kids.png') }}" alt="Shop by Kids"
+                            <img src="{{ asset('images/kids.png') }}" alt="Shop by Kids"
                                 class="w-full h-[400px] object-cover transition-all duration-700 group-hover:scale-110">
                             <div
                                 class="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-500">
@@ -306,8 +306,11 @@
                                         </div>
                                     @endif
                                     <div class="relative aspect-square overflow-hidden">
-                                        {{-- S3 BUCKET  fetch image--}}
-                                        <img src="{{ Storage::disk('s3')->url($product->images->first()->image) }}" alt="Product Image">
+                                        {{-- S3 BUCKET  fetch image --}}
+                                        <img src="{{ optional($product->images->first())->image
+                                            ? Storage::disk('s3')->url($product->images->first()->image)
+                                            : asset('images/no-image.png') }}"
+                                            alt="Product Image">
                                         <div
                                             class="absolute inset-0 bg-gray-800 bg-opacity-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                                             <span
@@ -507,6 +510,7 @@
             </div>
         </div>
     </div> --}}
+    
     <!-- Rest of the content remains the same -->
     <div class="py-16 bg-[#F8EED6] dark:bg-gray-800 dark:text-gray-200 overflow-hidden relative z-10">
         <div class="hidden md:block dark:bg-gray-800 dark:text-gray-200">
