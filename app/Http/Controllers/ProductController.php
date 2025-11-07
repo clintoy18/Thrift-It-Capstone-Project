@@ -41,13 +41,13 @@ class ProductController extends Controller
         $categories = $this->categoryService->getAllCategories();
         $segments = Segment::all();
         $barangays = Barangay::all();
-        
+
         return view('products.create', [
-        'categories' => $categories,
-        'segments' => $segments,
-        'barangays' => $barangays,
-        'currentStep' => 1, // <-- pass current step
-    ]);
+            'categories' => $categories,
+            'segments' => $segments,
+            'barangays' => $barangays,
+            'currentStep' => 1, // <-- pass current step
+        ]);
     }
 
     public function store(StoreProductRequest $request)
@@ -75,59 +75,42 @@ class ProductController extends Controller
 
     public function update(UpdateProductRequest $request, Product $product)
     {
-        DB::transaction(function () use ($request, $product) {
-            // Update main image
-            if ($request->hasFile('image')) {
-                if ($product->image && Storage::disk('public')->exists($product->image)) {
-                    Storage::disk('public')->delete($product->image);
-                }
-                $product->image = $request->file('image')->store('products', 'public');
-            }
+        // 1️⃣ Validate request
+        $validated = $request->validated();
 
-            // Update QR code if provided
-            if ($request->hasFile('qr_code')) {
-                if ($product->qr_code && Storage::disk('public')->exists($product->qr_code)) {
-                    Storage::disk('public')->delete($product->qr_code);
-                }
-                $product->qr_code = $request->file('qr_code')->store('qrcodes', 'public');
-            }
+        // 2️⃣ Prepare images array for service
+        $images = [
+            'main' => $request->file('image'),       // Main product image
+            'gallery' => $request->file('images', []) // Gallery images
+        ];
 
-            // Update other fields
-            $product->fill($request->only([
-                'category_id',
-                'segment_id',
-                'barangay_id',
-                'name',
-                'price',
-                'status',
-            ]));
-            $product->save();
+        // 3️⃣ Call service to handle update including S3 uploads
+        $this->productService->updateProduct($product, $validated, $images);
 
-            // Handle deletion of gallery images
-            $deleteIds = collect($request->input('deleted_images', []))->map(fn($id) => (int)$id)->filter()->unique()->values()->all();
-            if (!empty($deleteIds)) {
-                $imagesToDelete = $product->images()->whereIn('id', $deleteIds)->get(['id', 'image']);
-                foreach ($imagesToDelete as $img) {
-                    if ($img->image && Storage::disk('public')->exists($img->image)) {
-                        Storage::disk('public')->delete($img->image);
-                    }
-                }
-                Image::where('product_id', $product->id)->whereIn('id', $deleteIds)->delete();
-            }
+        // 4️⃣ Handle deletion of gallery images if any
+        $deleteIds = collect($request->input('deleted_images', []))
+            ->map(fn($id) => (int)$id)
+            ->filter()
+            ->unique()
+            ->values()
+            ->all();
 
-            // Handle new gallery images (max 8)
-            if ($request->hasFile('images')) {
-                $currentCount = $product->images()->count();
-                $remainingSlots = max(0, 8 - $currentCount);
-                foreach (array_slice($request->file('images'), 0, $remainingSlots) as $image) {
-                    $path = $image->store('product_images', 'public');
-                    $product->images()->create(['image' => $path]);
+        if (!empty($deleteIds)) {
+            $imagesToDelete = $product->images()->whereIn('id', $deleteIds)->get(['id', 'image']);
+            foreach ($imagesToDelete as $img) {
+                if ($img->image && Storage::disk('s3')->exists($img->image)) {
+                    Storage::disk('s3')->delete($img->image);
                 }
             }
-        });
+            Image::where('product_id', $product->id)->whereIn('id', $deleteIds)->delete();
+        }
 
-        return redirect()->route('products.show', $product)->with('success', 'Product updated successfully!');
+        // 5️⃣ Redirect with success message
+        return redirect()->route('products.show', $product)
+            ->with('success', 'Product updated successfully!');
     }
+
+
 
     public function show($id)
     {
@@ -187,7 +170,7 @@ class ProductController extends Controller
     }
 
     // ✅ Step 2: Show optional QR upload page
-   public function qrStep(Product $product): View
+    public function qrStep(Product $product): View
     {
         return view('products.qr.qr-step', [
             'product' => $product,
@@ -217,7 +200,7 @@ class ProductController extends Controller
             ->with('info', 'You chose to skip the QR code. Review and finalize your product.');
     }
 
-   // Step 3: Finalize
+    // Step 3: Finalize
     public function finalStep(Product $product): View
     {
         return view('products.qr.qr-final-step', [
