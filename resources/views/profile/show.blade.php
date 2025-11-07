@@ -119,18 +119,18 @@
                                         </div>
 
                                         <!-- Right Side: Message Button -->
-<a href="{{ route('private.chat', $user->id) }}"
-    class="flex items-center gap-2 px-5 py-2 border border-[#5C4033] text-white bg-[#5C4033]
+                                        <a href="{{ route('private.chat', $user->id) }}"
+                                            class="flex items-center gap-2 px-5 py-2 border border-[#5C4033] text-white bg-[#5C4033]
            rounded-md text-sm font-medium hover:bg-[#7A5238]
            dark:border-[#C6A580] dark:bg-[#7A5238] dark:hover:bg-[#8E6542]
            transition duration-300 ease-in-out shadow-md">
-    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-        stroke-width="1.8" stroke="currentColor" class="w-4 h-4">
-        <path stroke-linecap="round" stroke-linejoin="round"
-            d="M7.5 8.25h9m-9 3h5.25M21 12c0 4.97-4.03 9-9 9-1.5 0-2.91-.36-4.15-1L3 21l1-4.15A8.96 8.96 0 013 12c0-4.97 4.03-9 9-9s9 4.03 9 9z" />
-    </svg>
-    Message
-</a>
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                                stroke-width="1.8" stroke="currentColor" class="w-4 h-4">
+                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                    d="M7.5 8.25h9m-9 3h5.25M21 12c0 4.97-4.03 9-9 9-1.5 0-2.91-.36-4.15-1L3 21l1-4.15A8.96 8.96 0 013 12c0-4.97 4.03-9 9-9s9 4.03 9 9z" />
+                                            </svg>
+                                            Message
+                                        </a>
 
                                     </div>
                                 @endif
@@ -256,9 +256,11 @@
                                                             </div>
                                                         @endif
                                                         <div class="relative aspect-square overflow-hidden">
-                                                            <img src="{{ asset('storage/' . $product->first_image) }}"
-                                                                alt="{{ $product->name }}"
-                                                                class="w-full h-full object-cover">
+                                                            {{-- S3 BUCKET  fetch image --}}
+                                                            <img src="{{ optional($product->images->first())->image
+                                                                ? Storage::disk('s3')->url($product->images->first()->image)
+                                                                : asset('images/no-image.png') }}"
+                                                                alt="Product Image">
                                                             <div
                                                                 class="absolute inset-0 bg-gray-800 bg-opacity-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                                                                 <span
@@ -387,9 +389,11 @@
                                                             </div>
                                                         @endif
                                                         <div class="relative aspect-square overflow-hidden">
-                                                            <img src="{{ asset('storage/' . $product->first_image) }}"
-                                                                alt="{{ $product->name }}"
-                                                                class="w-full h-full object-cover filter brightness-75">
+                                                            {{-- S3 BUCKET  fetch image --}}
+                                                            <img src="{{ optional($product->images->first())->image
+                                                                ? Storage::disk('s3')->url($product->images->first()->image)
+                                                                : asset('images/no-image.png') }}"
+                                                                alt="Product Image">
                                                             <div
                                                                 class="absolute inset-0 bg-gray-800 bg-opacity-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                                                                 <span
