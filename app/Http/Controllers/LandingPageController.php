@@ -23,34 +23,46 @@ class LandingPageController extends Controller
     {
         $selectedCategoryId = $request->query('category');
         $selectedBarangayId = $request->query('barangay');
-        
-        $query = Product::with(['category', 'user', 'barangay'])
-            ->where(function ($query) {
-                $query->where('status', 'available')
-                    ->orWhere('approval_status', 'approved');
-            })
-            ->whereHas('user', function ($query) {
-                // Only include users who have an active subscription
-                $query->whereHas('subscriptions', function ($subQuery) {
-                    $subQuery->whereNull('ends_at'); // Active subscription
-                });
-            });
 
+        $query = Product::with(['category', 'user', 'barangay'])
+            ->where('status', 'available')
+            ->where('approval_status', 'approved')
+            ->leftJoin('users', 'products.user_id', '=', 'users.id')
+            ->leftJoin('subscriptions', function ($join) {
+                $join->on('users.id', '=', 'subscriptions.user_id')
+                    ->whereNull('subscriptions.ends_at'); // Active subscriptions
+            })
+            ->select('products.*')
+            ->orderByRaw('CASE WHEN subscriptions.id IS NOT NULL THEN 0 ELSE 1 END');
+
+        // Optional category filter
         if ($selectedCategoryId) {
             $query->where('category_id', $selectedCategoryId);
         }
 
+        // Optional barangay filter
         if ($selectedBarangayId) {
             $query->where('barangay_id', $selectedBarangayId);
         }
 
         $products = $query->paginate(10);
 
-        $donations = Donation::with(['user', 'category'])->where('status', 'available')->get();
+        $donations = Donation::with(['user', 'category'])
+            ->where('status', 'available')
+            ->get();
+
         $segments = Segment::all();
         $categories = Categories::all();
         $barangays = Barangay::all();
-        
-        return view('dashboard', compact('products', 'donations', 'segments', 'categories', 'barangays', 'selectedCategoryId', 'selectedBarangayId'));
+
+        return view('dashboard', compact(
+            'products',
+            'donations',
+            'segments',
+            'categories',
+            'barangays',
+            'selectedCategoryId',
+            'selectedBarangayId'
+        ));
     }
 }
