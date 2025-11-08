@@ -42,7 +42,7 @@ class Donation extends Model
      public function setImageAttribute($value)
     {
         if(is_file($value)){
-            $this->attributes['image'] = $value->store('products_images','public');
+            $this->attributes['image'] = $value->store('donation_images','public');
         }else {
             $this->attributes['image'] = $value;
         }

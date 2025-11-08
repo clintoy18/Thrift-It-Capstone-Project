@@ -123,7 +123,6 @@
                                             {{-- S3 BUCKET --}}
                                             <img src="{{ $product->images->isNotEmpty() ? Storage::disk('s3')->url($product->images->first()->image) : asset('images/default-placeholder.png') }}"
                                                 alt="{{ $product->name }}" class="w-full h-full object-cover" />
-                                            class="w-full h-full object-cover">
                                             <div
                                                 class="absolute inset-0 bg-gray-800 bg-opacity-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                                                 <span

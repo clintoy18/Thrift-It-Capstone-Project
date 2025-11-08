@@ -30,14 +30,22 @@ class DonationService
         // 1️⃣ Create donation record first
         $donation = $this->donationRepository->create($data);
 
-        // 2️⃣ If there are uploaded images, save them
+          // 2️⃣ Handle uploaded images (store in S3)
         if ($images && count($images) > 0) {
             foreach ($images as $image) {
-                $path = $image->store('donation_images', 'public');
+                if ($image instanceof \Illuminate\Http\UploadedFile) {
 
-                $donation->donationImages()->create([
-                    'image' => $path,
-                ]);
+                    // Store image in S3 under 'products_images' folder
+                    $path = $image->store('donation_images', [
+                        'disk' => 's3',
+                        'visibility' => 'public',
+                    ]);
+
+                    // Save record in donation_images table
+                    $donation->donationImages()->create([
+                        'image' => $path, // store the S3 key/path
+                    ]);
+                }
             }
         }
 
@@ -46,12 +54,20 @@ class DonationService
 
     public function updateDonation($donation, array $data, $donationImages = null)
     {
-        if ($donationImages) {
-            foreach ($donationImages as $image) {
-                $path = $image->store('donation_images', 'public');
-                $donation->donationImages()->create(['image' => $path]);
+         // 1️⃣ Handle main image
+        if (!empty($donationImages['main']) && $donationImages['main'] instanceof \Illuminate\Http\UploadedFile) {
+            // Delete old main image from S3 if exists
+            if ($donation->image && Storage::disk('s3')->exists($donation->image)) {
+                Storage::disk('s3')->delete($donation->image);
             }
+
+            // Store new main image in S3
+            $data['image'] = $donationImages['main']->store('donation_images', [
+                'disk' => 's3',
+                'visibility' => 'public',
+            ]);
         }
+
 
         return $this->donationRepository->update($donation, $data);
     }
