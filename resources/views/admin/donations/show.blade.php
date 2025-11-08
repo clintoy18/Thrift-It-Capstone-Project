@@ -17,31 +17,36 @@
                         @if ($donation->donationImages && $donation->donationImages->count() > 0)
                             @foreach ($donation->donationImages as $image)
                                 <div class="swiper-slide flex items-center justify-center bg-white h-full">
-                                    <img src="{{ asset('storage/' . $image->image) }}" 
-                                         alt="{{ $donation->name }}"
-                                         class="w-full h-full object-cover transition-transform duration-500 ease-out hover:scale-105">
+                                    <img src="{{ Storage::disk('s3')->url($image->image) }}" alt="{{ $donation->name }}"
+                                        class="w-full h-full object-cover transition-transform duration-500 ease-out hover:scale-105">
                                 </div>
                             @endforeach
                         @else
-                            <div class="swiper-slide flex items-center justify-center bg-gray-50 h-full">
-                                <img src="{{ asset('images/default-placeholder.png') }}" 
-                                     alt="No image available"
-                                     class="w-full h-full object-cover opacity-80">
+                            <!-- Fallback placeholder if no images -->
+                            <div class="swiper-slide flex items-center justify-center bg-white h-full">
+                                <img src="{{ asset('images/default-placeholder.png') }}" alt="No image"
+                                    class="w-full h-full object-cover">
                             </div>
                         @endif
                     </div>
 
                     {{-- Swiper Controls --}}
                     <div class="swiper-pagination absolute bottom-4 left-1/2 transform -translate-x-1/2 z-10"></div>
-                    <div class="swiper-button-next !text-white text-3xl z-20 hover:!text-gray-200 transition-colors duration-300"></div>
-                    <div class="swiper-button-prev !text-white text-3xl z-20 hover:!text-gray-200 transition-colors duration-300"></div>
+                    <div
+                        class="swiper-button-next !text-white text-3xl z-20 hover:!text-gray-200 transition-colors duration-300">
+                    </div>
+                    <div
+                        class="swiper-button-prev !text-white text-3xl z-20 hover:!text-gray-200 transition-colors duration-300">
+                    </div>
                 </div>
 
                 {{-- donation Details --}}
-                <div class="col-span-1 lg:col-span-2 bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-md border border-gray-100 dark:border-gray-700">
+                <div
+                    class="col-span-1 lg:col-span-2 bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-md border border-gray-100 dark:border-gray-700">
                     <div class="flex justify-between items-start mb-6">
                         <h3 class="text-2xl font-semibold text-gray-900 dark:text-gray-100">{{ $donation->name }}</h3>
-                        <span class="px-3 py-1 text-sm font-medium bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-md">
+                        <span
+                            class="px-3 py-1 text-sm font-medium bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-md">
                             {{ $donation->category->name }}
                         </span>
                     </div>
@@ -53,7 +58,7 @@
                         </p>
                     </div>
 
-                    @if($donation->description)
+                    @if ($donation->description)
                         <div class="mt-6">
                             <h4 class="font-semibold text-gray-900 dark:text-gray-100 mb-2">Description</h4>
                             <p class="text-gray-700 dark:text-gray-300 leading-relaxed">
@@ -65,7 +70,8 @@
             </div>
 
             {{-- Seller Information --}}
-            <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-md border border-gray-100 dark:border-gray-700">
+            <div
+                class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-md border border-gray-100 dark:border-gray-700">
                 <div class="flex items-center justify-between mb-6">
                     <h3 class="text-xl font-bold text-gray-900 dark:text-gray-100">Seller Information</h3>
                 </div>
@@ -83,11 +89,13 @@
             </div>
 
             {{-- Comments Section --}}
-            <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-md border border-gray-100 dark:border-gray-700">
+            <div
+                class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-md border border-gray-100 dark:border-gray-700">
                 <h3 class="text-xl font-bold text-gray-900 dark:text-gray-100 mb-6">Comments</h3>
 
                 @forelse($donation->comments as $comment)
-                    <div class="border-b border-gray-200 dark:border-gray-700 pb-4 mb-4 last:border-none last:pb-0 last:mb-0">
+                    <div
+                        class="border-b border-gray-200 dark:border-gray-700 pb-4 mb-4 last:border-none last:pb-0 last:mb-0">
                         <div class="flex justify-between items-start">
                             <div>
                                 <p class="font-semibold text-gray-900 dark:text-gray-100">
