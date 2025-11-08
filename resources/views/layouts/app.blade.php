@@ -55,7 +55,7 @@
         }
         </style>
     </head>
-    <body class="font-sans antialiased">
+    <body class="font-sans antialiased dark:bg-gray-800 ">
         <div class="min-h-screen ">
             @include('layouts.navigation')
 
