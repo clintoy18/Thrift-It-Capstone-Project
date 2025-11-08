@@ -523,24 +523,24 @@
                         <img src="{{ asset('images/Ellipse 23.png') }}" alt="Background decoration"
                             class="w-[196px] h-[221px]">
                     </div>
-                    <div class="md:w-[800px] md:pr-4 mb-3 md:mb-0">
-                        <h2 class="text-3xl font-bold text-[#634600] mb-2 leading-tight animate-text-reveal"
+                    <div class="md:w-[800px] md:pr-4 mb-3 md:mb-0 ">
+                        <h2 class="text-3xl font-bold text-[#634600] mb-2 leading-tight animate-text-reveal dark:text-[#f5d68b]"
                             style="font-family: Poppins; font-weight: 800; font-size: 40px; line-height: 100%; letter-spacing: 5%;">
                             Revamp Your Wardrobe With
-                            <span class="block h-[20px]" aria-hidden="true"></span>
+                            <span class="block h-[20px] dark:text-[#f5d68b]" aria-hidden="true"></span>
                             Upcycling: Discover Sustainable
-                            <span class="block h-[20px]" aria-hidden="true"></span>
+                            <span class="block h-[20px] dark:text-[#f5d68b]" aria-hidden="true"></span>
                             Style
                             <img src="{{ asset('images/image 157.png') }}" alt="emoji"
                                 class="inline-block h-6 w-6 align-middle h-[40px] w-[40px] animate-spin-slow">
                             <span class="block h-[20px]" aria-hidden="true"></span>
                         </h2>
                         <p
-                            class="font-poppins text-[#603E14] mb-6 text-lg leading-[30px] tracking-[0.1em] animate-fade-in animation-delay-400">
+                            class="font-poppins text-[#603E14] mb-6 text-lg leading-[30px] tracking-[0.1em] dark:text-[#f5d68b] animate-fade-in animation-delay-400">
                             Fashion with a Purpose—Shop, Upcycle, and Donate to Create a Sustainable Tomorrow.
                         </p>
                         <a href="#"
-                            class="inline-flex items-center justify-center bg-[#816849] text-white px-4 py-3 rounded-[30px] text-lg font-semibold hover:bg-[#a08e77] hover:scale-105 transition-all duration-200 w-[200px] animate-pulse-soft hover:animate-none relative z-10">
+                            class="inline-flex items-center justify-center bg-[#816849] dark:text-[#f5d68b] text-white px-4 py-3 rounded-[30px] text-lg font-semibold hover:bg-[#a08e77] hover:scale-105 transition-all duration-200 w-[200px] animate-pulse-soft hover:animate-none relative z-10">
                             Upcycle Now
                         </a>
                     </div>
@@ -561,8 +561,8 @@
                     </div>
 
                     <!-- Text Content -->
-                    <div class="md:w-[800px] flex flex-col relative md:pr-4 mb-3 md:mb-0 left-[200px]">
-                        <h2 class="text-3xl font-bold text-[#634600] mb-2 leading-tight animate-text-reveal"
+                    <div class="md:w-[800px] flex flex-col relative md:pr-4 mb-3 md:mb-0 left-[200px] ">
+                        <h2 class="text-3xl font-bold text-[#634600] mb-2 leading-tight animate-text-reveal dark:text-[#f5d68b]"
                             style="font-family: Poppins; font-weight: 800; font-size: 40px; line-height: 100%; letter-spacing: %;">
                             Style with a Purpose: Donate Your
                             <span class="block h-[20px]" aria-hidden="true"></span>
@@ -574,7 +574,7 @@
                             <span class="block h-[20px]" aria-hidden="true"></span>
                         </h2>
                         <p
-                            class="font-poppins text-[#603E14] mb-6 text-lg leading-[30px] tracking-[0.1em] animate-fade-in animation-delay-600">
+                            class="font-poppins text-[#603E14] mb-6 text-lg leading-[30px] tracking-[0.1em] animate-fade-in animation-delay-600 dark:text-[#f5d68b]">
                             Fashion with a Purpose—Shop, Upcycle, and Donate to Create a Sustainable Tomorrow.
                         </p>
                         <a href="{{ route('donations.hub') }}"
