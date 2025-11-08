@@ -22,12 +22,13 @@ class AdminDonationController extends Controller
     {
         $approvedDonations = $this->donationService->getDonationsByStatusPaginated('approved');
         $pendingDonations = $this->donationService->getDonationsByStatusPaginated('pending');
+        $rejectedDonations = $this->donationService->getDonationsByStatusPaginated('rejected');
         //reward donate management
         $pendingVerifications = Donation::where('verification_status', 'pending')->get();
         $verifiedDonations = Donation::where('verification_status', 'approved')->get();
         $rejectedProofs = Donation::where('verification_status', 'rejected')->get();
 
-        return view('admin.donations.index', compact('approvedDonations', 'pendingDonations','pendingVerifications',
+        return view('admin.donations.index', compact('approvedDonations', 'pendingDonations','rejectedDonations','pendingVerifications',
             'verifiedDonations',
             'rejectedProofs'));
     }

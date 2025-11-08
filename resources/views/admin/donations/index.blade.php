@@ -10,7 +10,7 @@
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6">
 
-                    {{-- Go Back to Dashboard Button  PALIHOG KO IMPROVE PRE--}}
+                    {{-- Go Back to Dashboard Button  PALIHOG KO IMPROVE PRE --}}
                     <div class="mb-6">
                         <a href="{{ route('admin.dashboard') }}"
                             class="inline-flex items-center px-4 py-2 bg-[#B59F84] text-white text-sm font-medium rounded-md hover:bg-[#a08e77] transition-all duration-300">
@@ -35,7 +35,8 @@
                     {{-- APPROVAL MANAGEMENT SECTION --}}
                     <div id="approval-section">
                         {{-- Pending donations --}}
-                        <h3 class="text-lg font-semibold text-yellow-700 dark:text-yellow-300 mb-4">Pending Donations</h3>
+                        <h3 class="text-lg font-semibold text-yellow-700 dark:text-yellow-300 mb-4">Pending Donations
+                        </h3>
                         <div class="overflow-x-auto">
                             @include('admin.donations._table', ['donations' => $pendingDonations])
                             <div class="mt-4">
@@ -44,25 +45,47 @@
                         </div>
 
                         {{-- Approved donations --}}
-                        <h3 class="text-lg font-semibold text-green-700 dark:text-green-300 mt-8 mb-4">Approved Donations</h3>
+                        <h3 class="text-lg font-semibold text-green-700 dark:text-green-300 mt-8 mb-4">Approved
+                            Donations</h3>
                         <div class="overflow-x-auto mb-6">
                             @include('admin.donations._table', ['donations' => $approvedDonations])
                             <div class="mt-4">
                                 {{ $approvedDonations->links() }}
                             </div>
                         </div>
+                        {{-- Rejected donations --}}
+                        <h3 class="text-lg font-semibold text-red-700 dark:text-red-300
+                        mt-8 mb-4">Rejected Donations</h3>
+                        <div class="overflow-x-auto">
+                            @include('admin.donations._table', ['donations' => $rejectedDonations])
+                            <div class="mt-4">
+                                {{ $rejectedDonations->links() }}
+                            </div>
+                        </div>
+
                     </div>
 
                     {{-- REWARD MANAGEMENT SECTION --}}
                     <div id="reward-section" class="hidden">
-                        <h3 class="text-lg font-semibold text-yellow-700 dark:text-yellow-300 mb-4">Pending Verifications</h3>
-                        @include('admin.donations.reward-management._reward_table', ['donations' => $pendingVerifications, 'type' => 'pending'])
+                        <h3 class="text-lg font-semibold text-yellow-700 dark:text-yellow-300 mb-4">Pending
+                            Verifications</h3>
+                        @include('admin.donations.reward-management._reward_table', [
+                            'donations' => $pendingVerifications,
+                            'type' => 'pending',
+                        ])
 
-                        <h3 class="text-lg font-semibold text-green-700 dark:text-green-300 mt-8 mb-4">Verified Donations</h3>
-                        @include('admin.donations.reward-management._reward_table', ['donations' => $verifiedDonations, 'type' => 'verified'])
+                        <h3 class="text-lg font-semibold text-green-700 dark:text-green-300 mt-8 mb-4">Verified
+                            Donations</h3>
+                        @include('admin.donations.reward-management._reward_table', [
+                            'donations' => $verifiedDonations,
+                            'type' => 'verified',
+                        ])
 
                         <h3 class="text-lg font-semibold text-red-700 dark:text-red-300 mt-8 mb-4">Rejected Proofs</h3>
-                        @include('admin.donations.reward-management._reward_table', ['donations' => $rejectedProofs, 'type' => 'rejected'])
+                        @include('admin.donations.reward-management._reward_table', [
+                            'donations' => $rejectedProofs,
+                            'type' => 'rejected',
+                        ])
                     </div>
 
                 </div>

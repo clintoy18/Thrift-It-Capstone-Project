@@ -11,6 +11,7 @@ use App\Services\CommentService;
 use App\Events\CommentNotification;
 use App\Models\Donation;
 use App\Models\Notification;
+use Illuminate\Support\Facades\Storage;
 use Exception;
 
 class CommentController extends Controller
@@ -114,7 +115,9 @@ class CommentController extends Controller
                             'fname' => $comment->user->fname,
                             'lname' => $comment->user->lname,
                             'verification_status' => $comment->user->verification_status,
-                            'profile_pic' => $comment->user->profile_pic,
+                            'profile_pic_url'      => $comment->user->profile_pic
+                                            ? Storage::disk('s3')->url($comment->user->profile_pic)
+                                            : asset('images/default-profile.jpg'),
                         ],
                     ],
                 ], 201);

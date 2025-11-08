@@ -345,7 +345,7 @@
                             rounded-full border-4 border-white dark:border-gray-800 overflow-hidden shadow-lg z-10">
 
                                 @if ($product->user->profile_pic)
-                                    <img src="{{ asset('storage/' . $product->user->profile_pic) }}"
+                                    <img src="{{ Storage::disk('s3')->url($product->user->profile_pic) }}"
                                         alt="Profile Picture" class="w-full h-full object-cover">
                                 @else
                                     <img src="{{ asset('images/default-profile.jpg') }}"
@@ -477,7 +477,7 @@
                                             <div
                                                 class="w-10 h-10 rounded-full border-2 border-white dark:border-gray-800 overflow-hidden bg-[#B59F84] flex items-center justify-center">
                                                 @if ($comment->user->profile_pic)
-                                                    <img src="{{ asset('storage/' . $comment->user->profile_pic) }}"
+                                                    <img src="{{ Storage::disk('s3')->url($comment->user->profile_pic) }}"
                                                         alt="{{ $comment->user->fname }}'s Profile Picture"
                                                         class="w-full h-full object-cover">
                                                 @else
@@ -605,7 +605,7 @@
                                                     <div
                                                         class="w-10 h-10 rounded-full border-2 border-white dark:border-gray-800 overflow-hidden bg-[#B59F84] flex items-center justify-center">
                                                         @if ($reply->user->profile_pic)
-                                                            <img src="{{ asset('storage/' . $reply->user->profile_pic) }}"
+                                                            <img src="{{ Storage::disk('s3')->url($reply->user->profile_pic) }}"
                                                                 alt="{{ $reply->user->fname }}'s Profile Picture"
                                                                 class="w-full h-full object-cover">
                                                         @else
@@ -1587,13 +1587,9 @@
               <!-- User Avatar -->
                 <div class="flex-shrink-0">
                     <div class="w-10 h-10 rounded-full border-2 border-white dark:border-gray-800 overflow-hidden bg-[#B59F84] flex items-center justify-center">
-                        ${commentData.user.profile_pic ? 
-                            `<img src="/storage/${commentData.user.profile_pic}" 
-                                    alt="${commentData.user.fname}'s Profile Picture"
-                                    class="w-full h-full object-cover">` :
-                            `<img src="/images/default-profile.jpg" 
-                                    alt="Default Profile Picture"
-                                    class="w-full h-full object-cover">`
+                       <img src="${commentData.user.profile_pic_url}" 
+                        alt="${commentData.user.fname}'s Profile Picture"
+                        class="w-full h-full object-cover">
                         }
                     </div>
                 </div>
@@ -1806,14 +1802,9 @@
         <div class="reply-item flex gap-3" id="reply-${commentData.id}" data-comment-id="${commentData.id}" data-parent-id="${commentData.parent_id}">
             <div class="flex-shrink-0">
                 <div class="w-10 h-10 bg-[#B59F84] rounded-full border-2 border-white dark:border-gray-800 flex items-center justify-center">
-                    ${commentData.user.profile_pic ? 
-                            `<img src="/storage/${commentData.user.profile_pic}" 
-                                    alt="${commentData.user.fname}'s Profile Picture"
-                                    class="w-full h-full object-cover">` :
-                            `<img src="/images/default-profile.jpg" 
-                                    alt="Default Profile Picture"
-                                    class="w-full h-full object-cover">`
-                        }
+                   <img src="${commentData.user.profile_pic_url}" 
+                    alt="${commentData.user.fname}'s Profile Picture"
+                    class="w-full h-full object-cover">
                 </div>
             </div>
             <div class="flex-1">

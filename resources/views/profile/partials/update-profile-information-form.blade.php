@@ -27,14 +27,15 @@
         @csrf
     </form>
 
+    {{-- ✅ Updated form to handle S3 profile pic --}}
     <form method="post" action="{{ route('profile.update') }}" enctype="multipart/form-data" class="space-y-8">
         @csrf
         @method('patch')
 
-        <!-- Profile Picture Centered -->
+        <!-- Profile Picture -->
         <div class="flex flex-col items-center text-center space-y-4">
             @if ($user->profile_pic)
-                <img src="{{ asset('storage/' . $user->profile_pic) }}" alt="Profile Picture"
+                <img src="{{ Storage::disk('s3')->url($user->profile_pic) }}" alt="Profile Picture"
                     class="w-28 h-28 rounded-full object-cover border-4 border-blue-500 shadow-md hover:scale-105 transition-transform duration-300">
             @else
                 <img src="{{ asset('images/default-profile.jpg') }}" alt="Default Profile Picture"
@@ -89,7 +90,7 @@
             @endif
         </div>
 
-        {{-- Barangay Address --}}
+        <!-- Barangay -->
         <div class="space-y-4">
             <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">Location</h3>
             <div class="mb-8">
@@ -114,7 +115,6 @@
             </div>
         </div>
 
-
         <!-- Save Button -->
         <div class="flex items-center gap-4 pt-4">
             <x-primary-button
@@ -125,7 +125,8 @@
                 {{ __('Save Changes') }}
             </x-primary-button>
 
-            @if (session('status') === 'Profile updated successfully!')
+            @if (session('status') === 'Profile picture updated successfully!' ||
+                    session('status') === 'Profile updated successfully!')
                 <p class="text-sm text-green-600 dark:text-green-400 font-medium">
                     {{ session('status') }}
                 </p>

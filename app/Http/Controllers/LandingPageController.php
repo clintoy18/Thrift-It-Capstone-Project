@@ -20,12 +20,22 @@ class LandingPageController extends Controller
     }
 
     public function index(Request $request)
-    { 
+    {
         $selectedCategoryId = $request->query('category');
         $selectedBarangayId = $request->query('barangay');
         
-        $query = Product::with(['category', 'user', 'barangay'])->where('status','available');
-        
+        $query = Product::with(['category', 'user', 'barangay'])
+            ->where(function ($query) {
+                $query->where('status', 'available')
+                    ->orWhere('approval_status', 'approved');
+            })
+            ->whereHas('user', function ($query) {
+                // Only include users who have an active subscription
+                $query->whereHas('subscriptions', function ($subQuery) {
+                    $subQuery->whereNull('ends_at'); // Active subscription
+                });
+            });
+
         if ($selectedCategoryId) {
             $query->where('category_id', $selectedCategoryId);
         }
@@ -33,13 +43,14 @@ class LandingPageController extends Controller
         if ($selectedBarangayId) {
             $query->where('barangay_id', $selectedBarangayId);
         }
-        
-        $products = $query->get();
+
+        $products = $query->paginate(10);
+
         $donations = Donation::with(['user', 'category'])->where('status', 'available')->get();
         $segments = Segment::all();
         $categories = Categories::all();
         $barangays = Barangay::all();
         
-        return view('dashboard', compact('products','donations','segments', 'categories', 'barangays', 'selectedCategoryId', 'selectedBarangayId'));
+        return view('dashboard', compact('products', 'donations', 'segments', 'categories', 'barangays', 'selectedCategoryId', 'selectedBarangayId'));
     }
 }
