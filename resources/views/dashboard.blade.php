@@ -3,7 +3,7 @@
     <div class="fixed inset-0 pointer-events-none z-0" id="particle-background"></div>
 
     <!-- Hero Section -->
-    <div class="w-full bg-[#F4F2ED] dark:bg-gray-800 dark:text-gray-200 shadow-sm overflow-hidden relative z-10">
+    <div class="w-full bg-[#F4F2ED] dark:bg-gray-800  shadow-sm overflow-hidden relative z-10">
         <!-- Hero Section Particle Background -->
         <div class="absolute inset-0 pointer-events-none z-0" id="hero-particles"></div>
         <!-- Floating Particles Background (inside Hero) -->
@@ -47,7 +47,7 @@
             </div>
 
             <!-- Desktop layout (side by side) -->
-            <div class="hidden md:flex md:flex-row md:items-center">
+            <div class="hidden md:flex md:flex-row md:items-center ">
                 <!-- Text Content for Desktop with Background Image -->
                 <div class="p-3 md:w-1/2 font-poppins relative">
                     <!-- Background Image - Adjustable positioning -->
@@ -57,16 +57,16 @@
                     <!-- Text Content (with higher z-index) -->
                     <div class="relative z-10">
                         <h1
-                            class="text-5xl lg:text-4xl font-bold text-custom-brown leading-tight dark:text-white animate-text-reveal">
+                            class="text-5xl lg:text-4xl font-bold text-custom-brown leading-tight dark:text-[#f5d68b] animate-text-reveal">
                             Refresh Your Wardrobe
-                            <span class="block h-[20px]" aria-hidden="true"></span>
+                            <span class="block h-[20px] " aria-hidden="true"></span>
                             Sustainably With Thrift-IT's
                             <span class="block h-[20px]" aria-hidden="true"></span>
                             Unique Finds
                             <span class="block h-[20px]" aria-hidden="true"></span>
                         </h1>
                         <p
-                            class="mt-2 text-[#603E14] dark:text-gray-300 text-sm leading-relaxed animate-fade-in animation-delay-800">
+                            class="mt-2 text-[#603E14] dark:text-[#f5d68b] text-sm leading-relaxed animate-fade-in animation-delay-800">
                             Fashion meets purpose — shop, sell, and donate
                             <span class="block h-[0px]" aria-hidden="true"></span>
                             thrifted clothing to embrace a greener future.
