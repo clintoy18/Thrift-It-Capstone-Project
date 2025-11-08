@@ -43,7 +43,7 @@ class ProductRepository
         return Product::with(['user','category','comments.user'])->findOrFail($id);
     }
 
-   public function getApproveProducts(Segment $segment, ?int $categoryId = null)
+   public function getApproveProducts(Segment $segment, ?int $categoryId = null, ?int $barangayId = null)
     {
         $query = $segment->products()
             ->where('approval_status', 'approved')
@@ -52,6 +52,10 @@ class ProductRepository
 
         if ($categoryId) {
             $query->where('category_id', $categoryId);
+        }
+
+        if ($barangayId) {
+            $query->where('barangay_id', $barangayId);
         }
 
         return $query->get();

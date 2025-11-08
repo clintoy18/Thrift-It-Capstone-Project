@@ -60,7 +60,7 @@ class ReportController extends Controller
         }
 
         return redirect()
-            ->route('reports.index')
+            ->route('profile.show', $user)
             ->with('success', 'Report submitted successfully. Our team will review it shortly.');
     }
 
@@ -89,7 +89,7 @@ class ReportController extends Controller
         $isAdmin = Auth::user()->role === 2;
         
         $validated = $request->validate([
-            'status' => 'required|in:pending,reviewed,resolved',
+            'status' => 'required|in:pending,rejected,resolved',
             'admin_notes' => 'nullable|string',
         ]);
 

@@ -28,6 +28,14 @@
                         </div>
                     </div>
 
+                    {{-- Rejected Products Section --}}
+                    <h3 class="text-lg font-semibold text-red-700 dark:text-red-300 mb-4">Rejected Products</h3>
+                    <div class="overflow-x-auto mb-6">
+                        @include('admin.products._table', ['products' => $rejectedProducts])
+                        <div class="mt-4">
+                            {{ $rejectedProducts->links() }}
+                        </div>
+                    </div>
 
                 </div>
             </div>

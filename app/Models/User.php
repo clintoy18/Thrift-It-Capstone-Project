@@ -33,7 +33,8 @@ class User extends Authenticatable implements MustVerifyEmail
         'is_verified',
         'verification_status',
         'verification_document',
-        'profile_pic'
+        'profile_pic',
+        'barangay_id',
     ];
 
     /**
@@ -149,4 +150,10 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasManyThrough(Order::class, Product::class);
     }
+
+    public function works()
+    {
+        return $this->hasMany(Work::class);
+    }
+    
 }

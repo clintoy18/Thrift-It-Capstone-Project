@@ -5,14 +5,7 @@ const host = process.env.VITE_HOST || 'localhost';
 const port = process.env.VITE_PORT || 5173;
 
 export default defineConfig({
-  server: {
-    host: host === '0.0.0.0' ? true : host,
-    port: parseInt(port),
-    strictPort: true,
-    hmr: {
-      host: host,
-    },
-  },
+  
   plugins: [
     laravel({
       input: ['resources/css/app.css', 'resources/js/app.js'],

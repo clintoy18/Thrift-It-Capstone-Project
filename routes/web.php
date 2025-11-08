@@ -33,10 +33,14 @@ use Illuminate\Support\Facades\Auth;
 
 Route::get('/search', [SearchController::class, 'index'])->name('search');
 Route::get('/', [LandingPageController::class, 'index'])->name('landing.index');
+Route::get('/products', [LandingPageController::class, 'products'])->name('landing.products');
 
 Route::get('/dashboard', [UserDashboardController::class, 'index'])
     ->middleware(['auth', 'verified', 'rolemiddleware:user'])
     ->name('dashboard');
+Route::get('/dashboard/products', [UserDashboardController::class, 'products'])
+    ->middleware(['auth', 'verified', 'rolemiddleware:user'])
+    ->name('dashboard.products');
 
 Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])
     ->middleware(['auth', 'verified', 'rolemiddleware:admin'])
@@ -121,6 +125,12 @@ Route::middleware(['auth', 'verified', 'rolemiddleware:admin'])->prefix('admin')
     ->name('donations.approve');
     Route::put('/donations/{donation}/reject', [AdminDonationController::class, 'reject'])
     ->name('donations.reject');
+
+    //verify donations and add points to donor/user
+    Route::get('/donations/reward-management', [AdminDonationController::class, 'rewardManagement'])->name('donations.rewardManagement');
+    Route::put('/donations/{donation}/verify', [AdminDonationController::class, 'verifyProof'])
+        ->name('donations.verifyProof');
+    Route::put('/donations/{donation}/reject-proof', [AdminDonationController::class, 'rejectProof'])->name('donations.rejectProof');
 
     //verify -reject user
     Route::put('/users/{user}/verify', [AdminUserController::class, 'verify'])->name('users.verify');

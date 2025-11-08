@@ -19,6 +19,7 @@ Thrift-It is a web application for booking and managing upcycling appointments, 
 - **Frontend:** Blade, Tailwind CSS
 - **Database:** MySQL (or compatible)
 - **Mail:** Laravel Mailables
+- **Pusher:** Real-time Pusher
 
 ## Project Structure
 - `app/Models/` — Eloquent models
@@ -27,12 +28,6 @@ Thrift-It is a web application for booking and managing upcycling appointments, 
 - `app/Repositories/` — Data access (Repository layer)
 - `resources/views/` — Blade templates
 - `routes/` — Route definitions
-
-## Service-Repository Pattern
-This project is refactored to use the Service-Repository pattern:
-- **Controllers** handle HTTP requests and responses only.
-- **Services** contain business logic and call repositories.
-- **Repositories** handle all data access (CRUD, queries).
 
 ## Setup Instructions
 1. **Clone the repository:**

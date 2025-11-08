@@ -51,7 +51,7 @@ class MessageRepository
             'user_id' => $userId,
             'receiver_id' => $receiverId,
             'message' => $messageContent,
-            'image' => $imagePath,
+            'image_path' => $imagePath,
         ]);
 
         return $message->load('user');

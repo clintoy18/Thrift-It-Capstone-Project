@@ -18,4 +18,9 @@ class Barangay extends Model
     {
         return $this->hasMany(User::class, 'barangay_id');
     }
+
+    public function donations()
+    {
+        return $this->hasMany(Donation::class, 'barangay_id');
+    }
 }

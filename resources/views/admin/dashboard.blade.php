@@ -96,7 +96,11 @@
                             </div>
                         </div>
                         <div class="mt-4">
-                            <span class="text-sm font-medium text-gray-500 dark:text-gray-400">Sales Overview</span>
+                            <a href="{{ route('admin.donations.index') }}"
+                                class="inline-flex items-center text-sm font-medium text-purple-600 dark:text-purple-300 hover:text-amber-800 dark:hover:text-amber-300 transition-colors duration-200">
+                                Manage Donations
+                                <i class="fas fa-arrow-right ml-1 text-xs"></i>
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -252,7 +256,8 @@
                     <!-- Yearly Summary -->
                     <div class="p-6 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700/50">
                         <h4 class="text-md font-semibold text-gray-700 dark:text-gray-300 mb-4 flex items-center">
-                            <i class="fas fa-calendar-alt text-blue-500 mr-2"></i> Yearly Sales Reports & Analytics Summary -
+                            <i class="fas fa-calendar-alt text-blue-500 mr-2"></i> Yearly Sales Reports & Analytics
+                            Summary -
                             {{ now()->format('Y') }}
                         </h4>
 

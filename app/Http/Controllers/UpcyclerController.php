@@ -43,18 +43,9 @@ class UpcyclerController extends Controller
      */
     public function show(string $id)
     {
-        $appointment = $this->upcyclerService->getAppointmentById($id);
+        $appointment = Appointment::with('apptImages')->findOrFail($id);
         return view('upcycler.show', compact('appointment'));
     }
-  
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
     public function update(UpdateAppointmentRequest $request, $appointmentid)
         {
             $validated = $request->validated(); // ✅ reuse this
@@ -69,10 +60,6 @@ class UpcyclerController extends Controller
     public function destroy($appointmentid) : RedirectResponse
     {
         $this->upcyclerService->deleteAppointment($appointmentid,Auth::id());
-        return redirect()->route('upcycler.index');
-
+        return redirect()->route('upcycler.index')->with('success', 'Appointment deleted successfully!');
     }
-   
-
-
 }

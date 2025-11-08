@@ -11,9 +11,7 @@ class Appointment extends Model
 
     // Correct the spelling of the primary key property
     protected $primaryKey = 'appointmentid';
-
-    // Specify that appointmentid is not an incrementing field (if applicable)
-    public $incrementing = false; // Set this to true if it's auto-incrementing
+    public $incrementing = true; 
 
     protected $fillable = [
         'user_id',
@@ -41,5 +39,10 @@ class Appointment extends Model
     public function getRouteKeyName()
     {
         return 'appointmentid';
+    }
+
+     public function apptImages()
+    {
+        return $this->hasMany(AppointmentImage::class, 'appointment_id', 'appointmentid');
     }
 }

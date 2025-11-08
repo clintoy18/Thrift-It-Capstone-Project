@@ -109,7 +109,7 @@
                 </h2>
                 <a href="{{ route('donations.index') }}" 
                    class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#B59F84] text-white shadow-md hover:bg-[#a08e77] transition">
-                    <span class="font-semibold">My Donations</span>
+                    <span class="font-semibold">Donate an Item</span>
                 </a>
             </div>
 
@@ -131,9 +131,9 @@
 
                                         <!-- Image -->
                                         <div class="relative aspect-square overflow-hidden">
-                                             <img src="{{ $donation->first_image ? asset('storage/' . $donation->first_image) : asset('images/default.jpg') }}" 
-                                            alt="{{ $donation->name }}" 
-                                            class="w-full h-full object-cover">
+                                            <img src="{{ Storage::disk('s3')->url($image->image) }}"
+                                                alt="{{ $image->name }}"
+                                                class="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-105">
                                         </div>
 
                                         <!-- Info -->
