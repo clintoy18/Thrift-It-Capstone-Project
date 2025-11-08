@@ -1,9 +1,6 @@
 import { defineConfig } from 'vite';
 import laravel from 'laravel-vite-plugin';
 
-const host = process.env.VITE_HOST || 'localhost';
-const port = process.env.VITE_PORT || 5173;
-
 export default defineConfig({
   
   plugins: [
