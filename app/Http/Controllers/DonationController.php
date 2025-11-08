@@ -2,21 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Services\DonationService;
 use App\Models\Categories;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 use App\Http\Requests\StoreDonationRequest;
 use App\Http\Requests\UpdateDonationRequest;
 use App\Http\Requests\SubmitProofAction as SubmitProofRequest;
-
+use Illuminate\Support\Facades\Storage;
 use App\Models\Donation;
 use App\Models\Comment;
 use App\Models\Barangay;
-
+use App\Models\DonationImage;
 use Illuminate\Http\RedirectResponse;
 
 class DonationController extends Controller
@@ -129,13 +127,41 @@ class DonationController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateDonationRequest $request, Donation $donation)
+  public function update(UpdateDonationRequest $request, Donation $donation)
     {
-        $data = $request->validated();
-        $this->donationService->updateDonation($donation, $data, $request->file('image') ?? null);
-       
-        return redirect()->route('donations.index')->with('success', 'donation updated successfully!');
+        // 1️⃣ Validate request
+        $validated = $request->validated();
 
+        // 2️⃣ Prepare images array for service
+        $images = [
+            'main' => $request->file('image'),       // Main product image
+            'gallery' => $request->file('images', []) // Gallery images
+        ];
+
+        // 3️⃣ Call service to handle update including S3 uploads
+        $this->donationService->updateDonation($donation, $validated, $images);
+
+        // 4️⃣ Handle deletion of gallery images if any
+        $deleteIds = collect($request->input('deletedImages', []))
+            ->map(fn($id) => (int)$id)
+            ->filter()
+            ->unique()
+            ->values()
+            ->all();
+
+        if (!empty($deleteIds)) {
+            $imagesToDelete = $donation->donationImages()->whereIn('id', $deleteIds)->get(['id', 'image']);
+            foreach ($imagesToDelete as $img) {
+                if ($img->image && Storage::disk('s3')->exists($img->image)) {
+                    Storage::disk('s3')->delete($img->image);
+                }
+            }
+            DonationImage::where('donation_id', $donation->id)->whereIn('id', $deleteIds)->delete();
+        }
+
+        // 5️⃣ Redirect with success message
+        return redirect()->route('donations.show', $donation)
+            ->with('success', 'Donation updated successfully!');
     }
 
     /**
