@@ -592,7 +592,7 @@
     </div>
 
     <!-- Mobile Version -->
-    <div class="md:hidden bg-[#F8EED6] py-10 relative z-10">
+    <div class="md:hidden bg-[#F8EED6] dark:bg-gray-800  py-10 relative z-10">
         <div class="mx-auto px-5">
             <!-- Mobile Upcycling Section -->
             <div class="mb-14 animate-fade-in-up">
@@ -606,11 +606,11 @@
                                     d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                             </svg>
                         </div>
-                        <h2 class="text-2xl font-bold text-[#634600] leading-tight font-poppins">
+                        <h2 class="text-2xl font-bold text-[#634600] leading-tight font-poppins dark:text-[#f5d68b]">
                             Revamp With Upcycling
                         </h2>
                     </div>
-                    <p class="text-[#603E14] text-base leading-relaxed px-2 font-poppins">
+                    <p class="text-[#603E14] text-base leading-relaxed px-2 font-poppins dark:text-[#f5d68b]">
                         Fashion with a Purpose—Shop, Upcycle, and Donate to Create a Sustainable Tomorrow.
                     </p>
                 </div>
@@ -628,7 +628,7 @@
 
                 <div class="text-center mt-6">
                     <a href="#"
-                        class="inline-flex items-center justify-center bg-[#816849] text-white px-8 py-4 rounded-full text-base font-semibold hover:bg-[#a08e77] transition-all duration-300 shadow-md transform hover:scale-105 animate-bounce-in relative z-10">
+                        class="inline-flex items-center justify-center bg-[#816849] dark:text-[#f5d68b] text-white px-8 py-4 rounded-full text-base font-semibold hover:bg-[#a08e77] transition-all duration-300 shadow-md transform hover:scale-105 animate-bounce-in relative z-10">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none"
                             viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -651,11 +651,11 @@
                                     d="M17 14v6m-3-3h6M6 10h2a2 2 0 012 2v6a2 2 0 01-2 2H6a2 2 0 01-2-2v-6a2 2 0 012-2zm10-4a2 2 0 11-4 0 2 2 0 014 0zM4 10a2 2 0 100-4 2 2 0 000 4zm16-2a2 2 0 11-4 0 2 2 0 014 0z" />
                             </svg>
                         </div>
-                        <h2 class="text-2xl font-bold text-[#634600] leading-tight font-poppins">
+                        <h2 class="text-2xl font-bold text-[#634600] leading-tight font-poppins dark:text-[#f5d68b]">
                             Donate With Purpose
                         </h2>
                     </div>
-                    <p class="text-[#603E14] text-base leading-relaxed px-2 font-poppins">
+                    <p class="text-[#603E14] text-base leading-relaxed px-2 font-poppins dark:text-[#f5d68b]">
                         Fashion with a Purpose—Shop, Upcycle, and Donate to Create a Sustainable Tomorrow.
                     </p>
                 </div>
@@ -674,7 +674,7 @@
 
                 <div class="text-center mt-6">
                     <a href="{{ route('donations.hub') }}"
-                        class="inline-flex items-center justify-center bg-[#816849] text-white px-8 py-4 rounded-full text-base font-semibold hover:bg-[#a08e77] transition-all duration-300 shadow-md transform hover:scale-105 animate-bounce-in animation-delay-400 relative z-10">
+                        class="inline-flex items-center justify-center bg-[#816849] text-white  dark:text-[#f5d68b] px-8 py-4 rounded-full text-base font-semibold hover:bg-[#a08e77] transition-all duration-300 shadow-md transform hover:scale-105 animate-bounce-in animation-delay-400 relative z-10">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none"
                             viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
