@@ -17,8 +17,8 @@ use Illuminate\Support\Facades\Storage;
 class ProfileController extends Controller
 {
 
-    
- 
+
+
     /**
      * Display the user's profile form.
      */
@@ -26,7 +26,7 @@ class ProfileController extends Controller
     {
 
         $user = $request->user(); // logged-in user only
-         $barangays = Barangay::all();
+        $barangays = Barangay::all();
 
         $totalListings = $user->products()->count();
         $itemsSold = $user->products()->where('status', 'sold')->count();
@@ -69,33 +69,40 @@ class ProfileController extends Controller
     {
         $user = $request->user();
 
-        // Get all validated fields
+        // Validate all form inputs
         $validated = $request->validated();
 
-        // ✅ Handle profile picture upload (optional)
+        // ✅ Handle S3 profile picture upload
         if ($request->hasFile('profile_pic')) {
-            $path = $request->file('profile_pic')->store('profile-pictures', 'public');
+            // Delete old image if it exists in S3
+            if ($user->profile_pic && Storage::disk('s3')->exists($user->profile_pic)) {
+                Storage::disk('s3')->delete($user->profile_pic);
+            }
+
+            // Store new profile picture in S3
+            $path = $request->file('profile_pic')->store('profile_pictures', 's3');
+
+            Storage::disk('s3')->setVisibility($path, 'public');
+
             $validated['profile_pic'] = $path;
         }
 
-        // ✅ Allow Barangay updates
+        // ✅ Update Barangay if provided
         if ($request->filled('barangay_id')) {
             $validated['barangay_id'] = $request->barangay_id;
         }
 
-        // ✅ Fill all updated fields into the user model
-        $user->fill($validated);
-
         // ✅ Reset email verification if changed
-        if ($user->isDirty('email')) {
-            $user->email_verified_at = null;
+        if ($user->email !== $validated['email']) {
+            $validated['email_verified_at'] = null;
         }
 
-        // ✅ Save changes
-        $user->save();
+        // ✅ Apply updates to user
+        $user->update($validated);
 
-        return Redirect::route('profile.edit')->with('status', 'profile-updated');
+        return Redirect::route('profile.edit')->with('status', 'Profile updated successfully!');
     }
+
 
 
 
@@ -163,22 +170,5 @@ class ProfileController extends Controller
         }
 
         return back()->with('status', 'Verification document uploaded successfully and sent for review.');
-    }
-
-    public function uploadProfilePic(Request $request)
-    {
-        $request->validate([
-            'profile_pic' => 'required|image|mimes:jpg,jpeg,png|max:2048',
-        ]);
-
-        $user = $request->user();
-
-        // Store new picture
-        $path = $request->file('profile_pic')->store('profile-pictures', 'public');
-
-        // Update user record
-        $user->update(['profile_pic' => $path]);
-
-        return back()->with('status', 'Profile picture updated successfully!');
     }
 }
