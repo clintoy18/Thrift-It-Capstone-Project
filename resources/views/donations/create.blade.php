@@ -28,13 +28,12 @@
             <form id="donationForm" action="{{ route('donations.store') }}" method="POST" enctype="multipart/form-data"
                 class="space-y-6">
                 @csrf
-                <div class="grid grid-cols-1 lg:grid-cols-5 gap-6 lg:gap-10 items-start lg:relative lg:left-[-150px]">
+                <div class="grid grid-cols-1 lg:grid-cols-5 gap-6 lg:gap-10 items-start lg:relative lg:left-[-150px] ">
                     <!-- Left Side - Image Upload Section (multi-select with previews) -->
                     <div class="lg:col-span-2 flex flex-col w-full lg:w-[450px]">
                         <div class="space-y-4">
                             <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">Photos</h3>
                             <div class="w-full">
-                                <!-- Preview Grid -->
                                 <!-- Preview Grid -->
                                 <!-- Photo Guidelines -->
                                 <div
@@ -76,9 +75,10 @@
                                     </ul>
                                 </div>
                                 <!-- Add Photos Button (matched to products style) -->
+                                <!-- Preview Grid -->
                                 <div class="mb-4 mt-[30px]">
                                     <label for="donationImages" id="donationDropZone"
-                                        class="upload-tile group cursor-pointer flex flex-col items-center justify-center border-2 border-dashed border-gray-300/80 rounded-3xl transition-all duration-500 hover:border-primary-400 hover:shadow-xl bg-white/80 hover:bg-white backdrop-blur-sm p-8 min-h-[192px] sm:min-h-[208px]">
+                                        class="upload-tile group cursor-pointer flex flex-col items-center justify-center border-2 border-dashed border-gray-300/80 rounded-3xl transition-all duration-500 hover:border-primary-400 hover:shadow-xl bg-white/80 dark:bg-gray-800/80 hover:bg-white dark:hover:bg-gray-800 backdrop-blur-sm p-8 min-h-[192px] sm:min-h-[208px]">
 
                                         <!-- Preview Grid INSIDE the drop zone -->
                                         <div id="donationPreviews"
@@ -87,13 +87,14 @@
                                         <div id="donationAddMoreText" class="text-center mb-4 hidden">
                                             <p class="text-sm text-[#B59F84] font-medium">Tap to add more photos</p>
                                         </div>
+
                                         <!-- Drop zone content - only show when no images or can add more -->
                                         <div id="donationDropZoneContent"
                                             class="flex flex-col items-center justify-center gap-5 w-full">
                                             <!-- Icon Container with Gradient -->
                                             <div class="flex justify-center w-full">
                                                 <div
-                                                    class="shrink-0 w-18 h-18 rounded-2xl bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-600 flex items-center justify-center text-gray-600 transition-all duration-500 group-hover:scale-110 group-hover:from-primary-50 group-hover:to-primary-100 group-hover:text-primary-600 shadow-sm group-hover:shadow-md">
+                                                    class="shrink-0 w-18 h-18 rounded-2xl bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-800 flex items-center justify-center text-gray-600 dark:text-gray-200 transition-all duration-500 group-hover:scale-110 group-hover:from-primary-50 group-hover:to-primary-100 group-hover:text-primary-600 shadow-sm group-hover:shadow-md">
                                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-9 w-9"
                                                         viewBox="0 0 24 24" fill="currentColor">
                                                         <path
@@ -118,10 +119,11 @@
                                                 <!-- File Info with Hover Text Change -->
                                                 <div class="flex flex-col gap-2">
                                                     <p
-                                                        class="text-sm font-semibold text-gray-700 bg-gray-100/50 px-3 py-1.5 rounded-lg">
+                                                        class="text-sm font-semibold text-gray-700 dark:text-gray-200 bg-gray-100/50 dark:bg-gray-800/50 px-3 py-1.5 rounded-lg">
                                                         PNG or JPG up to 5MB each</p>
-                                                    <span class="text-sm text-gray-600 font-medium">Add or Drag & Drop
-                                                        photos</span>
+                                                    <span
+                                                        class="text-sm text-gray-600 dark:text-gray-300 font-medium">Add
+                                                        or Drag & Drop photos</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -132,7 +134,6 @@
                                         </div>
                                     </label>
                                 </div>
-
                                 <!-- Hidden multiple input -->
                                 <input id="donationImages" name="images[]" type="file" accept="image/*" multiple
                                     class="hidden">
