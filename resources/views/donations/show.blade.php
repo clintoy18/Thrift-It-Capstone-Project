@@ -8,7 +8,7 @@
         <div class="max-w-7xl mx-auto p-6">
             <!-- Two-Column Layout -->
             <div class="flex flex-col lg:flex-row gap-8 items-stretch">
-                <!-- Left Column: Image Slider & Product Info -->
+                <!-- Left Column: Image Slider & donation Info -->
                 <div class="lg:w-1/3 flex flex-col gap-6 h-full">
                     <!-- Swiper Slider -->
                     <div class="relative swiper mySwiper rounded-xl overflow-hidden shadow-lg h-[28rem] sm:h-[32rem]">
@@ -140,7 +140,7 @@
                             <div
                                 class="absolute -top-10 left-6 w-20 h-20 rounded-full border-4 border-white dark:border-gray-800 overflow-hidden shadow-md">
                                 @if ($donation->user->profile_pic)
-                                    <img src="{{ asset('storage/' . $donation->user->profile_pic) }}"
+                                    <img src="{{ Storage::disk('s3')->url($donation->user->profile_pic) }}"
                                         alt="Profile Picture" class="w-full h-full object-cover">
                                 @else
                                     <img src="{{ asset('images/default-profile.jpg') }}" alt="Default Profile Picture"
@@ -151,7 +151,7 @@
                             <!-- User Details -->
                             <div class="flex items-start justify-between pt-10">
                                 <div class="flex-1">
-                                    <div class="product-card">
+                                    <div class="donation-card">
                                         <x-user-name-badge :user="$donation->user" />
                                     </div>
                                     <!-- Rating -->
@@ -195,6 +195,68 @@
                         </div>
                     </div>
 
+                    <!-- Google Maps Location Section -->
+                    <div class="mt-1 bg-white dark:bg-gray-800 rounded-xl p-6 shadow-md">
+                        <div class="flex items-center gap-2 mb-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-[#B59F84]" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                            </svg>
+                            <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Location</h3>
+                        </div>
+
+                        <!-- Location Details -->
+                        <div class="mb-4">
+                            <p class="text-sm text-gray-600 dark:text-gray-400">
+                                <span class="font-medium">Address:</span>
+                                {{ $donation->barangay->name ?? 'N/A' }}, Cebu City, Cebu 6000
+                            </p>
+                        </div>
+
+                        <!-- Alternative approach -->
+                        <div class="rounded-lg overflow-hidden shadow-lg border border-gray-200 dark:border-gray-700">
+                            <div id="google-map-container"
+                                class="w-full h-64 bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
+                                @if ($donation->barangay && $donation->barangay->name)
+                                    <!-- Alternative URL format that should show the pin -->
+                                    <iframe id="location-map" width="100%" height="100%" style="border:0;"
+                                        loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade"
+                                        src="https://maps.google.com/maps?q={{ urlencode($donation->barangay->name . ', Cebu City, Cebu, Philippines') }}&z=15&output=embed">
+                                    </iframe>
+                                @else
+                                    <!-- Fallback content -->
+                                    <div class="text-center text-gray-500 dark:text-gray-400 p-4">
+                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                            class="h-12 w-12 mx-auto mb-2 opacity-50" fill="none"
+                                            viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 11111.314 0z" />
+                                        </svg>
+                                        <p class="text-sm">Location information not available</p>
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
+
+                        <!-- Map Actions -->
+                        <div class="mt-4 flex gap-3">
+                            @if ($donation->barangay && $donation->barangay->name)
+                                <a href="https://www.google.com/maps/search/?api=1&query={{ urlencode($donation->barangay->name . ', Cebu City, Cebu, Philippines') }}"
+                                    target="_blank"
+                                    class="flex-1 bg-[#B59F84] text-white text-center py-2.5 rounded-lg hover:bg-[#a08e77] transition-all duration-300 font-medium text-sm">
+                                    Open in Google Maps
+                                </a>
+                                {{-- <button onclick="copyLocation()"
+                                    class="px-4 py-2.5 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-300 font-medium text-sm">
+                                    Copy Address
+                                </button> --}}
+                            @endif
+                        </div>
+                    </div>
+
                     <!-- Comments Section -->
                     <div class="bg-[#F4F2ED] dark:bg-gray-800 rounded-xl p-10 shadow-md">
                         <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4">Comments</h3>
@@ -211,7 +273,7 @@
                                             <div
                                                 class="w-10 h-10 rounded-full border-2 border-white dark:border-gray-800 overflow-hidden bg-[#B59F84] flex items-center justify-center">
                                                 @if ($comment->user->profile_pic)
-                                                    <img src="{{ asset('storage/' . $comment->user->profile_pic) }}"
+                                                    <img src="{{ Storage::disk('s3')->url($comment->user->profile_pic) }}"
                                                         alt="{{ $comment->user->fname }}'s Profile Picture"
                                                         class="w-full h-full object-cover">
                                                 @else
@@ -970,18 +1032,14 @@
             <div class="comment-item bg-white dark:bg-gray-700 rounded-lg p-4 shadow-sm" data-comment-id="${commentData.id}" id="comment-${commentData.id}">
                 <div class="flex gap-3">
                     <!-- User Avatar -->
-                    <div class="flex-shrink-0">
-                         <div class="w-10 h-10 rounded-full border-2 border-white dark:border-gray-800 overflow-hidden bg-[#B59F84] flex items-center justify-center">
-                            ${commentData.user.profile_pic ? 
-                                `<img src="/storage/${commentData.user.profile_pic}" 
-                                        alt="${commentData.user.fname}'s Profile Picture"
-                                        class="w-full h-full object-cover">` :
-                                `<img src="/images/default-profile.jpg" 
-                                        alt="Default Profile Picture"
-                                        class="w-full h-full object-cover">`
-                            }
-                        </div>
+                 <div class="flex-shrink-0">
+                    <div class="w-10 h-10 rounded-full border-2 border-white dark:border-gray-800 overflow-hidden bg-[#B59F84] flex items-center justify-center">
+                       <img src="${commentData.user.profile_pic_url}" 
+                        alt="${commentData.user.fname}'s Profile Picture"
+                        class="w-full h-full object-cover">
+                        }
                     </div>
+                </div>
                    
                     <!-- Comment Content -->
                     <div class="flex-1">
@@ -1177,15 +1235,20 @@
             // ✅ Build reply HTML with proper structure (all replies at same level)
             const replyHtml = `
                 <div class="reply-item flex gap-3" id="reply-${commentData.id}" data-comment-id="${commentData.id}" data-parent-id="${commentData.parent_id}">
-                    <div class="flex-shrink-0">
-                        <div class="w-8 h-8 bg-[#B59F84] rounded-full border-2 border-white dark:border-gray-800 overflow-hidden flex items-center justify-center">
+                <div class="flex-shrink-0">
+                                <div class="w-10 h-10 bg-[#B59F84] rounded-full border-2 border-white dark:border-gray-800 flex items-center justify-center">
+                                <img src="${commentData.user.profile_pic_url}" 
+                                    alt="${commentData.user.fname}'s Profile Picture"
+                                    class="w-full h-full object-cover">
+                                </div>
+                            </div>                        <div class="w-8 h-8 bg-[#B59F84] rounded-full border-2 border-white dark:border-gray-800 overflow-hidden flex items-center justify-center">
                            ${commentData.user.profile_pic ? 
                                 `<img src="/storage/${commentData.user.profile_pic}" 
-                                        alt="${commentData.user.fname}'s Profile Picture"
-                                        class="w-full h-full object-cover">` :
+                                                            alt="${commentData.user.fname}'s Profile Picture"
+                                                            class="w-full h-full object-cover">` :
                                 `<img src="/images/default-profile.jpg" 
-                                        alt="Default Profile Picture"
-                                        class="w-full h-full object-cover">`
+                                                            alt="Default Profile Picture"
+                                                            class="w-full h-full object-cover">`
                             }
                 </div>
             </div>
@@ -1339,7 +1402,7 @@
                 }
                 suggestions.innerHTML = list.map(p =>
                     `<button type="button" data-name="${p.name}" class="w-full text-left px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-sm">@${p.name}</button>`
-                    ).join('');
+                ).join('');
                 suggestions.classList.remove('hidden');
                 positionSuggestions();
             }

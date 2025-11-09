@@ -454,10 +454,10 @@
                                     class="flex-1 bg-[#B59F84] text-white text-center py-2.5 rounded-lg hover:bg-[#a08e77] transition-all duration-300 font-medium text-sm">
                                     Open in Google Maps
                                 </a>
-                                <button onclick="copyLocation()"
+                                {{-- <button onclick="copyLocation()"
                                     class="px-4 py-2.5 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-300 font-medium text-sm">
                                     Copy Address
-                                </button>
+                                </button> --}}
                             @endif
                         </div>
                     </div>
