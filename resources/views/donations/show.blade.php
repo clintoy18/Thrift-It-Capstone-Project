@@ -1004,19 +1004,20 @@
                 }
 
                 const replyHtml = `
-        <div class="reply-item flex gap-3" id="reply-${commentData.id}">
-            <div class="w-8 h-8 bg-[#B59F84] rounded-full flex items-center justify-center">
-                <span class="text-xs font-bold text-white">
-                    ${(commentData.user.fname.charAt(0) + commentData.user.lname.charAt(0)).toUpperCase()}
-                </span>
-            </div>
-            <div class="flex-1">
-                <p class="font-medium">${commentData.user.fname} ${commentData.user.lname}</p>
-                <p>${commentData.content}</p>
-                            <button onclick="startReply(${commentData.id}, '${commentData.user.fname} ${commentData.user.lname}')" class="text-xs text-gray-500 hover:text-[#B59F84]">Reply</button>
-            </div>
-        </div>
-    `;
+                <div class="reply-item flex gap-3" id="reply-${commentData.id}">
+                    <div class="w-8 h-8 bg-[#B59F84] rounded-full flex items-center justify-center">
+                        <span class="text-sm font-bold text-white">
+                                        ${commentData.user.fname ? (commentData.user.fname.charAt(0) + commentData.user.lname.charAt(0)).toUpperCase() : 'U'}
+                                    </span>
+                    </div>
+                    <div class="flex-1">
+                        <p class="font-medium">${commentData.user.fname} ${commentData.user.lname}</p>
+                        <p>${commentData.content}</p>
+                        <button onclick="startReply(${commentData.id}, '${commentData.user.fname} ${commentData.user.lname}')" class="text-xs text-gray-500 hover:text-[#B59F84]">Reply</button>
+                    </div>
+                </div>
+            `;
+
                 repliesContainer.insertAdjacentHTML('beforeend', replyHtml);
                 return;
             }
@@ -1234,44 +1235,34 @@
 
             // ✅ Build reply HTML with proper structure (all replies at same level)
             const replyHtml = `
-                <div class="reply-item flex gap-3" id="reply-${commentData.id}" data-comment-id="${commentData.id}" data-parent-id="${commentData.parent_id}">
-                <div class="flex-shrink-0">
-                                <div class="w-10 h-10 bg-[#B59F84] rounded-full border-2 border-white dark:border-gray-800 flex items-center justify-center">
-                                <img src="${commentData.user.profile_pic_url}" 
-                                    alt="${commentData.user.fname}'s Profile Picture"
-                                    class="w-full h-full object-cover">
-                                </div>
-                            </div>                        <div class="w-8 h-8 bg-[#B59F84] rounded-full border-2 border-white dark:border-gray-800 overflow-hidden flex items-center justify-center">
-                           ${commentData.user.profile_pic ? 
-                                `<img src="/storage/${commentData.user.profile_pic}" 
-                                                            alt="${commentData.user.fname}'s Profile Picture"
-                                                            class="w-full h-full object-cover">` :
-                                `<img src="/images/default-profile.jpg" 
-                                                            alt="Default Profile Picture"
-                                                            class="w-full h-full object-cover">`
-                            }
+        <div class="reply-item flex gap-3" id="reply-${commentData.id}" data-comment-id="${commentData.id}" data-parent-id="${commentData.parent_id}">
+            <div class="flex-shrink-0">
+                <div class="w-10 h-10 bg-[#B59F84] rounded-full border-2 border-white dark:border-gray-800 flex items-center justify-center">
+                   <img src="${commentData.user.profile_pic_url}" 
+                    alt="${commentData.user.fname}'s Profile Picture"
+                    class="w-full h-full object-cover">
                 </div>
             </div>
-                    <div class="flex-1">
+            <div class="flex-1">
                 <div>
-                            <a href="/profile/${commentData.user?.id}" class="hover:underline">
+                    <a href="/profile/${commentData.user?.id}" class="hover:underline">
                         ${createUserNameBadge(commentData.user)}
                     </a>
-                            <span class="text-xs text-gray-500 dark:text-gray-400 ml-2">just now</span>
+                    <span class="text-xs text-gray-500 dark:text-gray-400 ml-2">just now</span>
                 </div>
-                        <p class="text-sm text-gray-800 dark:text-gray-200">${commentData.content}</p>
+                <p class="text-sm text-gray-800 dark:text-gray-200">${commentData.content}</p>
 
-                        <div class="mt-2 flex items-center gap-3 text-xs text-gray-500 dark:text-gray-400">
-                            <button onclick="toggleLike(${commentData.id})" 
-                                    class="flex items-center gap-1 hover:text-[#B59F84] transition-colors duration-200"
-                                    id="like-btn-${commentData.id}">
-                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                                          d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
-                                </svg>
-                                <span id="like-count-${commentData.id}">0</span>
-                            </button>
-                            <button onclick="startReply(${commentData.id}, '${commentData.user?.fname ?? ''} ${commentData.user?.lname ?? ''}')" class="hover:text-[#B59F84] transition-colors duration-200">Reply</button>
+                <div class="mt-2 flex items-center gap-3 text-xs text-gray-500 dark:text-gray-400">
+                    <button onclick="toggleLike(${commentData.id})" 
+                            class="flex items-center gap-1 hover:text-[#B59F84] transition-colors duration-200"
+                            id="like-btn-${commentData.id}">
+                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                  d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                        </svg>
+                        <span id="like-count-${commentData.id}">0</span>
+                    </button>
+                    <button onclick="startReply(${commentData.id}, '${commentData.user?.fname ?? ''} ${commentData.user?.lname ?? ''}')" class="hover:text-[#B59F84] transition-colors duration-200">Reply</button>
                 </div>
             </div>
         </div>
