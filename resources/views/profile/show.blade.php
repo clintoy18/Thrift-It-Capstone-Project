@@ -27,7 +27,7 @@
                                     d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                             </svg>
                         </div>
-                        <x-user-name-badge :user="$user" :show-full-name="true" />'s Profile
+                        <x-user-name-badge :user="$user" :show-full-name="true" /> Profile
                     </h3>
                     <!-- User Profile Card Container -->
                     <div class="bg-white dark:bg-gray-800 rounded-lg overflow-hidden">
@@ -390,7 +390,7 @@
                                                         @endif
                                                         <div class="relative aspect-square overflow-hidden">
                                                             {{-- S3 BUCKET  fetch image --}}
-                                                            <img src="{{ optional($profil->images->first())->image
+                                                            <img src="{{ optional($product->images->first())->image
                                                                 ? Storage::disk('s3')->url($product->images->first()->image)
                                                                 : asset('images/no-image.png') }}"
                                                                 alt="Product Image">

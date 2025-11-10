@@ -59,9 +59,8 @@
                                 <span class="font-medium">Status:</span> {{ ucfirst($product->status) }}
                             </p>
                             <div class=" dark:bg-gray-700 rounded-lg ">
-                                <p
-                                    class="text-gray-600 dark:text-gray-400 break-words whitespace-pre-wrap overflow-hidden text-left">
-                                    {{ $product->description }}
+                                <p class="text-gray-600 dark:text-gray-400 break-words whitespace-pre-wrap text-left">
+                                    {{ $product->description ?? 'No description available' }}
                                 </p>
                             </div>
                         </div>
@@ -737,8 +736,8 @@
                                             @endif
 
                                             <div class="relative aspect-square overflow-hidden">
-                                                <img src="{{ $product->first_image }}"
-                                                    alt="{{ $product->name }}" class="w-full h-full object-cover">
+                                                <img src="{{ $product->first_image }}" alt="{{ $product->name }}"
+                                                    class="w-full h-full object-cover">
                                                 <div
                                                     class="absolute inset-0 bg-gray-800 bg-opacity-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
 
