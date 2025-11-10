@@ -26,7 +26,7 @@ class StoreDonationRequest extends FormRequest
         return [
             'category_id' => 'required|exists:categories,id', 
             'name' => 'required|string|max:255',
-            'description' => 'required|min:30|string',
+            'description' => 'required|min:15|string',
             'approval_status' => 'in:approved,pending,rejected',
             'size' => 'required|string',
             'status' => 'in:available,unavailable|default:available',
