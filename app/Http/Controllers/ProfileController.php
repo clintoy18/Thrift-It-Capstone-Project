@@ -109,7 +109,10 @@ class ProfileController extends Controller
     public function show(User $user)
     {
         // Available products (status not sold)
-        $availableProducts = $user->products()->where('status', '!=', 'sold')->get();
+        $availableProducts = $user->products()
+        ->where('approval_status', 'approved')    // only approved products
+        ->where('status', '!=', 'sold')  // exclude sold products
+        ->get();
 
         // Sold products
         $soldProducts = $user->products()->where('status', 'sold')->get();
