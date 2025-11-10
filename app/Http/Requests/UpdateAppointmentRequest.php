@@ -25,7 +25,7 @@ class UpdateAppointmentRequest extends FormRequest
     {
         return [
             'appstatus' => 'required|string|in:pending,approved,completed,rejected',
-            'appdetails' => 'nullable|string|min:30|max:255',
+            'appdetails' => 'nullable|string|min:15|max:255',
             'contactnumber' => 'nullable|numeric|digits_between:10,15',
         ];
     }
