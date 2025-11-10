@@ -316,6 +316,28 @@
                                     <span x-text="notifications.filter(n => !n.is_read).length"></span>
                                 </span>
                             </button>
+
+                               <!-- Dropdown -->
+                            <div x-show="open" @click.away="open = false" x-transition
+                                class="absolute right-20 mt-2 w-80 bg-white dark:bg-gray-800 shadow-lg rounded-xl overflow-hidden z-50 border border-gray-200">
+                                <div class="px-4 py-2 bg-gray-50 border-b border-gray-200  dark:bg-gray-800 ">
+                                    <span class="text-sm font-semibold text-gray-700 dark:text-gray-200">Notifications</span>
+                                </div>
+                                <div class="max-h-64 overflow-y-auto divide-y divide-gray-100 custom-scroll ">
+                                    <template x-for="notif in notifications" :key="notif.id">
+                                        <a :href="notif.data.product_id ? `/products/${notif.data.product_id}` : '#'"
+                                            class="block px-4 py-3 hover:bg-gray-50 transition">
+                                            <p class="text-sm text-gray-700">
+                                                <strong class="text-[#B59F84]"
+                                                    x-text="notif.data.from_user || 'System'"></strong>
+                                                <span
+                                                    x-text="notif.data.message || (notif.data.content ? 'commented: ' + notif.data.content : '')"></span>
+                                            </p>
+                                            <span class="text-xs text-gray-400" x-text="notif.created_at"></span>
+                                        </a>
+                                    </template>
+                                </div>
+                            </div>
                     </div>
 
                     <!-- Hamburger Menu -->
