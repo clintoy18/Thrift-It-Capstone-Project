@@ -13,7 +13,7 @@ use Laravel\Scout\Searchable;
 
 class Product extends Model
 {
-   //typesense searchable trait from laravel scout
+    //typesense searchable trait from laravel scout
     use Searchable;
     use HasFactory;
 
@@ -37,20 +37,22 @@ class Product extends Model
     protected $casts = [
         'price' => 'float',
     ];
-    
-    public function user(){
+
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
 
-    public function category(){
+    public function category()
+    {
         return $this->belongsTo(Categories::class, 'category_id');
     }
 
     public function setImageAttribute($value)
     {
-        if(is_file($value)){
-            $this->attributes['image'] = $value->store('products_images','public');
-        }else {
+        if (is_file($value)) {
+            $this->attributes['image'] = $value->store('products_images', 'public');
+        } else {
             $this->attributes['image'] = $value;
         }
     }
@@ -75,17 +77,17 @@ class Product extends Model
     {
         return $this->belongsTo(Segment::class, 'segment_id');
     }
-        /**
+    /**
      * Get the indexable data array for the model.
      *
      * @return array<string, mixed>
      */
-    public function toSearchableArray() : array
+    public function toSearchableArray(): array
     {
-        return array_merge($this->toArray(),[
+        return array_merge($this->toArray(), [
             'id' => (string) $this->id,
             'created_at' => $this->created_at->timestamp,
-            'updated_at' => $this->updated_at->timestamp,        
+            'updated_at' => $this->updated_at->timestamp,
         ]);
     }
 
@@ -99,15 +101,21 @@ class Product extends Model
         return $this->hasMany(Image::class);
     }
 
-     public function getFirstImageAttribute()
+    public function getFirstImageAttribute()
     {
-        // Return first image path or default placeholder
-        return $this->images->first()?->image ?? 'images/default-placeholder.png';
+        $firstImage = $this->images->first()?->image;
+
+        if ($firstImage) {
+            return Storage::disk('s3')->url($firstImage);
+        }
+
+        // Default placeholder image (also hosted in S3 or locally)
+        return asset('images/default-placeholder.png');
     }
+
 
     public function orders()
     {
         return $this->hasMany(Order::class);
     }
-
 }

@@ -293,7 +293,7 @@
 
                                                             <div class="flex justify-between items-center mt-1">
                                                                 <p
-                                                                    class="text-xs sm:text-sm font-bold {{ $product->listingtype === 'for donation' ? 'text-gray-700' : 'text-black-600' }}">
+                                                                    class="text-xs sm:text-sm font-bold {{ $product->listingtype === 'for donation' ? 'text-red-600' : 'text-black-600' }}">
                                                                     {{ $product->listingtype === 'for donation' ? 'For Donation' : '₱' . number_format($product->price, 2) }}
                                                                 </p>
 
