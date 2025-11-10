@@ -11,6 +11,7 @@ use App\Models\Barangay;
 use App\Models\Donation;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Laravel\Cashier\Billable;
+use Illuminate\Support\Facades\Storage;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -155,5 +156,17 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasMany(Work::class);
     }
+
+    public function profileImageUrl()
+    {
+        // If user has a profile picture, return its S3 URL
+        if ($this->profile_pic) {
+            return Storage::disk('s3')->url($this->profile_pic);
+        }
+
+        // Otherwise, return the public default profile image URL
+        return 'https://thriftit-bucket-s3.s3.ap-southeast-1.amazonaws.com/profile_pictures/default-profile.jpg';
+    }
+
     
 }

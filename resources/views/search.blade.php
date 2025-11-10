@@ -100,7 +100,7 @@
                                 @foreach ($users as $user)
                                     <a href="{{ route('profile.show', $user) }}"
                                         class="flex items-center space-x-3 p-4 bg-gray-50 dark:bg-gray-800 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700 transition">
-                                        <img src="{{ $user->profile_pic && Storage::disk('s3')->exists($user->profile_pic) ? Storage::disk('s3')->url($user->profile_pic) : asset('images/default-profile.jpg') }}"
+                                      <img  src="{{ $user->profileImageUrl() }}"
                                             alt="{{ $user->name }}"
                                             class="w-12 h-12 rounded-full object-cover border-2 border-gray-300 dark:border-gray-600"
                                             loading="lazy">
