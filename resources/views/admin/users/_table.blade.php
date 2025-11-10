@@ -24,7 +24,7 @@
         </tr>
     </thead>
 
-    <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+    <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:text-gray-200 dark:divide-gray-700">
         @forelse($users as $user)
             <tr class="hover:bg-gray-50 dark:hover:bg-gray-700 transition">
                 <td class="px-6 py-4">{{ $user->lname }}</td>
