@@ -43,7 +43,7 @@
                             <tbody class="divide-y divide-white/10">
                                 @forelse($reports as $report)
                                     <tr
-                                        class="bg-white/10 dark:bg-gray-800/30 hover:bg-white/20 dark:hover:bg-gray-700/50 transition-colors">
+                                        class="bg-white/10 dark:bg-gray-800/30 hover:bg-white/20 dark:text-gray-200 dark:hover:bg-gray-700/50 transition-colors">
                                         <td
                                             class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
                                             {{ $report->reporter->fname }} {{ $report->reporter->lname }}
