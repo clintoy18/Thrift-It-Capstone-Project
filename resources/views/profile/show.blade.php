@@ -43,15 +43,10 @@
                             <!-- User Profile Pic Container -->
                             <div
                                 class="absolute -top-[60px] left-[100px] -translate-x-1/2 w-[100px] h-[100px]
-                rounded-full border-4 border-white dark:border-gray-800 overflow-hidden shadow-lg z-10">
-                                @if ($user->profile_pic && Storage::disk('s3')->exists($user->profile_pic))
-                                    <img src="{{ Storage::disk('s3')->url($user->profile_pic) }}"
-                                        alt="{{ $user->name }}'s Profile Picture" class="w-full h-full object-cover">
-                                @else
-                                    <img src="{{ asset('images/default-profile.png') }}" alt="Default Profile Picture"
-                                        class="w-full h-full object-cover">
-                                @endif
-
+                          rounded-full border-4 border-white dark:border-gray-800 overflow-hidden shadow-lg z-10">
+                                <img src="{{ $user->profileImageUrl() }}"
+                                    alt="{{ $user->name }}"
+                                    class="w-full h-full object-cover">
                             </div>
 
                             <!-- User Details Container -->

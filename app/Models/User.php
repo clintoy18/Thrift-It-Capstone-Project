@@ -163,7 +163,6 @@ class User extends Authenticatable implements MustVerifyEmail
         if ($this->profile_pic) {
             return Storage::disk('s3')->url($this->profile_pic);
         }
-
         // Otherwise, return the public default profile image URL
         return 'https://thriftit-bucket-s3.s3.ap-southeast-1.amazonaws.com/profile_pictures/default-profile.jpg';
     }

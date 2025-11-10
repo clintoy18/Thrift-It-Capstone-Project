@@ -342,14 +342,9 @@
                             <div
                                 class="absolute -top-[60px] left-[100px] -translate-x-1/2 w-[100px] h-[100px]
                             rounded-full border-4 border-white dark:border-gray-800 overflow-hidden shadow-lg z-10">
-
-                                @if ($product->user->profile_pic)
-                                    <img src="{{ Storage::disk('s3')->url($product->user->profile_pic) }}"
-                                        alt="Profile Picture" class="w-full h-full object-cover">
-                                @else
-                                    <img src="{{ asset('images/default-profile.jpg') }}"
-                                        alt="Default Profile Picture" class="w-full h-full object-cover">
-                                @endif
+                                <img src="{{ $product->user->profileImageUrl() }}"
+                                    alt="{{ $product->user->name }}"
+                                    class="w-full h-full object-cover">
                             </div>
                             <!-- User Details -->
                             <div class="flex items-start justify-between pt-10">
@@ -476,7 +471,7 @@
                                             <div
                                                 class="w-10 h-10 rounded-full border-2 border-white dark:border-gray-800 overflow-hidden bg-[#B59F84] flex items-center justify-center">
                                                 @if ($comment->user->profile_pic)
-                                                    <img src="{{ Storage::disk('s3')->url($comment->user->profile_pic) }}"
+                                                    <img src="{{ $comment->user->profileImageUrl() }}"
                                                         alt="{{ $comment->user->fname }}'s Profile Picture"
                                                         class="w-full h-full object-cover">
                                                 @else
@@ -604,9 +599,9 @@
                                                     <div
                                                         class="w-10 h-10 rounded-full border-2 border-white dark:border-gray-800 overflow-hidden bg-[#B59F84] flex items-center justify-center">
                                                         @if ($reply->user->profile_pic)
-                                                            <img src="{{ Storage::disk('s3')->url($reply->user->profile_pic) }}"
+                                                            <img src="{{ $reply->user->profileImageUrl() }}"
                                                                 alt="{{ $reply->user->fname }}'s Profile Picture"
-                                                                class="w-full h-full object-cover">
+                                                                class="w-full h-full rounded-full object-cover">
                                                         @else
                                                             <img src="{{ asset('images/default-profile.jpg') }}"
                                                                 alt="Default Profile Picture"
