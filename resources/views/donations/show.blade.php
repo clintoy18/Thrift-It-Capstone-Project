@@ -28,6 +28,10 @@
                                         class="w-full h-full object-cover">
                                 </div>
                             @endif
+                            <div
+                                class="absolute top-2 left-2 z-10 dark:bg-green-300 bg-green-100 text-green-800 text-xs px-3 py-1 rounded-full shadow">
+                                Free
+                            </div>
                         </div>
 
                         <!-- Swiper Pagination (overlay) -->
