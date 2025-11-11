@@ -94,6 +94,7 @@ class PrivateChatController extends Controller
                     'id' => $message->user->id,
                     'fname' => $message->user->fname,
                     'lname' => $message->user->lname,
+                    'profile_pic_url' => $message->user->profileImageUrl(),
                 ]
             ]
         ]);

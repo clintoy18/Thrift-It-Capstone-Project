@@ -5,6 +5,7 @@ use App\Models\Message;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Storage;
 
 class PrivateMessageSent implements ShouldBroadcast
 {
@@ -22,8 +23,8 @@ class PrivateMessageSent implements ShouldBroadcast
                 'fname' => $message->user->fname,
                 'lname' => $message->user->lname,
                 'profile_pic' => $message->user->profile_pic
-                    ? asset('storage/' . $message->user->profile_pic)
-                    : null,
+                ? Storage::disk('s3')->url($message->user->profile_pic)
+                : asset('images/default-profile.jpg'),
             ];
             $this->receiverId = $receiver->id;
         }

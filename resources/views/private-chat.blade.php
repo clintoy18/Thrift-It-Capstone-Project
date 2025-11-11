@@ -118,7 +118,7 @@
                                 <div class="relative">
                                     <div class="w-12 h-12 rounded-full flex items-center justify-center overflow-hidden bg-gradient-to-r from-[#634600] to-[#B59F84]">
                                         @if($conversation['user']->profile_pic)
-                                            <img src="{{ asset('storage/' . $conversation['user']->profile_pic) }}" 
+                                          <img src="{{ $conversation->profileImageUrl() }}"
                                                 alt="{{ $conversation['user']->fname }} {{ $conversation['user']->lname }}'s Profile Picture"
                                                 class="w-full h-full object-cover rounded-full">
                                         @else
@@ -872,11 +872,13 @@
                     <div class="flex max-w-[85%] sm:max-w-xs lg:max-w-md flex-row-reverse items-end space-x-2">
                         <!-- Avatar -->
                         <div class="w-6 h-6 sm:w-8 sm:h-8 rounded-full flex-shrink-0 ml-1 sm:ml-2">
-                            <div class="w-6 h-6 sm:w-8 sm:h-8 bg-gradient-to-r from-[#634600] to-[#B59F84] rounded-full flex items-center justify-center">
-                                <span class="text-white text-xs font-semibold">${user.fname.charAt(0)}${user.lname.charAt(0)}</span>
-                            </div>
+                           ${user.profile_pic_url 
+                                ? `<img src="${user.profile_pic_url}" alt="${user.fname} ${user.lname}" class="w-full h-full rounded-full object-cover">`
+                                : `<div class="w-full h-full bg-gradient-to-r from-[#634600] to-[#B59F84] flex items-center justify-center">
+                                    <span class="text-white text-xs font-semibold">${user.fname.charAt(0)}${user.lname.charAt(0)}</span>
+                                </div>`
+                            }
                         </div>
-                        
                         <!-- Message Bubble -->
                         <div class="flex flex-col items-end">
                             <div class="px-4 py-3 rounded-2xl bg-gradient-to-r from-[#634600] to-[#B59F84] text-white rounded-br-md">
