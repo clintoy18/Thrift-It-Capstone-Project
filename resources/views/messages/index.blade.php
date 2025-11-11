@@ -51,17 +51,9 @@
                                     class="flex items-center p-4 hover:bg-[#B59F84] hover:bg-opacity-20 dark:hover:bg-yellow-800 transition-colors">
                                     <!-- Avatar -->
                                     <div class="relative">
-                                        <div
-                                            class="w-12 h-12 bg-gradient-to-r from-[#634600] to-[#B59F84] rounded-full flex items-center justify-center">
-                                            <span
-                                                class="text-white font-semibold text-sm">{{ substr($conversation['user']->fname, 0, 1) }}{{ substr($conversation['user']->lname, 0, 1) }}</span>
-                                        </div>
-                                        @if ($conversation['unread_count'] > 0)
-                                            <div
-                                                class="absolute -top-1 -right-1 w-5 h-5 bg-[#634600] dark:bg-[#f5d68b] text-white text-xs rounded-full flex items-center justify-center">
-                                                {{ $conversation['unread_count'] > 9 ? '9+' : $conversation['unread_count'] }}
-                                            </div>
-                                        @endif
+                                    <img src="{{ $conversation['user']->profileImageUrl() }}" 
+                                        alt="{{ $conversation['user']->fname }} {{ $conversation['user']->lname }}"
+                                        class="w-12 h-12 rounded-full object-cover">
                                     </div>
 
                                     <!-- Conversation Info -->

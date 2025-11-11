@@ -1,3 +1,4 @@
+
 <x-app-layout>
     <x-slot name="header">
         <div class="flex items-center justify-between">
@@ -10,7 +11,7 @@
                 <div class="flex items-center space-x-3">
                     <div class="w-10 h-10 rounded-full flex items-center justify-center overflow-hidden bg-gradient-to-r from-purple-500 to-pink-500">
                         @if ($recipient->profile_pic)
-                            <img src="{{ asset('storage/' . $recipient->profile_pic) }}" 
+                            <img src="{{ $recipient->profileImageUrl() }}"
                                 alt="{{ $recipient->fname }} {{ $recipient->lname }}'s Profile Picture"
                                 class="w-full h-full object-cover">
                         @else
@@ -179,7 +180,7 @@
                                 </button>
                                 <div class="w-10 h-10 sm:w-12 sm:h-12 bg-white bg-opacity-20 rounded-full flex items-center justify-center overflow-hidden">
                                 @if($recipient->profile_pic)
-                                    <img src="{{ asset('storage/' . $recipient->profile_pic) }}" 
+                                    <img src="{{ $recipient->profileImageUrl() }}"
                                         alt="{{ $recipient->fname }} {{ $recipient->lname }}'s Profile Picture"
                                         class="w-full h-full object-cover">
                                 @else
@@ -227,7 +228,7 @@
                                                 $user = $msg->user_id === auth()->id() ? auth()->user() : $msg->user;
                                             @endphp
                                             @if($user->profile_pic)
-                                                <img src="{{ asset('storage/' . $user->profile_pic) }}" 
+                                                <img src="{{ $user->profileImageUrl() }}" 
                                                     alt="{{ $user->fname }} {{ $user->lname }}'s Profile Picture"
                                                     class="w-full h-full object-cover rounded-full">
                                             @else
@@ -267,7 +268,7 @@
                                                                 <!-- Product Image -->
                                                                 <div class="relative flex-shrink-0">
                                                                     @if($product->first_image)
-                                                                        <img src="{{ asset('storage/' . $product->first_image) }}" 
+                                                                       <img src="{{ $product->first_image }}"
                                                                              alt="{{ $product->name }}" 
                                                                              class="w-16 h-16 sm:w-20 sm:h-20 object-cover rounded-lg shadow-sm">
                                                                     @else
