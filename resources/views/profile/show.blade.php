@@ -44,8 +44,7 @@
                             <div
                                 class="absolute -top-[60px] left-[100px] -translate-x-1/2 w-[100px] h-[100px]
                           rounded-full border-4 border-white dark:border-gray-800 overflow-hidden shadow-lg z-10">
-                                <img src="{{ $user->profileImageUrl() }}"
-                                    alt="{{ $user->name }}"
+                                <img src="{{ $user->profileImageUrl() }}" alt="{{ $user->name }}"
                                     class="w-full h-full object-cover">
                             </div>
 
@@ -825,7 +824,7 @@
                                                             @if ($order->proof)
                                                                 <!-- View Proof Button -->
                                                                 <button type="button"
-                                                                    onclick="window.open('{{ asset('storage/' . $order->proof) }}', '_blank')"
+                                                                    onclick="window.open('{{ Storage::disk('s3')->url($order->proof) }}', '_blank')"
                                                                     class="inline-flex items-center px-3 py-1 text-xs bg-[#B59F84] text-white rounded 
                                                hover:bg-[#9C8770] transition-colors gap-1">
                                                                     <svg class="w-3 h-3" fill="none"
