@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Repositories\AppointmentRepository;
 use App\Models\Appointment;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Storage;
 
 class AppointmentService
 {
@@ -27,21 +28,31 @@ class AppointmentService
 
     public function createAppointment(array $data, ?array $apptImages = null)
     {
+        // 1️⃣ Create the appointment first (without images)
         $appointment = $this->appointmentRepository->create($data);
 
+        // 2️⃣ Handle uploaded images (store in S3)
         if ($apptImages && count($apptImages) > 0) {
             foreach ($apptImages as $image) {
-                $path = $image->store('appointment_images', 'public');
+                if ($image instanceof \Illuminate\Http\UploadedFile) {
 
-                // Save record in the appointment_images table
-                $appointment->apptImages()->create([
-                    'image_path' => $path, // make sure your column name matches the migration
-                ]);
+                    // Store image in S3 under 'appointment_images' folder
+                    $path = $image->store('appointment_images', [
+                        'disk' => 's3',
+                        'visibility' => 'public',
+                    ]);
+
+                    // Save record in appointment_images table
+                    $appointment->apptImages()->create([
+                        'image_path' => $path, // store the S3 key/path
+                    ]);
+                }
             }
         }
 
         return $appointment;
     }
+
 
     public function updateAppointment(Appointment $appointment, array $data)
     {
