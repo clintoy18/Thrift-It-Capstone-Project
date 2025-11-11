@@ -23,12 +23,17 @@ class StoreAppointmentRequest extends FormRequest
     public function rules(): array
     {
         return [
+            
             'upcycler_id' => 'required|exists:users,id',
-            'appdetails' => 'nullable|string|min:20|max:255',
+            'appdetails' => 'required|string|min:15|max:255',
             'contactnumber' => 'required|numeric|digits_between:10,15',
             'apptype' => ['required', 'in:Resize,Customize,Patchwork,Fabric Dyeing'],
             'appstatus' => ['nullable', 'in:pending,approved,declined,completed,cancelled'],
             'appdate' => 'required|date|after:now',
+
+            // Multi-image input from the form: images[]
+            'images'   => 'required|array|min:2|max:8',
+            'images.*' => 'image|mimes:jpg,jpeg,png,webp,gif|max:5120',
         ];
     }
 }
