@@ -103,16 +103,18 @@ class Product extends Model
 
     public function getFirstImageAttribute()
     {
+        /** @var \Illuminate\Filesystem\FilesystemAdapter $s3 */
+        $s3 = Storage::disk('s3');
+
         $firstImage = $this->images->first()?->image;
 
         if ($firstImage) {
-            return Storage::disk('s3')->url($firstImage);
+            return $s3->url($firstImage); // use $s3 variable instead of calling Storage::disk again
         }
 
-        // Default placeholder image (also hosted in S3 or locally)
+        // Default placeholder image (hosted locally)
         return asset('images/default-placeholder.png');
     }
-
 
     public function orders()
     {

@@ -146,8 +146,8 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(Order::class, 'buyer_id');
     }
 
-     // Orders received on products this user is selling
-     public function ordersAsSeller()
+    // Orders received on products this user is selling
+    public function ordersAsSeller()
     {
         return $this->hasManyThrough(Order::class, Product::class);
     }
@@ -159,13 +159,15 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function profileImageUrl()
     {
-        // If user has a profile picture, return its S3 URL
+        /** @var \Illuminate\Filesystem\FilesystemAdapter $s3 */
+        $s3 = Storage::disk('s3');
+
+        // If user has a profile picture, return its full S3 URL
         if ($this->profile_pic) {
-            return Storage::disk('s3')->url($this->profile_pic);
+            return $s3->url($this->profile_pic);
         }
+
         // Otherwise, return the public default profile image URL
         return 'https://thriftit-bucket-s3.s3.ap-southeast-1.amazonaws.com/profile_pictures/default-profile.jpg';
     }
-
-    
 }

@@ -15,20 +15,22 @@ class PrivateMessageSent implements ShouldBroadcast
     public $sender; // simplified sender info
     protected $receiverId;
 
-        public function __construct(Message $message, $receiver)
-        {
-            $this->message = $message;
-            $this->sender = [
-                'id' => $message->user->id,
-                'fname' => $message->user->fname,
-                'lname' => $message->user->lname,
-                'profile_pic' => $message->user->profile_pic
-                ? Storage::disk('s3')->url($message->user->profile_pic)
-                : asset('images/default-profile.jpg'),
-            ];
-            $this->receiverId = $receiver->id;
-        }
+    public function __construct(Message $message, $receiver)
+    {
+        /** @var \Illuminate\Filesystem\FilesystemAdapter $s3 */
+        $s3 = Storage::disk('s3');
 
+        $this->message = $message;
+        $this->sender = [
+            'id' => $message->user->id,
+            'fname' => $message->user->fname,
+            'lname' => $message->user->lname,
+            'profile_pic' => $message->user->profile_pic
+                ? $s3->url($message->user->profile_pic) // use S3 URL
+                : asset('images/default-profile.jpg'),  // fallback
+        ];
+        $this->receiverId = $receiver->id;
+    }
 
     public function broadcastOn()
     {
