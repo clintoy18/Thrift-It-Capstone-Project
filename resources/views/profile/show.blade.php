@@ -826,7 +826,7 @@
                                                                 <button type="button"
                                                                     onclick="window.open('{{ Storage::disk('s3')->url($order->proof) }}', '_blank')"
                                                                     class="inline-flex items-center px-3 py-1 text-xs bg-[#B59F84] text-white rounded 
-                                               hover:bg-[#9C8770] transition-colors gap-1">
+                                                                    hover:bg-[#9C8770] transition-colors gap-1">
                                                                     <svg class="w-3 h-3" fill="none"
                                                                         stroke="currentColor" viewBox="0 0 24 24">
                                                                         <path stroke-linecap="round"
