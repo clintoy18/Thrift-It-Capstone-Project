@@ -100,7 +100,7 @@ Route::middleware(['auth', 'verified', 'rolemiddleware:user'])->group(function (
 //Upcycler Routes
 Route::middleware(['auth', 'verified', 'rolemiddleware:upcycler'])->group(function () {
     Route::resource('upcycler', UpcyclerController::class);
-    Route::resource('works', WorkController::class);
+    Route::resource('works', WorkController::class)->except(['show']);
 
 });
 
@@ -154,6 +154,8 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
+    //routes to show
+
     Route::get('/messages', [PrivateChatController::class, 'index'])->name('messages.index');
     Route::get('/private-chat/{user}', [PrivateChatController::class, 'show'])->name('private.chat');
     Route::post('/private-chat/{user}/send', [PrivateChatController::class, 'send'])->name('private.chat.send');
@@ -162,7 +164,9 @@ Route::middleware('auth')->group(function () {
      Route::post('/profile/verification-document', [ProfileController::class, 'uploadVerificationDocument'])
         ->name('profile.verification.upload');
 
-    
+    //show works globally
+    Route::get('/works/{id}/view', [WorkController::class, 'show'])->name('works.show');
+
     //mark item as sold
     Route::put('/products/{product}/mark-as-sold', [ProductController::class, 'markAsSold'])
     ->name('products.markAsSold');   
@@ -171,10 +175,8 @@ Route::middleware('auth')->group(function () {
     Route::put('/donations/{donation}/mark-as-donated', [DonationController::class, 'markAsDonated'])
     ->name('donations.markAsDonated');   
 
-
     //route for pricing page
     Route::get('/pricing', [PricingController::class, 'index'])->name('pricing.index');
-      
 
     //route for cehckout
     Route::get('/checkout/{name}', [App\Http\Controllers\CheckoutController::class, 'checkout'])->name('checkout');
