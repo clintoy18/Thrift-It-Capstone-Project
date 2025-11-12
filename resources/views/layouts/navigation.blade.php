@@ -21,8 +21,10 @@
                         <a href="{{ route('appointments.index') }}"
                             class="text-gray-700  dark:text-gray-200 hidden font-bold lg:block">Upcycle</a>
                     @elseif($role === 1)
-                        <a href="{{ route('upcycler.index') }}" class="text-gray-700 dark:text-gray-200 hidden font-bold lg:block">Manage
+                        <a href="{{ route('upcycler.index') }}" class="text-gray-700 dark:text-gray-200 hidden font-bold lg:block">
                             Appointments</a>
+                        <a href="{{ route('works.index') }}" class="text-gray-700 dark:text-gray-200 hidden font-bold lg:block">Upcycling
+                            Works</a>
                     @endif
                 </div>
             @endauth
