@@ -18,9 +18,9 @@ class StoreWorkRequest extends FormRequest
         return [
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'status' => 'in:available,unavailable',
-            'images' => 'nullable|array',
-            'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+            'images.*' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+            'upcycle_type' => 'required|string|max:255',
+            'approval_status' => "default"
         ];
     }
 

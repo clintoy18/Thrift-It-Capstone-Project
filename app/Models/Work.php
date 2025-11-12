@@ -14,8 +14,8 @@ class Work extends Model
         'user_id',
         'title',
         'description',
-        'image',
-        'status',
+        'upcycle_type',
+        'approval_status',
     ];
 
     // Each Work belongs to an Upcycler (User with role=1)
@@ -46,6 +46,16 @@ class Work extends Model
 
     public function getFirstImageAttribute()
     {
-        return $this->images->first()?->image ?? 'images/default-placeholder.png';
+             /** @var \Illuminate\Filesystem\FilesystemAdapter $s3 */
+        $s3 = Storage::disk('s3');
+
+        $firstImage = $this->images->first()?->image;
+
+        if ($firstImage) {
+            return $s3->url($firstImage);
+        }
+
+        // Default placeholder image (hosted locally)
+        return asset('images/default-placeholder.png');
     }
 }

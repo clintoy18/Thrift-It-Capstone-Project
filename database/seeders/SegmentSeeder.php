@@ -13,6 +13,7 @@ class SegmentSeeder extends Seeder
             ['name' => 'Men'],
             ['name' => 'Women'],
             ['name' => 'Kids'],
+            ['name' => 'Unisex'],
         ]);
     }
 }

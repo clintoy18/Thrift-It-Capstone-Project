@@ -11,10 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('works', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
-        });
+        Schema::table('works', function (Blueprint $table) {
+        $table->enum('approval_status', ['pending', 'approved', 'rejected'])
+              ->default('pending')
+              ->after('description'); 
+    });
+
     }
 
     /**
@@ -22,6 +24,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('works');
+        Schema::table('works', function (Blueprint $table) {
+         $table->dropColumn('approval_status');
+        });
     }
 };
