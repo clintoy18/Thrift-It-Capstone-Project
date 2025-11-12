@@ -25,6 +25,7 @@ use App\Http\Controllers\SegmentController;
 use App\Http\Controllers\PricingController;
 use App\Http\Controllers\EcoPostController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\WorkController;
 
 use App\Models\Notification;
 use Illuminate\Support\Facades\Auth;
@@ -99,6 +100,9 @@ Route::middleware(['auth', 'verified', 'rolemiddleware:user'])->group(function (
 //Upcycler Routes
 Route::middleware(['auth', 'verified', 'rolemiddleware:upcycler'])->group(function () {
     Route::resource('upcycler', UpcyclerController::class);
+    Route::resource('works', WorkController::class);
+
+
 });
 
 // Admin Routes

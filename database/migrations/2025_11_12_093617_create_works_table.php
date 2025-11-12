@@ -12,8 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('works', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+                $table->id();
+                $table->foreignId('user_id')->constrained()->onDelete('cascade'); // upcycler owner
+                $table->string('title');
+                $table->text('description')->nullable();
+                $table->enum('upcycle_type', ['pending', 'approved', 'rejected'])->default('pending');
+                $table->timestamps();
         });
     }
 

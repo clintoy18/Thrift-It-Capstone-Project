@@ -14,8 +14,7 @@ class Work extends Model
         'user_id',
         'title',
         'description',
-        'image',
-        'status',
+        'upcycle_type',
     ];
 
     // Each Work belongs to an Upcycler (User with role=1)
