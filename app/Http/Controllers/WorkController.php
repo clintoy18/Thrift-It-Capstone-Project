@@ -8,40 +8,53 @@ use Illuminate\Support\Facades\Auth;
 
 class WorkController extends Controller
 {
-    protected $wokrService;
+    protected $workService;
 
-    public function __construct(WorkService $wokrService)
+    public function __construct(WorkService $workService)
     {
-        $this->wokrService = $wokrService;
+        $this->workService = $workService;
     }
 
+    // Show all approved works
     public function index()
     {
-        $works = $this->wokrService->listApprovedWorks();
+        $works = $this->workService->getApprovedWorks(); // fetch approved works
         return view('works.index', compact('works'));
     }
 
+    // Show create work form
     public function create()
     {
         return view('works.create');
     }
 
+    // Store a new work
     public function store(StoreWorkRequest $request)
     {
-        $this->wokrService->createWork($request, Auth::id());
+        $data = $request->validated();
+        $images = $request->file('images'); // expecting multiple images
 
-        return dd($request);
+        $this->workService->createWork(array_merge($data, [
+            'user_id' => Auth::id(),
+            'approval_status' => 'pending'
+        ]), $images);
+
+        return redirect()->route('works.index')
+            ->with('success', 'Your work has been uploaded for review.');
     }
 
+    // Show a single work
     public function show($id)
     {
-        $work = $this->wokrService->getWorkById($id);
-        return view('works.show', compact('work'));
+        $work = $this->workService->getWorkWithRelations($id);
+        $moreWorks = $this->workService->getMoreWorksByUser($work->user_id, $work->id);
+        return view('works.show', compact('work','moreWorks'));
     }
 
+    // Show all works by a specific upcycler
     public function byUpcycler($userId)
     {
-        $works = $this->wokrService->getWorksByUpcycler($userId);
+        $works = $this->workService->getWorksByUser($userId);
         return view('works.by-upcycler', compact('works'));
     }
 }

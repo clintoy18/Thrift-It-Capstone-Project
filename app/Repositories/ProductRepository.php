@@ -79,12 +79,4 @@ class ProductRepository
             ->take($limit)
             ->get();
     }
-
-
-
-
-    
-
-
-
 }

@@ -102,7 +102,6 @@ Route::middleware(['auth', 'verified', 'rolemiddleware:upcycler'])->group(functi
     Route::resource('upcycler', UpcyclerController::class);
     Route::resource('works', WorkController::class);
 
-
 });
 
 // Admin Routes

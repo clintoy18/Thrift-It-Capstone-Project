@@ -16,7 +16,7 @@ return new class extends Migration
                 $table->foreignId('user_id')->constrained()->onDelete('cascade'); // upcycler owner
                 $table->string('title');
                 $table->text('description')->nullable();
-                $table->enum('upcycle_type', ['pending', 'approved', 'rejected'])->default('pending');
+                $table->string('upcycle_type');
                 $table->timestamps();
         });
     }
