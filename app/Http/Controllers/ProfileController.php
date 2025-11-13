@@ -168,8 +168,13 @@ class ProfileController extends Controller
         ]);
 
         if ($request->hasFile('verification_document')) {
-            $path = $request->file('verification_document')->store('verification-documents', 'public');
+            // Store the file on S3
+            $path = $request->file('verification_document')->store('verification-documents', 's3');
 
+            // Make the file publicly accessible (optional, depends on your S3 policy)
+            Storage::disk('s3')->setVisibility($path, 'public');
+
+            // Update the user's document path and status
             $request->user()->update([
                 'verification_document' => $path,
                 'verification_status' => 'pending',
@@ -178,4 +183,5 @@ class ProfileController extends Controller
 
         return back()->with('status', 'Verification document uploaded successfully and sent for review.');
     }
+
 }

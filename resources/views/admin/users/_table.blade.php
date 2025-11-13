@@ -45,7 +45,7 @@
                 @if($showDocument ?? false)
                     <td class="px-6 py-4">
                         @if ($user->verification_document)
-                            <a href="{{ asset('storage/' . $user->verification_document) }}" target="_blank"
+                            <a href="{{ Storage::disk('s3')->url($user->verification_document) }}" target="_blank"
                                class="text-blue-600 underline hover:text-blue-800">
                                 View Document
                             </a>
