@@ -24,7 +24,7 @@ class AppointmentController extends Controller
      */
     public function index()
     {
-        $upcyclers = User::where('role', 1)->get(); // fetch all upcyclers
+        $upcyclers = User::where('role', 1)->where('is_active','1')->get(); // fetch active all upcyclers
         return view('appointments.index', compact('upcyclers'));
     }
 
