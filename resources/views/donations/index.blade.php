@@ -53,7 +53,8 @@
                             @endforeach
                         </div>
                     @else
-                        <x-empty-message message="No active donations found." link="{{ route('donations.create') }}" />
+                        <x-empty-message message="No active donations found." link="{{ route('donations.create') }}"
+                            buttonText="Add Donation" icon="shopping-cart" />
                     @endif
                 </div>
             </div>

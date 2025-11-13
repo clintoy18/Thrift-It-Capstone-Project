@@ -14,20 +14,20 @@
             </p>
         </div>
         <div class="text-right">
-            <div class="text-lg font-bold text-[#B59F84]">{{ $works->count() }}</div>
+            <div class="text-lg font-bold text-[#B59F84]">{{ $works->count() ?? 0 }}</div>
             <div class="text-sm text-gray-500 dark:text-gray-400">Total Works</div>
         </div>
     </div>
 
-    @if ($works->count() > 0)
+    @if ($works && $works->count() > 0)
         <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
             @foreach ($works as $work)
-                <a href="{{ route('works.show', $work->id) }}"
+                <a href="{{ route('works.show', $work->id ?? '#') }}"
                    class="group block bg-white dark:bg-gray-800 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 border border-[#D9D9D9] dark:border-gray-700 overflow-hidden">
                     <div class="relative aspect-square overflow-hidden">
-                        @if ($work->images->first())
+                        @if ($work->images && $work->images->first() && $work->images->first()->image)
                             <img src="{{ Storage::disk('s3')->url($work->images->first()->image) }}"
-                                 alt="{{ $work->title }}"
+                                 alt="{{ $work->title ?? 'Untitled' }}"
                                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                         @else
                             <div class="w-full h-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
@@ -41,7 +41,7 @@
                             {{ $work->title ?? 'Untitled' }}
                         </h4>
                         <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                            {{ ucfirst($work->approval_status) }}
+                            {{ $work->approval_status ? ucfirst($work->approval_status) : 'Pending' }}
                         </p>
                     </div>
                 </a>
@@ -60,7 +60,7 @@
                 This upcycler hasn't uploaded any artwork yet.
             </p>
             @if (Auth::id() === $user->id)
-                <a href="{{ route('works.create') }}"
+                <a href="{{ route('works.create') ?? '#' }}"
                    class="inline-flex items-center bg-[#B59F84] hover:bg-[#9C8770] text-white px-6 py-2 rounded-lg transition-colors gap-2">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>

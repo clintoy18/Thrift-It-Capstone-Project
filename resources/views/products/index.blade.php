@@ -121,8 +121,8 @@
                                         @endif
                                         <div class="relative aspect-square overflow-hidden">
                                             {{-- S3 BUCKET --}}
-                                            <img src="{{ $product->first_image }}"
-                                                alt="{{ $product->name }}" class="w-full h-full object-cover" />
+                                            <img src="{{ $product->first_image }}" alt="{{ $product->name }}"
+                                                class="w-full h-full object-cover" />
                                             <div
                                                 class="absolute inset-0 bg-gray-800 bg-opacity-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                                                 <span
@@ -177,7 +177,8 @@
                             @endforeach
                         </div>
                     @else
-                        <x-empty-message message="No active products found." link="{{ route('products.create') }}" />
+                        <x-empty-message message="No active products found." link="{{ route('products.create') }}"
+                            buttonText="Add Product" icon="shopping-cart" />
                     @endif
                 </div>
             </div>

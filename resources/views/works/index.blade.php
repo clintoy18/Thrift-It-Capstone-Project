@@ -98,7 +98,12 @@
                             @endforeach
                         </div>
                     @else
-                        <x-empty-message message="You haven't added any works yet." link="{{ route('works.create') }}" />
+                    <x-empty-message 
+                        message="You haven't added any works yet." 
+                        link="{{ route('works.create') }}" 
+                        buttonText="Add Work" 
+                        icon="shopping-cart" 
+                    />                    
                     @endif
                 </div>
             </div>
