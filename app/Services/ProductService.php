@@ -36,21 +36,27 @@ class ProductService
         return $this->productRepository->find($id);
     }
 
-   public function createProduct(array $data, ?array $images = null)
+    public function createProduct(array $data, ?array $images = null)
     {
         // 1️⃣ Create the product first (without images)
         $product = $this->productRepository->create($data);
 
-        // 2️⃣ If images are uploaded, store them in product_images table
+        // 2️⃣ Handle uploaded images (store in S3)
         if ($images && count($images) > 0) {
             foreach ($images as $image) {
-                // Store image in storage/app/public/items_images
-                $path = $image->store('items_images', 'public');
+                if ($image instanceof \Illuminate\Http\UploadedFile) {
 
-                // Save record in images table
-                $product->images()->create([
-                    'image' => $path, // Make sure your column is named 'filename' or adjust accordingly
-                ]);
+                    // Store image in S3 under 'products_images' folder
+                    $path = $image->store('products_images', [
+                        'disk' => 's3',
+                        'visibility' => 'public',
+                    ]);
+
+                    // Save record in product_images table
+                    $product->images()->create([
+                        'image' => $path, // store the S3 key/path
+                    ]);
+                }
             }
         }
 
@@ -58,18 +64,51 @@ class ProductService
     }
 
 
-    public function updateProduct(Product $product, array $data, $image = null)
+    public function updateProduct(Product $product, array $data, ?array $images = null, ?array $deleteGalleryIds = null)
     {
-        // Add business logic here if needed
-        if($image){
-            //Delete old image if exists
-            if($product->image){
-                Storage::delete('public/'.$product->image);
+        // 1️⃣ Handle main image
+        if (!empty($images['main']) && $images['main'] instanceof \Illuminate\Http\UploadedFile) {
+            // Delete old main image from S3 if exists
+            if ($product->image && Storage::disk('s3')->exists($product->image)) {
+                Storage::disk('s3')->delete($product->image);
             }
-            $data['image'] = $image->store('products_images', 'public');
+
+            // Store new main image in S3
+            $data['image'] = $images['main']->store('products_images', [
+                'disk' => 's3',
+                'visibility' => 'public',
+            ]);
         }
+
+        // 2️⃣ Handle deletion of gallery images
+        if (!empty($deleteGalleryIds)) {
+            $imagesToDelete = $product->images()->whereIn('id', $deleteGalleryIds)->get();
+            foreach ($imagesToDelete as $img) {
+                if ($img->image && Storage::disk('s3')->exists($img->image)) {
+                    Storage::disk('s3')->delete($img->image);
+                }
+            }
+            $product->images()->whereIn('id', $deleteGalleryIds)->delete();
+        }
+
+        // 3️⃣ Handle new gallery images (limit to 8)
+        if (!empty($images['gallery'])) {
+            $currentCount = $product->images()->count();
+            $remainingSlots = max(0, 8 - $currentCount);
+
+            foreach (array_slice($images['gallery'], 0, $remainingSlots) as $img) {
+                $path = $img->store('products_images', [
+                    'disk' => 's3',
+                    'visibility' => 'public',
+                ]);
+                $product->images()->create(['image' => $path]);
+            }
+        }
+
+        // 4️⃣ Update other product fields
         return $this->productRepository->update($product, $data);
     }
+
 
     public function deleteProduct(Product $product)
     {
@@ -77,9 +116,9 @@ class ProductService
         return $this->productRepository->delete($product);
     }
 
-    public function getApprovedProductsBySegment(Segment $segment, ?int $categoryId = null)
+    public function getApprovedProductsBySegment(Segment $segment, ?int $categoryId = null, ?int $barangayId = null)
     {
-        return $this->productRepository->getApproveProducts($segment, $categoryId);
+        return $this->productRepository->getApproveProducts($segment, $categoryId, $barangayId);
     }
 
     public function getProductsByStatusPaginated(string $status, int $perPage = 10)
@@ -91,7 +130,5 @@ class ProductService
     {
         return $this->productRepository->getMoreByUser($userId, $excludeProductId, $limit);
     }
-
-
-
 }
+
