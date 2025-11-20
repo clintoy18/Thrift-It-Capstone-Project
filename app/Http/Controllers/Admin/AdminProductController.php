@@ -13,6 +13,7 @@ use App\Mail\ProductApprovedMail;
 use App\Mail\ProductRejectedMail;
 use App\Events\ProductStatusNotification;
 use App\Models\Notification;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class AdminProductController extends Controller
@@ -29,15 +30,15 @@ class AdminProductController extends Controller
         $pendingProducts = $this->productService->getProductsByStatusPaginated('pending');
         $rejectedProducts = $this->productService->getProductsByStatusPaginated('rejected');
 
-        return view('admin.products.index', compact('approvedProducts', 'pendingProducts','rejectedProducts'));
+        return view('admin.products.index', compact('approvedProducts', 'pendingProducts', 'rejectedProducts'));
     }
 
     public function show(Product $product): View
     {
-        $product->load(['user', 'category', 'comments.user','images']);
+        $product->load(['user', 'category', 'comments.user', 'images']);
         return view('admin.products.show', compact('product'));
     }
-    
+
 
     public function update(ApprovalStatusProductUpdateRequest $request, Product $product): RedirectResponse
     {
@@ -47,7 +48,7 @@ class AdminProductController extends Controller
         return redirect()->route('admin.products.index')
             ->with('success', 'Product approval status updated successfully.');
     }
-    
+
     public function edit(Product $product): View
     {
         $product->load(['user', 'category']);
@@ -67,9 +68,9 @@ class AdminProductController extends Controller
     {
         $this->productService->updateProduct($product, ['approval_status' => 'approved']);
         //email user once product is approved
-         Mail::to($product->user->email)->send(new ProductApprovedMail($product));
+        Mail::to($product->user->email)->send(new ProductApprovedMail($product));
 
-             // Save notification in DB
+        // Save notification in DB
         Notification::create([
             'user_id' => $product->user_id,
             'type' => 'product_status',
@@ -87,29 +88,30 @@ class AdminProductController extends Controller
             ->with('success', 'Product approved successfully.');
     }
 
-    public function reject(Product $product): RedirectResponse
+    public function reject(Request $request, Product $product): RedirectResponse
     {
-        $this->productService->updateProduct($product, ['approval_status' => 'rejected']);
+        $admin_notes = $request->input('admin_notes');
+
+        $this->productService->updateProduct($product, [
+            'approval_status' => 'rejected',
+            'admin_notes'     => $admin_notes,
+        ]);
+
         Mail::to($product->user->email)->send(new ProductRejectedMail($product));
 
-             // Save notification in DB
         Notification::create([
             'user_id' => $product->user_id,
             'type' => 'product_status',
             'data' => [
                 'status' => 'rejected',
                 'product_id' => $product->id,
-                'message' => 'Your product has been rejected!'
+                'message' => 'Your product has been rejected. Note: ' . $admin_notes
             ],
         ]);
 
-        // Broadcast real-time notification
-    broadcast(new ProductStatusNotification($product, $product->user_id, 'rejected'))->toOthers();
+        broadcast(new ProductStatusNotification($product, $product->user_id, 'rejected'))->toOthers();
 
         return redirect()->route('admin.products.index')
-            ->with('error', 'Product rejected!.');
+            ->with('error', 'Product rejected!');
     }
-
-
-    
-} 
+}

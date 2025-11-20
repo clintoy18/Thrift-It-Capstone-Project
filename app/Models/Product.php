@@ -31,6 +31,7 @@ class Product extends Model
         'segment_id',
         'barangay_id',
         'qr_code',
+        'admin_notes',
 
     ];
 

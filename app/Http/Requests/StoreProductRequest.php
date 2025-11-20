@@ -38,7 +38,8 @@ class StoreProductRequest extends FormRequest
             'status' => 'required|in:available,sold',
             'segment_id' => 'required|exists:segments,id',
             'barangay_id'   => 'required|exists:barangays,id',
-            'qr_code' => ['nullable', 'image', 'mimes:jpg,jpeg,png,gif', 'max:2048']
+            'qr_code' => ['nullable', 'image', 'mimes:jpg,jpeg,png,gif', 'max:2048'],
+            'admin_notes'=> 'nullable|string'
         ];
     }
 

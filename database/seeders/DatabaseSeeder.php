@@ -18,8 +18,8 @@ class DatabaseSeeder extends Seeder
             SegmentSeeder::class,
             CategoriesSeeder::class,
             BarangaySeeder::class,
-            // ProductSeeder::class,
-            // EcoPostSeeder::class,
+            ProductSeeder::class,
+            EcoPostSeeder::class,
             PlanSeeder::class,
           
            
