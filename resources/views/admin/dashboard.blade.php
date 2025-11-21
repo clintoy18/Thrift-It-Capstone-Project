@@ -17,145 +17,149 @@
     <div class="py-8">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <!-- Statistics Cards -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6 mb-8">
+
                 <!-- Total Users Card -->
                 <div
-                    class="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden border-l-4 border-blue-500 hover:shadow-lg transition-shadow duration-300">
+                    class="bg-white dark:bg-gray-800 rounded-xl shadow-md border-l-4 border-indigo-500 hover:shadow-lg transition">
                     <div class="p-5">
                         <div class="flex justify-between items-start">
                             <div>
                                 <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">Total Users</h3>
-                                <p class="text-3xl font-bold text-blue-600 dark:text-blue-400">
-                                    {{ $stats['total_users'] }}</p>
-                                <div class="flex items-center mt-2 text-sm text-gray-500 dark:text-gray-400">
-                                    <i class="fas fa-user-plus mr-1 text-green-500"></i>
+                                <p class="text-3xl font-bold text-indigo-600">{{ $stats['total_users'] }}</p>
+                                <div class="flex items-center mt-2 text-sm text-gray-500">
+                                    <i class="fas fa-user-plus text-indigo-400 mr-1"></i>
                                     <span>+{{ $stats['new_users_today'] }} today</span>
                                 </div>
                             </div>
-                            <div class="p-3 rounded-full bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300">
+
+                            <div class="p-3 rounded-full bg-indigo-100 dark:bg-indigo-900 text-indigo-600">
                                 <i class="fas fa-users text-xl"></i>
                             </div>
                         </div>
-                        <div class="mt-4">
-                            <a href="{{ route('admin.users.index') }}"
-                                class="inline-flex items-center text-sm font-medium text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition-colors duration-200">
-                                Manage Users
-                                <i class="fas fa-arrow-right ml-1 text-xs"></i>
-                            </a>
-                        </div>
+
+                        <a href="{{ route('admin.users.index') }}"
+                            class="inline-flex text-sm text-indigo-600 hover:text-indigo-800 mt-4">
+                            Manage Users <i class="fas fa-arrow-right ml-1"></i>
+                        </a>
                     </div>
                 </div>
 
-                <!-- Total Products Card -->
+
+                <!-- Total Items Card -->
                 <div
-                    class="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden border-l-4 border-green-500 hover:shadow-lg transition-shadow duration-300">
+                    class="bg-white dark:bg-gray-800 rounded-xl shadow-md border-l-4 border-rose-500 hover:shadow-lg transition">
                     <div class="p-5">
                         <div class="flex justify-between items-start">
                             <div>
-                                <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">Total Items</h3>
-                                <p class="text-3xl font-bold text-green-600 dark:text-green-400">
-                                    {{ $stats['total_products'] }}</p>
-                                <div class="flex items-center mt-2 text-sm text-gray-500 dark:text-gray-400">
-                                    <i class="fas fa-box mr-1 text-green-500"></i>
+                                <h3 class="text-lg font-semibold mb-2 text-gray-900 dark:text-gray-100">Total 
+                                    Items</h3>
+                                <p class="text-3xl font-bold text-rose-600">{{ $stats['total_products'] }}</p>
+
+                                <div class="flex items-center mt-2 text-sm text-gray-500">
+                                    <i class="fas fa-plus text-rose-400 mr-1"></i>
                                     <span>+{{ $stats['new_products_today'] }} today</span>
                                 </div>
                             </div>
-                            <div
-                                class="p-3 rounded-full bg-green-100 dark:bg-green-900 text-green-600 dark:text-green-300">
-                                <i class="fas fa-boxes text-xl"></i>
+
+                            <div class="p-3 rounded-full bg-rose-100 dark:bg-rose-900 text-rose-600">
+                                <i class="fas fa-shirt text-xl"></i>
                             </div>
                         </div>
-                        <div class="mt-4">
-                            <a href="{{ route('admin.products.index') }}"
-                                class="inline-flex items-center text-sm font-medium text-green-600 dark:text-green-400 hover:text-green-800 dark:hover:text-green-300 transition-colors duration-200">
-                                Manage Items
-                                <i class="fas fa-arrow-right ml-1 text-xs"></i>
-                            </a>
-                        </div>
+
+                        <a href="{{ route('admin.products.index') }}"
+                            class="inline-flex text-sm text-rose-600 hover:text-rose-800 mt-4">
+                            Manage Items <i class="fas fa-arrow-right ml-1"></i>
+                        </a>
                     </div>
                 </div>
 
-                <!-- Total Donation Card -->
+
+                <!-- Total Donations Card -->
                 <div
-                    class="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden border-l-4 border-purple-500 hover:shadow-lg transition-shadow duration-300">
+                    class="bg-white dark:bg-gray-800 rounded-xl shadow-md border-l-4 border-purple-500 hover:shadow-lg transition">
                     <div class="p-5">
                         <div class="flex justify-between items-start">
                             <div>
                                 <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">Total Donations
                                 </h3>
-                                <p class="text-3xl font-bold text-purple-600 dark:text-purple-400">
-                                    {{ $stats['total_products_sold'] }}</p>
-                                <div class="flex items-center mt-2 text-sm text-gray-500 dark:text-gray-400">
-                                    <i class="fas fa-chart-line mr-1 text-purple-500"></i>
-                                    <span>Total sales performance</span>
+                                <p class="text-3xl font-bold text-purple-600">{{ $stats['total_donations'] }}</p>
+
+                                <div class="flex items-center mt-2 text-sm text-gray-500">
+                                    <i class="fas fa-hand-holding-heart text-purple-400 mr-1"></i>
+                                    <span>+{{ $stats['new_donations_today'] }} today</span>
                                 </div>
                             </div>
-                            <div
-                                class="p-3 rounded-full bg-purple-100 dark:bg-purple-900 text-purple-600 dark:text-purple-300">
-                                <i class="fas fa-shopping-cart text-xl"></i>
+
+                            <div class="p-3 rounded-full bg-purple-100 dark:bg-purple-900 text-purple-600">
+                                <i class="fas fa-hand-holding-heart text-xl"></i>
                             </div>
                         </div>
-                        <div class="mt-4">
-                            <a href="{{ route('admin.donations.index') }}"
-                                class="inline-flex items-center text-sm font-medium text-purple-600 dark:text-purple-300 hover:text-amber-800 dark:hover:text-amber-300 transition-colors duration-200">
-                                Manage Donations
-                                <i class="fas fa-arrow-right ml-1 text-xs"></i>
-                            </a>
-                        </div>
+
+                        <a href="{{ route('admin.donations.index') }}"
+                            class="inline-flex text-sm text-purple-600 hover:text-purple-800 mt-4">
+                            Manage Donations <i class="fas fa-arrow-right ml-1"></i>
+                        </a>
                     </div>
                 </div>
-                {{-- <!-- Products Sold Card -->
-                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden border-l-4 border-purple-500 hover:shadow-lg transition-shadow duration-300">
-                    <div class="p-5">
-                        <div class="flex justify-between items-start">
-                            <div>
-                                <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">Items Sold</h3>
-                                <p class="text-3xl font-bold text-purple-600 dark:text-purple-400">{{ $stats['total_products_sold'] }}</p>
-                                <div class="flex items-center mt-2 text-sm text-gray-500 dark:text-gray-400">
-                                    <i class="fas fa-chart-line mr-1 text-purple-500"></i>
-                                    <span>Total sales performance</span>
-                                </div>
-                            </div>
-                            <div class="p-3 rounded-full bg-purple-100 dark:bg-purple-900 text-purple-600 dark:text-purple-300">
-                                <i class="fas fa-shopping-cart text-xl"></i>
-                            </div>
-                        </div>
-                        <div class="mt-4">
-                            <span class="text-sm font-medium text-gray-500 dark:text-gray-400">Sales Overview</span>
-                        </div>
-                    </div>
-                </div> --}}
 
-                <!-- Reported Users Card -->
+
+                <!-- Pending Reports Card -->
                 <div
-                    class="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden border-l-4 border-amber-500 hover:shadow-lg transition-shadow duration-300">
+                    class="bg-white dark:bg-gray-800 rounded-xl shadow-md border-l-4 border-amber-500 hover:shadow-lg transition">
                     <div class="p-5">
                         <div class="flex justify-between items-start">
                             <div>
-                                <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">Pending Reports
+                                <h3 class="text-lg font-semibold mb-2 text-gray-900 dark:text-gray-100">Reported Users 
                                 </h3>
-                                <p class="text-3xl font-bold text-amber-600 dark:text-amber-400">
-                                    {{ $stats['pending_reports'] }}</p>
-                                <div class="flex items-center mt-2 text-sm text-gray-500 dark:text-gray-400">
-                                    <i class="fas fa-exclamation-triangle mr-1 text-amber-500"></i>
-                                    <span>{{ $stats['active_listings'] }} active listings</span>
+                                <p class="text-3xl font-bold text-amber-600">{{ $stats['pending_reports'] }}</p>
+
+                                <div class="flex items-center mt-2 text-sm text-gray-500">
+                                    <i class="fas fa-exclamation-triangle text-amber-500 mr-1"></i>
+                                    <span>{{ $stats['new_reports_today'] }} active reports</span>
                                 </div>
                             </div>
-                            <div
-                                class="p-3 rounded-full bg-amber-100 dark:bg-amber-900 text-amber-600 dark:text-amber-300">
+                            <div class="p-3 rounded-full bg-amber-100 dark:bg-amber-900 text-amber-600">
                                 <i class="fas fa-flag text-xl"></i>
                             </div>
                         </div>
-                        <div class="mt-4">
-                            <a href="{{ route('admin.reports.index') }}"
-                                class="inline-flex items-center text-sm font-medium text-amber-600 dark:text-amber-400 hover:text-amber-800 dark:hover:text-amber-300 transition-colors duration-200">
-                                Manage Reports
-                                <i class="fas fa-arrow-right ml-1 text-xs"></i>
-                            </a>
-                        </div>
+                        <a href="{{ route('admin.reports.index') }}"
+                            class="inline-flex text-sm text-amber-600 hover:text-amber-800 mt-4">
+                            Manage Reports <i class="fas fa-arrow-right ml-1"></i>
+                        </a>
                     </div>
                 </div>
+                <!-- Pending Works Card -->
+                <div
+                    class="bg-white dark:bg-gray-800 rounded-xl shadow-md border-l-4 border-emerald-500 hover:shadow-lg transition">
+                    <div class="p-5">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h3 class="text-lg font-semibold mb-2 text-gray-900 dark:text-gray-100"> Upcycled
+                                    Works</h3>
+                                <p class="text-3xl font-bold text-emerald-600">{{ $stats['pending_works'] }}</p>
+
+                                <div class="flex items-center mt-2 text-sm text-gray-500">
+                                    <i class="fas fa-scissors text-emerald-500 mr-1"></i>
+                                    <span>{{ $stats['new_works_today'] }} active works</span>
+                                </div>
+                            </div>
+
+                            <div class="p-3 rounded-full bg-emerald-100 dark:bg-emerald-900 text-emerald-600">
+                                <i class="fas fa-recycle text-xl"></i>
+                            </div>
+                        </div>
+
+                        <a href="{{ route('admin.works.index') }}"
+                            class="inline-flex text-sm text-emerald-600 hover:text-emerald-800 mt-4">
+                            Manage Upcycled Works <i class="fas fa-arrow-right ml-1"></i>
+                        </a>
+                    </div>
+                </div>
+
+
             </div>
+
 
             <!-- Charts and Analytics Section -->
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
@@ -220,7 +224,8 @@
                         <div class="p-6 space-y-3">
                             @foreach ($topCategories as $category)
                                 <div class="flex justify-between items-center">
-                                    <span class="text-sm text-gray-600 dark:text-gray-400">{{ $category->name }}</span>
+                                    <span
+                                        class="text-sm text-gray-600 dark:text-gray-400">{{ $category->name }}</span>
                                     <span class="text-sm font-bold text-gray-800 dark:text-gray-200">
                                         {{ $category->products_count }} products
                                     </span>

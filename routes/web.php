@@ -16,6 +16,7 @@ use App\Http\Controllers\Admin\AdminReportController;
 use App\Http\Controllers\Admin\AdminUserController;
 use App\Http\Controllers\Admin\AdminProductController;
 use App\Http\Controllers\Admin\AdminDonationController;
+use App\Http\Controllers\Admin\AdminWorkController;
 use App\Http\Controllers\LandingPageController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\PrivateChatController;
@@ -111,6 +112,7 @@ Route::middleware(['auth', 'verified', 'rolemiddleware:admin'])->prefix('admin')
     Route::resource('users', AdminUserController::class);
     Route::resource('products', AdminProductController::class);
     Route::resource('donations', AdminDonationController::class);
+    Route::resource('works', AdminWorkController::class);
 
     // Sales Report Routes
     Route::get('/sales/monthly-report/{month}', [App\Http\Controllers\Admin\SalesReportController::class, 'generateMonthlyReport'])->name('sales.monthly-report');
@@ -123,11 +125,17 @@ Route::middleware(['auth', 'verified', 'rolemiddleware:admin'])->prefix('admin')
     Route::put('/products/{product}/reject', [AdminProductController::class, 'reject'])
     ->name('products.reject');
  
-        //approve and reject donations
+     //approve and reject donations
     Route::put('/donations/{donation}/approve', [AdminDonationController::class, 'approve'])
     ->name('donations.approve');
     Route::put('/donations/{donation}/reject', [AdminDonationController::class, 'reject'])
     ->name('donations.reject');
+
+        //approve and reject work
+    Route::put('/works/{work}/approve', [AdminWorkController::class, 'approve'])
+    ->name('works.approve');
+    Route::put('/works/{work}/reject', [AdminWorkController::class, 'reject'])
+    ->name('works.reject');
 
     //verify donations and add points to donor/user
     Route::get('/donations/reward-management', [AdminDonationController::class, 'rewardManagement'])->name('donations.rewardManagement');
