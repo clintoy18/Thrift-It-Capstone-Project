@@ -213,9 +213,25 @@
         class="shadow-sm overflow-hidden dark:bg-gray-800 bg-white my-0 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div class="p-4 sm:p-6" id="productsContainer">
             <!-- Filters Section with Higher z-index -->
-            <div class="flex gap-2 relative z-50">
+            <div class="flex gap-2 justify-end relative z-50">
+            <div
+                        class=" md:flex items-center bg-[#F4F2ED] dark:bg-gray-800 px-4 rounded-full w-full max-w-md border border-gray-400 dark:text-gray-200  mx-4">
+                        <form action="{{ route('search') }}" method="GET" class="flex w-full items-center">
+                            <input type="text" name="query" value="{{ request('query') }}"
+                                placeholder="Search for a product..."
+                                class="w-full dark:placeholder:text-gray-200 outline-none text-sm bg-transparent border-0 focus:outline-none focus:ring-0 focus:border-0 focus:shadow-none"
+                                required>
+                            <button type="submit" class="ml-2">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd"
+                                        d="M8 4a4 4 0 1 1 2.83 6.83l3.88 3.88a1 1 0 0 1-1.42 1.42l-3.88-3.88A4 4 0 0 1 8 4zm0 2a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"
+                                        clip-rule="evenodd" />
+                                </svg>
+                            </button>
+                        </form>
+                    </div>
                 <!-- Category Dropdown -->
-                <div x-data="{ open: false }" class="relative z-50">
+                <div x-data="{ open: false }" class="relative z-30">
                     <button @click="open = !open"
                         class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 text-sm shadow-sm z-50">
                         <span
@@ -234,7 +250,7 @@
                         x-transition:leave="transition ease-in duration-150"
                         x-transition:leave-start="opacity-100 transform scale-100"
                         x-transition:leave-end="opacity-0 transform scale-95"
-                        class="absolute left-0 mt-2 w-48 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg z-[60] py-1 max-h-64 overflow-y-auto">
+                        class="absolute left-[-40] mt-2 w-48 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg z-[30] py-1 max-h-64 overflow-y-auto">
                         <a data-category-link data-category-name="All" href="{{ route('dashboard') }}"
                             class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg">
                             All Categories
@@ -250,39 +266,40 @@
                 </div>
 
                 <!-- Location Dropdown -->
-                <div x-data="{ open: false }" class="relative z-50">
-                    <button @click="open = !open"
-                        class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 text-sm shadow-sm z-50">
-                        <span
-                            id="locationButtonText">{{ isset($selectedBarangayId) && $barangays->where('id', $selectedBarangayId)->first() ? $barangays->where('id', $selectedBarangayId)->first()->name : 'Location' }}</span>
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-700 dark:text-gray-300"
-                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                            stroke-linecap="round" stroke-linejoin="round">
-                            <polyline points="6 9 12 15 18 9"></polyline>
-                        </svg>
-                    </button>
-                    <!-- Dropdown Menu -->
-                    <div x-cloak x-show="open" @click.outside="open = false"
-                        x-transition:enter="transition ease-out duration-200"
-                        x-transition:enter-start="opacity-0 transform scale-95"
-                        x-transition:enter-end="opacity-100 transform scale-100"
-                        x-transition:leave="transition ease-in duration-150"
-                        x-transition:leave-start="opacity-100 transform scale-100"
-                        x-transition:leave-end="opacity-0 transform scale-95"
-                        class="absolute left-0 mt-2 w-48 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg z-[60] py-1 max-h-64 overflow-y-auto">
-                        <a data-location-link data-location-name="All" href="{{ route('dashboard') }}"
-                            class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg">
-                            All Locations
-                        </a>
-                        @foreach ($barangays as $barangay)
-                            <a data-location-link data-location-name="{{ $barangay->name }}"
-                                href="{{ route('dashboard', ['barangay' => $barangay->id]) }}"
-                                class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg {{ isset($selectedBarangayId) && (int) $selectedBarangayId === $barangay->id ? 'font-semibold bg-gray-100 dark:bg-gray-700' : '' }}">
-                                {{ $barangay->name }}
-                            </a>
-                        @endforeach
-                    </div>
-                </div>
+               <!-- Location Dropdown -->
+<div x-data="{ open: false }" class="relative z-40">
+    <button @click="open = !open"
+        class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 text-sm shadow-sm z-40 relative">
+        <span
+            id="locationButtonText">{{ isset($selectedBarangayId) && $barangays->where('id', $selectedBarangayId)->first() ? $barangays->where('id', $selectedBarangayId)->first()->name : 'Location' }}</span>
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-700 dark:text-gray-300"
+            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+    </button>
+    <!-- Dropdown Menu -->
+    <div x-cloak x-show="open" @click.outside="open = false"
+        x-transition:enter="transition ease-out duration-200"
+        x-transition:enter-start="opacity-0 transform scale-95"
+        x-transition:enter-end="opacity-100 transform scale-100"
+        x-transition:leave="transition ease-in duration-150"
+        x-transition:leave-start="opacity-100 transform scale-100"
+        x-transition:leave-end="opacity-0 transform scale-95"
+        class="absolute left-0 mt-2 w-48 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg z-50 py-1 max-h-64 overflow-y-auto">
+        <a data-location-link data-location-name="All" href="{{ route('dashboard') }}"
+            class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg">
+            All Locations
+        </a>
+        @foreach ($barangays as $barangay)
+            <a data-location-link data-location-name="{{ $barangay->name }}"
+                href="{{ route('dashboard', ['barangay' => $barangay->id]) }}"
+                class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg {{ isset($selectedBarangayId) && (int) $selectedBarangayId === $barangay->id ? 'font-semibold bg-gray-100 dark:bg-gray-700' : '' }}">
+                {{ $barangay->name }}
+            </a>
+        @endforeach
+    </div>
+</div>
             </div>
 
             <!-- Loading Indicator -->
@@ -1388,47 +1405,34 @@
                     showLoading();
 
                     try {
-                        const dashboardUrl = '{{ route('dashboard') }}' + (params.toString() ?
+                        const apiUrl = '{{ route('dashboard.products') }}' + (params.toString() ?
                             '?' + params.toString() : '');
-                        const response = await fetch(dashboardUrl, {
+                        const res = await fetch(apiUrl, {
                             headers: {
-                                'X-Requested-With': 'XMLHttpRequest',
-                                'Accept': 'text/html'
+                                'X-Requested-With': 'XMLHttpRequest'
                             }
                         });
-
-                        if (!response.ok) {
-                            throw new Error('Network response was not ok');
-                        }
-
-                        const html = await response.text();
-                        const parser = new DOMParser();
-                        const doc = parser.parseFromString(html, 'text/html');
-                        const newProductsGrid = doc.getElementById('productsGrid');
-
-                        if (newProductsGrid) {
-                            productsGrid.innerHTML = newProductsGrid.innerHTML;
-                            initFavoriteButtons();
-                        }
+                        const json = await res.json();
+                        productsGrid.innerHTML = json.html;
+                        initFavoriteButtons();
                     } catch (error) {
                         console.error('Error filtering products:', error);
                     } finally {
                         hideLoading();
                     }
 
-                    // Update URL without reloading
+                    // Update URL without reloading - keep barangay if present
                     const newUrl = new URL(window.location);
                     if (linkUrl.searchParams.get('category')) {
-                        newUrl.searchParams.set('category', linkUrl.searchParams.get(
-                            'category'));
+                        newUrl.searchParams.set('category', linkUrl.searchParams.get('category'));
                     } else {
                         newUrl.searchParams.delete('category');
                     }
+                    // Keep barangay param if it exists
                     if (currentUrl.searchParams.get('barangay')) {
-                        newUrl.searchParams.set('barangay', currentUrl.searchParams.get(
-                            'barangay'));
+                        newUrl.searchParams.set('barangay', currentUrl.searchParams.get('barangay'));
                     }
-                    window.history.pushState({}, '', newUrl);
+                    window.history.replaceState({}, '', newUrl);
                 });
             });
 
@@ -1465,47 +1469,34 @@
                     showLoading();
 
                     try {
-                        const dashboardUrl = '{{ route('dashboard') }}' + (params.toString() ?
+                        const apiUrl = '{{ route('dashboard.products') }}' + (params.toString() ?
                             '?' + params.toString() : '');
-                        const response = await fetch(dashboardUrl, {
+                        const res = await fetch(apiUrl, {
                             headers: {
-                                'X-Requested-With': 'XMLHttpRequest',
-                                'Accept': 'text/html'
+                                'X-Requested-With': 'XMLHttpRequest'
                             }
                         });
-
-                        if (!response.ok) {
-                            throw new Error('Network response was not ok');
-                        }
-
-                        const html = await response.text();
-                        const parser = new DOMParser();
-                        const doc = parser.parseFromString(html, 'text/html');
-                        const newProductsGrid = doc.getElementById('productsGrid');
-
-                        if (newProductsGrid) {
-                            productsGrid.innerHTML = newProductsGrid.innerHTML;
-                            initFavoriteButtons();
-                        }
+                        const json = await res.json();
+                        productsGrid.innerHTML = json.html;
+                        initFavoriteButtons();
                     } catch (error) {
                         console.error('Error filtering products:', error);
                     } finally {
                         hideLoading();
                     }
 
-                    // Update URL without reloading
+                    // Update URL without reloading - keep category if present
                     const newUrl = new URL(window.location);
-                    if (currentUrl.searchParams.get('category')) {
-                        newUrl.searchParams.set('category', currentUrl.searchParams.get(
-                            'category'));
-                    }
                     if (linkUrl.searchParams.get('barangay')) {
-                        newUrl.searchParams.set('barangay', linkUrl.searchParams.get(
-                            'barangay'));
+                        newUrl.searchParams.set('barangay', linkUrl.searchParams.get('barangay'));
                     } else {
                         newUrl.searchParams.delete('barangay');
                     }
-                    window.history.pushState({}, '', newUrl);
+                    // Keep category param if it exists
+                    if (currentUrl.searchParams.get('category')) {
+                        newUrl.searchParams.set('category', currentUrl.searchParams.get('category'));
+                    }
+                    window.history.replaceState({}, '', newUrl);
                 });
             });
 
