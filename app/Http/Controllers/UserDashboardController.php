@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Models\Product;
 use App\Models\Donation;
 use App\Models\Categories;
@@ -20,22 +21,23 @@ class UserDashboardController extends Controller
         $selectedBarangayId = $request->query('barangay');
 
         $query = Product::with(['category', 'user', 'barangay'])
-            ->where('status', 'available')
-            ->where('approval_status', 'approved')
+            ->where('products.status', 'available')
+            ->where('products.approval_status', 'approved')
             ->leftJoin('users', 'products.user_id', '=', 'users.id')
             ->leftJoin('subscriptions', function ($join) {
                 $join->on('users.id', '=', 'subscriptions.user_id')
                      ->whereNull('subscriptions.ends_at'); // Active subscription
             })
-            ->select('products.*')
-            ->orderByRaw('CASE WHEN subscriptions.id IS NOT NULL THEN 0 ELSE 1 END');
+            ->select('products.*', DB::raw('MAX(subscriptions.id) as subscription_id'))
+            ->groupBy('products.id')
+            ->orderByRaw('CASE WHEN MAX(subscriptions.id) IS NOT NULL THEN 0 ELSE 1 END');
 
         if ($selectedCategoryId) {
-            $query->where('category_id', $selectedCategoryId);
+            $query->where('products.category_id', $selectedCategoryId);
         }
 
         if ($selectedBarangayId) {
-            $query->where('barangay_id', $selectedBarangayId);
+            $query->where('products.barangay_id', $selectedBarangayId);
         }
 
         $products = $query->paginate(10);
@@ -68,22 +70,23 @@ class UserDashboardController extends Controller
         $selectedBarangayId = $request->query('barangay');
 
         $query = Product::with(['category', 'user', 'barangay', 'images'])
-            ->where('status', 'available')
-            ->where('approval_status', 'approved')
+            ->where('products.status', 'available')
+            ->where('products.approval_status', 'approved')
             ->leftJoin('users', 'products.user_id', '=', 'users.id')
             ->leftJoin('subscriptions', function ($join) {
                 $join->on('users.id', '=', 'subscriptions.user_id')
                      ->whereNull('subscriptions.ends_at');
             })
-            ->select('products.*')
-            ->orderByRaw('CASE WHEN subscriptions.id IS NOT NULL THEN 0 ELSE 1 END');
+            ->select('products.*', DB::raw('MAX(subscriptions.id) as subscription_id'))
+            ->groupBy('products.id')
+            ->orderByRaw('CASE WHEN MAX(subscriptions.id) IS NOT NULL THEN 0 ELSE 1 END');
 
         if ($selectedCategoryId) {
-            $query->where('category_id', $selectedCategoryId);
+            $query->where('products.category_id', $selectedCategoryId);
         }
 
         if ($selectedBarangayId) {
-            $query->where('barangay_id', $selectedBarangayId);
+            $query->where('products.barangay_id', $selectedBarangayId);
         }
 
         $products = $query->paginate(10);
