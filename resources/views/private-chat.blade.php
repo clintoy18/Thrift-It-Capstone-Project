@@ -113,7 +113,36 @@
                         @if($conversations->count() > 0)
                             @foreach($conversations as $conversation)
                                 <a href="{{ route('private.chat', $conversation['user']->id) }}" 
-                                   class="flex items-center p-4 hover:bg-gray-50 lg:hover:bg-[#B59F84] lg:hover:bg-opacity-20 transition-colors border-b border-gray-100 lg:border-[#B59F84] lg:border-opacity-20 {{ $conversation['user']->id == $recipient->id ? 'bg-gray-50 lg:bg-[#B59F84] lg:bg-opacity-30 lg:border-r-2 lg:border-[#634600]' : '' }}">
+                                   class="flex items-center p-4 hover:bg-gray-50 lg:hover:bg-[#B59F84] lg:hover:bg-opacity-20 transition-colors border-b border-gray-100 lg:border-[#B59F84] lg:border-opacity-20 {{ $conversation['user']->id == $recipient->id ? 'bg-gray-50 lg:bg-[#B59F84] lg:bg-opacity-30 lg:border-r-2 lg:border-[#634600]' : '' }}"
+                                   x-data="{ 
+                                       unreadCount: {{ $conversation['unread_count'] }},
+                                       conversationUserId: {{ $conversation['user']->id }},
+                                       init() {
+                                           // Listen for when messages are marked as read for this conversation
+                                           window.addEventListener('conversation-read', (e) => {
+                                               if (e.detail.user_id === this.conversationUserId) {
+                                                   this.unreadCount = e.detail.unread_count || 0;
+                                               }
+                                           });
+                                           
+                                           // Listen for new messages in this conversation
+                                           @if(Auth::check())
+                                           if (typeof Echo !== 'undefined') {
+                                               Echo.private('chat.user.{{ Auth::id() }}')
+                                                   .listen('.private-message', (e) => {
+                                                       // Check if message is from this conversation user
+                                                       if (e.message && e.message.user_id === this.conversationUserId) {
+                                                           // Only increment if not currently viewing this conversation
+                                                           const currentRecipientId = document.querySelector('meta[name="recipient-id"]')?.getAttribute('content');
+                                                           if (currentRecipientId != this.conversationUserId) {
+                                                               this.unreadCount++;
+                                                           }
+                                                       }
+                                                   });
+                                           }
+                                           @endif
+                                       }
+                                   }">
                                     <!-- Avatar -->
                                 <div class="relative">
                                     <div class="w-12 h-12 rounded-full flex items-center justify-center overflow-hidden bg-gradient-to-r from-[#634600] to-[#B59F84]">
@@ -128,11 +157,11 @@
                                         @endif
                                     </div>
 
-                                    @if($conversation['unread_count'] > 0)
-                                        <div class="absolute -top-1 -right-1 w-5 h-5 bg-[#634600] text-white text-xs rounded-full flex items-center justify-center">
-                                            {{ $conversation['unread_count'] > 9 ? '9+' : $conversation['unread_count'] }}
-                                        </div>
-                                    @endif
+                                    <!-- Unread Count Badge -->
+                                    <div x-show="unreadCount > 0"
+                                         class="absolute -top-1 -right-1 w-5 h-5 bg-[#634600] text-white text-xs rounded-full flex items-center justify-center transition-all duration-300">
+                                        <span x-text="unreadCount > 9 ? '9+' : unreadCount"></span>
+                                    </div>
                                 </div>
                                  <!-- Conversation Info -->
                                     <div class="ml-3 flex-1 min-w-0">
@@ -1125,10 +1154,8 @@
                 scrollToBottom(true);
             }, 100);
             
-            // Mark any unread messages as read after new message is added
-            setTimeout(() => {
-                markMessagesAsRead();
-            }, 500);
+            // Note: We don't mark messages as read when sending a message
+            // Messages are only marked as read when viewing them (via Intersection Observer)
         })
         .catch(error => {
             console.error('Error sending message:', error);
@@ -1250,6 +1277,7 @@
         
         const messageIds = Array.from(unreadMessages).map(msg => msg.getAttribute('data-message-id'));
         const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+        const recipientId = document.querySelector('meta[name="recipient-id"]')?.getAttribute('content');
         
         fetch('/messages/mark-as-read', {
             method: 'POST',
@@ -1278,6 +1306,52 @@
                         text.classList.remove('font-bold');
                     }
                 });
+                
+                // Get updated unread count for this conversation and total unread count
+                if (recipientId) {
+                    // Get conversation-specific unread count
+                    fetch(`/messages/conversation-unread-count/${recipientId}`, {
+                        method: 'GET',
+                        headers: {
+                            'X-CSRF-TOKEN': token,
+                            'Accept': 'application/json'
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(countData => {
+                        // Dispatch event to update conversation badge
+                        window.dispatchEvent(new CustomEvent('conversation-read', {
+                            detail: {
+                                user_id: parseInt(recipientId),
+                                unread_count: countData.unread_count || 0
+                            }
+                        }));
+                    })
+                    .catch(error => {
+                        console.warn('Error fetching conversation unread count:', error);
+                    });
+                    
+                    // Get total unread count across all conversations
+                    fetch('/messages/unread-count', {
+                        method: 'GET',
+                        headers: {
+                            'X-CSRF-TOKEN': token,
+                            'Accept': 'application/json'
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(totalCountData => {
+                        // Dispatch event to update navigation badge
+                        window.dispatchEvent(new CustomEvent('messages-marked-read', {
+                            detail: {
+                                unread_count: totalCountData.unread_count || 0
+                            }
+                        }));
+                    })
+                    .catch(error => {
+                        console.warn('Error fetching total unread count:', error);
+                    });
+                }
             }
         })
         .catch(error => {

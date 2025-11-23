@@ -25,8 +25,8 @@ class LandingPageController extends Controller
         $selectedBarangayId = $request->query('barangay');
 
         $query = Product::with(['category', 'user', 'barangay'])
-            ->where('status', 'available')
-            ->where('approval_status', 'approved')
+            ->where('products.status', 'available')
+            ->where('products.approval_status', 'approved')
             ->leftJoin('users', 'products.user_id', '=', 'users.id')
             ->leftJoin('subscriptions', function ($join) {
                 $join->on('users.id', '=', 'subscriptions.user_id')
@@ -37,12 +37,12 @@ class LandingPageController extends Controller
 
         // Optional category filter
         if ($selectedCategoryId) {
-            $query->where('category_id', $selectedCategoryId);
+            $query->where('products.category_id', $selectedCategoryId);
         }
 
         // Optional barangay filter
         if ($selectedBarangayId) {
-            $query->where('barangay_id', $selectedBarangayId);
+            $query->where('products.barangay_id', $selectedBarangayId);
         }
 
         $products = $query->paginate(10);

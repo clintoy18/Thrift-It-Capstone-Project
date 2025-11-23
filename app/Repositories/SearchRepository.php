@@ -18,14 +18,14 @@ class SearchRepository
     ) {
         $productsQuery = Product::with(['category', 'user', 'barangay'])
             ->where(function ($q) use ($query) {
-                $q->where('name', 'like', "%{$query}%")
-                    ->orWhere('description', 'like', "%{$query}%")
+                $q->where('products.name', 'like', "%{$query}%")
+                    ->orWhere('products.description', 'like', "%{$query}%")
                     ->orWhereHas('barangay', function ($b) use ($query) {
                         $b->where('name', 'like', "%{$query}%");
                     });
             })
-            ->where('status', 'available')
-            ->where('approval_status', 'approved')
+            ->where('products.status', 'available')
+            ->where('products.approval_status', 'approved')
             // Join users and subscriptions to prioritize subscribed users
             ->leftJoin('users', 'products.user_id', '=', 'users.id')
             ->leftJoin('subscriptions', function ($join) {
@@ -37,12 +37,12 @@ class SearchRepository
 
         // Optional category filter
         if ($selectedCategoryId) {
-            $productsQuery->where('category_id', $selectedCategoryId);
+            $productsQuery->where('products.category_id', $selectedCategoryId);
         }
 
         // Optional barangay filter
         if ($selectedBarangayId) {
-            $productsQuery->where('barangay_id', $selectedBarangayId);
+            $productsQuery->where('products.barangay_id', $selectedBarangayId);
         }
 
         return $productsQuery->paginate($perPage);

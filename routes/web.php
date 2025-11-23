@@ -367,7 +367,53 @@ Route::middleware('auth')->group(function () {
     // Route::patch('/notifications/mark-all-read', [NotificationController::class, 'markAllAsRead'])->name('notifications.mark-all-read');
  
 });
+Route::post('/messages/mark-read', function () {
+    if (Auth::check()) {
+        $userId = Auth::id();
+        
+        // Mark all messages as read
+        \App\Models\Message::where('receiver_id', $userId)
+            ->where('is_read', false)
+            ->update(['is_read' => true]);
+        
+        // Get updated count
+        $unreadCount = \App\Models\Message::where('receiver_id', $userId)
+            ->where('is_read', false)
+            ->count();
+        
+        // Broadcast update if using real-time
+        // event(new MessagesRead($userId));
+    }
+    
+    return response()->json(['success' => true, 'unread_count' => $unreadCount ?? 0]);
+})->name('messages.mark-read')->middleware('auth');
 
+// Route to get unread count without marking as read
+Route::get('/messages/unread-count', function () {
+    if (Auth::check()) {
+        $userId = Auth::id();
+        $unreadCount = \App\Models\Message::where('receiver_id', $userId)
+            ->where('is_read', false)
+            ->count();
+        return response()->json(['unread_count' => $unreadCount]);
+    }
+    return response()->json(['unread_count' => 0]);
+})->name('messages.unread-count')->middleware('auth');
+
+// Route to get unread count for a specific conversation
+Route::get('/messages/conversation-unread-count/{userId}', function ($userId) {
+    if (Auth::check()) {
+        $currentUserId = Auth::id();
+        $unreadCount = \App\Models\Message::where(function($query) use ($currentUserId, $userId) {
+            $query->where('user_id', $userId)
+                  ->where('receiver_id', $currentUserId);
+        })
+        ->where('is_read', false)
+        ->count();
+        return response()->json(['unread_count' => $unreadCount]);
+    }
+    return response()->json(['unread_count' => 0]);
+})->name('messages.conversation-unread-count')->middleware('auth');
 
 Route::get('/sell-item/qr/{product}', [ProductController::class, 'qrStep'])->name('sell-item.qr');
 Route::post('/sell-item/qr/{product}', [ProductController::class, 'storeQr'])->name('sell-item.qr.store');

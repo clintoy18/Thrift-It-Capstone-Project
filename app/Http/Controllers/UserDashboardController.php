@@ -21,8 +21,8 @@ class UserDashboardController extends Controller
         $selectedBarangayId = $request->query('barangay');
 
         $query = Product::with(['category', 'user', 'barangay'])
-            ->where('status', 'available')
-            ->where('approval_status', 'approved')
+            ->where('products.status', 'available')
+            ->where('products.approval_status', 'approved')
             ->leftJoin('users', 'products.user_id', '=', 'users.id')
             ->leftJoin('subscriptions', function ($join) {
                 $join->on('users.id', '=', 'subscriptions.user_id')
@@ -33,11 +33,11 @@ class UserDashboardController extends Controller
 
 
         if ($selectedCategoryId) {
-            $query->where('category_id', $selectedCategoryId);
+            $query->where('products.category_id', $selectedCategoryId);
         }
 
         if ($selectedBarangayId) {
-            $query->where('barangay_id', $selectedBarangayId);
+            $query->where('products.barangay_id', $selectedBarangayId);
         }
 
         $products = $query->paginate(10);
@@ -70,8 +70,8 @@ class UserDashboardController extends Controller
         $selectedBarangayId = $request->query('barangay');
 
         $query = Product::with(['category', 'user', 'barangay', 'images'])
-            ->where('status', 'available')
-            ->where('approval_status', 'approved')
+            ->where('products.status', 'available')
+            ->where('products.approval_status', 'approved')
             ->leftJoin('users', 'products.user_id', '=', 'users.id')
             ->leftJoin('subscriptions', function ($join) {
                 $join->on('users.id', '=', 'subscriptions.user_id')
@@ -82,11 +82,11 @@ class UserDashboardController extends Controller
 
 
         if ($selectedCategoryId) {
-            $query->where('category_id', $selectedCategoryId);
+            $query->where('products.category_id', $selectedCategoryId);
         }
 
         if ($selectedBarangayId) {
-            $query->where('barangay_id', $selectedBarangayId);
+            $query->where('products.barangay_id', $selectedBarangayId);
         }
 
         $products = $query->paginate(10);

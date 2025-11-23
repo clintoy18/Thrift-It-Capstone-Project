@@ -21,7 +21,9 @@
         <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
         <!-- KEEP ONLY ONE Alpine.js SCRIPT -->
         <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
-        
+        <!-- In your main layout file, add these before your custom scripts -->
+<script src="https://js.pusher.com/7.0/pusher.min.js"></script>
+<script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
         <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
          
         <!-- Pass Authenticated User ID to JavaScript -->
