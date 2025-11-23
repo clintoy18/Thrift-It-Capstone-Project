@@ -214,22 +214,7 @@
         <div class="p-4 sm:p-6" id="productsContainer">
             <!-- Filters Section with Higher z-index -->
             <div class="flex gap-2 justify-end relative z-50">
-            <div
-                        class=" md:flex items-center bg-[#F4F2ED] dark:bg-gray-800 px-4 rounded-full w-full max-w-md border border-gray-400 dark:text-gray-200  mx-4">
-                        <form action="{{ route('search') }}" method="GET" class="flex w-full items-center">
-                            <input type="text" name="query" value="{{ request('query') }}"
-                                placeholder="Search for a product..."
-                                class="w-full dark:placeholder:text-gray-200 outline-none text-sm bg-transparent border-0 focus:outline-none focus:ring-0 focus:border-0 focus:shadow-none"
-                                required>
-                            <button type="submit" class="ml-2">
-                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd"
-                                        d="M8 4a4 4 0 1 1 2.83 6.83l3.88 3.88a1 1 0 0 1-1.42 1.42l-3.88-3.88A4 4 0 0 1 8 4zm0 2a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"
-                                        clip-rule="evenodd" />
-                                </svg>
-                            </button>
-                        </form>
-                    </div>
+        
                 <!-- Category Dropdown -->
                 <div x-data="{ open: false }" class="relative z-30">
                     <button @click="open = !open"
