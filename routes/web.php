@@ -30,6 +30,7 @@ use App\Http\Controllers\WorkController;
 
 use App\Models\Notification;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 
 
 
@@ -167,6 +168,175 @@ Route::middleware('auth')->group(function () {
     Route::get('/messages', [PrivateChatController::class, 'index'])->name('messages.index');
     Route::get('/private-chat/{user}', [PrivateChatController::class, 'show'])->name('private.chat');
     Route::post('/private-chat/{user}/send', [PrivateChatController::class, 'send'])->name('private.chat.send');
+    Route::post('/messages/mark-as-read', [PrivateChatController::class, 'markAsRead'])->name('messages.markAsRead');
+    
+    // Call invitation routes
+    Route::post('/api/call/invite', function (Request $request) {
+        $request->validate([
+            'recipient_id' => 'required|exists:users,id',
+            'call_type' => 'required|in:audio,video',
+            'action' => 'required|in:invite,end'
+        ]);
+        
+        $recipientId = $request->recipient_id;
+        $callType = $request->call_type;
+        $action = $request->action;
+        $callerId = auth()->id();
+        
+        // Get caller info
+        $caller = auth()->user();
+        
+        // Broadcast the call invitation
+        broadcast(new \App\Events\CallInvitation($callerId, $recipientId, $callType, $caller, $action));
+        
+        return response()->json(['success' => true, 'message' => 'Call invitation sent']);
+    })->name('api.call.invite');
+    
+    Route::post('/api/call/response', function (Request $request) {
+        $request->validate([
+            'caller_id' => 'required|exists:users,id',
+            'call_type' => 'required|in:audio,video',
+            'response' => 'required|in:accepted,rejected'
+        ]);
+        
+        $callerId = $request->caller_id;
+        $callType = $request->call_type;
+        $response = $request->response;
+        $responderId = auth()->id();
+        
+        // Get responder info
+        $responder = auth()->user();
+        
+        // Broadcast the call response back to the caller
+        broadcast(new \App\Events\CallInvitation($responderId, $callerId, $callType, $responder, $response));
+        
+        return response()->json(['success' => true, 'message' => 'Call response sent']);
+    })->name('api.call.response');
+    
+    // Test route for debugging
+    Route::get('/test-call/{userId}', function ($userId) {
+        if (!auth()->check()) {
+            return "Please log in first";
+        }
+        broadcast(new \App\Events\CallInvitation(auth()->id(), $userId, 'video', auth()->user()));
+        return "Call invitation sent to user {$userId}";
+    })->name('test.call');
+    
+    // WebRTC Signaling Routes (API-based for reliability)
+    Route::post('/api/webrtc/offer', function (Request $request) {
+        try {
+            $request->validate([
+                'recipient_id' => 'required|integer|exists:users,id',
+                'offer' => 'required',
+                'caller_id' => 'required|integer',
+                'type' => 'required|in:audio,video'
+            ]);
+            
+            $recipientId = (int) $request->recipient_id;
+            $offer = $request->offer;
+            $callerId = (int) $request->caller_id;
+            
+            // Verify caller is the authenticated user
+            if ($callerId !== auth()->id()) {
+                return response()->json(['error' => 'Unauthorized'], 403);
+            }
+            
+            // Ensure offer is an array (RTCSessionDescription objects are serialized as arrays)
+            if (is_object($offer)) {
+                $offer = (array) $offer;
+            }
+            
+            // Broadcast the offer via Laravel event (more reliable than Pusher whisper)
+            broadcast(new \App\Events\WebRTCOffer($recipientId, $offer, $callerId));
+            
+            return response()->json(['success' => true, 'message' => 'WebRTC offer sent']);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            \Log::error('WebRTC Offer Validation Error:', $e->errors());
+            return response()->json(['error' => 'Validation failed', 'details' => $e->errors()], 422);
+        } catch (\Exception $e) {
+            \Log::error('WebRTC Offer Error: ' . $e->getMessage(), [
+                'trace' => $e->getTraceAsString(),
+                'request' => $request->all()
+            ]);
+            return response()->json(['error' => 'Failed to send offer', 'message' => $e->getMessage()], 500);
+        }
+    })->name('api.webrtc.offer');
+    
+    Route::post('/api/webrtc/answer', function (Request $request) {
+        try {
+            $request->validate([
+                'recipient_id' => 'required|integer|exists:users,id',
+                'answer' => 'required',
+                'caller_id' => 'required|integer'
+            ]);
+            
+            $recipientId = (int) $request->recipient_id;
+            $answer = $request->answer;
+            $callerId = (int) $request->caller_id;
+            
+            // Verify caller is the authenticated user
+            if ($callerId !== auth()->id()) {
+                return response()->json(['error' => 'Unauthorized'], 403);
+            }
+            
+            // Ensure answer is an array
+            if (is_object($answer)) {
+                $answer = (array) $answer;
+            }
+            
+            // Broadcast the answer via Laravel event
+            broadcast(new \App\Events\WebRTCAnswer($recipientId, $answer, $callerId));
+            
+            return response()->json(['success' => true, 'message' => 'WebRTC answer sent']);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            \Log::error('WebRTC Answer Validation Error:', $e->errors());
+            return response()->json(['error' => 'Validation failed', 'details' => $e->errors()], 422);
+        } catch (\Exception $e) {
+            \Log::error('WebRTC Answer Error: ' . $e->getMessage(), [
+                'trace' => $e->getTraceAsString(),
+                'request' => $request->all()
+            ]);
+            return response()->json(['error' => 'Failed to send answer', 'message' => $e->getMessage()], 500);
+        }
+    })->name('api.webrtc.answer');
+    
+    Route::post('/api/webrtc/ice-candidate', function (Request $request) {
+        try {
+            $request->validate([
+                'recipient_id' => 'required|integer|exists:users,id',
+                'candidate' => 'required',
+                'caller_id' => 'required|integer'
+            ]);
+            
+            $recipientId = (int) $request->recipient_id;
+            $candidate = $request->candidate;
+            $callerId = (int) $request->caller_id;
+            
+            // Verify caller is the authenticated user
+            if ($callerId !== auth()->id()) {
+                return response()->json(['error' => 'Unauthorized'], 403);
+            }
+            
+            // Ensure candidate is an array
+            if (is_object($candidate)) {
+                $candidate = (array) $candidate;
+            }
+            
+            // Broadcast the ICE candidate via Laravel event
+            broadcast(new \App\Events\WebRTCIceCandidate($recipientId, $candidate, $callerId));
+            
+            return response()->json(['success' => true, 'message' => 'ICE candidate sent']);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            \Log::error('WebRTC ICE Candidate Validation Error:', $e->errors());
+            return response()->json(['error' => 'Validation failed', 'details' => $e->errors()], 422);
+        } catch (\Exception $e) {
+            \Log::error('WebRTC ICE Candidate Error: ' . $e->getMessage(), [
+                'trace' => $e->getTraceAsString(),
+                'request' => $request->all()
+            ]);
+            return response()->json(['error' => 'Failed to send ICE candidate', 'message' => $e->getMessage()], 500);
+        }
+    })->name('api.webrtc.ice-candidate');
 
     //upload verification document user/upcycler 
      Route::post('/profile/verification-document', [ProfileController::class, 'uploadVerificationDocument'])
