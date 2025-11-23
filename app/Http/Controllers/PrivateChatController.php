@@ -99,4 +99,23 @@ class PrivateChatController extends Controller
             ]
         ]);
     }
+
+    public function markAsRead(Request $request)
+    {
+        $request->validate([
+            'message_ids' => 'required|array',
+            'message_ids.*' => 'exists:messages,id'
+        ]);
+
+        $messageIds = $request->input('message_ids');
+        $userId = Auth::id();
+
+        // Only mark messages as read if the current user is the receiver
+        \App\Models\Message::whereIn('id', $messageIds)
+            ->where('receiver_id', $userId)
+            ->where('is_read', false)
+            ->update(['is_read' => true]);
+
+        return response()->json(['success' => true]);
+    }
 }

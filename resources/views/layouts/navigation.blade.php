@@ -57,14 +57,51 @@
                         <a href="#" class="text-gray-700 dark:text-gray-200">🤍</a> <!-- Wishlist -->
 
 
-                        <!-- Messages -->
-                        <a href="{{ route('messages.index') }}" class="text-gray-700 relative">
-                            <svg class="w-6 h-6 dark:text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8-1.325 0-2.58-.26-3.68-.725L3 20l1.32-3.96C3.474 15.003 3 13.55 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z">
-                                </path>
-                            </svg>
-                        </a>
+  <!-- Messages with Real-time Badge -->
+                        <a href="{{ route('messages.index') }}" class="text-gray-700 dark:text-gray-200 relative" x-data="{
+                            unreadCount: {{ $totalUnreadCount ?? 0 }},
+    init() {
+        @if(Auth::check())
+        if (typeof Echo !== 'undefined') {
+                                    // Listen for new private messages - increment count
+                                    Echo.private('chat.user.{{ Auth::id() }}')
+                                        .listen('.private-message', (e) => {
+                                            // Only increment if not on messages page
+                                            if (!window.location.pathname.includes('messages')) {
+                    this.unreadCount++;
+                                            }
+                });
+            
+            // Listen for when messages are read - update count
+                                    window.addEventListener('messages-marked-read', (e) => {
+                                        this.unreadCount = e.detail?.unread_count || 0;
+                });
+        }
+        @endif
+        
+        // Fallback event listeners
+        window.addEventListener('new-message-received', () => {
+                                    if (!window.location.pathname.includes('messages')) {
+            this.unreadCount++;
+                                    }
+        });
+        
+        window.addEventListener('messages-marked-read', (e) => {
+            this.unreadCount = e.detail?.unread_count || 0;
+        });
+    }
+}">
+    <svg class="w-6 h-6 dark:text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8-1.325 0-2.58-.26-3.68-.725L3 20l1.32-3.96C3.474 15.003 3 13.55 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z">
+        </path>
+    </svg>
+    <!-- Message Count Badge -->
+    <span x-show="unreadCount > 0"
+                                class="absolute -top-1 -right-1 bg-red-600 text-white text-xs rounded-full px-1.5 py-0.5 min-w-[1.25rem] flex items-center justify-center transition-all duration-300 z-10">
+        <span x-text="unreadCount > 9 ? '9+' : unreadCount"></span>
+    </span>
+</a>
                         <!-- Notification Bell -->
                         <div id="notif-bell" x-data="{
                             open: false,
@@ -299,8 +336,57 @@
                     </form>
                 </div>
 
-                <!-- Icons: Notifications + Menu -->
+                <!-- Icons: Messages + Notifications + Menu -->
                 <div class="flex items-center space-x-3">
+                    @auth
+                        @if ($role !== 2)
+                            <!-- Messages with Real-time Badge -->
+                            <a href="{{ route('messages.index') }}" class="text-gray-700 relative" x-data="{
+                                unreadCount: {{ $totalUnreadCount ?? 0 }},
+                                init() {
+                                    @if(Auth::check())
+                                    if (typeof Echo !== 'undefined') {
+                                        // Listen for new private messages - increment count
+                                        Echo.private('chat.user.{{ Auth::id() }}')
+                                            .listen('.private-message', (e) => {
+                                                // Only increment if not on messages page
+                                                if (!window.location.pathname.includes('messages')) {
+                                                    this.unreadCount++;
+                                                }
+                                            });
+                                        
+                                        // Listen for when messages are read - update count
+                                        window.addEventListener('messages-marked-read', (e) => {
+                                            this.unreadCount = e.detail?.unread_count || 0;
+                                        });
+                                    }
+                                    @endif
+                                    
+                                    // Fallback event listeners
+                                    window.addEventListener('new-message-received', () => {
+                                        if (!window.location.pathname.includes('messages')) {
+                                            this.unreadCount++;
+                                        }
+                                    });
+                                    
+                                    window.addEventListener('messages-marked-read', (e) => {
+                                        this.unreadCount = e.detail?.unread_count || 0;
+                                    });
+                                }
+                            }">
+                                <svg class="w-6 h-6 dark:text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8-1.325 0-2.58-.26-3.68-.725L3 20l1.32-3.96C3.474 15.003 3 13.55 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z">
+                                    </path>
+                                </svg>
+                                <!-- Message Count Badge -->
+                                <span x-show="unreadCount > 0"
+                                    class="absolute -top-1 -right-1 bg-red-600 text-white text-xs rounded-full px-1.5 py-0.5 min-w-[1.25rem] flex items-center justify-center transition-all duration-300">
+                                    <span x-text="unreadCount > 9 ? '9+' : unreadCount"></span>
+                                </span>
+                            </a>
+                        @endif
+                    @endauth
                     <!-- Notification Bell -->
                     <div id="notif-bell" x-data="{ open: false, notifications: [], markAsRead() { fetch('{{ route('notifications.read') }}', { method: 'POST', headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}', 'Accept': 'application/json' } }).then(() => { this.notifications.forEach(n => n.is_read = true); }); } }" x-init="notifications = {{ Js::from(\App\Models\Notification::where('user_id', Auth::id())->latest()->take(5)->get()) }};"
                         @new-notification.window="notifications.unshift($event.detail)">
@@ -366,13 +452,51 @@
                             </a>
 
                             <a href="{{ route('messages.index') }}"
-                                class="flex items-center text-gray-700 dark:text-gray-200 py-3 hover:text-[#B59F84] border-b border-gray-100">
+                                class="flex items-center text-gray-700 dark:text-gray-200 py-3 hover:text-[#B59F84] border-b border-gray-100 relative"
+                                x-data="{
+                                    unreadCount: {{ $totalUnreadCount ?? 0 }},
+                                    init() {
+                                        @if(Auth::check())
+                                        if (typeof Echo !== 'undefined') {
+                                            // Listen for new private messages - increment count
+                                            Echo.private('chat.user.{{ Auth::id() }}')
+                                                .listen('.private-message', (e) => {
+                                                    // Only increment if not on messages page
+                                                    if (!window.location.pathname.includes('messages')) {
+                                                        this.unreadCount++;
+                                                    }
+                                                });
+                                            
+                                            // Listen for when messages are read - update count
+                                            window.addEventListener('messages-marked-read', (e) => {
+                                                this.unreadCount = e.detail?.unread_count || 0;
+                                            });
+                                        }
+                                        @endif
+                                        
+                                        // Fallback event listeners
+                                        window.addEventListener('new-message-received', () => {
+                                            if (!window.location.pathname.includes('messages')) {
+                                                this.unreadCount++;
+                                            }
+                                        });
+                                        
+                                        window.addEventListener('messages-marked-read', (e) => {
+                                            this.unreadCount = e.detail?.unread_count || 0;
+                                        });
+                                    }
+                                }">
                                 <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8-1.325 0-2.58-.26-3.68-.725L3 20l1.32-3.96C3.474 15.003 3 13.55 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z">
                                     </path>
                                 </svg>
                                 <span class="font-medium">Messages</span>
+                                <!-- Message Count Badge -->
+                                <span x-show="unreadCount > 0"
+                                    class="ml-2 bg-red-600 text-white text-xs rounded-full px-1.5 py-0.5 min-w-[1.25rem] flex items-center justify-center transition-all duration-300">
+                                    <span x-text="unreadCount > 9 ? '9+' : unreadCount"></span>
+                                </span>
                             </a>
                         @endif
 
@@ -489,3 +613,74 @@
         }
     }
 </style>
+<script>
+    // Function to refresh unread count from server (without marking as read)
+    function refreshUnreadCount() {
+        fetch('{{ route("messages.unread-count") }}', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            }
+        }).then(response => response.json())
+          .then(data => {
+              // Dispatch event to update badges with actual unread count from server
+              window.dispatchEvent(new CustomEvent('messages-marked-read', { 
+                  detail: { unread_count: data.unread_count || 0 } 
+              }));
+          })
+          .catch(error => {
+              console.error('Error refreshing unread count:', error);
+          });
+    }
+
+    // Add this to your main layout or app.js
+    function markMessagesAsRead() {
+        fetch('{{ route("messages.mark-read") }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            }
+        }).then(response => response.json())
+          .then(data => {
+              // Dispatch event to update badges with actual unread count from server
+              window.dispatchEvent(new CustomEvent('messages-marked-read', { 
+                  detail: { unread_count: data.unread_count || 0 } 
+              }));
+          })
+          .catch(error => {
+              console.error('Error marking messages as read:', error);
+          });
+    }
+
+    // Auto-mark as read when messages page is opened
+    document.addEventListener('DOMContentLoaded', function() {
+        // Refresh unread count on page load to ensure accuracy
+        refreshUnreadCount();
+        
+        if (window.location.pathname.includes('messages')) {
+            markMessagesAsRead();
+        }
+        
+        // Refresh count when page becomes visible (user switches back to tab)
+        document.addEventListener('visibilitychange', function() {
+            if (!document.hidden) {
+                // Refresh count when user comes back to the page
+                refreshUnreadCount();
+            }
+        });
+    });
+
+    // Also mark as read when viewing a specific conversation
+    document.addEventListener('DOMContentLoaded', function() {
+        if (window.location.pathname.includes('chat/')) {
+            // Mark messages as read when viewing a conversation
+            setTimeout(() => {
+                markMessagesAsRead();
+            }, 500);
+        }
+    });
+</script>
+
+

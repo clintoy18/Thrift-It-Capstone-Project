@@ -213,25 +213,9 @@
         class="shadow-sm overflow-hidden dark:bg-gray-800 bg-white my-0 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div class="p-4 sm:p-6" id="productsContainer">
             <!-- Filters Section with Higher z-index -->
-            <div class="flex gap-2 relative z-50">
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+            <div class="flex gap-2 justify-end relative z-[100]">
                 <!-- Category Dropdown -->
-                <div x-data="{ open: false }" class="relative z-50">
+                <div x-data="{ open: false }" class="relative z-[]0">
                     <button @click="open = !open"
                         class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 text-sm shadow-sm z-50">
                         <span
@@ -244,21 +228,15 @@
                     </button>
                     <!-- Dropdown Menu -->
                     <div x-cloak x-show="open" @click.outside="open = false"
-                        x-transition:enter="transition ease-out duration-200"
-                        x-transition:enter-start="opacity-0 transform scale-95"
-                        x-transition:enter-end="opacity-100 transform scale-100"
-                        x-transition:leave="transition ease-in duration-150"
-                        x-transition:leave-start="opacity-100 transform scale-100"
-                        x-transition:leave-end="opacity-0 transform scale-95"
-                        class="absolute left-0 mt-2 w-48 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg z-[60] py-1 max-h-64 overflow-y-auto">
+                        class="absolute right-0 mt-2 w-44 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg z-[101] py-1 max-h-64 overflow-y-auto">
                         <a data-category-link data-category-name="All" href="{{ route('dashboard') }}"
-                            class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg">
-                            All Categories
+                            class="block px-3 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg">
+                            All
                         </a>
                         @foreach ($categories as $cat)
                             <a data-category-link data-category-name="{{ $cat->name }}"
                                 href="{{ route('dashboard', ['category' => $cat->id]) }}"
-                                class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg {{ isset($selectedCategoryId) && (int) $selectedCategoryId === $cat->id ? 'font-semibold bg-gray-100 dark:bg-gray-700' : '' }}">
+                                class="block px-3 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg {{ isset($selectedCategoryId) && (int) $selectedCategoryId === $cat->id ? 'font-semibold' : '' }}">
                                 {{ $cat->name }}
                             </a>
                         @endforeach
@@ -266,11 +244,12 @@
                 </div>
 
                 <!-- Location Dropdown -->
-                <div x-data="{ open: false }" class="relative z-50">
+                <div x-data="{ open: false }" class="relative z-[100]">
                     <button @click="open = !open"
                         class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 text-sm shadow-sm z-50">
-                        <span
-                            id="locationButtonText">{{ isset($selectedBarangayId) && $barangays->where('id', $selectedBarangayId)->first() ? $barangays->where('id', $selectedBarangayId)->first()->name : 'Location' }}</span>
+                        <span id="locationButtonText">
+                            {{ isset($selectedBarangayId) && $barangays->where('id', $selectedBarangayId)->first() ? $barangays->where('id', $selectedBarangayId)->first()->name : 'Location' }}
+                        </span>
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-700 dark:text-gray-300"
                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                             stroke-linecap="round" stroke-linejoin="round">
@@ -279,21 +258,15 @@
                     </button>
                     <!-- Dropdown Menu -->
                     <div x-cloak x-show="open" @click.outside="open = false"
-                        x-transition:enter="transition ease-out duration-200"
-                        x-transition:enter-start="opacity-0 transform scale-95"
-                        x-transition:enter-end="opacity-100 transform scale-100"
-                        x-transition:leave="transition ease-in duration-150"
-                        x-transition:leave-start="opacity-100 transform scale-100"
-                        x-transition:leave-end="opacity-0 transform scale-95"
-                        class="absolute left-0 mt-2 w-48 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg z-[60] py-1 max-h-64 overflow-y-auto">
+                        class="absolute right-0 mt-2 w-44 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg z-[101] py-1 max-h-64 overflow-y-auto">
                         <a data-location-link data-location-name="All" href="{{ route('dashboard') }}"
-                            class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg">
-                            All Locations
+                            class="block px-3 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg">
+                            All
                         </a>
                         @foreach ($barangays as $barangay)
                             <a data-location-link data-location-name="{{ $barangay->name }}"
                                 href="{{ route('dashboard', ['barangay' => $barangay->id]) }}"
-                                class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg {{ isset($selectedBarangayId) && (int) $selectedBarangayId === $barangay->id ? 'font-semibold bg-gray-100 dark:bg-gray-700' : '' }}">
+                                class="block px-3 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg {{ isset($selectedBarangayId) && (int) $selectedBarangayId === $barangay->id ? 'font-semibold' : '' }}">
                                 {{ $barangay->name }}
                             </a>
                         @endforeach
@@ -1376,24 +1349,17 @@
             document.querySelectorAll('[data-category-link]').forEach(link => {
                 link.addEventListener('click', async (e) => {
                     e.preventDefault();
-
-                    // Close dropdown
-                    const dropdown = link.closest('[x-data]');
-                    if (dropdown && dropdown.__x) {
-                        dropdown.__x.$data.open = false;
-                    }
-
                     const currentUrl = new URL(window.location);
-                    const linkUrl = new URL(link.href, window.location.origin);
+                    const linkUrl = new URL(e.currentTarget.href, window.location.origin);
                     const categoryButtonText = document.getElementById('categoryButtonText');
-
+                    
                     // Update button text
-                    const categoryName = link.getAttribute('data-category-name') || 'Category';
+                    const categoryName = e.currentTarget.getAttribute('data-category-name') || 'Category';
                     if (categoryButtonText) {
                         categoryButtonText.textContent = categoryName;
                     }
-
-                    // Build query params preserving location
+                    
+                    // Build query params for API call preserving location
                     const params = new URLSearchParams();
                     if (linkUrl.searchParams.get('category')) {
                         params.set('category', linkUrl.searchParams.get('category'));
@@ -1401,12 +1367,11 @@
                     if (currentUrl.searchParams.get('barangay')) {
                         params.set('barangay', currentUrl.searchParams.get('barangay'));
                     }
-
+                    
                     showLoading();
-
+                    
                     try {
-                        const dashboardUrl = '{{ route('dashboard') }}' + (params.toString() ?
-                            '?' + params.toString() : '');
+                        const dashboardUrl = '{{ route('dashboard') }}' + (params.toString() ? '?' + params.toString() : '');
                         const response = await fetch(dashboardUrl, {
                             headers: {
                                 'X-Requested-With': 'XMLHttpRequest',
@@ -1432,21 +1397,19 @@
                     } finally {
                         hideLoading();
                     }
-
-                    // Update URL without reloading
+                    
+                    // update query string without reloading - keep barangay if present
                     const newUrl = new URL(window.location);
                     if (linkUrl.searchParams.get('category')) {
-                        newUrl.searchParams.set('category', linkUrl.searchParams.get(
-                            'category'));
+                        newUrl.searchParams.set('category', linkUrl.searchParams.get('category'));
                     } else {
                         newUrl.searchParams.delete('category');
                     }
-
+                    // Keep barangay param if it exists
                     if (currentUrl.searchParams.get('barangay')) {
-                        newUrl.searchParams.set('barangay', currentUrl.searchParams.get(
-                            'barangay'));
+                        newUrl.searchParams.set('barangay', currentUrl.searchParams.get('barangay'));
                     }
-                    window.history.pushState({}, '', newUrl);
+                    window.history.replaceState({}, '', newUrl);
                 });
             });
 
@@ -1454,24 +1417,17 @@
             document.querySelectorAll('[data-location-link]').forEach(link => {
                 link.addEventListener('click', async (e) => {
                     e.preventDefault();
-
-                    // Close dropdown
-                    const dropdown = link.closest('[x-data]');
-                    if (dropdown && dropdown.__x) {
-                        dropdown.__x.$data.open = false;
-                    }
-
                     const currentUrl = new URL(window.location);
-                    const linkUrl = new URL(link.href, window.location.origin);
+                    const linkUrl = new URL(e.currentTarget.href, window.location.origin);
                     const locationButtonText = document.getElementById('locationButtonText');
-
+                    
                     // Update button text
-                    const locationName = link.getAttribute('data-location-name') || 'Location';
+                    const locationName = e.currentTarget.getAttribute('data-location-name') || 'Location';
                     if (locationButtonText) {
                         locationButtonText.textContent = locationName;
                     }
-
-                    // Build query params preserving category
+                    
+                    // Build query params for API call preserving category
                     const params = new URLSearchParams();
                     if (currentUrl.searchParams.get('category')) {
                         params.set('category', currentUrl.searchParams.get('category'));
@@ -1479,12 +1435,11 @@
                     if (linkUrl.searchParams.get('barangay')) {
                         params.set('barangay', linkUrl.searchParams.get('barangay'));
                     }
-
+                    
                     showLoading();
-
+                    
                     try {
-                        const dashboardUrl = '{{ route('dashboard') }}' + (params.toString() ?
-                            '?' + params.toString() : '');
+                        const dashboardUrl = '{{ route('dashboard') }}' + (params.toString() ? '?' + params.toString() : '');
                         const response = await fetch(dashboardUrl, {
                             headers: {
                                 'X-Requested-With': 'XMLHttpRequest',
@@ -1510,24 +1465,19 @@
                     } finally {
                         hideLoading();
                     }
-
-                    // Update URL without reloading
+                    
+                    // update query string without reloading - keep category if present
                     const newUrl = new URL(window.location);
-                    if (currentUrl.searchParams.get('category')) {
-                        newUrl.searchParams.set('category', currentUrl.searchParams.get(
-                            'category'));
-                    }
                     if (linkUrl.searchParams.get('barangay')) {
-                        newUrl.searchParams.set('barangay', linkUrl.searchParams.get(
-                            'barangay'));
+                        newUrl.searchParams.set('barangay', linkUrl.searchParams.get('barangay'));
                     } else {
                         newUrl.searchParams.delete('barangay');
                     }
-                    window.history.pushState({}, '', newUrl);
-
-
-
-
+                    // Keep category param if it exists
+                    if (currentUrl.searchParams.get('category')) {
+                        newUrl.searchParams.set('category', currentUrl.searchParams.get('category'));
+                    }
+                    window.history.replaceState({}, '', newUrl);
                 });
             });
 
