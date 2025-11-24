@@ -59,6 +59,11 @@ class MessageRepository
 
     public function getUserConversations($userId)
     {
+        // Get blocked user IDs (users that this user has blocked or users that have blocked this user)
+        $blockedByMe = \App\Models\BlockedUser::where('user_id', $userId)->pluck('blocked_user_id')->toArray();
+        $blockedMe = \App\Models\BlockedUser::where('blocked_user_id', $userId)->pluck('user_id')->toArray();
+        $blockedUserIds = array_unique(array_merge($blockedByMe, $blockedMe));
+
         // Get all unique conversation partners for the user
         $conversations = Message::select('user_id', 'receiver_id', 'message', 'created_at')
             ->with(['user:id,fname,lname', 'receiver:id,fname,lname'])
@@ -81,6 +86,10 @@ class MessageRepository
                     'latest_message' => $latestMessage,
                     'unread_count' => $messages->where('receiver_id', $userId)->where('is_read', false)->count(),
                 ];
+            })
+            ->filter(function ($conversation) use ($blockedUserIds) {
+                // Filter out conversations with blocked users
+                return !in_array($conversation['user']->id, $blockedUserIds);
             })
             ->values();
 

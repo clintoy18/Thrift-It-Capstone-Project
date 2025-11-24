@@ -258,6 +258,16 @@
                                             <span>View Media & Links</span>
                                         </button>
                                         
+                                        <!-- Blocked Users -->
+                                        <button type="button" 
+                                                class="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 flex items-center space-x-2"
+                                                onclick="showBlockedUsers()">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                                            </svg>
+                                            <span>Blocked Users</span>
+                                        </button>
+                                        
                                         <!-- Block User -->
                                         <button type="button" 
                                                 class="w-full text-left px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 flex items-center space-x-2"
@@ -1563,6 +1573,180 @@
         });
     }
 
+    function showBlockedUsers() {
+        // Close dropdown
+        const dropdownMenu = document.getElementById('settings-dropdown-menu');
+        if (dropdownMenu) {
+            dropdownMenu.classList.add('hidden');
+        }
+        
+        const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+        
+        // Show loading state
+        const modal = document.createElement('div');
+        modal.id = 'blocked-users-modal';
+        modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[200]';
+        modal.innerHTML = `
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-xl max-w-2xl w-full mx-4 max-h-[80vh] overflow-hidden flex flex-col">
+                <div class="p-4 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Blocked Users</h3>
+                    <button onclick="this.closest('.fixed').remove()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+                <div class="flex-1 overflow-y-auto p-4">
+                    <div class="text-center py-8">
+                        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-[#634600] mx-auto"></div>
+                        <p class="text-gray-500 dark:text-gray-400 mt-4">Loading blocked users...</p>
+                    </div>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(modal);
+        
+        // Fetch blocked users
+        fetch('/users/blocked', {
+            method: 'GET',
+            headers: {
+                'X-CSRF-TOKEN': token,
+                'Accept': 'application/json'
+            }
+        })
+        .then(async response => {
+            if (!response.ok) {
+                throw new Error('Failed to fetch blocked users');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                updateBlockedUsersModal(data.blocked_users);
+            } else {
+                throw new Error('Failed to load blocked users');
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching blocked users:', error);
+            modal.querySelector('.flex-1').innerHTML = `
+                <div class="text-center py-8">
+                    <svg class="w-12 h-12 text-red-400 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                    </svg>
+                    <p class="text-gray-500 dark:text-gray-400">Failed to load blocked users. Please try again.</p>
+                </div>
+            `;
+        });
+        
+        // Close modal when clicking outside
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) {
+                modal.remove();
+            }
+        });
+    }
+    
+    function updateBlockedUsersModal(blockedUsers) {
+        const modal = document.getElementById('blocked-users-modal');
+        if (!modal) return;
+        
+        const contentDiv = modal.querySelector('.flex-1');
+        
+        if (blockedUsers.length === 0) {
+            contentDiv.innerHTML = `
+                <div class="text-center py-8">
+                    <svg class="w-12 h-12 text-gray-400 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"></path>
+                    </svg>
+                    <p class="text-gray-500 dark:text-gray-400">No blocked users</p>
+                    <p class="text-gray-400 dark:text-gray-500 text-sm mt-1">You haven't blocked any users yet.</p>
+                </div>
+            `;
+            return;
+        }
+        
+        contentDiv.innerHTML = `
+            <div class="space-y-3">
+                ${blockedUsers.map(user => `
+                    <div class="flex items-center justify-between p-3 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                        <div class="flex items-center space-x-3 flex-1 min-w-0">
+                            <div class="w-10 h-10 rounded-full flex items-center justify-center overflow-hidden bg-gradient-to-r from-[#634600] to-[#B59F84] flex-shrink-0">
+                                ${user.profile_pic_url 
+                                    ? `<img src="${user.profile_pic_url}" alt="${user.fname} ${user.lname}" class="w-full h-full object-cover rounded-full">`
+                                    : `<span class="text-white font-semibold text-sm">${user.fname.charAt(0)}${user.lname.charAt(0)}</span>`
+                                }
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <p class="text-sm font-semibold text-gray-900 dark:text-white truncate">${user.fname} ${user.lname}</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">Blocked ${new Date(user.blocked_at).toLocaleDateString()}</p>
+                            </div>
+                        </div>
+                        <button onclick="unblockUser(${user.id}, '${user.fname} ${user.lname}')" 
+                                class="ml-3 px-4 py-2 text-sm font-medium text-white bg-[#634600] hover:bg-[#56432C] rounded-lg transition-colors flex-shrink-0">
+                            Unblock
+                        </button>
+                    </div>
+                `).join('')}
+            </div>
+        `;
+    }
+    
+    function unblockUser(userId, userName) {
+        if (!confirm(`Are you sure you want to unblock ${userName}? You will be able to receive messages from them again.`)) {
+            return;
+        }
+        
+        const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+        
+        fetch(`/users/${userId}/unblock`, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': token,
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+        })
+        .then(async response => {
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({}));
+                throw new Error(errorData.message || 'Failed to unblock user');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                showNotification(`${userName} has been unblocked`, 'info');
+                // Refresh the blocked users list
+                const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+                fetch('/users/blocked', {
+                    method: 'GET',
+                    headers: {
+                        'X-CSRF-TOKEN': token,
+                        'Accept': 'application/json'
+                    }
+                })
+                .then(async response => {
+                    if (response.ok) {
+                        const data = await response.json();
+                        if (data.success) {
+                            updateBlockedUsersModal(data.blocked_users);
+                        }
+                    }
+                })
+                .catch(error => {
+                    console.error('Error refreshing blocked users:', error);
+                });
+            } else {
+                showNotification(data.message || 'Failed to unblock user', 'error');
+            }
+        })
+        .catch(error => {
+            console.error('Error unblocking user:', error);
+            showNotification(error.message || 'Failed to unblock user. Please try again.', 'error');
+        });
+    }
+
     function blockUser(userId) {
         // Close dropdown
         const dropdownMenu = document.getElementById('settings-dropdown-menu');
@@ -1705,6 +1889,9 @@
                     <p class="text-lg opacity-80" id="audio-call-time">00:00</p>
                 </div>
                 
+                <!-- Hidden audio element for remote audio stream -->
+                <audio id="remote-audio" autoplay playsinline></audio>
+                
                 <!-- Call Controls -->
                 <div class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 px-4 py-6 flex items-center justify-center space-x-4 z-10">
                     <button onclick="toggleCallAudio()" id="mute-call-btn" class="p-4 bg-white bg-opacity-20 hover:bg-opacity-30 rounded-full text-white transition-colors" title="Mute">
@@ -1790,6 +1977,16 @@
                 const statusElement = document.getElementById('audio-call-status');
                 if (statusElement) {
                     statusElement.textContent = 'Connected';
+                }
+                
+                // Attach remote audio stream to audio element
+                const remoteAudio = document.getElementById('remote-audio');
+                if (remoteAudio) {
+                    remoteAudio.srcObject = event.streams[0];
+                    remoteAudio.play().catch(error => {
+                        console.error('Error playing remote audio:', error);
+                    });
+                    console.log('Remote audio stream attached and playing');
                 }
             }
         };
@@ -2826,6 +3023,16 @@
                         if (statusElement) {
                             statusElement.textContent = 'Connected';
                         }
+                        
+                        // Attach remote audio stream to audio element
+                        const remoteAudio = document.getElementById('remote-audio');
+                        if (remoteAudio) {
+                            remoteAudio.srcObject = event.streams[0];
+                            remoteAudio.play().catch(error => {
+                                console.error('Error playing remote audio:', error);
+                            });
+                            console.log('Remote audio stream attached and playing');
+                        }
                     }
                 };
                 
@@ -3000,6 +3207,10 @@
                     <h3 class="text-2xl font-semibold mb-2">Audio Call</h3>
                     <p class="text-lg opacity-80" id="audio-call-time">00:00</p>
                 </div>
+                
+                <!-- Hidden audio element for remote audio stream -->
+                <audio id="remote-audio" autoplay playsinline></audio>
+                
                 <div class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 px-4 py-6 flex items-center justify-center space-x-4 z-10">
                     <button onclick="toggleCallAudio()" id="mute-call-btn" class="p-4 bg-white bg-opacity-20 hover:bg-opacity-30 rounded-full text-white transition-colors">
                         <svg id="mute-icon-on" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -3068,6 +3279,16 @@
                         const statusElement = document.getElementById('audio-call-status');
                         if (statusElement) {
                             statusElement.textContent = 'Connected';
+                        }
+                        
+                        // Attach remote audio stream to audio element
+                        const remoteAudio = document.getElementById('remote-audio');
+                        if (remoteAudio) {
+                            remoteAudio.srcObject = event.streams[0];
+                            remoteAudio.play().catch(error => {
+                                console.error('Error playing remote audio:', error);
+                            });
+                            console.log('Remote audio stream attached and playing');
                         }
                     }
                 };

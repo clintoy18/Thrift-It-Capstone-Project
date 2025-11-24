@@ -118,4 +118,88 @@ class PrivateChatController extends Controller
 
         return response()->json(['success' => true]);
     }
+
+    public function block(User $user)
+    {
+        $currentUser = Auth::user();
+
+        // Prevent blocking yourself
+        if ($currentUser->id === $user->id) {
+            return response()->json([
+                'success' => false,
+                'message' => 'You cannot block yourself.'
+            ], 400);
+        }
+
+        // Check if already blocked
+        if ($currentUser->hasBlocked($user->id)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'User is already blocked.'
+            ], 400);
+        }
+
+        // Block the user
+        \App\Models\BlockedUser::create([
+            'user_id' => $currentUser->id,
+            'blocked_user_id' => $user->id
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'User blocked successfully.'
+        ]);
+    }
+
+    public function getBlockedUsers()
+    {
+        $currentUser = Auth::user();
+        
+        $blockedUsers = \App\Models\BlockedUser::where('user_id', $currentUser->id)
+            ->with('blockedUser:id,fname,lname,profile_pic')
+            ->get()
+            ->filter(function ($blocked) {
+                // Filter out deleted users
+                return $blocked->blockedUser !== null;
+            })
+            ->map(function ($blocked) {
+                return [
+                    'id' => $blocked->blocked_user_id,
+                    'fname' => $blocked->blockedUser->fname,
+                    'lname' => $blocked->blockedUser->lname,
+                    'profile_pic' => $blocked->blockedUser->profile_pic,
+                    'profile_pic_url' => $blocked->blockedUser->profileImageUrl(),
+                    'blocked_at' => $blocked->created_at
+                ];
+            })
+            ->values(); // Re-index array after filtering
+
+        return response()->json([
+            'success' => true,
+            'blocked_users' => $blockedUsers
+        ]);
+    }
+
+    public function unblock(User $user)
+    {
+        $currentUser = Auth::user();
+
+        // Check if user is actually blocked
+        if (!$currentUser->hasBlocked($user->id)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'User is not blocked.'
+            ], 400);
+        }
+
+        // Unblock the user
+        \App\Models\BlockedUser::where('user_id', $currentUser->id)
+            ->where('blocked_user_id', $user->id)
+            ->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'User unblocked successfully.'
+        ]);
+    }
 }
