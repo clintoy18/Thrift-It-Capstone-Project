@@ -89,6 +89,7 @@ class PrivateChatController extends Controller
                 'message' => $message->message,
                 'image_path' => $message->image_path,
                 'image_url' => $message->image_url,
+                'product_preview' => $message->getAttribute('product_preview'),
                 'created_at' => $message->created_at,
                 'user' => [
                     'id' => $message->user->id,

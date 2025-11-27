@@ -10,6 +10,9 @@
             </a>
         </div>
     </x-slot>
+    <meta name="user-id" content="{{ auth()->id() }}">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="recipient-id" content="">
     <div class="py-6">
         <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
             <div
@@ -73,12 +76,60 @@
                         @if ($conversations->count() > 0)
                             @foreach ($conversations as $conversation)
                                 <a href="{{ route('private.chat', $conversation['user']->id) }}"
-                                    class="flex items-center p-4 hover:bg-[#B59F84] hover:bg-opacity-20 dark:hover:bg-yellow-800 transition-colors">
+                                    class="flex items-center p-4 hover:bg-[#B59F84] hover:bg-opacity-20 dark:hover:bg-yellow-800 transition-colors conversation-item"
+                                    data-user-id="{{ $conversation['user']->id }}"
+                                    x-data="{
+                                        unreadCount: {{ (int)($conversation['unread_count'] ?? 0) }},
+                                        conversationUserId: {{ $conversation['user']->id }},
+                                        init() {
+                                            // Listen for conversation read events
+                                            window.addEventListener('conversation-read', (e) => {
+                                                if (e.detail?.user_id === this.conversationUserId) {
+                                                    this.unreadCount = 0;
+                                                    this.updateBadgeDisplay();
+                                                }
+                                            });
+                                            
+                                            // Listen for new messages
+                                            @if(Auth::check())
+                                            if (typeof Echo !== 'undefined') {
+                                                Echo.private('chat.user.{{ Auth::id() }}')
+                                                    .listen('.private-message', (e) => {
+                                                        if (e.message && e.message.user_id === this.conversationUserId) {
+                                                            const currentRecipientId = document.querySelector('meta[name=\"recipient-id\"]')?.getAttribute('content');
+                                                            if (currentRecipientId != this.conversationUserId) {
+                                                                this.unreadCount++;
+                                                                this.updateBadgeDisplay();
+                                                                window.dispatchEvent(new CustomEvent('new-message-received', {
+                                                                    detail: { user_id: this.conversationUserId }
+                                                                }));
+                                                            }
+                                                        }
+                                                    });
+                                            }
+                                            @endif
+                                            
+                                            // Initialize badge display
+                                            this.updateBadgeDisplay();
+                                        },
+                                        updateBadgeDisplay() { updateGlobalUnreadCount(); }
+                                    }">
                                     <!-- Avatar -->
                                     <div class="relative">
-                                    <img src="{{ $conversation['user']->profileImageUrl() }}" 
-                                        alt="{{ $conversation['user']->fname }} {{ $conversation['user']->lname }}"
-                                        class="w-12 h-12 rounded-full object-cover">
+                                        <img src="{{ $conversation['user']->profileImageUrl() }}" 
+                                            alt="{{ $conversation['user']->fname }} {{ $conversation['user']->lname }}"
+                                            class="w-12 h-12 rounded-full object-cover">
+                                        <div x-cloak 
+                                            x-show="unreadCount > 0"
+                                            class="absolute -top-1.5 -right-1.5 min-w-[1.75rem] h-7 px-1 bg-[#FF4D4F] text-white text-xs font-bold rounded-full flex items-center justify-center shadow-md ring-2 ring-white transition-all duration-300"
+                                            x-transition:enter="transition ease-out duration-300"
+                                            x-transition:enter-start="opacity-0 scale-75"
+                                            x-transition:enter-end="opacity-100 scale-100"
+                                            x-transition:leave="transition ease-in duration-200"
+                                            x-transition:leave-start="opacity-100 scale-100"
+                                            x-transition:leave-end="opacity-0 scale-75">
+                                            <span x-text="unreadCount > 9 ? '9+' : unreadCount"></span>
+                                        </div>
                                     </div>
 
                                     <!-- Conversation Info -->
@@ -91,8 +142,10 @@
                                                 {{ $conversation['latest_message']->created_at->diffForHumans() }}
                                             </p>
                                         </div>
-                                        <p class="text-sm text-[#786126] dark:text-white truncate">
-                                            {{ $conversation['latest_message']->message }}
+                                        <!-- Latest Message - Bold when unread -->
+                                        <p class="text-sm truncate mt-1 text-[#786126] dark:text-white"
+                                            x-bind:class="unreadCount > 0 ? 'font-extrabold text-[#3d2f1f] dark:text-yellow-200' : ''">
+                                            {{ $conversation['latest_message']->message ?: '[Image]' }}
                                         </p>
                                     </div>
                                 </a>
@@ -169,7 +222,75 @@
                     }
                 });
             }
+
+            // Mark conversation as read when clicked
+            document.querySelectorAll('.conversation-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    const userId = this.getAttribute('data-user-id');
+                    markConversationAsRead(userId);
+                });
+            });
         });
+
+        function updateGlobalUnreadCount() {
+            const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+            fetch('/messages/unread-count', {
+                method: 'GET',
+                headers: {
+                    'X-CSRF-TOKEN': token,
+                    'Accept': 'application/json'
+                }
+            })
+            .then(response => response.ok ? response.json() : Promise.reject())
+            .then(data => {
+                window.dispatchEvent(new CustomEvent('messages-marked-read', {
+                    detail: { unread_count: data.unread_count || 0 }
+                }));
+            })
+            .catch(error => console.warn('Unable to refresh global unread count:', error));
+        }
+
+        // Function to mark conversation as read
+        function markConversationAsRead(userId) {
+            const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+            
+            fetch(`/conversations/${userId}/mark-as-read`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': token,
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                }
+            })
+            .then(async response => {
+                if (!response.ok) {
+                    throw new Error('Failed to mark conversation as read');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    // Dispatch event to update all conversation badges
+                    window.dispatchEvent(new CustomEvent('conversation-read', {
+                        detail: {
+                            user_id: parseInt(userId),
+                            unread_count: 0
+                        }
+                    }));
+                    
+                    // Update the recipient ID in meta tag
+                    const recipientMeta = document.querySelector('meta[name="recipient-id"]');
+                    if (recipientMeta) {
+                        recipientMeta.setAttribute('content', userId);
+                    }
+
+                    updateGlobalUnreadCount();
+                }
+            })
+            .catch(error => {
+                console.error('Error marking conversation as read:', error);
+            });
+        }
 
         // Notification function
         function showNotification(message, type = 'info') {

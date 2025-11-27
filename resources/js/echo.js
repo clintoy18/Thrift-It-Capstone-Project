@@ -137,10 +137,12 @@ if (currentUserId && csrfToken) {
 
 function createMessageBubble(message, sender, isOwnMessage) {
     const timeAgo = 'just now';
-    const avatarHTML = sender.profile_pic
-        ? `<img src="${sender.profile_pic}" class="w-8 h-8 rounded-full object-cover">`
+    const avatarUrl = sender.profile_pic_url || sender.profile_pic || sender.profileImageUrl;
+    const initials = `${(sender.fname || '?').charAt(0)}${(sender.lname || '?').charAt(0)}`.toUpperCase();
+    const avatarHTML = avatarUrl
+        ? `<img src="${avatarUrl}" class="w-8 h-8 rounded-full object-cover" alt="${sender.fname || ''} ${sender.lname || ''}">`
         : `<div class="w-8 h-8 bg-[#B59F84] text-white rounded-full flex items-center justify-center text-xs font-semibold">
-              ${sender.fname.charAt(0)}${sender.lname.charAt(0)}
+              ${initials}
            </div>`;
 
     const bubbleClasses = isOwnMessage

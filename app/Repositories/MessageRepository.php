@@ -65,8 +65,8 @@ class MessageRepository
         $blockedUserIds = array_unique(array_merge($blockedByMe, $blockedMe));
 
         // Get all unique conversation partners for the user
-        $conversations = Message::select('user_id', 'receiver_id', 'message', 'created_at')
-            ->with(['user:id,fname,lname', 'receiver:id,fname,lname'])
+        $conversations = Message::select('id', 'user_id', 'receiver_id', 'message', 'is_read', 'created_at')
+            ->with(['user:id,fname,lname,profile_pic', 'receiver:id,fname,lname,profile_pic'])
             ->where(function ($query) use ($userId) {
                 $query->where('user_id', $userId)
                       ->orWhere('receiver_id', $userId);
