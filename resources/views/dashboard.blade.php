@@ -139,9 +139,10 @@
                         class="p-4 bg-white dark:bg-gray-800 transform transition-transform duration-300 group-hover:-translate-y-1">
                         <h3 class="text-lg font-semibold text-[#634600] dark:text-white mb-2">Women's Fashion</h3>
                         <p class="text-sm text-[#603E14] dark:text-gray-300">
-                            Explore our selection of quality men's apparel. From casual wear to
-                            professional attire, find timeless pieces that combine style, comfort,
-                            and sustainability in every thread.
+                            Discover a curated collection of stylish, pre-loved women's clothing.
+                            From everyday essentials to statement pieces, find unique items that
+                            express your personal style while supporting sustainable fashion.
+
 
                         </p>
                     </div>
@@ -170,9 +171,9 @@
                         <h3 class="text-lg font-semibold text-[#634600] dark:text-white mb-2">Men's Collection</h3>
                         <p class="text-sm text-[#603E14] dark:text-gray-300">
 
-                            Discover a curated collection of stylish, pre-loved women's clothing.
-                            From everyday essentials to statement pieces, find unique items that
-                            express your personal style while supporting sustainable fashion.
+                            Explore our selection of quality men's apparel. From casual wear to
+                            professional attire, find timeless pieces that combine style, comfort,
+                            and sustainability in every thread.
                         </p>
                     </div>
                 </div>
@@ -1352,13 +1353,14 @@
                     const currentUrl = new URL(window.location);
                     const linkUrl = new URL(e.currentTarget.href, window.location.origin);
                     const categoryButtonText = document.getElementById('categoryButtonText');
-                    
+
                     // Update button text
-                    const categoryName = e.currentTarget.getAttribute('data-category-name') || 'Category';
+                    const categoryName = e.currentTarget.getAttribute('data-category-name') ||
+                        'Category';
                     if (categoryButtonText) {
                         categoryButtonText.textContent = categoryName;
                     }
-                    
+
                     // Build query params for API call preserving location
                     const params = new URLSearchParams();
                     if (linkUrl.searchParams.get('category')) {
@@ -1367,11 +1369,12 @@
                     if (currentUrl.searchParams.get('barangay')) {
                         params.set('barangay', currentUrl.searchParams.get('barangay'));
                     }
-                    
+
                     showLoading();
-                    
+
                     try {
-                        const dashboardUrl = '{{ route('dashboard') }}' + (params.toString() ? '?' + params.toString() : '');
+                        const dashboardUrl = '{{ route('dashboard') }}' + (params.toString() ?
+                            '?' + params.toString() : '');
                         const response = await fetch(dashboardUrl, {
                             headers: {
                                 'X-Requested-With': 'XMLHttpRequest',
@@ -1397,17 +1400,19 @@
                     } finally {
                         hideLoading();
                     }
-                    
+
                     // update query string without reloading - keep barangay if present
                     const newUrl = new URL(window.location);
                     if (linkUrl.searchParams.get('category')) {
-                        newUrl.searchParams.set('category', linkUrl.searchParams.get('category'));
+                        newUrl.searchParams.set('category', linkUrl.searchParams.get(
+                            'category'));
                     } else {
                         newUrl.searchParams.delete('category');
                     }
                     // Keep barangay param if it exists
                     if (currentUrl.searchParams.get('barangay')) {
-                        newUrl.searchParams.set('barangay', currentUrl.searchParams.get('barangay'));
+                        newUrl.searchParams.set('barangay', currentUrl.searchParams.get(
+                            'barangay'));
                     }
                     window.history.replaceState({}, '', newUrl);
                 });
@@ -1420,13 +1425,14 @@
                     const currentUrl = new URL(window.location);
                     const linkUrl = new URL(e.currentTarget.href, window.location.origin);
                     const locationButtonText = document.getElementById('locationButtonText');
-                    
+
                     // Update button text
-                    const locationName = e.currentTarget.getAttribute('data-location-name') || 'Location';
+                    const locationName = e.currentTarget.getAttribute('data-location-name') ||
+                        'Location';
                     if (locationButtonText) {
                         locationButtonText.textContent = locationName;
                     }
-                    
+
                     // Build query params for API call preserving category
                     const params = new URLSearchParams();
                     if (currentUrl.searchParams.get('category')) {
@@ -1435,11 +1441,12 @@
                     if (linkUrl.searchParams.get('barangay')) {
                         params.set('barangay', linkUrl.searchParams.get('barangay'));
                     }
-                    
+
                     showLoading();
-                    
+
                     try {
-                        const dashboardUrl = '{{ route('dashboard') }}' + (params.toString() ? '?' + params.toString() : '');
+                        const dashboardUrl = '{{ route('dashboard') }}' + (params.toString() ?
+                            '?' + params.toString() : '');
                         const response = await fetch(dashboardUrl, {
                             headers: {
                                 'X-Requested-With': 'XMLHttpRequest',
@@ -1465,17 +1472,19 @@
                     } finally {
                         hideLoading();
                     }
-                    
+
                     // update query string without reloading - keep category if present
                     const newUrl = new URL(window.location);
                     if (linkUrl.searchParams.get('barangay')) {
-                        newUrl.searchParams.set('barangay', linkUrl.searchParams.get('barangay'));
+                        newUrl.searchParams.set('barangay', linkUrl.searchParams.get(
+                            'barangay'));
                     } else {
                         newUrl.searchParams.delete('barangay');
                     }
                     // Keep category param if it exists
                     if (currentUrl.searchParams.get('category')) {
-                        newUrl.searchParams.set('category', currentUrl.searchParams.get('category'));
+                        newUrl.searchParams.set('category', currentUrl.searchParams.get(
+                            'category'));
                     }
                     window.history.replaceState({}, '', newUrl);
                 });
