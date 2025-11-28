@@ -1,38 +1,6 @@
 
 <x-app-layout>
-    <x-slot name="header">
-        <div class="flex items-center justify-between">
-            <div class="flex items-center space-x-3">
-                <a href="{{ route('products.index') }}" class="text-gray-500 hover:text-gray-700">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
-                    </svg>
-                </a>
-                <div class="flex items-center space-x-3">
-                    <div class="w-10 h-10 rounded-full flex items-center justify-center overflow-hidden bg-gradient-to-r from-purple-500 to-pink-500">
-                        @if ($recipient->profile_pic)
-                            <img src="{{ $recipient->profileImageUrl() }}"
-                                alt="{{ $recipient->fname }} {{ $recipient->lname }}'s Profile Picture"
-                                class="w-full h-full object-cover">
-                        @else
-                            <span class="text-white font-semibold text-sm">
-                                {{ substr($recipient->fname, 0, 1) }}{{ substr($recipient->lname, 0, 1) }}
-                            </span>
-                        @endif
-                    </div>
-                    <div>
-                        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                            {{ $recipient->fname }} {{ $recipient->lname }}
-                        </h2>
-                        <p class="text-sm text-green-500 flex items-center">
-                            <span class="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
-                            Online
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </x-slot>
+   
 
     <meta name="user-id" content="{{ auth()->id() }}">
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -44,25 +12,8 @@
         <div class="max-w-7xl mx-auto px-0 sm:px-4 lg:px-8">
             <!-- Mobile Header with Conversations Toggle -->
             <div class="lg:hidden bg-white border-b border-gray-200 px-4 py-3 flex items-center justify-between sticky top-0 z-20">
-                <button id="conversations-toggle" class="flex items-center gap-3 text-[#634600] hover:text-[#56432C] transition-colors">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path>
-                    </svg>
-                    <span class="font-semibold">Messages</span>
-                </button>
-                <div class="flex items-center gap-2">
-                    <button class="p-2 text-[#634600] hover:bg-gray-100 rounded-full transition-colors">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                        </svg>
-                    </button>
-                    <button class="p-2 text-[#634600] hover:bg-gray-100 rounded-full transition-colors">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                        </svg>
-                    </button>
-                </div>
+                
+               
             </div>
 
             <div class="bg-white lg:rounded-2xl lg:shadow-xl overflow-hidden h-[calc(100vh-100px)] lg:h-[calc(100vh-120px)] flex flex-col lg:flex-row">
@@ -271,7 +222,7 @@
                                 </button>
                                   
                                 <!-- Settings Dropdown - Desktop Only -->
-                                <div id="chat-settings-dropdown" class="hidden lg:block relative">
+                                <div id="chat-settings-dropdown" class=" lg:block relative">
                                     <button id="settings-toggle-btn" 
                                             class="p-2 text-white hover:bg-white hover:bg-opacity-20 rounded-full transition-colors relative">
                                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
