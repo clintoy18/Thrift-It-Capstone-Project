@@ -31,7 +31,7 @@
                     </p>
 
                     <div class="relative mb-6 animate-float">
-                        <img src="{{ asset('images/image152.png') }}" alt="Thrift-IT Sustainable Fashion"
+                        <img src="{{ Storage::disk('s3')->url('images/image152.png') }}"alt="Thrift-IT Sustainable Fashion"
                             class="mx-auto w-full max-w-[280px] h-auto object-contain transform transition-transform duration-700 hover:scale-105">
                         <span
                             class="absolute bottom-2 right-2 bg-white px-3 py-1 rounded-full text-xs text-[#7C6A46] font-medium shadow-sm animate-pulse">
@@ -52,7 +52,7 @@
                 <div class="p-3 md:w-1/2 font-poppins relative">
                     <!-- Background Image - Adjustable positioning -->
                     <div class="absolute top-[-100px] left-[-150px] z-0 w-[145px] h-[600px]">
-                        <img src="{{ asset('images/Rectangle123.png') }}" alt="Background" class="w-full h-full">
+                        <img src="{{ Storage::disk('s3')->url('images/Rectangle123.png') }}" alt="Background" class="w-full h-full">
                     </div>
                     <!-- Text Content (with higher z-index) -->
                     <div class="relative z-10">
@@ -88,7 +88,8 @@
                 <!-- Image for Desktop -->
                 <div class="md:w-1/2 flex felx-col relative left-[70px] top-[45px] overflow-hidden">
                     <div class="relative overflow-hidden animate-zoom-in animation-delay-600">
-                        <img src="{{ asset('images/image152.png') }}" alt="Thrift-IT Sustainable Fashion"
+                        <img src="{{ Storage::disk('s3')->url('images/image152.png') }}"
+                            alt="Thrift-IT Sustainable Fashion"
                             class="w-full max-h-[500px] object-contain transform transition-all duration-1000 hover:scale-110 hover:rotate-1 relative z-10">
                         <div
                             class="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent animate-shimmer">
@@ -121,7 +122,7 @@
                 <div class="group overflow-hidden rounded-md shadow-md h-auto w-full animate-stagger-1 relative z-10">
                     <a href="{{ route('segments.show', ['segment' => '2']) }}" class="block relative overflow-hidden">
                         <div class="relative overflow-hidden">
-                            <img src="{{ asset('images/women.png') }}" alt="Shop by Women"
+                            <img src="{{ Storage::disk('s3')->url('images/women.png') }}" alt="Shop by Women"
                                 class="w-full h-[400px] object-cover transition-all duration-700 group-hover:scale-110">
                             <div
                                 class="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-500">
@@ -152,8 +153,9 @@
                 <div class="group overflow-hidden rounded-md shadow-md h-auto w-full animate-stagger-2 relative z-10">
                     <a href="{{ route('segments.show', ['segment' => '1']) }}" class="block relative overflow-hidden">
                         <div class="relative overflow-hidden">
-                            <img src="{{ asset('images/men.png') }}" alt="Shop by Men"
+                            <img src="{{ Storage::disk('s3')->url('images/men.png') }}" alt="Shop by Men"
                                 class="w-full h-[400px] object-cover transition-all duration-700 group-hover:scale-110">
+
                             <div
                                 class="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-500">
                             </div>
@@ -182,7 +184,7 @@
                 <div class="group overflow-hidden rounded-md shadow-md h-auto w-full animate-stagger-3 relative z-10">
                     <a href="{{ route('segments.show', ['segment' => '3']) }}" class="block relative overflow-hidden">
                         <div class="relative overflow-hidden">
-                            <img src="{{ asset('images/kids.png') }}" alt="Shop by Kids"
+                            <img src="{{ Storage::disk('s3')->url('images/kids.png') }}" alt="Shop by Kids"
                                 class="w-full h-[400px] object-cover transition-all duration-700 group-hover:scale-110">
                             <div
                                 class="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-500">
@@ -510,8 +512,8 @@
                     class="flex flex-col md:flex-row relative p-8 items-center scroll-animate left-[50px] animate-slide-in-left">
                     <!-- Text Content -->
                     <div class="absolute top-[1710px] left-[-30px] z-0 animate-float-slow">
-                        <img src="{{ asset('images/Ellipse 23.png') }}" alt="Background decoration"
-                            class="w-[196px] h-[221px]">
+                        <img src="{{ Storage::disk('s3')->url('images/Ellipse 23.png') }}"
+                            alt="Background decoration" class="w-[196px] h-[221px]">
                     </div>
                     <div class="md:w-[800px] md:pr-4 mb-3 md:mb-0 ">
                         <h2 class="text-3xl font-bold text-[#634600] mb-2 leading-tight animate-text-reveal dark:text-[#f5d68b]"
@@ -521,8 +523,8 @@
                             Upcycling: Discover Sustainable
                             <span class="block h-[20px] dark:text-[#f5d68b]" aria-hidden="true"></span>
                             Style
-                            <img src="{{ asset('images/image 157.png') }}" alt="emoji"
-                                class="inline-block h-6 w-6 align-middle h-[40px] w-[40px] animate-spin-slow">
+                            <img src="{{ Storage::disk('s3')->url('images/image 157.png') }}" alt="emoji"
+                                class="inline-block h-6 w-6 align-middle animate-spin-slow">
                             <span class="block h-[20px]" aria-hidden="true"></span>
                         </h2>
                         <p
@@ -537,7 +539,7 @@
 
                     <!-- Image -->
                     <div class="md:w-1/3 flex flex-col relative left-[30px] animate-zoom-in animation-delay-600">
-                        <img src="{{ asset('images/upcycling-image.jpg') }}" alt="Upcycling"
+                        <img src="{{ Storage::disk('s3')->url('images/upcycling-image.jpg') }}" alt="Upcycling"
                             class="rounded-lg shadow-md w-full h-80 object-cover transform transition-all duration-700 hover:scale-105 hover:shadow-xl relative z-10">
                     </div>
                 </div>
@@ -546,8 +548,8 @@
                 <div class="flex flex-col md:flex-row items-center scroll-animate animate-slide-in-right">
                     <!-- Image -->
                     <div class="md:w-1/3 flex flex-col relative right-[-80px] animate-zoom-in animation-delay-400">
-                        <img src="{{ asset('images/donate-image.jpg') }}" alt="Donate"
-                            class="rounded-lg shadow-md w-full h-80 object-cover transform transition-all duration-700 hover:scale-105 hover:shadow-xl relative z-10">
+                        <img src="{{ Storage::disk('s3')->url('images/donate-image.jpg') }}" alt="Donate Image">
+                        class="rounded-lg shadow-md w-full h-80 object-cover transform transition-all duration-700 hover:scale-105 hover:shadow-xl relative z-10">
                     </div>
 
                     <!-- Text Content -->
@@ -559,8 +561,8 @@
                             Pre-Loved Clothes and Create a
                             <span class="block h-[20px]" aria-hidden="true"></span>
                             Sustainable Future
-                            <img src="{{ asset('images/Rectangle 142.png') }}" alt="emoji"
-                                class="inline-block h-6 w-6 align-middle h-[40px] w-[40px] animate-bounce-gentle">
+                            <img src="{{ Storage::disk('s3')->url('images/Rectangle 142.png') }}" alt="emoji"
+                                class="inline-block h-6 w-6 align-middle animate-bounce-gentle">
                             <span class="block h-[20px]" aria-hidden="true"></span>
                         </h2>
                         <p
@@ -577,7 +579,8 @@
         </div>
 
         <div class="absolute top-[2220px] right-[0px] hidden md:block z-0 animate-float-slow">
-            <img src="{{ asset('images/Ellipse 21.png') }}" alt="Background decoration" class="w-[90px] h-[330px]">
+            <img src="{{ Storage::disk('s3')->url('images/Ellipse 21.png') }}" alt="Background decoration"
+                class="w-[90px] h-[330px]">
         </div>
     </div>
 
@@ -608,11 +611,11 @@
                 <div class="mb-7 relative animate-zoom-in">
                     <div
                         class="rounded-2xl overflow-hidden shadow-lg transform transition-all duration-500 hover:scale-105">
-                        <img src="{{ asset('images/upcycling-image.jpg') }}" alt="Upcycling"
+                        <img src="{{ Storage::disk('s3')->url('images/upcycling-image.jpg') }}" alt="Upcycling"
                             class="w-full h-64 object-cover relative z-10">
                     </div>
                     <div class="absolute -bottom-3 -right-3 bg-white rounded-full p-2 shadow-md animate-bounce-gentle">
-                        <img src="{{ asset('images/image 157.png') }}" alt="Recycle emoji" class="h-8 w-8">
+                        <img src="{{ Storage::disk('s3')->url('images/image 157.png') }}" alt="Recycle emoji" class="h-8 w-8">
                     </div>
                 </div>
 
@@ -653,12 +656,13 @@
                 <div class="mb-7 relative animate-zoom-in animation-delay-400">
                     <div
                         class="rounded-2xl overflow-hidden shadow-lg transform transition-all duration-500 hover:scale-105">
-                        <img src="{{ asset('images/donate-image.jpg') }}" alt="Donate"
+                        <img src="{{ Storage::disk('s3')->url('images/donate-image.jpg') }}" alt="Donate"
                             class="w-full h-64 object-cover relative z-10">
                     </div>
                     <div
                         class="absolute -bottom-3 -right-3 bg-white rounded-full p-2 shadow-md animate-bounce-gentle animation-delay-200">
-                        <img src="{{ asset('images/Rectangle 142.png') }}" alt="Donation emoji" class="h-8 w-8">
+                        <img src="{{ Storage::disk('s3')->url('images/Rectangle 142.png') }}" alt="Donation emoji"
+                            class="h-8 w-8">
                     </div>
                 </div>
 
