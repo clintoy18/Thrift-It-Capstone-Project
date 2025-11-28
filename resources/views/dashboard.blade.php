@@ -548,7 +548,7 @@
                 <div class="flex flex-col md:flex-row items-center scroll-animate animate-slide-in-right">
                     <!-- Image -->
                     <div class="md:w-1/3 flex flex-col relative right-[-80px] animate-zoom-in animation-delay-400">
-                        <img src="{{ Storage::disk('s3')->url('images/donate-image.jpg') }}" alt="Donate Image">
+                        <img src="{{ Storage::disk('s3')->url('images/donate-image.jpg') }}" alt="Donate Image"
                         class="rounded-lg shadow-md w-full h-80 object-cover transform transition-all duration-700 hover:scale-105 hover:shadow-xl relative z-10">
                     </div>
 
