@@ -85,6 +85,7 @@ class WorkRepository
     {
         return $this->model->where('user_id', $userId)
             ->where('id', '!=', $excludeWorkId)
+            ->where('approval_status', 'approved') // only approved works
             ->with('images')
             ->latest()
             ->take($limit)

@@ -123,8 +123,11 @@
                                 <h3 class="font-semibold text-gray-800 dark:text-white line-clamp-1 group-hover:text-[#B59F84] transition">
                                     {{ $moreWork->title ?? 'Untitled' }}
                                 </h3>
+                                 <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                                    {{ $moreWork->upcycle_type ?? 'No upcycling type' }}
+                                </p>
                                 <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                                    {{ ucfirst($moreWork->approval_status) }}
+                                    {{ $moreWork->description ?? 'No Description' }}
                                 </p>
                             </div>
                         </a>
