@@ -21,7 +21,9 @@ class Subscribed
         }
 
         // Count current listings
-        $listingCount = $user->products()->count();
+        $listingCount = $user->products()
+            ->where('status', 'approved')
+            ->count();
 
         // Default: free users get 5
         $limit = 5;
@@ -46,5 +48,4 @@ class Subscribed
 
         return $next($request);
     }
-
 }
