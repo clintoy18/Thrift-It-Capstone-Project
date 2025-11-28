@@ -57,25 +57,21 @@ class ProductController extends Controller
         $validated = $request->validated();
         $validated['user_id'] = Auth::id();
 
-        // Save product data to session
-        session([
-            'pending_product' => $validated,
-            'pending_images' => $request->file('images', [])
-        ]);
+        $images = $request->file('images', []);
+        $product = $this->productService->createProduct($validated, $images);
 
-        // If unverified → skip QR
+        // Check if user is verified
         if (!Auth::user()->is_verified) {
             return redirect()
-                ->route('sell-item.final')
-                ->with('info', 'You may now finalize your product.');
+                ->route('sell-item.final', $product->id)
+                ->with('info', 'Product created! Since your account is not verified, QR upload is disabled.');
         }
 
-        // Verified → go to QR upload
+        // Verified users can upload a QR code (Step 2)
         return redirect()
-            ->route('sell-item.qr')
-            ->with('success', 'Please upload a QR code (optional).');
+            ->route('sell-item.qr', $product->id)
+            ->with('success', 'Product created! You can now upload a QR code before finalizing.');
     }
-
 
     public function edit(Product $product): View
     {
