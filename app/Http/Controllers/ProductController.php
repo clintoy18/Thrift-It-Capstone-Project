@@ -165,8 +165,16 @@ class ProductController extends Controller
 
     public function markAsSold(Product $product): RedirectResponse
     {
-        $this->productService->updateProduct($product, ['status' => 'sold']);
-        return redirect()->route('products.index')->with('success', 'Item marked as sold.');
+        // only owner may mark as sold
+        if (!Auth::check() || Auth::id() !== $product->user_id) {
+            abort(403);
+        }
+
+        // update status
+        $product->update(['status' => 'sold']);
+
+        return redirect()->route('products.show', $product)
+            ->with('success', 'Item marked as sold.');
     }
 
     // ✅ Step 2: Show optional QR upload page

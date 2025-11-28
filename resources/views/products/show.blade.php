@@ -118,7 +118,7 @@
                             @endphp
 
                             <!-- Message Seller - Only show to buyers, not to the owner -->
-                            @if (Auth::check() && Auth::id() !== $product->user_id)
+                            @if (Auth::check() && Auth::id() !== $product->user_id && $product->status !== 'sold')
                                 <div
                                     class="w-full max-w-sm mt-4 bg-[#f8f4f0] dark:bg-gray-800 dark:text-gray-200 text-gray-800 p-4 rounded-lg shadow-md mx-auto border border-[#d9cbb6]">
                                     <div class="flex items-center gap-2 mb-2 dark:bg-gray-800 dark:text-gray-200">
@@ -139,18 +139,29 @@
                                     </a>
                                 </div>
                             @endif
+                           
+
 
                             <!-- Buy Now Button -->
                             @if (
                                 $product->listingtype !== 'for donation' &&
                                     Auth::id() !== $product->user_id &&
-                                    (!$existingOrder || $existingOrder->status === 'cancelled'))
+                                    (!$existingOrder || $existingOrder->status === 'cancelled') && $product->status !== 'sold')
                                 @if ($product->qr_code)
                                     <button type="button" @click="open = true"
                                         class="w-full mt-4 px-6 py-3 bg-[#B59F84] text-white rounded-lg hover:bg-[#a08e77] transition-all duration-300 font-medium">
                                         Buy Now
                                     </button>
                                 @endif
+                                
+                                @else
+                                 <button type="button" disabled
+                                class="w-full mt-4 px-6 py-3 bg-[#B59F84] text-white rounded-lg 
+                                    opacity-50 cursor-not-allowed font-medium">
+                                Sold
+                            </button>
+
+                                
                             @endif
 
                             <!-- Payment Modal -->

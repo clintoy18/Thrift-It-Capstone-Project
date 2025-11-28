@@ -75,6 +75,8 @@ class ProductRepository
     {
         return Product::where('user_id', $userId)
             ->where('id', '!=', $excludeProductId)
+            ->where('approval_status', 'approved')
+            ->where('status','available') // only approved products
             ->latest()
             ->take($limit)
             ->get();
