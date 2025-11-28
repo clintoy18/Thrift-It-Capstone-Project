@@ -71,15 +71,13 @@
                         </a>
 
                     </div>
-
-
                 </div>
 
                 <!-- Images -->
                 <div class="md:w-1/2 h-[420px] flex gap-4 relative">
-                    <img src="{{ asset('images/thrift-fashion.png') }}" alt="Thrift Fashion"
+                    <img src="{{ Storage::disk('s3')->url('images/thrift-fashion.png') }}" alt="Thrift Fashion"
                         class="w-1/2 h-full object-cover rounded-xl shadow-lg hover:scale-[1.02] transition-transform duration-300">
-                    <img src="{{ asset('images/sustainable-style.png') }}" alt="Sustainable Style"
+                    <img src="{{ Storage::disk('s3')->url('images/sustainable-style.png') }}" alt="Sustainable Style"
                         class="w-1/2 h-full object-cover rounded-xl shadow-lg hover:scale-[1.02] transition-transform duration-300">
                 </div>
             </div>
