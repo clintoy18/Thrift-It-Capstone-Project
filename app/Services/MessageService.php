@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Repositories\MessageRepository;
 use App\Models\Message;
+use App\Models\Product;
 use App\Models\User;
 use App\Events\PrivateMessageSent;
 
@@ -45,6 +46,18 @@ class MessageService
 
     public function sendPrivateMessage($senderId, $receiverId, $messageContent, $imageFile = null)
     {
+        // Check if sender has blocked receiver
+        $sender = User::find($senderId);
+        if ($sender && $sender->hasBlocked($receiverId)) {
+            return ['error' => 'You cannot send messages to a user you have blocked.'];
+        }
+
+        // Check if receiver has blocked sender
+        $receiver = User::find($receiverId);
+        if ($receiver && $receiver->hasBlocked($senderId)) {
+            return ['error' => 'This user has blocked you. You cannot send messages to them.'];
+        }
+
         // Validate message content - handle null or empty string
         $messageText = $messageContent ? trim($messageContent) : '';
         $hasMessage = !empty($messageText);
@@ -77,10 +90,50 @@ class MessageService
             $imagePath
         );
 
+        // Attach product preview metadata when message references a product link
+        $this->attachProductPreview($message);
+
         // Broadcast the event
         broadcast(new PrivateMessageSent($message, User::find($receiverId)))->toOthers();
 
         return ['success' => true, 'message' => $message];
+    }
+
+    /**
+     * If the message contains a product URL, append lightweight product metadata
+     * so realtime receivers can render the preview immediately.
+     */
+    protected function attachProductPreview(Message $message): ?array
+    {
+        $messageText = $message->message;
+        if (empty($messageText)) {
+            return null;
+        }
+
+        if (!preg_match('/\/products\/(\d+)/', $messageText, $matches)) {
+            return null;
+        }
+
+        $productId = (int) $matches[1];
+        $product = Product::find($productId);
+
+        if (!$product) {
+            return null;
+        }
+
+        $preview = [
+            'id' => $product->id,
+            'name' => $product->name,
+            'price' => $product->price,
+            'listingtype' => $product->listingtype,
+            'status' => $product->status,
+            'image_url' => $product->first_image,
+            'url' => route('products.show', $product->id),
+        ];
+
+        $message->setAttribute('product_preview', $preview);
+
+        return $preview;
     }
 
     public function canUserSendMessage($senderId, $receiverId)
@@ -98,6 +151,17 @@ class MessageService
 
         if (!$receiver->is_active) {
             return ['error' => 'Cannot send message to inactive user.'];
+        }
+
+        // Check if sender has blocked receiver
+        $sender = User::find($senderId);
+        if ($sender && $sender->hasBlocked($receiverId)) {
+            return ['error' => 'You cannot send messages to a user you have blocked.'];
+        }
+
+        // Check if receiver has blocked sender
+        if ($receiver->hasBlocked($senderId)) {
+            return ['error' => 'This user has blocked you. You cannot send messages to them.'];
         }
 
         return ['success' => true, 'receiver' => $receiver];

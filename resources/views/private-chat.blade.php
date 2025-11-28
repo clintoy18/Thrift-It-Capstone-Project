@@ -37,6 +37,7 @@
     <meta name="user-id" content="{{ auth()->id() }}">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="recipient-id" content="{{ $recipient->id }}">
+    <meta name="recipient-profile-pic-url" content="{{ $recipient->profileImageUrl() }}">
     <meta name="recipient-name" content="{{ substr($recipient->fname, 0, 1) }}{{ substr($recipient->lname, 0, 1) }}">
 
     <div class="py-0 sm:py-6">
@@ -77,124 +78,157 @@
                         </button>
                     </div>
 
-                    <!-- Sidebar Header -->
-                    <div class="hidden lg:block p-4 border-b border-[#B59F84]">
-                        <div class="flex items-center justify-between">
-                            <h2 class="text-lg font-semibold text-[#634600]">Messages</h2>
-                            <button class="p-2 text-[#786126] hover:text-[#634600] hover:bg-[#B59F84] hover:bg-opacity-20 rounded-full transition-colors">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                                </svg>
-                            </button>
-                        </div>
-                        <!-- Search -->
-                        <div class="mt-3 relative">
-                            <input type="text" placeholder="Search conversations..." 
-                                   class="w-full pl-10 pr-4 py-2 border border-[#B59F84] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#634600] focus:border-transparent bg-white text-sm">
-                            <svg class="absolute left-3 top-2.5 w-4 h-4 text-[#786126]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                            </svg>
-                        </div>
-                    </div>
+                   <!-- In the Conversations Sidebar section, update the search inputs and add the search functionality -->
 
-                    <!-- Mobile Search -->
-                    <div class="lg:hidden p-4 border-b border-gray-200">
-                        <div class="relative">
-                            <input type="text" placeholder="Search conversations..." 
-                                   class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-[#634600] focus:border-transparent bg-gray-50 text-sm">
-                            <svg class="absolute left-3 top-3.5 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                            </svg>
-                        </div>
-                    </div>
+<!-- Desktop Search -->
+<div class="hidden lg:block p-4 border-b border-[#B59F84]">
+    <div class="flex items-center justify-between">
+        <h2 class="text-lg font-semibold text-[#634600]">Messages</h2>
+        <button class="p-2 text-[#786126] hover:text-[#634600] hover:bg-[#B59F84] hover:bg-opacity-20 rounded-full transition-colors">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+            </svg>
+        </button>
+    </div>
+    <!-- Search -->
+    <div class="mt-3 relative">
+        <input type="text" 
+               id="desktop-search-input"
+               placeholder="Search conversations..." 
+               class="w-full pl-10 pr-4 py-2 border border-[#B59F84] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#634600] focus:border-transparent bg-white text-sm">
+        <svg class="absolute left-3 top-2.5 w-4 h-4 text-[#786126]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+        </svg>
+        <!-- Clear search button -->
+        <button id="clear-desktop-search" class="absolute right-3 top-2.5 hidden text-[#786126] hover:text-[#634600]">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+        </button>
+    </div>
+</div>
 
-                    <!-- Conversations List -->
-                    <div class="flex-1 overflow-y-auto">
-                        @if($conversations->count() > 0)
-                            @foreach($conversations as $conversation)
-                                <a href="{{ route('private.chat', $conversation['user']->id) }}" 
-                                   class="flex items-center p-4 hover:bg-gray-50 lg:hover:bg-[#B59F84] lg:hover:bg-opacity-20 transition-colors border-b border-gray-100 lg:border-[#B59F84] lg:border-opacity-20 {{ $conversation['user']->id == $recipient->id ? 'bg-gray-50 lg:bg-[#B59F84] lg:bg-opacity-30 lg:border-r-2 lg:border-[#634600]' : '' }}"
-                                   x-data="{ 
-                                       unreadCount: {{ $conversation['unread_count'] }},
-                                       conversationUserId: {{ $conversation['user']->id }},
-                                       init() {
-                                           // Listen for when messages are marked as read for this conversation
-                                           window.addEventListener('conversation-read', (e) => {
-                                               if (e.detail.user_id === this.conversationUserId) {
-                                                   this.unreadCount = e.detail.unread_count || 0;
-                                               }
-                                           });
-                                           
-                                           // Listen for new messages in this conversation
-                                           @if(Auth::check())
-                                           if (typeof Echo !== 'undefined') {
-                                               Echo.private('chat.user.{{ Auth::id() }}')
-                                                   .listen('.private-message', (e) => {
-                                                       // Check if message is from this conversation user
-                                                       if (e.message && e.message.user_id === this.conversationUserId) {
-                                                           // Only increment if not currently viewing this conversation
-                                                           const currentRecipientId = document.querySelector('meta[name="recipient-id"]')?.getAttribute('content');
-                                                           if (currentRecipientId != this.conversationUserId) {
-                                                               this.unreadCount++;
-                                                           }
-                                                       }
-                                                   });
-                                           }
-                                           @endif
+<!-- Mobile Search -->
+<div class="lg:hidden p-4 border-b border-gray-200">
+    <div class="relative">
+        <input type="text" 
+               id="mobile-search-input"
+               placeholder="Search conversations..." 
+               class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-[#634600] focus:border-transparent bg-gray-50 text-sm">
+        <svg class="absolute left-3 top-3.5 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+        </svg>
+        <!-- Clear search button -->
+        <button id="clear-mobile-search" class="absolute right-3 top-3.5 hidden text-gray-400 hover:text-gray-600">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+        </button>
+    </div>
+</div>
+
+<!-- Update the Conversations List to include search functionality -->
+<div class="flex-1 overflow-y-auto" id="conversations-list">
+    @if($conversations->count() > 0)
+        @foreach($conversations as $conversation)
+            <a href="{{ route('private.chat', $conversation['user']->id) }}" 
+               class="conversation-item flex items-center p-4 hover:bg-gray-50 lg:hover:bg-[#B59F84] lg:hover:bg-opacity-20 transition-colors border-b border-gray-100 lg:border-[#B59F84] lg:border-opacity-20 {{ $conversation['user']->id == $recipient->id ? 'bg-gray-50 lg:bg-[#B59F84] lg:bg-opacity-30 lg:border-r-2 lg:border-[#634600]' : '' }}"
+               data-user-name="{{ strtolower($conversation['user']->fname . ' ' . $conversation['user']->lname) }}"
+               data-latest-message="{{ strtolower($conversation['latest_message']->message) }}"
+               x-data="{ 
+                   unreadCount: {{ $conversation['unread_count'] }},
+                   conversationUserId: {{ $conversation['user']->id }},
+                   init() {
+                       // Listen for when messages are marked as read for this conversation
+                       window.addEventListener('conversation-read', (e) => {
+                           if (e.detail.user_id === this.conversationUserId) {
+                               this.unreadCount = e.detail.unread_count || 0;
+                           }
+                       });
+                       
+                       // Listen for new messages in this conversation
+                       @if(Auth::check())
+                       if (typeof Echo !== 'undefined') {
+                           Echo.private('chat.user.{{ Auth::id() }}')
+                               .listen('.private-message', (e) => {
+                                   // Check if message is from this conversation user
+                                   if (e.message && e.message.user_id === this.conversationUserId) {
+                                       // Only increment if not currently viewing this conversation
+                                       const currentRecipientId = document.querySelector('meta[name="recipient-id"]')?.getAttribute('content');
+                                       if (currentRecipientId != this.conversationUserId) {
+                                           this.unreadCount++;
                                        }
-                                   }">
-                                    <!-- Avatar -->
-                                <div class="relative">
-                                    <div class="w-12 h-12 rounded-full flex items-center justify-center overflow-hidden bg-gradient-to-r from-[#634600] to-[#B59F84]">
-                                        @if($conversation['user']->profile_pic)
-                                          <img src="{{ $conversation->profileImageUrl() }}"
-                                                alt="{{ $conversation['user']->fname }} {{ $conversation['user']->lname }}'s Profile Picture"
-                                                class="w-full h-full object-cover rounded-full">
-                                        @else
-                                            <span class="text-white font-semibold text-sm">
-                                                {{ substr($conversation['user']->fname, 0, 1) }}{{ substr($conversation['user']->lname, 0, 1) }}
-                                            </span>
-                                        @endif
-                                    </div>
-
-                                    <!-- Unread Count Badge -->
-                                    <div x-show="unreadCount > 0"
-                                         class="absolute -top-1 -right-1 w-5 h-5 bg-[#634600] text-white text-xs rounded-full flex items-center justify-center transition-all duration-300">
-                                        <span x-text="unreadCount > 9 ? '9+' : unreadCount"></span>
-                                    </div>
-                                </div>
-                                 <!-- Conversation Info -->
-                                    <div class="ml-3 flex-1 min-w-0">
-                                        <div class="flex items-center justify-between">
-                                            <p class="text-sm font-semibold text-gray-900 lg:text-[#634600] truncate">
-                                                {{ $conversation['user']->fname }} {{ $conversation['user']->lname }}
-                                            </p>
-                                            <p class="text-xs text-gray-500 lg:text-[#786126] whitespace-nowrap ml-2">
-                                                {{ $conversation['latest_message']->created_at->diffForHumans() }}
-                                            </p>
-                                        </div>
-                                        <p class="text-sm text-gray-600 lg:text-[#786126] truncate mt-1">
-                                            {{ $conversation['latest_message']->message }}
-                                        </p>
-                                    </div>
-                                </a>
-                            @endforeach
+                                   }
+                               });
+                       }
+                       @endif
+                   }
+               }">
+                <!-- Avatar -->
+                <div class="relative">
+                    <div class="w-12 h-12 rounded-full flex items-center justify-center overflow-hidden bg-gradient-to-r from-[#634600] to-[#B59F84]">
+                        @if($conversation['user']->profile_pic)
+                            <img src="{{ $conversation['user']->profileImageUrl() }}"
+                                 alt="{{ $conversation['user']->fname }} {{ $conversation['user']->lname }}'s Profile Picture"
+                                 class="w-full h-full object-cover rounded-full">
                         @else
-                            <div class="flex items-center justify-center h-full p-4">
-                                <div class="text-center">
-                                    <div class="w-16 h-16 bg-[#B59F84] bg-opacity-30 rounded-full flex items-center justify-center mx-auto mb-4">
-                                        <svg class="w-8 h-8 text-[#786126]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8-1.325 0-2.58-.26-3.68-.725L3 20l1.32-3.96C3.474 15.003 3 13.55 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
-                                        </svg>
-                                    </div>
-                                    <p class="text-[#634600] text-sm">No conversations yet</p>
-                                    <p class="text-[#786126] text-xs mt-1">Start chatting with someone!</p>
-                                </div>
-                            </div>
+                            <span class="text-white font-semibold text-sm">
+                                {{ substr($conversation['user']->fname, 0, 1) }}{{ substr($conversation['user']->lname, 0, 1) }}
+                            </span>
                         @endif
                     </div>
-                </div>
 
+                    <!-- Unread Count Badge -->
+                    <div x-show="unreadCount > 0"
+                         class="absolute -top-1 -right-1 w-5 h-5 bg-[#634600] text-white text-xs rounded-full flex items-center justify-center transition-all duration-300">
+                        <span x-text="unreadCount > 9 ? '9+' : unreadCount"></span>
+                    </div>
+                </div>
+                
+                <!-- Conversation Info -->
+                <div class="ml-3 flex-1 min-w-0">
+                    <div class="flex items-center justify-between">
+                        <p class="text-sm font-semibold text-gray-900 lg:text-[#634600] truncate conversation-name">
+                            {{ $conversation['user']->fname }} {{ $conversation['user']->lname }}
+                        </p>
+                        <p class="text-xs text-gray-500 lg:text-[#786126] whitespace-nowrap ml-2 conversation-time">
+                            {{ $conversation['latest_message']->created_at->diffForHumans() }}
+                        </p>
+                    </div>
+                    <p class="text-sm text-gray-600 lg:text-[#786126] truncate mt-1 conversation-message">
+                        {{ $conversation['latest_message']->message }}
+                    </p>
+                </div>
+            </a>
+        @endforeach
+    @else
+        <div class="flex items-center justify-center h-full p-4">
+            <div class="text-center">
+                <div class="w-16 h-16 bg-[#B59F84] bg-opacity-30 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg class="w-8 h-8 text-[#786126]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8-1.325 0-2.58-.26-3.68-.725L3 20l1.32-3.96C3.474 15.003 3 13.55 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                    </svg>
+                </div>
+                <p class="text-[#634600] text-sm">No conversations yet</p>
+                <p class="text-[#786126] text-xs mt-1">Start chatting with someone!</p>
+            </div>
+        </div>
+    @endif
+    
+    <!-- No search results message -->
+    <div id="no-search-results" class="hidden flex items-center justify-center h-full p-4">
+        <div class="text-center">
+            <div class="w-16 h-16 bg-[#B59F84] bg-opacity-30 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg class="w-8 h-8 text-[#786126]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                </svg>
+            </div>
+            <p class="text-[#634600] text-sm">No conversations found</p>
+            <p class="text-[#786126] text-xs mt-1">Try different search terms</p>
+        </div>
+    </div>
+</div>
+</div>
                 <!-- Chat Area -->
                 <div class="flex-1 flex flex-col w-full">
                     <!-- Chat Header -->
@@ -258,6 +292,16 @@
                                             <span>View Media & Links</span>
                                         </button>
                                         
+                                        <!-- Blocked Users -->
+                                        <button type="button" 
+                                                class="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 flex items-center space-x-2"
+                                                onclick="showBlockedUsers()">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                                            </svg>
+                                            <span>Blocked Users</span>
+                                        </button>
+                                        
                                         <!-- Block User -->
                                         <button type="button" 
                                                 class="w-full text-left px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 flex items-center space-x-2"
@@ -303,9 +347,10 @@
                                         <div class="w-6 h-6 sm:w-8 sm:h-8 rounded-full flex-shrink-0 {{ $msg->user_id === auth()->id() ? 'ml-1 sm:ml-2' : 'mr-1 sm:mr-2' }}">
                                             @php
                                                 $user = $msg->user_id === auth()->id() ? auth()->user() : $msg->user;
+                                                $profilePicUrl = $user->profile_pic_url ?? $user->profileImageUrl();
                                             @endphp
-                                            @if($user->profile_pic)
-                                                <img src="{{ $user->profileImageUrl() }}" 
+                                            @if($profilePicUrl)
+                                                <img src="{{ $profilePicUrl }}" 
                                                     alt="{{ $user->fname }} {{ $user->lname }}'s Profile Picture"
                                                     class="w-full h-full object-cover rounded-full">
                                             @else
@@ -633,6 +678,233 @@
     </div>
 
     <script>
+        // Search functionality for conversations
+function initConversationSearch() {
+    const desktopSearchInput = document.getElementById('desktop-search-input');
+    const mobileSearchInput = document.getElementById('mobile-search-input');
+    const clearDesktopSearch = document.getElementById('clear-desktop-search');
+    const clearMobileSearch = document.getElementById('clear-mobile-search');
+    const conversationsList = document.getElementById('conversations-list');
+    const noSearchResults = document.getElementById('no-search-results');
+    const conversationItems = document.querySelectorAll('.conversation-item');
+    const emptyState = conversationsList.querySelector('.flex.items-center.justify-center.h-full');
+
+    // Function to perform search
+    function performSearch(searchTerm) {
+        const term = searchTerm.toLowerCase().trim();
+        let hasVisibleResults = false;
+
+        if (term === '') {
+            // Show all conversations
+            conversationItems.forEach(item => {
+                item.classList.remove('hidden');
+            });
+            if (emptyState) {
+                emptyState.classList.remove('hidden');
+            }
+            noSearchResults.classList.add('hidden');
+            return;
+        }
+
+        // Hide empty state during search
+        if (emptyState) {
+            emptyState.classList.add('hidden');
+        }
+
+        // Filter conversations
+        conversationItems.forEach(item => {
+            const userName = item.getAttribute('data-user-name') || '';
+            const latestMessage = item.getAttribute('data-latest-message') || '';
+            
+            if (userName.includes(term) || latestMessage.includes(term)) {
+                item.classList.remove('hidden');
+                hasVisibleResults = true;
+                
+                // Highlight matching text
+                highlightText(item, term);
+            } else {
+                item.classList.add('hidden');
+            }
+        });
+
+        // Show/hide no results message
+        if (hasVisibleResults) {
+            noSearchResults.classList.add('hidden');
+        } else {
+            noSearchResults.classList.remove('hidden');
+        }
+    }
+
+    // Function to highlight matching text
+    function highlightText(item, term) {
+        const nameElement = item.querySelector('.conversation-name');
+        const messageElement = item.querySelector('.conversation-message');
+        
+        if (nameElement) {
+            const originalName = nameElement.getAttribute('data-original-text') || nameElement.textContent;
+            nameElement.setAttribute('data-original-text', originalName);
+            const highlightedName = originalName.replace(
+                new RegExp(term, 'gi'),
+                match => `<span class="bg-yellow-200 text-[#634600] px-1 rounded">${match}</span>`
+            );
+            nameElement.innerHTML = highlightedName;
+        }
+        
+        if (messageElement) {
+            const originalMessage = messageElement.getAttribute('data-original-text') || messageElement.textContent;
+            messageElement.setAttribute('data-original-text', originalMessage);
+            const highlightedMessage = originalMessage.replace(
+                new RegExp(term, 'gi'),
+                match => `<span class="bg-yellow-200 text-[#634600] px-1 rounded">${match}</span>`
+            );
+            messageElement.innerHTML = highlightedMessage;
+        }
+    }
+
+    // Function to remove highlighting
+    function removeHighlighting() {
+        conversationItems.forEach(item => {
+            const nameElement = item.querySelector('.conversation-name');
+            const messageElement = item.querySelector('.conversation-message');
+            
+            if (nameElement && nameElement.getAttribute('data-original-text')) {
+                nameElement.textContent = nameElement.getAttribute('data-original-text');
+                nameElement.removeAttribute('data-original-text');
+            }
+            
+            if (messageElement && messageElement.getAttribute('data-original-text')) {
+                messageElement.textContent = messageElement.getAttribute('data-original-text');
+                messageElement.removeAttribute('data-original-text');
+            }
+        });
+    }
+
+    // Function to clear search
+    function clearSearch(inputElement, clearButton) {
+        inputElement.value = '';
+        clearButton.classList.add('hidden');
+        removeHighlighting();
+        performSearch('');
+    }
+
+    // Desktop search event listeners
+    if (desktopSearchInput && clearDesktopSearch) {
+        desktopSearchInput.addEventListener('input', function(e) {
+            const searchTerm = e.target.value;
+            performSearch(searchTerm);
+            
+            // Show/hide clear button
+            if (searchTerm.length > 0) {
+                clearDesktopSearch.classList.remove('hidden');
+            } else {
+                clearDesktopSearch.classList.add('hidden');
+                removeHighlighting();
+            }
+        });
+
+        clearDesktopSearch.addEventListener('click', function() {
+            clearSearch(desktopSearchInput, clearDesktopSearch);
+        });
+
+        // Clear search on escape key
+        desktopSearchInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                clearSearch(desktopSearchInput, clearDesktopSearch);
+                desktopSearchInput.blur();
+            }
+        });
+    }
+
+    // Mobile search event listeners
+    if (mobileSearchInput && clearMobileSearch) {
+        mobileSearchInput.addEventListener('input', function(e) {
+            const searchTerm = e.target.value;
+            performSearch(searchTerm);
+            
+            // Show/hide clear button
+            if (searchTerm.length > 0) {
+                clearMobileSearch.classList.remove('hidden');
+            } else {
+                clearMobileSearch.classList.add('hidden');
+                removeHighlighting();
+            }
+        });
+
+        clearMobileSearch.addEventListener('click', function() {
+            clearSearch(mobileSearchInput, clearMobileSearch);
+        });
+
+        // Clear search on escape key
+        mobileSearchInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                clearSearch(mobileSearchInput, clearMobileSearch);
+                mobileSearchInput.blur();
+            }
+        });
+    }
+
+    // Sync search between desktop and mobile
+    function syncSearch() {
+        if (desktopSearchInput && mobileSearchInput) {
+            desktopSearchInput.addEventListener('input', function() {
+                mobileSearchInput.value = desktopSearchInput.value;
+                if (mobileSearchInput.value.length > 0) {
+                    clearMobileSearch.classList.remove('hidden');
+                } else {
+                    clearMobileSearch.classList.add('hidden');
+                }
+            });
+
+            mobileSearchInput.addEventListener('input', function() {
+                desktopSearchInput.value = mobileSearchInput.value;
+                if (desktopSearchInput.value.length > 0) {
+                    clearDesktopSearch.classList.remove('hidden');
+                } else {
+                    clearDesktopSearch.classList.add('hidden');
+                }
+            });
+        }
+    }
+
+    syncSearch();
+
+    // Debounce search to improve performance
+    function debounce(func, wait) {
+        let timeout;
+        return function executedFunction(...args) {
+            const later = () => {
+                clearTimeout(timeout);
+                func(...args);
+            };
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+        };
+    }
+
+    // Apply debouncing to search inputs
+    const debouncedSearch = debounce((searchTerm) => {
+        performSearch(searchTerm);
+    }, 300);
+
+    if (desktopSearchInput) {
+        desktopSearchInput.addEventListener('input', (e) => {
+            debouncedSearch(e.target.value);
+        });
+    }
+
+    if (mobileSearchInput) {
+        mobileSearchInput.addEventListener('input', (e) => {
+            debouncedSearch(e.target.value);
+        });
+    }
+}
+
+// Initialize search when DOM is loaded
+document.addEventListener('DOMContentLoaded', function() {
+    setTimeout(() => {
+        initConversationSearch();
+    }, 100);
+});
     // Debug function to check WebRTC support
     function checkWebRTCSupport() {
         const support = {
@@ -1099,20 +1371,88 @@
             const user = data.message.user;
             const userFullName = `${user.fname ?? ''} ${user.lname ?? ''}`.trim();
 
+            // Helper: strip raw product URLs from message text (we render a card instead)
+            function stripProductLinks(text) {
+                if (!text) return '';
+                return text.replace(/https?:\/\/[^\s]+\/products\/\d+/g, '').trim();
+            }
+
             // Create new message HTML
             let messageContent = '';
+
             // Handle image (check both image_path and image_url)
             if (data.message.image_path || data.message.image_url) {
                 const imageSrc = data.message.image_url || `/storage/${data.message.image_path}`;
-                messageContent = `
+                messageContent += `
                     <div class="mb-2">
                         <img src="${imageSrc}" alt="Shared image" class="max-w-full h-auto rounded-lg shadow-sm">
                     </div>
                 `;
             }
-            // Only show message text if it exists and is not empty
+
+            // Message text (with product links stripped and HTML-escaped)
             if (data.message.message && data.message.message.trim()) {
-                messageContent += `<div class="text-sm whitespace-pre-line break-words">${data.message.message.replace(/\n/g, '<br>')}</div>`;
+                const cleanedText = stripProductLinks(data.message.message);
+                if (cleanedText) {
+                    messageContent += `
+                        <div class="text-sm whitespace-pre-line break-words">
+                            ${escapeHtml(cleanedText).replace(/\n/g, '<br>')}
+                        </div>
+                    `;
+                }
+            }
+
+            // Product preview card (if backend attached product_preview metadata)
+            let productPreviewHtml = '';
+            const preview = data.message.product_preview || null;
+            if (preview && preview.id) {
+                const previewImage = preview.image_url || '{{ asset('images/default-placeholder.png') }}';
+                const isDonation = preview.listingtype === 'for donation';
+                const priceLabel = isDonation
+                    ? 'For Donation'
+                    : `₱${Number(preview.price || 0).toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+
+                productPreviewHtml = `
+                    <div class="mt-3 p-3 bg-white bg-opacity-95 rounded-xl border border-white border-opacity-40 shadow-lg group hover:bg-opacity-100 transition-all duration-200">
+                        <div class="flex gap-3">
+                            <!-- Product Image -->
+                            <div class="relative flex-shrink-0">
+                                <img src="${previewImage}" alt="${escapeHtml(preview.name || 'Product')}"
+                                     class="w-16 h-16 sm:w-20 sm:h-20 object-cover rounded-lg shadow-sm">
+                                ${isDonation ? `
+                                    <div class="absolute -top-1 -right-1 bg-green-500 text-white text-xs px-1.5 py-0.5 rounded-full font-medium">
+                                        FREE
+                                    </div>` : ''}
+                            </div>
+                            <!-- Product Details -->
+                            <div class="flex-1 min-w-0">
+                                <div class="flex items-start justify-between mb-1">
+                                    <h4 class="font-semibold text-sm sm:text-base text-gray-900 truncate pr-2">
+                                        ${escapeHtml(preview.name || 'Product')}
+                                    </h4>
+                                    <div class="flex-shrink-0">
+                                        <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                        </svg>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <p class="text-sm font-bold ${isDonation ? 'text-green-600' : 'text-[#634600]'}">
+                                        ${priceLabel}
+                                    </p>
+                                    ${preview.url ? `
+                                        <a href="${preview.url}" target="_blank"
+                                           class="text-xs text-[#634600] hover:text-[#56432C] font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center">
+                                            <span>View</span>
+                                            <svg class="w-3 h-3 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                                            </svg>
+                                        </a>` : ''}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
             }
 
             const newMessageHTML = `
@@ -1131,6 +1471,7 @@
                         <div class="flex flex-col items-end">
                             <div class="px-4 py-3 rounded-2xl bg-gradient-to-r from-[#634600] to-[#B59F84] text-white rounded-br-md">
                                 ${messageContent}
+                                ${productPreviewHtml}
                             </div>
                             <div class="mt-1 text-right">
                                 <span class="text-xs text-gray-500 lg:text-[#786126] px-2">just now</span>
@@ -1168,32 +1509,184 @@
         });
     });
 
-    // Typing indicator functions
-    function showTypingIndicator() {
-        const messagesContainer = document.getElementById('private-messages-container');
-        const typingHTML = `
-            <div class="flex justify-start" id="typing-indicator">
-                <div class="flex max-w-[85%] sm:max-w-xs lg:max-w-md flex-row items-end space-x-2">
-                    <div class="w-6 h-6 sm:w-8 sm:h-8 rounded-full flex-shrink-0 mr-1 sm:mr-2">
-                        <div class="w-6 h-6 sm:w-8 sm:h-8 bg-gradient-to-r from-[#B59F84] to-[#786126] rounded-full flex items-center justify-center">
-                            <span class="text-white text-xs font-semibold">${document.querySelector('meta[name="recipient-name"]')?.content || 'U'}</span>
+    // Utility to escape HTML
+    function escapeHtml(string) {
+        if (!string) return '';
+        return string
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#039;');
+    }
+
+    // Override global createMessageBubble from Echo bundle so avatars persist without rebuild
+    window.createMessageBubble = function(message, sender, isOwnMessage) {
+        const containerJustify = isOwnMessage ? 'justify-end' : 'justify-start';
+        const rowDirection = isOwnMessage ? 'flex-row-reverse' : 'flex-row';
+        const avatarSpacing = isOwnMessage ? 'ml-1 sm:ml-2' : 'mr-1 sm:mr-2';
+        const bubbleAlignment = isOwnMessage ? 'items-end' : 'items-start';
+        const fallbackGradient = isOwnMessage ? 'from-[#634600] to-[#B59F84]' : 'from-[#B59F84] to-[#786126]';
+        const bubbleClasses = isOwnMessage
+            ? 'bg-gradient-to-r from-[#634600] to-[#B59F84] text-white rounded-br-md'
+            : 'bg-white text-[#634600] rounded-bl-md shadow-sm border border-[#B59F84]';
+
+        const avatarUrl = sender?.profile_pic_url || sender?.profile_pic || sender?.profileImageUrl || '';
+        const initials = `${(sender?.fname || '?').charAt(0)}${(sender?.lname || '?').charAt(0)}`.toUpperCase();
+        const avatarInner = avatarUrl
+            ? `<img src="${avatarUrl}" alt="${sender?.fname || ''} ${sender?.lname || ''}" class="w-full h-full object-cover rounded-full">`
+            : `<div class="w-full h-full bg-gradient-to-r ${fallbackGradient} rounded-full flex items-center justify-center">
+                    <span class="text-white text-xs font-semibold">${initials}</span>
+               </div>`;
+
+        const imageSrc = message?.image_url
+            || (message?.image_path ? `/storage/${message.image_path}` : '');
+        const imageHTML = imageSrc
+            ? `<div class="mb-2"><img src="${imageSrc}" alt="Shared image" class="max-w-full h-auto rounded-lg shadow-sm"></div>`
+            : '';
+
+        // Strip raw product links from message text (we render a card instead) and escape HTML
+        function stripProductLinks(text) {
+            if (!text) return '';
+            return text.replace(/https?:\/\/[^\s]+\/products\/\d+/g, '').trim();
+        }
+
+        const rawMessageText = message?.message || '';
+        const cleanedMessageText = stripProductLinks(rawMessageText);
+        const safeMessage = cleanedMessageText
+            ? escapeHtml(cleanedMessageText).replace(/\n/g, '<br>')
+            : '';
+
+        // Product preview card (for realtime Echo messages)
+        let productPreviewHtml = '';
+        const preview = message?.product_preview || null;
+        if (preview && preview.id) {
+            const previewImage = preview.image_url || '{{ asset('images/default-placeholder.png') }}';
+            const isDonation = preview.listingtype === 'for donation';
+            const priceLabel = isDonation
+                ? 'For Donation'
+                : `₱${Number(preview.price || 0).toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+
+            productPreviewHtml = `
+                <div class="mt-3 p-3 bg-white bg-opacity-95 rounded-xl border border-white border-opacity-40 shadow-lg group hover:bg-opacity-100 transition-all duration-200">
+                    <div class="flex gap-3">
+                        <!-- Product Image -->
+                        <div class="relative flex-shrink-0">
+                            <img src="${previewImage}" alt="${escapeHtml(preview.name || 'Product')}"
+                                 class="w-16 h-16 sm:w-20 sm:h-20 object-cover rounded-lg shadow-sm">
+                            ${isDonation ? `
+                                <div class="absolute -top-1 -right-1 bg-green-500 text-white text-xs px-1.5 py-0.5 rounded-full font-medium">
+                                    FREE
+                                </div>` : ''}
+                        </div>
+                        <!-- Product Details -->
+                        <div class="flex-1 min-w-0">
+                            <div class="flex items-start justify-between mb-1">
+                                <h4 class="font-semibold text-sm sm:text-base text-gray-900 truncate pr-2">
+                                    ${escapeHtml(preview.name || 'Product')}
+                                </h4>
+                                <div class="flex-shrink-0">
+                                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <p class="text-sm font-bold ${isDonation ? 'text-green-600' : 'text-[#634600]'}">
+                                    ${priceLabel}
+                                </p>
+                                ${preview.url ? `
+                                    <a href="${preview.url}" target="_blank"
+                                       class="text-xs text-[#634600] hover:text-[#56432C] font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center">
+                                        <span>View</span>
+                                        <svg class="w-3 h-3 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                                        </svg>
+                                    </a>` : ''}
+                            </div>
                         </div>
                     </div>
-                    <div class="flex flex-col items-start">
-                        <div class="px-4 py-3 rounded-2xl bg-white text-[#634600] rounded-bl-md shadow-sm border border-[#B59F84]">
-                            <div class="flex space-x-1">
-                                <div class="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-[#786126] rounded-full animate-bounce"></div>
-                                <div class="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-[#786126] rounded-full animate-bounce" style="animation-delay: 0.1s"></div>
-                                <div class="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-[#786126] rounded-full animate-bounce" style="animation-delay: 0.2s"></div>
-                            </div>
+                </div>
+            `;
+        }
+
+        return `
+            <div class="flex ${containerJustify} message-item">
+                <div class="flex max-w-[85%] sm:max-w-xs lg:max-w-md ${rowDirection} items-end space-x-2">
+                    <div class="w-6 h-6 sm:w-8 sm:h-8 rounded-full flex-shrink-0 ${avatarSpacing}">
+                        ${avatarInner}
+                    </div>
+                    <div class="flex flex-col ${bubbleAlignment}">
+                        <div class="px-4 py-3 rounded-2xl text-sm ${bubbleClasses}">
+                            ${imageHTML}
+                            ${safeMessage ? `<div class="text-sm whitespace-pre-line break-words">${safeMessage}</div>` : ''}
+                            ${productPreviewHtml}
+                        </div>
+                        <div class="mt-1 ${isOwnMessage ? 'text-right' : 'text-left'}">
+                            <span class="text-xs text-gray-500 lg:text-[#786126] px-2">just now</span>
                         </div>
                     </div>
                 </div>
             </div>
         `;
-        messagesContainer.insertAdjacentHTML('beforeend', typingHTML);
-        scrollToBottom(true);
+    };
+
+    function showTypingIndicator() {
+    const messagesContainer = document.getElementById('private-messages-container');
+    
+    // Remove existing typing indicator if any
+    removeTypingIndicator();
+    
+    // Get recipient info with fallbacks
+    const recipientProfilePicUrl = document.querySelector('meta[name="recipient-profile-pic-url"]')?.content || '';
+    const recipientInitials = document.querySelector('meta[name="recipient-name"]')?.content || 'U';
+    const recipientName = '{{ $recipient->fname }} {{ $recipient->lname }}' || 'User';
+    
+    // Create avatar HTML with better error handling
+    let avatarHTML = '';
+    if (recipientProfilePicUrl && recipientProfilePicUrl !== '') {
+        avatarHTML = `
+            <img src="${recipientProfilePicUrl}" 
+                 alt="${recipientName}" 
+                 class="w-full h-full object-cover rounded-full"
+                 onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+            <div class="w-full h-full bg-gradient-to-r from-[#B59F84] to-[#786126] rounded-full flex items-center justify-center hidden">
+                <span class="text-white text-xs font-semibold">${recipientInitials}</span>
+            </div>
+        `;
+    } else {
+        avatarHTML = `
+            <div class="w-full h-full bg-gradient-to-r from-[#B59F84] to-[#786126] rounded-full flex items-center justify-center">
+                <span class="text-white text-xs font-semibold">${recipientInitials}</span>
+            </div>
+        `;
     }
+    
+    const typingHTML = `
+        <div class="flex justify-start" id="typing-indicator">
+            <div class="flex max-w-[85%] sm:max-w-xs lg:max-w-md flex-row items-end space-x-2">
+                <!-- Avatar with profile picture -->
+                <div class="w-6 h-6 sm:w-8 sm:h-8 rounded-full flex-shrink-0 mr-1 sm:mr-2 overflow-hidden relative">
+                    ${avatarHTML}
+                </div>
+                <!-- Typing bubble -->
+                <div class="flex flex-col items-start">
+                    <div class="px-4 py-3 rounded-2xl bg-white text-[#634600] rounded-bl-md shadow-sm border border-[#B59F84]">
+                        <div class="flex space-x-1 items-center">
+                            <div class="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-[#786126] rounded-full animate-bounce"></div>
+                            <div class="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-[#786126] rounded-full animate-bounce" style="animation-delay: 0.1s"></div>
+                            <div class="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-[#786126] rounded-full animate-bounce" style="animation-delay: 0.2s"></div>
+                        
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    messagesContainer.insertAdjacentHTML('beforeend', typingHTML);
+    scrollToBottom(true);
+}
 
     function removeTypingIndicator() {
         const typingIndicator = document.getElementById('typing-indicator');
@@ -1563,6 +2056,180 @@
         });
     }
 
+    function showBlockedUsers() {
+        // Close dropdown
+        const dropdownMenu = document.getElementById('settings-dropdown-menu');
+        if (dropdownMenu) {
+            dropdownMenu.classList.add('hidden');
+        }
+        
+        const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+        
+        // Show loading state
+        const modal = document.createElement('div');
+        modal.id = 'blocked-users-modal';
+        modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[200]';
+        modal.innerHTML = `
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-xl max-w-2xl w-full mx-4 max-h-[80vh] overflow-hidden flex flex-col">
+                <div class="p-4 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Blocked Users</h3>
+                    <button onclick="this.closest('.fixed').remove()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+                <div class="flex-1 overflow-y-auto p-4">
+                    <div class="text-center py-8">
+                        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-[#634600] mx-auto"></div>
+                        <p class="text-gray-500 dark:text-gray-400 mt-4">Loading blocked users...</p>
+                    </div>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(modal);
+        
+        // Fetch blocked users
+        fetch('/users/blocked', {
+            method: 'GET',
+            headers: {
+                'X-CSRF-TOKEN': token,
+                'Accept': 'application/json'
+            }
+        })
+        .then(async response => {
+            if (!response.ok) {
+                throw new Error('Failed to fetch blocked users');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                updateBlockedUsersModal(data.blocked_users);
+            } else {
+                throw new Error('Failed to load blocked users');
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching blocked users:', error);
+            modal.querySelector('.flex-1').innerHTML = `
+                <div class="text-center py-8">
+                    <svg class="w-12 h-12 text-red-400 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                    </svg>
+                    <p class="text-gray-500 dark:text-gray-400">Failed to load blocked users. Please try again.</p>
+                </div>
+            `;
+        });
+        
+        // Close modal when clicking outside
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) {
+                modal.remove();
+            }
+        });
+    }
+    
+    function updateBlockedUsersModal(blockedUsers) {
+        const modal = document.getElementById('blocked-users-modal');
+        if (!modal) return;
+        
+        const contentDiv = modal.querySelector('.flex-1');
+        
+        if (blockedUsers.length === 0) {
+            contentDiv.innerHTML = `
+                <div class="text-center py-8">
+                    <svg class="w-12 h-12 text-gray-400 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"></path>
+                    </svg>
+                    <p class="text-gray-500 dark:text-gray-400">No blocked users</p>
+                    <p class="text-gray-400 dark:text-gray-500 text-sm mt-1">You haven't blocked any users yet.</p>
+                </div>
+            `;
+            return;
+        }
+        
+        contentDiv.innerHTML = `
+            <div class="space-y-3">
+                ${blockedUsers.map(user => `
+                    <div class="flex items-center justify-between p-3 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                        <div class="flex items-center space-x-3 flex-1 min-w-0">
+                            <div class="w-10 h-10 rounded-full flex items-center justify-center overflow-hidden bg-gradient-to-r from-[#634600] to-[#B59F84] flex-shrink-0">
+                                ${user.profile_pic_url 
+                                    ? `<img src="${user.profile_pic_url}" alt="${user.fname} ${user.lname}" class="w-full h-full object-cover rounded-full">`
+                                    : `<span class="text-white font-semibold text-sm">${user.fname.charAt(0)}${user.lname.charAt(0)}</span>`
+                                }
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <p class="text-sm font-semibold text-gray-900 dark:text-white truncate">${user.fname} ${user.lname}</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">Blocked ${new Date(user.blocked_at).toLocaleDateString()}</p>
+                            </div>
+                        </div>
+                        <button onclick="unblockUser(${user.id}, '${user.fname} ${user.lname}')" 
+                                class="ml-3 px-4 py-2 text-sm font-medium text-white bg-[#634600] hover:bg-[#56432C] rounded-lg transition-colors flex-shrink-0">
+                            Unblock
+                        </button>
+                    </div>
+                `).join('')}
+            </div>
+        `;
+    }
+    
+    function unblockUser(userId, userName) {
+        if (!confirm(`Are you sure you want to unblock ${userName}? You will be able to receive messages from them again.`)) {
+            return;
+        }
+        
+        const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+        
+        fetch(`/users/${userId}/unblock`, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': token,
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+        })
+        .then(async response => {
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({}));
+                throw new Error(errorData.message || 'Failed to unblock user');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                showNotification(`${userName} has been unblocked`, 'info');
+                // Refresh the blocked users list
+                const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+                fetch('/users/blocked', {
+                    method: 'GET',
+                    headers: {
+                        'X-CSRF-TOKEN': token,
+                        'Accept': 'application/json'
+                    }
+                })
+                .then(async response => {
+                    if (response.ok) {
+                        const data = await response.json();
+                        if (data.success) {
+                            updateBlockedUsersModal(data.blocked_users);
+                        }
+                    }
+                })
+                .catch(error => {
+                    console.error('Error refreshing blocked users:', error);
+                });
+            } else {
+                showNotification(data.message || 'Failed to unblock user', 'error');
+            }
+        })
+        .catch(error => {
+            console.error('Error unblocking user:', error);
+            showNotification(error.message || 'Failed to unblock user. Please try again.', 'error');
+        });
+    }
+
     function blockUser(userId) {
         // Close dropdown
         const dropdownMenu = document.getElementById('settings-dropdown-menu');
@@ -1705,6 +2372,9 @@
                     <p class="text-lg opacity-80" id="audio-call-time">00:00</p>
                 </div>
                 
+                <!-- Hidden audio element for remote audio stream -->
+                <audio id="remote-audio" autoplay playsinline></audio>
+                
                 <!-- Call Controls -->
                 <div class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 px-4 py-6 flex items-center justify-center space-x-4 z-10">
                     <button onclick="toggleCallAudio()" id="mute-call-btn" class="p-4 bg-white bg-opacity-20 hover:bg-opacity-30 rounded-full text-white transition-colors" title="Mute">
@@ -1790,6 +2460,16 @@
                 const statusElement = document.getElementById('audio-call-status');
                 if (statusElement) {
                     statusElement.textContent = 'Connected';
+                }
+                
+                // Attach remote audio stream to audio element
+                const remoteAudio = document.getElementById('remote-audio');
+                if (remoteAudio) {
+                    remoteAudio.srcObject = event.streams[0];
+                    remoteAudio.play().catch(error => {
+                        console.error('Error playing remote audio:', error);
+                    });
+                    console.log('Remote audio stream attached and playing');
                 }
             }
         };
@@ -2826,6 +3506,16 @@
                         if (statusElement) {
                             statusElement.textContent = 'Connected';
                         }
+                        
+                        // Attach remote audio stream to audio element
+                        const remoteAudio = document.getElementById('remote-audio');
+                        if (remoteAudio) {
+                            remoteAudio.srcObject = event.streams[0];
+                            remoteAudio.play().catch(error => {
+                                console.error('Error playing remote audio:', error);
+                            });
+                            console.log('Remote audio stream attached and playing');
+                        }
                     }
                 };
                 
@@ -3000,6 +3690,10 @@
                     <h3 class="text-2xl font-semibold mb-2">Audio Call</h3>
                     <p class="text-lg opacity-80" id="audio-call-time">00:00</p>
                 </div>
+                
+                <!-- Hidden audio element for remote audio stream -->
+                <audio id="remote-audio" autoplay playsinline></audio>
+                
                 <div class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 px-4 py-6 flex items-center justify-center space-x-4 z-10">
                     <button onclick="toggleCallAudio()" id="mute-call-btn" class="p-4 bg-white bg-opacity-20 hover:bg-opacity-30 rounded-full text-white transition-colors">
                         <svg id="mute-icon-on" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -3068,6 +3762,16 @@
                         const statusElement = document.getElementById('audio-call-status');
                         if (statusElement) {
                             statusElement.textContent = 'Connected';
+                        }
+                        
+                        // Attach remote audio stream to audio element
+                        const remoteAudio = document.getElementById('remote-audio');
+                        if (remoteAudio) {
+                            remoteAudio.srcObject = event.streams[0];
+                            remoteAudio.play().catch(error => {
+                                console.error('Error playing remote audio:', error);
+                            });
+                            console.log('Remote audio stream attached and playing');
                         }
                     }
                 };
@@ -3369,6 +4073,34 @@
     </script>
 
     <style>
+        /* Search highlight styles */
+.conversation-name span.bg-yellow-200,
+.conversation-message span.bg-yellow-200 {
+    background-color: #fef3c7 !important;
+    color: #634600 !important;
+    font-weight: 600;
+    padding: 0 2px;
+    border-radius: 3px;
+}
+
+/* Smooth transitions for search */
+.conversation-item {
+    transition: all 0.3s ease;
+}
+
+/* Search input focus styles */
+#desktop-search-input:focus,
+#mobile-search-input:focus {
+    border-color: #634600;
+    box-shadow: 0 0 0 2px rgba(99, 70, 0, 0.1);
+}
+
+/* Clear button hover effects */
+#clear-desktop-search:hover,
+#clear-mobile-search:hover {
+    transform: scale(1.1);
+    transition: transform 0.2s ease;
+}
         /* Ensure proper spacing for messages */
         .message-item {
             margin-bottom: 1rem;

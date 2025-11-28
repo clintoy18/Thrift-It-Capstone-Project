@@ -169,6 +169,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/private-chat/{user}', [PrivateChatController::class, 'show'])->name('private.chat');
     Route::post('/private-chat/{user}/send', [PrivateChatController::class, 'send'])->name('private.chat.send');
     Route::post('/messages/mark-as-read', [PrivateChatController::class, 'markAsRead'])->name('messages.markAsRead');
+    Route::post('/users/{user}/block', [PrivateChatController::class, 'block'])->name('users.block');
+    Route::get('/users/blocked', [PrivateChatController::class, 'getBlockedUsers'])->name('users.blocked');
+    Route::post('/users/{user}/unblock', [PrivateChatController::class, 'unblock'])->name('users.unblock');
     
     // Call invitation routes
     Route::post('/api/call/invite', function (Request $request) {
