@@ -28,6 +28,8 @@ class ProductController extends Controller
         $this->productService = $productService;
         $this->categoryService = $categoryService;
         $this->middleware('subscribed')->only(['create', 'store']);
+        //us middleware to ensure seller is verified before accessing qr upload routes
+        $this->middleware('verified.seller')->only(['qrStep', 'storeQr']);
     }
 
     public function index(): View
@@ -58,10 +60,17 @@ class ProductController extends Controller
         $images = $request->file('images', []);
         $product = $this->productService->createProduct($validated, $images);
 
-        // Redirect to optional QR upload (Step 2)
+        // Check if user is verified
+        if (!Auth::user()->is_verified) {
+            return redirect()
+                ->route('sell-item.final', $product->id)
+                ->with('info', 'Product created! Since your account is not verified, QR upload is disabled.');
+        }
+
+        // Verified users can upload a QR code (Step 2)
         return redirect()
             ->route('sell-item.qr', $product->id)
-            ->with('success', 'Product created! You can optionally upload a QR code before finalizing.');
+            ->with('success', 'Product created! You can now upload a QR code before finalizing.');
     }
 
     public function edit(Product $product): View

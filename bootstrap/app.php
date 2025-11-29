@@ -5,6 +5,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use App\Http\Middleware\Subscribed;
+use App\Http\Middleware\EnsureSellerIsVerified;
 
 
 return Application::configure(basePath: dirname(__DIR__))
@@ -18,6 +19,7 @@ return Application::configure(basePath: dirname(__DIR__))
        $middleware->alias([
             'rolemiddleware' => RoleMiddleware::class,
             'subscribed' => Subscribed::class, 
+            'verified.seller' => EnsureSellerIsVerified::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

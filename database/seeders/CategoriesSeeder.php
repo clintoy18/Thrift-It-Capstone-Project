@@ -25,6 +25,7 @@ class CategoriesSeeder extends Seeder
             ['name' => 'Hats'],
             ['name' => 'Socks'],
             ['name' => 'Jackets'],
+            ['name' => 'Polo'],
             ['name' => 'Others'],
         ];
 
